@@ -1,0 +1,341 @@
+{% extends "bash/base.html" %} 
+{% block content %}
+<div class="article-intro" id="content">
+<h1>Shell 常用的命令</h1>
+
+<table class="table table-bordered table-striped">
+<tbody>
+	<tr>
+		<th>常用命令</th>
+		<th>说明</th>
+		<th>结果</th>
+	</tr>
+	<tr>
+	<td>reboot</td>
+	<td># 重启系统 需root权限</td>
+	<td>系统重启</td>
+	</tr>
+	<tr>
+	<td>poweroff</td>
+	<td># 关闭系统 需root权限</td>
+	<td>系统关闭</td>
+	</tr>
+	<tr>
+	<td>echo Linux </td>
+	<td># 输出字符到终端</td>
+	<td>Linux</td>
+	</tr>
+	<tr>
+	<td>echo $SHELL</td>
+	<td># 提取变量并输出到终端</td>
+	<td>Bash</td>
+	</tr>
+	<tr>
+	<td>date</td>
+	<td># 输出固定格式的日期</td>
+	<td>Mon Aug 24 16:11:23 CST 2017</td>
+	</tr>
+	<tr>
+	<td>date "+%Y-%m-%d %H:%M:%S"</td>
+	<td># 输出固定格式时间</td>
+	<td>2017-08-04 16:29:12</td>
+	</tr>
+	<tr>
+	<td>date -s "20170901 8:30:00"</td>
+	<td># 将系统时间设置为2017年9月1日</td>
+	<td>Fri Sep 1 08:30:00 CST 2017</td>
+	</tr>
+	<tr>
+	<td>date "+%j"</td>
+	<td># 查看当年的第几天</td>
+	<td>244</td>
+	</tr>
+	<tr>
+	<td>wget http://www.linuxprobe.com/docs/LinuxProbe.pdf</td>
+	<td># 下载网站上文件</td>
+	<td>saved</td>
+	</tr>
+	<tr>
+	<td>wget -r -p http://www.linuxprobe.com</td>
+	<td># 递归下载网站内的所有页面数据及文件</td>
+	<td>....</td>
+	</tr>
+	<tr>
+	<td>ps -ef</td>
+	<td># 查看进程状态</td>
+	<td>返回终端进程列表</td>
+	</tr>
+	<tr>
+	<td>top</td>
+	<td># 动态查看系统运维状态</td>
+	<td>返回运维列表</td>
+	</tr>
+	<tr>
+	<td>pidof sshd</td>
+	<td># 查询本机sshd 的pid</td>
+	<td>2156</td>
+	</tr>
+	<tr>
+	<td>kill 2156</td>
+	<td># 关闭对应pid的进程</td>
+	<td>强制停止sshd服务</td>
+	</tr>
+	<tr>
+	<td>killall httpd</td>
+	<td># 关闭所有httpd进程</td>
+	<td>
+	pidof httpd
+	killall httpd
+	pidof httpd
+	</td>
+	</tr>
+	<tr>
+	<td>ifconfig</td>
+	<td># 获取网卡配置与网络状态等信息</td>
+	<td>
+	返回ip,ether参数等信息
+	</td>
+	</tr>
+	<tr>
+	<td>uname -a</td>
+	<td># 用于查看系统内核与系统版本等信息</td>
+	<td>
+	Linux linuxprobe.com 3.10.0-123.el7.x86_64 #1 SMP Mon May 5 11:16:57 EDT 2017 x86_64 x86_64 x86_64 GRU/Linux
+	</td>
+	</tr>
+	<tr>
+	<td>cat /etc/redhat-release</td>
+	<td># 查看系统详细信息</td>
+	<td>
+	Red Hat Enterprise Linux Server release 7.0 (Maipo)
+	</td>
+	</tr>
+	<tr>
+	<td>uptime</td>
+	<td># 查看系统负载信息</td>
+	<td>
+	22:49:55 up 10 min, 2 users, load average: 0.01, 0.19, 0.18
+	</td>
+	</tr>
+	<tr>
+	<td>free -h</td>
+	<td># 显示当前系统内存的使用量信息</td>
+	<td>
+	返回内存使用列表
+	</td>
+	</tr>
+	<tr>
+	<td>who</td>
+	<td># 查看当前登入主机用户终端信息</td>
+	<td>
+	....
+	</td>
+	</tr>
+	<tr>
+	<td>last</td>
+	<td># 用于查看所有系统登录信息</td>
+	<td>
+	....
+	</td>
+	</tr>
+	<tr>
+	<td>history</td>
+	<td># 用于查看命令历史记录信息</td>
+	<td>
+	....
+	</td>
+	</tr>
+	<tr>
+	<td>history -c</td>
+	<td># 用于清空当前 用户命令历史记录信息</td>
+	<td>
+	....
+	</td>
+	</tr>
+	<tr>
+	<td>sosreport</td>
+	<td># 用于收集系统配置及架构信息并输出诊断档案</td>
+	<td>
+	....
+	</td>
+	</tr>
+	<tr>
+	<td>pwd</td>
+	<td># 显示用户当前所处的工作目录</td>
+	<td>
+	/etc
+	</td>
+	</tr>
+	<tr>
+	<td>cd /etc</td>
+	<td># 用于切换工作路径</td>
+	<td>
+	/etc
+	</td>
+	</tr>
+	<tr>
+	<td>ls -al</td>
+	<td># 用于显示目录中的文件信息</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>ls -al</td>
+	<td># 用于显示目录中的文件信息(包含隐藏文件)</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>cat -n initial-setup-ks.cfg</td>
+	<td># 用于查看纯文本文件，内容少的(包含行号)</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>more initial-setup-ks.cfg</td>
+	<td># 用于查看纯文本文件，内容多的</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>head -n 20 initial-setup-ks.cfg</td>
+	<td># 用于查看纯文本文件前N行</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>tail -f /var/log/messages</td>
+	<td># 用于查看查看纯文本文档的后N行或持续刷新内容</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>cat anaconda-ks.cfg | tr [a-z] [A-Z]</td>
+	<td># 用于替换文本文件中的字符</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>wc -l /etc/passwd</td>
+	<td># 用于统计指定文本的行数</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>stat anaconda-ks.cfg</td>
+	<td># 用于查看文件的具体存储信息和时间等信息</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>cut -d: -f1 /etc/passwd</td>
+	<td># 用于按“列”提取文本字符</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>diff --brief diff_A.txt diff_B.txt</td>
+	<td># 用于比较多个文本文件的差异(显示比较结果)</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>diff -c diff_A.txt diff_B.txt</td>
+	<td># 用于比较多个文本文件的差异(描述具体的不同)</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>diff -c diff_A.txt diff_B.txt</td>
+	<td># 用于比较多个文本文件的差异(描述具体的不同)</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>touch -d "2017-05-04 15:44" anaconda-ks.cfg</td>
+	<td># 用于创建空白文件或设置文件的时间(同时修改atime 与 mtime)</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>mkdir linuxprobe</td>
+	<td># 用于创建空白目录</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>cp install.log x.log</td>
+	<td># 用于复制文件或目录</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>mv install.log x.log</td>
+	<td># 用于剪切或重命名文件</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>rm install.log</td>
+	<td># 用于删除文件或目录</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>dd if=/dev/zero of=560_file count=1 bs=560M</td>
+	<td># 用于按照指定大小和个数的数据块来复制文件或转换文件</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>file anaconda-ks.cfg</td>
+	<td># 用于查看文件的类型</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>tar -czvf etc.tar.gz /etc</td>
+	<td># 用于对文件进行打包压缩或解压</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>grep /sbin/nologin /etc/passwd</td>
+	<td># 用于在文本中执行关键词搜索</td>
+	<td>
+	...
+	</td>
+	</tr>
+	<tr>
+	<td>find /etc -name "host*" -print</td>
+	<td># 用于按照指定条件来查找文件</td>
+	<td>
+	...
+	</td>
+	</tr>
+</tbody>
+</table>
+<a href="/command/index">命令行源</a>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "bash/base.html" %} 
+{% block content %}
+<div class="article-intro" id="content">
+<h1>Shell 注释</h1>
+<p>
+以 <span class="label label-info">#</span> 开头的行就是注释，会被解释器忽略。
+</p>
+<p>
+通过每一行加一个 <strong>#</strong> 号设置多行注释，像这样：
+</p>
+<pre class="prettyprint lang-bash" >
+#--------------------------------------------
+# 这是一个注释
+# author：菜鸟教程
+# site：www.runoob.com
+# slogan：学的不仅是技术，更是梦想！
+#--------------------------------------------
+##### 用户配置区 开始 #####
+#
+#
+# 这里可以添加脚本描述信息
+# 
+#
+##### 用户配置区 结束  #####
+</pre>
+<p>如果在开发过程中，遇到大段的代码需要临时注释起来，过一会儿又取消注释，怎么办呢？</p>
+<p>每一行加个#符号太费力了，可以把这一段要注释的代码用一对花括号括起来，定义成一个函数，没有地方调用这个函数，这块代码就不会执行，达到了和注释一样的效果。
+</p>
+
+<h3>多行注释</h3>
+<p>多行注释还可以使用以下格式：</p>
+
+<pre class="prettyprint lang-bash" >
+:&lt;&lt;EOF
+注释内容...
+注释内容...
+注释内容...
+EOF
+</pre>
+
+<p>EOF 也可以使用其他符号:</p>
+
+<pre class="prettyprint lang-bash" >
+:&lt;&lt;'
+注释内容...
+注释内容...
+注释内容...
+'
+
+:&lt;&lt;!
+注释内容...
+注释内容...
+注释内容...
+!
+</pre>
+</div>
+{% endblock %}

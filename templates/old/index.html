@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>主页</title>
+
+<!-- Bootstrap -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/dashboard.css" rel="stylesheet">
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/static/js/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/holder.min.js"></script>
+</head>
+<body data-spy="scroll" data-target="#myScrollspy">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		{% include "common/index_header.html" %}
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar" id="myScrollspy">
+				<ul class="nav nav-sidebar" data-spy="affix" data-offset-top="150">
+					<li><a href="#">全部教程</a></li>
+					<li><a href="#linux">服务端教程</a></li>
+					<li><a href="#database">数据库教程</a></li>
+					<li><a href="#webpage">网页端教程</a></li>
+					<li><a href="#telphone">移动端教程</a></li>
+					<li><a href="#foreignlang">外语教程</a></li>
+					<li><a href="#math">程序基础教程</a></li>
+					<li><a href="#frontkill">前沿科技教程</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="row placeholders">
+					<h1 class="page-header" id="linux">服务端教程</h1>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="/linux/index">
+							<img src="/static/img/linux.png" width="100" height="100" class="img-responsive" alt="Linux">
+							<h4>Linux</h4>
+							<span class="text-muted">免费使用的类Unix操作系统</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/regex.png" width="100" height="100" class="img-responsive" alt="Regex">
+							<h4>正则表达式</h4>
+							<span class="text-muted">一种对字符串操作的逻辑公式</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/design.png" width="100" height="100" class="img-responsive" alt="DesignModel">
+							<h4>设计模式</h4>
+							<span class="text-muted">面向对象常用的设计模式</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/docker.png" width="150" height="150" class="img-responsive" alt="Docker">
+							<h4>Docker</h4>
+							<span class="text-muted">开源的应用容器引擎</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/maven.png" width="100" height="100" class="img-responsive" alt="Maven">
+							<h4>Maven</h4>
+							<span class="text-muted">Java项目管理工具</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/python.png" width="100" height="100" class="img-responsive" alt="Python3">
+							<h4>Python3.x</h4>
+							<span class="text-muted">解释性,编译性,互动性和面向对象的脚本语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="/bash/index">
+							<img src="/static/img/bash.png" width="120" height="120" class="img-responsive" alt="Bash">
+							<h4>Bash</h4>
+							<span class="text-muted">Linux系统中默认的命令编程语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/java.png" width="120" height="120" class="img-responsive" alt="Java">
+							<h4>Java</h4>
+							<span class="text-muted">跨平台的面向对象的程序设计语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/perl.png" width="120" height="120" class="img-responsive" alt="Perl">
+							<h4>Perl</h4>
+							<span class="text-muted">高级,通用,直译式,动态的程序语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/c++.png" width="120" height="120" class="img-responsive" alt="C++">
+							<h4>C++</h4>
+							<span class="text-muted">前一代通用编程语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/go.png" width="120" height="120" class="img-responsive" alt="Go">
+							<h4>Go</h4>
+							<span class="text-muted">谷歌推出的全新编程语言</span>
+						</a>
+					</div>
+				</div>
+				<div class="row placeholders">
+					<h1 class="page-header" id="database">数据库教程</h1>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/SQL.png" width="120" height="120" class="img-responsive" alt="SQL">
+							<h4>标准SQL</h4>
+							<span class="text-muted">结构化查询语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/mysql.png" width="120" height="120" class="img-responsive" alt="MySql">
+							<h4>MySql/MariasDB</h4>
+							<span class="text-muted">免费关系型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/oracle.png" width="120" height="120" class="img-responsive" alt="Oracle">
+							<h4>Oracle</h4>
+							<span class="text-muted">收费关系型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/sql-server.png" width="120" height="120" class="img-responsive" alt="SqlServer">
+							<h4>SqlServer</h4>
+							<span class="text-muted">关系型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/sybase.png" width="120" height="120" class="img-responsive" alt="Sybase">
+							<h4>Sybase</h4>
+							<span class="text-muted">关系型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/sqlite.png" width="120" height="120" class="img-responsive" alt="SQLite">
+							<h4>SQLite</h4>
+							<span class="text-muted">轻型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/postgresql.png" width="120" height="120" class="img-responsive" alt="PostgreSQL">
+							<h4>PostgreSQL</h4>
+							<span class="text-muted">对象-关系型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/MongoDB.png" width="120" height="120" class="img-responsive" alt="MongoDB">
+							<h4>MongoDB</h4>
+							<span class="text-muted">非关系型数据库</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/redis.png" width="120" height="120" class="img-responsive" alt="Redis">
+							<h4>Redis</h4>
+							<span class="text-muted">高性能key-value数据库</span>
+						</a>
+					</div>
+				</div>
+				<div class="row placeholders">
+					<h1 class="page-header" id="webpage">网页端教程</h1>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/html.png" width="120" height="120" class="img-responsive" alt="Html5">
+							<h4>Html5</h4>
+							<span class="text-muted">下一代HTML标准</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/JavaScript.png" width="120" height="120" class="img-responsive" alt="Javacript">
+							<h4>Javascript</h4>
+							<span class="text-muted">Web编程语言</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/CSS.png" width="120" height="120" class="img-responsive" alt="Css">
+							<h4>CSS</h4>
+							<span class="text-muted">层叠样式表</span>
+						</a>
+					</div>
+				</div>
+				<div class="row placeholders">
+					<h1 class="page-header" id="telphone">移动端教程</h1>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/android.png" width="120" height="120" class="img-responsive" alt="Android">
+							<h4>Android</h4>
+							<span class="text-muted">基于Linux的移动操作系统</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/kotlin.png" width="120" height="120" class="img-responsive" alt="Kotlin">
+							<h4>Kotlin</h4>
+							<span class="text-muted">Android官方开发语言，类Java</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/Gradle.png" width="120" height="120" class="img-responsive" alt="Gradle">
+							<h4>Gradle</h4>
+							<span class="text-muted">Android官方打包工具</span>
+						</a>
+					</div>
+				</div>
+				<div class="row placeholders">
+					<h1 class="page-header" id="math">程序基础教程</h1>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/math.png" width="100" height="100" class="img-responsive" alt="Combinatorics">
+							<h4>组合数学</h4>
+							<span class="text-muted">用算法处理离散对象</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/line_math.png" width="100" height="100" class="img-responsive" alt="LinearAlgebra">
+							<h4>线性代数</h4>
+							<span class="text-muted">解决线性关系问题</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/math_rate.png" width="100" height="100" class="img-responsive" alt="ProbabilityAxioms">
+							<h4>概率统计</h4>
+							<span class="text-muted">统计计数调查</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/math_score.png" width="100" height="100" class="img-responsive" alt="Calculus">
+							<h4>微积分</h4>
+							<span class="text-muted">微分学和积分学</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/math_theory.png" width="100" height="100" class="img-responsive" alt="NumberTheory">
+							<h4>数论</h4>
+							<span class="text-muted">研究整数的性质</span>
+						</a>
+					</div>
+				</div>
+				<div class="row placeholders">
+					<h1 class="page-header" id="frontkill">前沿科技教程</h1>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/Geek-2.png" width="110" height="110" class="img-responsive" alt="GeekTechnology">
+							<h4>极客技术</h4>
+							<span class="text-muted">保护系统不被病毒攻击</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/machine_l.png" width="120" height="120" class="img-responsive" alt="MachineLearning">
+							<h4>机器学习</h4>
+							<span class="text-muted">使用计算机提高学习效率</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/deep_learning.png" width="120" height="120" class="img-responsive" alt="DeepLearning">
+							<h4>深度学习</h4>
+							<span class="text-muted">模式分析方法</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/data_search.png" width="120" height="120" class="img-responsive" alt="DataMining">
+							<h4>数据挖掘</h4>
+							<span class="text-muted">通过算法搜索隐藏信息</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/web_crawler.png" width="120" height="120" class="img-responsive" alt="WebCrawler">
+							<h4>网络爬虫</h4>
+							<span class="text-muted">按一定规则爬取网站信息</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/speech_synthesis.png" width="120" height="120" class="img-responsive" alt="SpeechSynthesis">
+							<h4>语音合成</h4>
+							<span class="text-muted">人造语音</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/voice_recognition.png" width="120" height="120" class="img-responsive" alt="VoiceRecognition">
+							<h4>语音识别</h4>
+							<span class="text-muted">识别语音语言的技术</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/block_chain.png" width="120" height="120" class="img-responsive" alt="BlockChain">
+							<h4>区块链</h4>
+							<span class="text-muted">去中心化数据块</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/3D_model.png" width="120" height="120" class="img-responsive" alt="3DModel">
+							<h4>3D建模</h4>
+							<span class="text-muted">制作3D模型</span>
+						</a>
+					</div>
+					<div class="col-xs-6 col-sm-4 placeholder">
+						<a href="#">
+							<img src="/static/img/Unity3D.png" width="120" height="120" class="img-responsive" alt="Unity3D">
+							<h4>Unity3D</h4>
+							<span class="text-muted">游戏制作引擎</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

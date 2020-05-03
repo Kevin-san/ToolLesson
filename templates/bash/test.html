@@ -1,0 +1,272 @@
+{% extends "bash/base.html" %} 
+{% block content %}
+<div class="article-intro" id="content">
+<h1>Shell test 命令</h1>
+<p>Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。</p>
+<hr>
+<h2>数值测试</h2>
+<table class="table table-bordered table-striped">
+	<tbody>
+		<tr>
+			<th>
+				参数</th>
+			<th>英语源由</th>
+			<th>
+				说明</th>
+		</tr>
+		<tr>
+			<td>
+				-eq</td>
+			<td>equal的缩写</td>
+			<td>
+				等于则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-ne</td>
+			<td>not equal的缩写</td>
+			<td>
+				不等于则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-gt</td>
+			<td>greater than的缩写</td>
+			<td>
+				大于则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-ge</td>
+			<td>greater &amp; equal的缩写</td>
+			<td>
+				大于等于则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-lt</td>
+			<td>lower than的缩写</td>
+			<td>
+				小于则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-le</td>
+			<td>lower&amp;equal的缩写</td>
+			<td>
+				小于等于则为真</td>
+		</tr>
+	</tbody>
+</table>
+<p>实例演示：</p>
+<pre class="prettyprint lang-bash" >
+num1=100
+num2=100
+if test $[num1] -eq $[num2]
+then
+    echo '两个数相等！'
+else
+    echo '两个数不相等！'
+fi
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash" >
+两个数相等！
+</pre>
+<p>代码中的 [] 执行基本的算数运算，如：</p>
+<pre class="prettyprint lang-bash" >
+#!/bin/bash
+
+a=5
+b=6
+
+result=$[a+b] # 注意等号两边不能有空格
+echo "result 为： $result"
+</pre>
+<p>结果为:</p>
+<pre class="prettyprint lang-bash" >
+result 为： 11
+</pre>
+<hr>
+<h2>字符串测试</h2>
+<table class="table table-bordered table-striped">
+	<tbody>
+		<tr>
+			<th>
+				参数</th>
+			<th>
+				说明</th>
+		</tr>
+		<tr>
+			<td>
+				=</td>
+			<td>
+				等于则为真</td>
+		</tr>
+		<tr>
+			<td>
+				!=</td>
+			<td>
+				不相等则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-z 字符串</td>
+			<td>
+				字符串的长度为零则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-n 字符串</td>
+			<td>
+				字符串的长度不为零则为真</td>
+		</tr>
+	</tbody>
+</table>
+<p>实例演示：</p>
+<pre class="prettyprint lang-bash" >
+num1="ru1noob"
+num2="runoob"
+if test $num1 = $num2
+then
+    echo '两个字符串相等!'
+else
+    echo '两个字符串不相等!'
+fi
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash" >
+两个字符串不相等!
+</pre>
+<hr>
+<h2>文件测试</h2>
+<table class="table table-bordered table-striped">
+	<tbody>
+		<tr>
+			<th>
+				参数</th>
+			<th>
+				说明</th>
+		</tr>
+		<tr>
+			<td>
+				-e 文件名</td>
+			<td>
+				如果文件存在则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-r 文件名</td>
+			<td>
+				如果文件存在且可读则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-w 文件名</td>
+			<td>
+				如果文件存在且可写则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-x 文件名</td>
+			<td>
+				如果文件存在且可执行则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-s 文件名</td>
+			<td>
+				如果文件存在且至少有一个字符则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-d 文件名</td>
+			<td>
+				如果文件存在且为目录则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-f 文件名</td>
+			<td>
+				如果文件存在且为普通文件则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-c 文件名</td>
+			<td>
+				如果文件存在且为字符型特殊文件则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-b 文件名</td>
+			<td>
+				如果文件存在且为块特殊文件则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-L 文件名</td>
+			<td>
+				如果文件存在且为符号链接则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-h 文件名</td>
+			<td>
+				如果文件存在且为软链接则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-O 文件名</td>
+			<td>
+				如果文件存在且属于当前用户则为真</td>
+		</tr>
+		<tr>
+			<td>
+				-G 文件名</td>
+			<td>
+				如果文件存在且属于当前用户组则为真</td>
+		</tr>
+		<tr>
+			<td>
+				文件名 -nt 文件名</td>
+			<td>
+				判断file1是否比file2新 [ "/data/file1" -nt "/data/file2" ]</td>
+		</tr>
+		<tr>
+			<td>
+				文件名 -ot 文件名</td>
+			<td>
+				判断file1是否比file2旧 [ "/data/file1" -ot "/data/file2" ]</td>
+		</tr>
+	</tbody>
+</table>
+<p>实例演示：</p>
+<pre class="prettyprint lang-bash" >
+cd /bin
+if test -e ./bash
+then
+    echo '文件已存在!'
+else
+    echo '文件不存在!'
+fi
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash" >
+文件已存在!
+</pre>
+<p>另外，Shell还提供了与( -a )、或( -o )、非( ! )三个逻辑操作符用于将测试条件连接起来，其优先级为："!"最高，"-a"次之，"-o"最低。例如：</p>
+<pre class="prettyprint lang-bash" >
+cd /bin
+if test -e ./notFile -o -e ./bash
+then
+    echo '至少有一个文件存在!'
+else
+    echo '两个文件都不存在'
+fi
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash" >
+至少有一个文件存在!
+</pre>			<!-- 其他扩展 -->
+</div>
+{% endblock %}

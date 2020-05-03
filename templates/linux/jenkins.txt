@@ -1,0 +1,40 @@
+http://192.168.31.90:8080/jenkins/
+<li><a href="/linux/command">Linux 常用命令、管道符、环境变量</a></li>
+	<li><a href="#">Linux yum命令</a></li>
+	<li><a href="#">Linux vi/vim</a></li>
+	<li><a href="#">Linux 用户和用户组管理</a></li>
+	<li><a href="#">Linux 存储结构与磁盘划分</a></li>
+	<li><a href="#">Linux 系统目录结构</a></li>
+	<li><a href="#">Linux 忘记密码解决方法</a></li>
+	<li><a href="#">Linux 文件基本属性</a></li>
+	<li><a href="#">Linux 文件与目录管理</a></li>
+	
+	netstat -ano|findstr 8000
+	tasklist |findstr 8000
+	taskkill /pid $id /F
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<pre class="prettyprint lang-bash">
+
+</pre>
+<p><strong>第1步：</strong>
+<p><img class="attachment-full" src="/static/img/linux/linux_mail_system.png" alt="mail_system" width="676" height="432"></p>
+
+
+无序队列 （包含了子节点）
+有序队列 （包含了子节点）
+段落
+脚本块
+图片
+表
+标题头（分
+
+BookTitle
+BookArticle
+
+
+table  header   details  
+split str = 。_。
+TableHeaderContents()
+
+TableDetailContents()

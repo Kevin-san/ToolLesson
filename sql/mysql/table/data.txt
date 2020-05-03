@@ -1,0 +1,1 @@
+insert into BookArticle values(1,1,'/bash/index','p','','','h2',0,'alvin','1900-01-01');

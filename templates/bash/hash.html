@@ -1,0 +1,117 @@
+{% extends "bash/base.html" %} 
+{% block content %}
+<div class="article-intro" id="content">
+<h1>Shell 哈希</h1>
+<p>哈希中可以存放多个值。
+<br>
+获取哈希中的元素要利用哈希键，哈希键可以是整数或字符串，其值应唯一。
+</p>
+<h3>定义哈希</h3>
+<p>在 Shell 中，用括号来表示哈希，哈希元素用"空格"符号分割开。定义哈希的一般形式为：</p>
+<pre class="prettyprint lang-bash">
+declare -A m_dict
+m_dict=(
+["key1"]="value1"
+["key2"]="value2"
+)
+或者
+m_dict=(["key1"]="value1" ["key2"]="value2")
+</pre>
+<h3>单独定义哈希元素</h3>
+<p>还可以单独定义哈希的各个元素：</p>
+<pre class="prettyprint lang-bash">
+m_dict["key1"]="value1"
+m_dict["key2"]="value2"
+</pre>
+<h3>读取哈希</h3>
+<p>读取哈希元素值的一般格式是：</p>
+<pre class="prettyprint lang-bash">
+v1=${m_dict[$key]}
+v2=${m_dict["value2"]}
+</pre>
+<h3>获取哈希所有key值</h3>
+<p>使用 <span class="label label-info">*或@</span> 和<span class="label label-info">!</span> 符号可以哈希所有key值，例如：</p>
+<pre class="prettyprint lang-bash">
+echo ${!m_dict[*]}
+echo ${!m_dict[@]}
+</pre>
+<h3>获取哈希所有value值</h3>
+<p>使用 <span class="label label-info">*或@</span> 符号可以哈希所有value值，例如：</p>
+<pre class="prettyprint lang-bash">
+echo ${m_dict[*]}
+echo ${m_dict[@]}
+</pre>
+<p>遍历哈希中所有key、value值,如果key不存在,则访问的v为空字符串</p>
+<pre class="prettyprint lang-bash">
+for key in $(echo ${!m_dict[*]})
+do
+    echo "$key : ${m_dict[$key]}"
+done
+</pre>
+<h3>获取哈希的长度</h3>
+<p>获取哈希长度的方法与获取数组长度的方法相同，例如：</p>
+<pre class="prettyprint lang-bash">
+# 取得哈希元素的个数
+length=${#array_name[@]}
+# 或者
+length=${#array_name[*]}
+</pre>
+<h3>实例</h3>
+<pre class="prettyprint lang-bash">
+#!/bin/bash
+# Declare a dictionary.
+declare -A Host
+Host=( [node1]='10.1.1.11' [node2]='10.1.1.12' [node3]='10.1.1.13' [node4]='10.1.1.14' )
+
+# Traversing dictionary values.
+for node_ip in ${Host[@]};
+do
+  echo "One IP of these hosts is ${node_ip} .";
+done
+
+# Traversing dictionary keys.
+for node in ${!Host[@]};
+do
+  echo "One hostname of these hosts is: ${node}. ";
+done
+
+# Traverse keys and values at the same time.
+for node in ${!Host[@]};
+do
+  echo "Hostname: ${node}, IP: ${Host[${node}]}. "
+done
+
+# Get the length of this dictionary.
+echo "The length of this dictionary is ${#Host[@]}. "
+
+# Append a key and a value.
+Host[node5]='10.1.1.15'
+echo "The value of new dictionary is: ${Host[@]}. "
+echo "The length of dictionary is: ${#Host[*]}. "
+
+# Modify a value of the dictionary .
+Host[node1]='10.1.1.111'
+echo "The value of new dictionary is: ${Host[@]}. "
+</pre>
+<p>执行脚本，输出结果如下所示：</p>
+<pre class="prettyprint lang-bash">
+$ chmod +x test.sh 
+One IP of these hosts is 10.1.1.14 .
+One IP of these hosts is 10.1.1.11 .
+One IP of these hosts is 10.1.1.12 .
+One IP of these hosts is 10.1.1.13 .
+One hostname of these hosts is: node4.
+One hostname of these hosts is: node1.
+One hostname of these hosts is: node2.
+One hostname of these hosts is: node3.
+Hostname: node4, IP: 10.1.1.14.
+Hostname: node1, IP: 10.1.1.11.
+Hostname: node2, IP: 10.1.1.12.
+Hostname: node3, IP: 10.1.1.13.
+The length of this dictionary is 4.
+The value of new dictionary is: 10.1.1.14 10.1.1.15 10.1.1.11 10.1.1.12 10.1.1.13.
+The length of dictionary is: 5.
+The value of new dictionary is: 10.1.1.14 10.1.1.15 10.1.1.111 10.1.1.12 10.1.1.13.
+</pre>
+</div>
+{% endblock %}

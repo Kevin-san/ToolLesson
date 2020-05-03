@@ -1,0 +1,9 @@
+argvs : h1/p/h3/p/pre/p/pre/p/table/pre/p/pre/p/ul/pre/p/pre
+array : h1/p/pre/h3/p/pre/p/pre/p/pre/p/pre/p/h3/p/pre/p/pre/p/pre/h3/p/pre/
+
+
+index : h1/p/pre/p/pre
+array : h1/p/pre h3/p/pre/p/pre
+
+<p>Linux 命令格式 ：</p>
+<pre>命令名称 [命令参数] [命令参数]</pre>
