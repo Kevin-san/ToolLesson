@@ -1,0 +1,315 @@
+<div class="article-intro" id="content">
+<h1>强大好用的Shell</h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常来讲，计算机硬件是由运算器、控制器、存储器、输入/输出设备等共同组成的，而让各种硬件设备各司其职且又能协同运行的就是系统内核。
+Linux系统的内核负责完成对硬件资源的分配、调度等管理任务。由此可见，系统内核对计算机的正常运行来讲是太重要了，因此一般不建议直接去编辑内核中的参数，而是让用户通过基于系统调用接口开发出的程序或服务来管理计算机，以满足日常工作的需要。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;必须肯定的是，Linux系统中有些图形化工具(比如逻辑卷管理器[Logical Volume Manager,LVM])确实非常好用，极大地降低了运维人员操作出错的概率，值得称赞。
+但是，很多图形化工具其实是调用了脚本来完成相应的工作，往往只是为了完成某种工作来设计的，缺乏Linux命令原有的灵活性及可控性。再者，图形化工具相较于Linux命令行界面会更加消耗系统资源，因此经验丰富的运维人员甚至都不会给Linux系统安装图形界面，需要开始运维工作时直接通过命令行模式远程连接过去，不得不说这样做确实挺高效的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shell就是这样的一个命令行工具。Shell(也称终端或壳)充当的是人与内核(硬件)之间的翻译官，用户把一些命令"告诉终端"，它就会调用相应的程序服务去完成某些工作。
+现在包括红帽系统在内的许多主流Linux系统默认使用的终端是Bash(Bourne-Again Shell)解释器。主流Linux系统选择Bash解释器作为命令行终端主要有以下4项优势:</p>
+<pre>
+	<strong><em>通过上下方向键来调取过往执行过的Linux命令；</em></strong>
+	<strong><em>命令或参数仅需输入前几位就可以用Tab键补全；</em></strong>
+	<strong><em>具有强大的批处理脚本；</em></strong>
+	<strong><em>具有实用的环境变量功能；</em></strong>
+</pre>
+<p>Linux 命令格式 ：</p>
+<pre>命令名称 [命令参数] [命令参数]</pre>
+<h2>Shell man命令</h2>
+<p>Shell 的man 指令用于快速查询Linux帮助手册，并格式化显示。</p>
+<p>man命令中常用按键以及用途</p>
+<table class="table table-bordered table-striped">
+<tbody>
+	<tr>
+		<th>按键</th>
+		<th>用途</th>
+	</tr>
+	<tr>
+		<td>空格键</td>
+		<td>向下翻一页</td>
+	</tr>
+	<tr>
+		<td>Page Down</td>
+		<td>向下翻一页</td>
+	</tr>
+	<tr>
+		<td>Page Up</td>
+		<td>向上翻一页</td>
+	</tr>
+	<tr>
+		<td>Home</td>
+		<td>直接前往首页</td>
+	</tr>
+	<tr>
+		<td>End</td>
+		<td>直接前往尾页</td>
+	</tr>
+	<tr>
+		<td>/</td>
+		<td>从上至下搜索某个关键词，如"/linux"</td>
+	</tr>
+	<tr>
+		<td>?</td>
+		<td>从下至上搜索某个关键词，如"?linux"</td>
+	</tr>
+	<tr>
+		<td>n</td>
+		<td>定位到下一个搜索到的关键词</td>
+	</tr>
+	<tr>
+		<td>N</td>
+		<td>定位到上一个搜索到的关键词</td>
+	</tr>
+	<tr>
+		<td>q</td>
+		<td>退出帮助文档</td>
+	</tr>
+</tbody>
+</table>
+<p>man命令帮助信息的文档结构以及意义</p>
+<table class="table table-bordered table-striped">
+<tbody>
+	<tr>
+		<th>结构名称</th>
+		<th>代表意义</th>
+	</tr>
+	<tr>
+		<td>NAME</td>
+		<td>命令的名称</td>
+	</tr>
+	<tr>
+		<td>SYNOPSIS</td>
+		<td>参数的大致使用方法</td>
+	</tr>
+	<tr>
+		<td>DESCRIPTION</td>
+		<td>介绍说明</td>
+	</tr>
+	<tr>
+		<td>EXAMPLES</td>
+		<td>演示(附带简单说明)</td>
+	</tr>
+	<tr>
+		<td>OVERVIEW</td>
+		<td>概述</td>
+	</tr>
+	<tr>
+		<td>DEFAULTS</td>
+		<td>默认的功能</td>
+	</tr>
+	<tr>
+		<td>?</td>
+		<td>从下至上搜索某个关键词，如"?linux"</td>
+	</tr>
+	<tr>
+		<td>n</td>
+		<td>定位到下一个搜索到的关键词</td>
+	</tr>
+	<tr>
+		<td>N</td>
+		<td>定位到上一个搜索到的关键词</td>
+	</tr>
+	<tr>
+		<td>q</td>
+		<td>退出帮助文档</td>
+	</tr>
+</tbody>
+</table>
+<h2>Shell rpm命令</h2>
+<p>Shell linux软件包安装命令,用于安装软件。命令格式：</p>
+<p>rpm 选项 包名</p>
+<table class="table table-bordered table-striped">
+<tbody>
+	<tr>
+		<th>选项</th>
+		<th>用途</th>
+	</tr>
+	<tr>
+		<td>-a</td>
+		<td>查询所有套件</td>
+	</tr>
+	<tr>
+		<td>-c</td>
+		<td>只列出组态配置文件，本参数需配合"-l"参数使用</td>
+	</tr>
+	<tr>
+		<td>-d</td>
+		<td>只列出文本文件，本参数需配合"-l"参数使用</td>
+	</tr>
+	<tr>
+		<td>-e</td>
+		<td>删除指定的套件</td>
+	</tr>
+	<tr>
+		<td>-f</td>
+		<td>查询拥有指定文件的套件</td>
+	</tr>
+	<tr>
+		<td>-h</td>
+		<td>套件安装时列出标记</td>
+	</tr>
+	<tr>
+		<td>-i</td>
+		<td>显示套件的相关信息</td>
+	</tr>
+	<tr>
+		<td>-l</td>
+		<td>显示套件的文件列表</td>
+	</tr>
+	<tr>
+		<td>-p</td>
+		<td>查询指定的RPM套件档</td>
+	</tr>
+	<tr>
+		<td>-q</td>
+		<td>使用询问模式，当遇到任何问题时，rpm指令会先询问用户</td>
+	</tr>
+	<tr>
+		<td>-R</td>
+		<td>显示套件的关联性信息</td>
+	</tr>
+	<tr>
+		<td>-s</td>
+		<td>显示文件状态，本参数需配合"-l"参数使用</td>
+	</tr>
+	<tr>
+		<td>-U</td>
+		<td>升级指定的套件档</td>
+	</tr>
+	<tr>
+		<td>-v</td>
+		<td>显示指令执行过程</td>
+	</tr>
+	<tr>
+		<td>-vv</td>
+		<td>详细显示指令执行过程，便于排错</td>
+	</tr>
+</tbody>
+</table>
+<h3>
+1、安装软件包
+</h3>
+<pre class="prettyprint lang-bash">
+rpm -ivh filename.rpm #安装单一软件包
+rpm -ivh filename1.rpm ... filenameN.rpm #安装互相依赖软件包
+</pre>
+<h3>
+2、安装软件包（忽略依赖，强制安装）
+</h3>
+<pre class="prettyprint lang-bash">rpm --nodeps -ivh filename.rpm</pre>
+<h3>
+3、升级软件包
+</h3>
+<pre class="prettyprint lang-bash">rpm -Uvh filename.rpm</pre>
+<h3>
+4、卸载软件包
+</h3>
+<pre class="prettyprint lang-bash">rpm -e filename.rpm</pre>
+<h3>
+5、查询软件描述信息的命令格式
+</h3>
+<pre class="prettyprint lang-bash">rpm -qpi filename.rpm</pre>
+<h3>
+6、列出软件文件信息的命令格式
+</h3>
+<pre class="prettyprint lang-bash">rpm -qpl filename.rpm</pre>
+<h3>
+7、查询文件属于哪个RPM的命令格式
+</h3>
+<pre class="prettyprint lang-bash">rpm -qf filename</pre>
+<h3>
+8、列出所有安装过的包
+</h3>
+<pre class="prettyprint lang-bash">rpm -qa</pre>
+<h3>
+9、获得软件包全名
+</h3>
+<pre class="prettyprint lang-bash">
+rpm -q file
+filename.x.x.x.el6.x86_64
+</pre>
+<h3>
+10、根据关键字查询已安装的某个软件包
+</h3>
+<pre class="prettyprint lang-bash">rpm -qa | grep 'file'</pre>
+
+<h2>Shell echo命令</h2>
+<p>Shell 的 echo 指令与 PHP 的 echo 指令类似，都是用于字符串的输出。命令格式：</p>
+<pre class="prettyprint lang-bash">echo string | $变量</pre>
+<p>
+您可以使用echo实现更复杂的输出格式控制。
+</p>
+<h3>
+1.显示普通字符串:</h3>
+<pre class="prettyprint lang-bash">echo "It is a test"</pre>
+<p>
+这里的双引号完全可以省略，以下命令与上面实例效果一致：</p>
+<pre class="prettyprint lang-bash">echo It is a test</pre>
+<h3>2.显示转义字符</h3>
+<pre class="prettyprint lang-bash">echo "\"It is a test\""</pre>
+<p>
+结果将是:</p>
+<pre class="prettyprint lang-bash">"It is a test"</pre>
+<p>
+同样，双引号也可以省略</p>
+<h3>
+3.显示变量</h3>
+<p>read 命令从标准输入中读取一行,并把输入行的每个字段的值指定给 shell 变量</p>
+<pre class="prettyprint lang-bash">
+!/bin/sh
+read name 
+echo "$name It is a test"</pre>
+<p>以上代码保存为 test.sh，name 接收标准输入的变量，结果将是: </p>
+<pre class="prettyprint lang-bash">
+[root@www ~]# sh test.sh
+OK                     #标准输入
+OK It is a test        #输出
+</pre>
+<h3>
+4.显示换行</h3>
+<pre class="prettyprint lang-bash">
+echo -e "OK! \n" # -e 开启转义
+echo "It is a test"
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash">
+OK!
+
+It is a test
+</pre>
+<h3>
+5.显示不换行
+</h3><pre class="prettyprint lang-bash">
+#!/bin/sh
+echo -e "OK! \c" # -e 开启转义 \c 不换行
+echo "It is a test"
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash">
+OK! It is a test
+</pre>
+<h3>
+6.显示结果定向至文件</h3>
+<pre class="prettyprint lang-bash">
+echo "It is a test" &gt; myfile
+</pre>
+<h3>
+7.原样输出字符串，不进行转义或取变量(用单引号)</h3>
+<pre class="prettyprint lang-bash">
+echo '$name\"'
+</pre>
+<p>输出结果：</p>
+<pre class="prettyprint lang-bash">
+$name\"
+</pre>
+<h3>
+8.显示命令执行结果</h3>
+<pre class="prettyprint lang-bash">
+echo `date`
+</pre>
+<p><strong>注意：</strong> 这里使用的是反引号 <span class="marked">`</span>, 而不是单引号 <span class="marked">'</span>。</p>
+<p>
+结果将显示当前日期</p>
+<pre class="prettyprint lang-bash">
+Thu Jul 24 10 08 46 CST 2014
+</pre>			
+</div>

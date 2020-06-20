@@ -27,6 +27,9 @@ def get_file_m_date(file_path):
     file_date=time.localtime(os.stat(file_path).st_mtime)
     return time.strftime('%Y-%m-%d %H:%M:%S',file_date)
 
+def get_child_files(file_path):
+    return os.listdir(file_path)
+
 def get_file_dir_size(directory):
     if os.path.isfile(directory):
         return getsize(directory)

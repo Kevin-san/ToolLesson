@@ -3,8 +3,8 @@
 <div class="article-intro" id="content">
 <h1>Bash vi/vim </h1>
 <p>
-所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。<br>
-但是目前我们使用比较多的是 vim 编辑器。<br>
+所有的 Unix Like 系统都会内建 vi 文书编辑器，其他的文书编辑器则不一定会存在。
+但是目前我们使用比较多的是 vim 编辑器。
 vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的正确性，方便程序设计。
 </p>
 
@@ -68,7 +68,7 @@ vim 具有程序编辑的能力，可以主动的以字体颜色辨别语法的�
 
 <p>简单的说，我们可以将这三个模式想成底下的图标来表示：</p>
 
-<img src="/static/img/bash/vim-vi-workmodel.png" width="800" height="800" class="img-responsive">
+<p><img src="/static/img/bash/vim-vi-workmodel.png" width="800" height="800" class="img-responsive"></p>
 <hr>
 <h2>vi/vim 使用实例</h2>
 
@@ -79,13 +79,13 @@ $ vim runoob.txt
 </pre>
 <p>直接输入<strong> vi 文件名 </strong>就能够进入 vi 的一般模式了。请注意，记得 vi 后面一定要加文件名，不管该文件存在与否！ 
 </p>
-<img src="/static/img/bash/vim_vi_03.jpg" width="800" height="800" class="img-responsive">
+<p><img src="/static/img/bash/vim_vi_03.jpg" width="800" height="800" class="img-responsive"></p>
 <h3>按下 i 进入输入模式(也称为编辑模式)，开始编辑文字</h3>
 <p>在一般模式之中，只要按下 i, o, a 等字符就可以进入输入模式了！</p>
 <p>在编辑模式当中，你可以发现在左下角状态栏中会出现 –INSERT- 的字样，那就是可以输入任意字符的提示。</p>
 <p>这个时候，键盘上除了 <strong>Esc</strong> 这个按键之外，其他的按键都可以视作为一般的输入按钮了，所以你可以进行任何的编辑。
 </p>
-<img src="/static/img/bash/vim_vi_04.jpg" width="800" height="800" class="img-responsive">
+<p><img src="/static/img/bash/vim_vi_04.jpg" width="800" height="800" class="img-responsive"></p>
 <h3>按下 ESC 按钮回到一般模式</h3>
 <p>好了，假设我已经按照上面的样式给他编辑完毕了，那么应该要如何退出呢？是的！没错！就是给他按下 <strong>Esc</strong> 这个按钮即可！马上你就会发现画面左下角的 – INSERT – 不见了！
 </p>
@@ -93,7 +93,7 @@ $ vim runoob.txt
 <p>
 OK，我们要存档了，存盘并离开的指令很简单，输入 <strong>:wq</strong> 即可保存离开！
 </p>
-<img src="/static/img/bash/vim_vi_05.jpg" width="800" height="800" class="img-responsive">
+<p><img src="/static/img/bash/vim_vi_05.jpg" width="800" height="800" class="img-responsive"></p>
 <p>OK! 这样我们就成功创建了一个 runoob.txt 的文件。</p>
 
 <hr>
@@ -173,7 +173,7 @@ OK，我们要存档了，存盘并离开的指令很简单，输入 <strong>:wq
 	</td></tr>
 	<tr><td>:n1,n2s/word1/word2/g</td>
 		<td>n1 与 n2 为数字。在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为
-		word2 ！举例来说，在 100 到 200 行之间搜寻 vbird 并取代为 VBIRD 则：<br>
+		word2 ！举例来说，在 100 到 200 行之间搜寻 vbird 并取代为 VBIRD 则：
 		『:100,200s/vbird/VBIRD/g』。(常用)</td></tr>
 	<tr><td><span class="label label-info">:1,$s/word1/word2/g</span> 或 <span class="label label-info">:%s/word1/word2/g</span></td>
 		<td>从第一行到最后一行寻找 word1 字符串，并将该字符串取代为
@@ -241,43 +241,43 @@ OK，我们要存档了，存盘并离开的指令很简单，输入 <strong>:wq
 	<table class="table table-bordered table-striped">
 <tbody><tr><th colspan="2"><strong>进入输入或取代的编辑模式</strong></th></tr>
 	<tr><td width="120">i, I</td>
-		<td>进入输入模式(Insert mode)：<br>
+		<td>进入输入模式(Insert mode)：</td><td>
 		i 为『从目前光标所在处输入』， I 为『在目前所在行的第一个非空格符处开始输入』。
-		(<span class="text_import2">常用</span>)</td></tr>
+		(常用)</td></tr>
 	<tr><td>a, A</td>
-		<td>进入输入模式(Insert mode)：<br>
+		<td>进入输入模式(Insert mode)：</td><td>
 		a 为『从目前光标所在的下一个字符处开始输入』， A
-		为『从光标所在行的最后一个字符处开始输入』。(<span class="text_import2">常用</span>)</td></tr>
+		为『从光标所在行的最后一个字符处开始输入』。(常用)</td></tr>
 	<tr><td>o, O</td>
-		<td>进入输入模式(Insert mode)：<br>
+		<td>进入输入模式(Insert mode)：</td><td>
 		这是英文字母 o 的大小写。o 为『在目前光标所在的下一行处输入新的一行』；
-		O 为在目前光标所在处的上一行输入新的一行！(<span class="text_import2">常用</span>)</td></tr>
+		O 为在目前光标所在处的上一行输入新的一行！(常用)</td></tr>
 	<tr><td>r, R</td>
-		<td>进入取代模式(Replace mode)：<br>
+		<td>进入取代模式(Replace mode)：</td><td>
 		r 只会取代光标所在的那一个字符一次；R会一直取代光标所在的文字，直到按下
-		ESC 为止；(<span class="text_import2">常用</span>)</td></tr>
+		ESC 为止；(常用)</td></tr>
 	<tr><td colspan="2">上面这些按键中，在 vi 画面的左下角处会出现『--INSERT--』或『--REPLACE--』的字样。
 		由名称就知道该动作了吧！！特别注意的是，我们上面也提过了，你想要在档案里面输入字符时，
 		一定要在左下角处看到 INSERT 或 REPLACE 才能输入喔！</td></tr>
 	<tr><td>[Esc]</td>
-		<td>退出编辑模式，回到一般模式中(<span class="text_import2">常用</span>)</td></tr>
+		<td>退出编辑模式，回到一般模式中(常用)</td></tr>
 	</tbody></table>
 	<h3>第三部分：一般模式切换到指令行模式的可用的按钮说明</h3>
 	<table class="table table-bordered table-striped">
 <tbody><tr><th colspan="2"><span class="label label-info">指令行的储存、离开等指令</span></th></tr>
 	<tr><td width="160">:w</td>
-		<td>将编辑的数据写入硬盘档案中(<span class="text_import2">常用</span>)</td></tr>
+		<td>将编辑的数据写入硬盘档案中(常用)</td></tr>
 	<tr><td>:w!</td>
 		<td>若文件属性为『只读』时，强制写入该档案。不过，到底能不能写入，
 		还是跟你对该档案的档案权限有关啊！</td></tr>
 	<tr><td>:q</td>
-		<td>离开 vi (<span class="text_import2">常用</span>)</td></tr>
+		<td>离开 vi (常用)</td></tr>
 	<tr><td>:q!</td>
 		<td>若曾修改过档案，又不想储存，使用 ! 为强制离开不储存档案。</td></tr>
 	<tr><td colspan="2">注意一下啊，那个惊叹号 (!) 在 vi 当中，常常具有『强制』的意思～</td></tr>
 	<tr><td>:wq</td>
 		<td>储存后离开，若为 :wq! 则为强制储存后离开
-		(<span class="text_import2">常用</span>)</td></tr>
+		(常用)</td></tr>
 	<tr><td>ZZ</td>
 		<td>这是大写的 Z 喔！若档案没有更动，则不储存离开，若档案已经被更动过，则储存后离开！</td></tr>
 	<tr><td>:w [filename]</td>
@@ -288,7 +288,7 @@ OK，我们要存档了，存盘并离开的指令很简单，输入 <strong>:wq
 	<tr><td>:n1,n2 w [filename]</td>
 		<td>将 n1 到 n2 的内容储存成 filename 这个档案。</td></tr>
 	<tr><td>:! command</td>
-		<td>暂时离开 vi 到指令行模式下执行 command 的显示结果！例如<br>
+		<td>暂时离开 vi 到指令行模式下执行 command 的显示结果！例如:
 		『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！</td></tr>
 <tr><th colspan="2"><strong>vim 环境的变更</strong></th></tr>
 	<tr><td>:set nu</td>

@@ -153,7 +153,7 @@ def pdf2any(pdf_params):
 def pdf2pic(pdf_params):
     check_xo=r"/Type(?= */XObject)"
     check_im=r"/Subtype(?= */Image)"
-    doc = fitz.open(pdf_params.pdffile)
+    doc = fitz.Document(pdf_params.pdffile)
     imgcount=0
     len_xref=doc._getXrefLength()
     for i in range(1,len_xref):
@@ -174,3 +174,9 @@ def pdf2pic(pdf_params):
             pix0.writePNG(F"{pdf_params.imgdir}/img_{imgcount}.png")
             pix0 = None
     return
+
+def htmlspec2str(str1):
+    return str1.replace("&nbsp;"," ").replace("&lt;","<").replace("&gt;",">").replace("\t","    ")
+
+def str2htmlspec(str1):
+    return str1.replace(" ","&nbsp;").replace("<","&lt;").replace(">","&gt;")

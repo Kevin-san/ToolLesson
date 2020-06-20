@@ -45,9 +45,6 @@ def html_to_detail_sql(html_file):
     html_str = common_filer.get_file_details(html_file)
 
 
-
-
-
 def group_by_list(func,item,group_dicts):
     par_key = func(item)
     if par_key in group_dicts:
@@ -432,3 +429,6 @@ def sorted_dict_to_str(dict_obj,reverse_flag):
 
 def group_format(obj_val):
     return format(obj_val, ',')
+
+def get_count(str1,str2):
+    return (len(str1) - len(str1.replace(str2,""))) // len(str2)

@@ -1,0 +1,1765 @@
+
+fr_type:linux/apache,tag_id:26,name:table,text:服务目录	/etc/httpd
+主配置文件	/etc/httpd/conf/httpd.conf
+网站数据目录	/var/www/html
+访问日志	/var/log/httpd/access_log
+错误日志	/var/log/httpd/error_log,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/apache,tag_id:31,name:table,text:ServerRoot	服务目录
+ServerAdmin	管理员邮箱
+User	运行服务的用户
+Group	运行服务的用户组
+ServerName	网站服务器的域名
+DocumentRoot	网站数据目录
+Listen	监听的IP地址与端口号
+DirectoryIndex	默认的索引页页面
+ErrorLog	错误日志文件
+CustomLog	访问日志文件
+Timeout	网页超时时间，默认为300秒,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/apache,tag_id:49,name:ul,text:enforcing：强制启用安全策略模式，将拦截服务的不合法请求。
+permissive：遇到服务越权访问时，只发出警告而不强制拦截。
+disabled：对于越权的行为不警告也不拦截。,flag:html,attrs:{}
+fr_type:linux/apache,tag_id:68,name:ul,text:-l参数用于查询；
+-a参数用于添加；
+-m参数用于修改；
+-d参数用于删除。,flag:html,attrs:{}
+fr_type:linux/apache,tag_id:26,name:table,text:服务目录	/etc/httpd
+主配置文件	/etc/httpd/conf/httpd.conf
+网站数据目录	/var/www/html
+访问日志	/var/log/httpd/access_log
+错误日志	/var/log/httpd/error_log,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/apache,tag_id:31,name:table,text:ServerRoot	服务目录
+ServerAdmin	管理员邮箱
+User	运行服务的用户
+Group	运行服务的用户组
+ServerName	网站服务器的域名
+DocumentRoot	网站数据目录
+Listen	监听的IP地址与端口号
+DirectoryIndex	默认的索引页页面
+ErrorLog	错误日志文件
+CustomLog	访问日志文件
+Timeout	网页超时时间，默认为300秒,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/apache,tag_id:49,name:ul,text:enforcing：强制启用安全策略模式，将拦截服务的不合法请求。
+permissive：遇到服务越权访问时，只发出警告而不强制拦截。
+disabled：对于越权的行为不警告也不拦截。,flag:html,attrs:{}
+fr_type:linux/apache,tag_id:68,name:ul,text:-l参数用于查询；
+-a参数用于添加；
+-m参数用于修改；
+-d参数用于删除。,flag:html,attrs:{}
+fr_type:linux/bind,tag_id:16,name:table,text:名称	管理单位	地理位置	IP地址
+A	INTERNIC.NET	美国-弗吉尼亚州	198.41.0.4
+B	美国信息科学研究所	美国-加利弗尼亚州	128.9.0.107
+C	PSINet公司	美国-弗吉尼亚州	192.33.4.12
+D	马里兰大学	美国-马里兰州	128.8.10.90
+E	美国航空航天管理局	美国加利弗尼亚州	192.203.230.10
+F	因特网软件联盟	美国加利弗尼亚州	192.5.5.241
+G	美国国防部网络信息中心	美国弗吉尼亚州	192.112.36.4
+H	美国陆军研究所	美国-马里兰州	128.63.2.53
+I	Autonomica公司	瑞典-斯德哥尔摩	192.36.148.17
+J	VeriSign公司	美国-弗吉尼亚州	192.58.128.30
+K	RIPE NCC	英国-伦敦	193.0.14.129
+L	IANA	美国-弗吉尼亚州	199.7.83.42
+M	WIDE Project	日本-东京	202.12.27.33,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:21,name:ul,text:主配置文件（/etc/named.conf）：只有58行，而且在去除注释信息和空行之后，实际有效的参数仅有30行左右，这些参数用来定义bind服务程序的运行。
+区域配置文件（/etc/named.rfc1912.zones）：用来保存域名和IP地址对应关系的所在位置。类似于图书的目录，对应着每个域和相应IP地址所在的具体位置，当需要查看或修改时，可根据这个位置找到相关文件。
+数据配置文件目录（/var/named）：该目录用来保存域名和IP地址真实对应关系的数据配置文件。,flag:html,attrs:{}
+fr_type:linux/bind,tag_id:51,name:table,text:主机名称	操作系统	IP地址
+主服务器	RHEL 7	192.168.10.10
+从服务器	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:65,name:table,text:参数	作用
+-a	指定加密算法，包括RSAMD5（RSA）、RSASHA1、DSA、NSEC3RSASHA1、NSEC3DSA等
+-b	密钥长度（HMAC-MD5的密钥长度在1~512位之间）
+-n	密钥的类型（HOST表示与主机相关）,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:83,name:table,text:主机名称	操作系统	IP地址
+缓存服务器	RHEL 7	网卡（外网）：根据物理设备的网络参数进行配置（通过DHCP或手动方式指定IP地址与网关等信息）<ul>网卡（内网）：192.168.10.10
+客户端	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:95,name:table,text:主机名称	操作系统	IP地址
+DNS服务器	RHEL 7	北京网络：122.71.115.10<ul>美国网络：106.185.25.10
+北京用户	Windows 7	122.71.115.1
+海外用户	Windows 7	106.185.25.1,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:16,name:table,text:名称	管理单位	地理位置	IP地址
+A	INTERNIC.NET	美国-弗吉尼亚州	198.41.0.4
+B	美国信息科学研究所	美国-加利弗尼亚州	128.9.0.107
+C	PSINet公司	美国-弗吉尼亚州	192.33.4.12
+D	马里兰大学	美国-马里兰州	128.8.10.90
+E	美国航空航天管理局	美国加利弗尼亚州	192.203.230.10
+F	因特网软件联盟	美国加利弗尼亚州	192.5.5.241
+G	美国国防部网络信息中心	美国弗吉尼亚州	192.112.36.4
+H	美国陆军研究所	美国-马里兰州	128.63.2.53
+I	Autonomica公司	瑞典-斯德哥尔摩	192.36.148.17
+J	VeriSign公司	美国-弗吉尼亚州	192.58.128.30
+K	RIPE NCC	英国-伦敦	193.0.14.129
+L	IANA	美国-弗吉尼亚州	199.7.83.42
+M	WIDE Project	日本-东京	202.12.27.33,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:21,name:ul,text:主配置文件（/etc/named.conf）：只有58行，而且在去除注释信息和空行之后，实际有效的参数仅有30行左右，这些参数用来定义bind服务程序的运行。
+区域配置文件（/etc/named.rfc1912.zones）：用来保存域名和IP地址对应关系的所在位置。类似于图书的目录，对应着每个域和相应IP地址所在的具体位置，当需要查看或修改时，可根据这个位置找到相关文件。
+数据配置文件目录（/var/named）：该目录用来保存域名和IP地址真实对应关系的数据配置文件。,flag:html,attrs:{}
+fr_type:linux/bind,tag_id:51,name:table,text:主机名称	操作系统	IP地址
+主服务器	RHEL 7	192.168.10.10
+从服务器	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:65,name:table,text:参数	作用
+-a	指定加密算法，包括RSAMD5（RSA）、RSASHA1、DSA、NSEC3RSASHA1、NSEC3DSA等
+-b	密钥长度（HMAC-MD5的密钥长度在1~512位之间）
+-n	密钥的类型（HOST表示与主机相关）,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:83,name:table,text:主机名称	操作系统	IP地址
+缓存服务器	RHEL 7	网卡（外网）：根据物理设备的网络参数进行配置（通过DHCP或手动方式指定IP地址与网关等信息）<ul>网卡（内网）：192.168.10.10
+客户端	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/bind,tag_id:95,name:table,text:主机名称	操作系统	IP地址
+DNS服务器	RHEL 7	北京网络：122.71.115.10<ul>美国网络：106.185.25.10
+北京用户	Windows 7	122.71.115.1
+海外用户	Windows 7	106.185.25.1,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/command,tag_id:11,name:table,text:按键	用途
+空格键	向下翻一页
+Page Down	向下翻一页
+Page Up	向上翻一页
+Home	直接前往首页
+End	直接前往尾页
+/	从上至下搜索某个关键词，如"/linux"
+?	从下至上搜索某个关键词，如"?linux"
+n	定位到下一个搜索到的关键词
+N	定位到上一个搜索到的关键词
+q	退出帮助文档,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/command,tag_id:13,name:table,text:结构名称	代表意义
+NAME	命令的名称
+SYNOPSIS	参数的大致使用方法
+DESCRIPTION	介绍说明
+EXAMPLES	演示(附带简单说明)
+OVERVIEW	概述
+DEFAULTS	默认的功能
+?	从下至上搜索某个关键词，如"?linux"
+n	定位到下一个搜索到的关键词
+N	定位到上一个搜索到的关键词
+q	退出帮助文档,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/command,tag_id:17,name:table,text:选项	用途
+-a	查询所有套件
+-c	只列出组态配置文件，本参数需配合"-l"参数使用
+-d	只列出文本文件，本参数需配合"-l"参数使用
+-e	删除指定的套件
+-f	查询拥有指定文件的套件
+-h	套件安装时列出标记
+-i	显示套件的相关信息
+-l	显示套件的文件列表
+-p	查询指定的RPM套件档
+-q	使用询问模式，当遇到任何问题时，rpm指令会先询问用户
+-R	显示套件的关联性信息
+-s	显示文件状态，本参数需配合"-l"参数使用
+-U	升级指定的套件档
+-v	显示指令执行过程
+-vv	详细显示指令执行过程，便于排错,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/command,tag_id:11,name:table,text:按键	用途
+空格键	向下翻一页
+Page Down	向下翻一页
+Page Up	向上翻一页
+Home	直接前往首页
+End	直接前往尾页
+/	从上至下搜索某个关键词，如"/linux"
+?	从下至上搜索某个关键词，如"?linux"
+n	定位到下一个搜索到的关键词
+N	定位到上一个搜索到的关键词
+q	退出帮助文档,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/command,tag_id:13,name:table,text:结构名称	代表意义
+NAME	命令的名称
+SYNOPSIS	参数的大致使用方法
+DESCRIPTION	介绍说明
+EXAMPLES	演示(附带简单说明)
+OVERVIEW	概述
+DEFAULTS	默认的功能
+?	从下至上搜索某个关键词，如"?linux"
+n	定位到下一个搜索到的关键词
+N	定位到上一个搜索到的关键词
+q	退出帮助文档,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/command,tag_id:17,name:table,text:选项	用途
+-a	查询所有套件
+-c	只列出组态配置文件，本参数需配合"-l"参数使用
+-d	只列出文本文件，本参数需配合"-l"参数使用
+-e	删除指定的套件
+-f	查询拥有指定文件的套件
+-h	套件安装时列出标记
+-i	显示套件的相关信息
+-l	显示套件的文件列表
+-p	查询指定的RPM套件档
+-q	使用询问模式，当遇到任何问题时，rpm指令会先询问用户
+-R	显示套件的关联性信息
+-s	显示文件状态，本参数需配合"-l"参数使用
+-U	升级指定的套件档
+-v	显示指令执行过程
+-vv	详细显示指令执行过程，便于排错,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:20,name:table,text:参数	作用
+ddns-update-style 类型	定义DNS服务动态更新的类型，类型包括：none（不支持动态更新）、interim（互动更新模式）与ad-hoc（特殊更新模式）
+allow/ignore client-updates	允许/忽略客户端更新DNS记录
+default-lease-time 21600	默认超时时间
+max-lease-time 43200	最大超时时间
+option domain-name-servers 8.8.8.8	定义DNS服务器地址
+option domain-name "domain.org"	定义DNS域名
+range	定义用于分配的IP地址池
+option subnet-mask	定义客户端的子网掩码
+option routers	定义客户端的网关地址
+broadcast-address 广播地址	定义客户端的广播地址
+ntp-server IP地址	定义客户端的网络时间服务器（NTP）
+nis-servers IP地址	定义客户端的NIS域服务器的地址
+hardware 硬件类型 MAC地址	指定网卡接口的类型与MAC地址
+server-name 主机名	向DHCP客户端通知DHCP服务器的主机名
+fixed-address IP地址	将某个固定的IP地址分配给指定主机
+time-offset 偏移差	指定客户端与格林尼治时间的偏移差,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:26,name:table,text:参数名称	值
+默认租约时间	21600秒
+最大租约时间	43200秒
+IP地址范围	192.168.10.50~192.168.10.150
+子网掩码	255.255.255.0
+网关地址	192.168.10.1
+DNS服务器地址	192.168.10.1
+搜索域	linuxprobe.com,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:27,name:table,text:主机类型	操作系统	IP地址
+DHCP服务器	RHEL 7	192.168.10.1
+DHCP客户机	RHEL 7	DHCP自动获取地址,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:34,name:table,text:参数	作用
+ddns-update-style none;	设置DNS服务不自动进行动态更新
+ignore client-updates;	忽略客户端更新DNS记录
+subnet 192.168.10.0 netmask 255.255.255.0 {	作用域为192.168.10.0/24网段
+range 192.168.10.50 192.168.10.150;	IP地址池为192.168.10.50-150（约100个IP地址）
+option subnet-mask 255.255.255.0;	定义客户端默认的子网掩码
+option routers 192.168.10.1;	定义客户端的网关地址
+option domain-name "linuxprobe.com";	定义默认的搜索域
+option domain-name-servers 192.168.10.1;	定义客户端的DNS地址
+default-lease-time 21600;	定义默认租约时间（单位：秒）
+max-lease-time 43200;	定义最大预约时间（单位：秒）
+}	结束符,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:20,name:table,text:参数	作用
+ddns-update-style 类型	定义DNS服务动态更新的类型，类型包括：none（不支持动态更新）、interim（互动更新模式）与ad-hoc（特殊更新模式）
+allow/ignore client-updates	允许/忽略客户端更新DNS记录
+default-lease-time 21600	默认超时时间
+max-lease-time 43200	最大超时时间
+option domain-name-servers 8.8.8.8	定义DNS服务器地址
+option domain-name "domain.org"	定义DNS域名
+range	定义用于分配的IP地址池
+option subnet-mask	定义客户端的子网掩码
+option routers	定义客户端的网关地址
+broadcast-address 广播地址	定义客户端的广播地址
+ntp-server IP地址	定义客户端的网络时间服务器（NTP）
+nis-servers IP地址	定义客户端的NIS域服务器的地址
+hardware 硬件类型 MAC地址	指定网卡接口的类型与MAC地址
+server-name 主机名	向DHCP客户端通知DHCP服务器的主机名
+fixed-address IP地址	将某个固定的IP地址分配给指定主机
+time-offset 偏移差	指定客户端与格林尼治时间的偏移差,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:26,name:table,text:参数名称	值
+默认租约时间	21600秒
+最大租约时间	43200秒
+IP地址范围	192.168.10.50~192.168.10.150
+子网掩码	255.255.255.0
+网关地址	192.168.10.1
+DNS服务器地址	192.168.10.1
+搜索域	linuxprobe.com,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:27,name:table,text:主机类型	操作系统	IP地址
+DHCP服务器	RHEL 7	192.168.10.1
+DHCP客户机	RHEL 7	DHCP自动获取地址,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/dhcp,tag_id:34,name:table,text:参数	作用
+ddns-update-style none;	设置DNS服务不自动进行动态更新
+ignore client-updates;	忽略客户端更新DNS记录
+subnet 192.168.10.0 netmask 255.255.255.0 {	作用域为192.168.10.0/24网段
+range 192.168.10.50 192.168.10.150;	IP地址池为192.168.10.50-150（约100个IP地址）
+option subnet-mask 255.255.255.0;	定义客户端默认的子网掩码
+option routers 192.168.10.1;	定义客户端的网关地址
+option domain-name "linuxprobe.com";	定义默认的搜索域
+option domain-name-servers 192.168.10.1;	定义客户端的DNS地址
+default-lease-time 21600;	定义默认租约时间（单位：秒）
+max-lease-time 43200;	定义最大预约时间（单位：秒）
+}	结束符,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:19,name:table,text:版本	用户	说明	日期
+1	Ronny	创建Git章节文档	10/12 13:48
+2	Dave	新增Git命令介绍	10/15 12:19
+3	Aaron	新增Github使用方法	10/20 8:32
+4	Kim	改正文章中的错别字	10/30 15:17,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:22,name:ul,text:已提交(committed):表示数据文件已经顺利提交到Git数据库中。
+已修改(modified):表示数据文件已经被修改，但未被保存到Git数据库中。
+已暂存(staged):表示数据文件已经被修改，并会在下次提交时提交到Git数据库中。,flag:html,attrs:{}
+fr_type:linux/git,tag_id:24,name:ol,text:在工作目录中修改数据文件。
+将文件的快照放入暂存区域。
+将暂存区域的文件快照提交到Git仓库中。,flag:html,attrs:{}
+fr_type:linux/git,tag_id:29,name:table,text:配置文件	作用
+/etc/gitconfig	保存着系统中每个用户及仓库通用配置信息。
+~/.gitconfig<ul>~/.config/git/config	针对于当前用户的配置信息。
+                工作目录/.git/config            	针对于当前仓库数据的配置信息。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:120,name:table,text:%s	提交说明。
+%cd	提交日期。
+%an	作者的名字。
+%cn	提交者的姓名。
+%ce	提交者的电子邮件。
+%H	提交对象的完整SHA-1哈希字串。
+%h	提交对象的简短SHA-1哈希字串。
+%T	树对象的完整SHA-1哈希字串。
+%t	树对象的简短SHA-1哈希字串。
+%P	父对象的完整SHA-1哈希字串。
+%p	父对象的简短SHA-1哈希字串。
+%ad	作者的修订时间。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:220,name:table,text:主机名称	操作系统	IP地址
+Git服务器	红帽RHEL7操作系统	192.168.10.10
+Git客户端	红帽RHEL7操作系统	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:19,name:table,text:版本	用户	说明	日期
+1	Ronny	创建Git章节文档	10/12 13:48
+2	Dave	新增Git命令介绍	10/15 12:19
+3	Aaron	新增Github使用方法	10/20 8:32
+4	Kim	改正文章中的错别字	10/30 15:17,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:22,name:ul,text:已提交(committed):表示数据文件已经顺利提交到Git数据库中。
+已修改(modified):表示数据文件已经被修改，但未被保存到Git数据库中。
+已暂存(staged):表示数据文件已经被修改，并会在下次提交时提交到Git数据库中。,flag:html,attrs:{}
+fr_type:linux/git,tag_id:24,name:ol,text:在工作目录中修改数据文件。
+将文件的快照放入暂存区域。
+将暂存区域的文件快照提交到Git仓库中。,flag:html,attrs:{}
+fr_type:linux/git,tag_id:29,name:table,text:配置文件	作用
+/etc/gitconfig	保存着系统中每个用户及仓库通用配置信息。
+~/.gitconfig<ul>~/.config/git/config	针对于当前用户的配置信息。
+                工作目录/.git/config            	针对于当前仓库数据的配置信息。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:120,name:table,text:%s	提交说明。
+%cd	提交日期。
+%an	作者的名字。
+%cn	提交者的姓名。
+%ce	提交者的电子邮件。
+%H	提交对象的完整SHA-1哈希字串。
+%h	提交对象的简短SHA-1哈希字串。
+%T	树对象的完整SHA-1哈希字串。
+%t	树对象的简短SHA-1哈希字串。
+%P	父对象的完整SHA-1哈希字串。
+%p	父对象的简短SHA-1哈希字串。
+%ad	作者的修订时间。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/git,tag_id:220,name:table,text:主机名称	操作系统	IP地址
+Git服务器	红帽RHEL7操作系统	192.168.10.10
+Git客户端	红帽RHEL7操作系统	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/index,tag_id:16,name:ul,text:巴西联邦政府由于支持 Linux 而世界闻名。
+有新闻报道俄罗斯军队自己制造的 Linux 发布版的，做为 G.H.ost 项目已经取得成果。
+印度的 Kerala 联邦计划在向全联邦的高中推广使用 Linux。
+中华人民共和国为取得技术独立，在龙芯处理器中排他性地使用 Linux。
+ 在西班牙的一些地区开发了自己的 Linux 发布版，并且在政府与教育领域广泛使用，如 Extremadura 地区的 gnuLinEx 和 Andalusia 地区的 Guadalinex。
+葡萄牙同样使用自己的 Linux 发布版 Caixa Mágica，用于 Magalh?es 笔记本电脑和 e-escola 政府软件。
+法国和德国同样开始逐步采用 Linux。,flag:html,attrs:{}
+fr_type:linux/index,tag_id:20,name:table,text:比较	Windows	Linux
+界面	界面统一，外壳程序固定所有 Windows 程序菜单几乎一致，快捷键也几乎相同	图形界面风格依发布版不同而不同，可能互不兼容。GNU/Linux 的终端机是从 UNIX 传承下来，基本命令和操作方法也几乎一致。
+驱动程序	驱动程序丰富，版本更新频繁。默认安装程序里面一般包含有该版本发布时流行的硬件驱动程序，之后所出的新硬件驱动依赖于硬件厂商提供。对于一些老硬件，如果没有了原配的驱动有时很难支持。另外，有时硬件厂商未提供所需版本的 Windows 下的驱动，也会比较头痛。	由志愿者开发，由 Linux 核心开发小组发布，很多硬件厂商基于版权考虑并未提供驱动程序，尽管多数无需手动安装，但是涉及安装则相对复杂，使得新用户面对驱动程序问题（是否存在和安装方法）会一筹莫展。但是在开源开发模式下，许多老硬件尽管在Windows下很难支持的也容易找到驱动。HP、Intel、AMD 等硬件厂商逐步不同程度支持开源驱动，问题正在得到缓解。
+使用	使用比较简单，容易入门。图形化界面对没有计算机背景知识的用户使用十分有利。	图形界面使用简单，容易入门。文字界面，需要学习才能掌握。
+学习	系统构造复杂、变化频繁，且知识、技能淘汰快，深入学习困难。	系统构造简单、稳定，且知识、技能传承性好，深入学习相对容易。
+软件	每一种特定功能可能都需要商业软件的支持，需要购买相应的授权。	大部分软件都可以自由获取，同样功能的软件选择较少。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/index,tag_id:24,name:table,text:特性	内容
+低风险	使用闭源软件无疑把命运交付给他人，一旦封闭的源代码没有人来维护，你将进退维谷；而且相较于商业软件公司，开源社区很少存在倒闭的问题。
+高品质	相较于闭源软件公司，开源项目通常是由开源社区来研发及维护，参与编写、维护、测试的用户量众多，一般的bug还没有等爆发就已经被修补。
+低成本	开源工作者都是在幕后默默且无偿地付出劳动成果，为美好的世界贡献一份力量，因此使用开源社区推动的软件项目可以节省大量的人力、物力和财力。
+更透明	没有哪个笨蛋会把木马、后门等放到开放的源代码中，这样无疑是把自己的罪行暴露在阳光下。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/index,tag_id:26,name:ul,text:GNU GPL( GNU General Public License, GNU通用许可证)
+BSD (Berkeley Software Distribution, 伯克利软件发布版) 许可协议
+Apache 许可证版本(Apache License Version)许可协议
+MPL (Mozilla Public License, Mozilla公共许可)许可协议
+MIT (Massachusetts Institute of Technology)许可协议,flag:html,attrs:{}
+fr_type:linux/index,tag_id:16,name:ul,text:巴西联邦政府由于支持 Linux 而世界闻名。
+有新闻报道俄罗斯军队自己制造的 Linux 发布版的，做为 G.H.ost 项目已经取得成果。
+印度的 Kerala 联邦计划在向全联邦的高中推广使用 Linux。
+中华人民共和国为取得技术独立，在龙芯处理器中排他性地使用 Linux。
+ 在西班牙的一些地区开发了自己的 Linux 发布版，并且在政府与教育领域广泛使用，如 Extremadura 地区的 gnuLinEx 和 Andalusia 地区的 Guadalinex。
+葡萄牙同样使用自己的 Linux 发布版 Caixa Mágica，用于 Magalh?es 笔记本电脑和 e-escola 政府软件。
+法国和德国同样开始逐步采用 Linux。,flag:html,attrs:{}
+fr_type:linux/index,tag_id:20,name:table,text:比较	Windows	Linux
+界面	界面统一，外壳程序固定所有 Windows 程序菜单几乎一致，快捷键也几乎相同	图形界面风格依发布版不同而不同，可能互不兼容。GNU/Linux 的终端机是从 UNIX 传承下来，基本命令和操作方法也几乎一致。
+驱动程序	驱动程序丰富，版本更新频繁。默认安装程序里面一般包含有该版本发布时流行的硬件驱动程序，之后所出的新硬件驱动依赖于硬件厂商提供。对于一些老硬件，如果没有了原配的驱动有时很难支持。另外，有时硬件厂商未提供所需版本的 Windows 下的驱动，也会比较头痛。	由志愿者开发，由 Linux 核心开发小组发布，很多硬件厂商基于版权考虑并未提供驱动程序，尽管多数无需手动安装，但是涉及安装则相对复杂，使得新用户面对驱动程序问题（是否存在和安装方法）会一筹莫展。但是在开源开发模式下，许多老硬件尽管在Windows下很难支持的也容易找到驱动。HP、Intel、AMD 等硬件厂商逐步不同程度支持开源驱动，问题正在得到缓解。
+使用	使用比较简单，容易入门。图形化界面对没有计算机背景知识的用户使用十分有利。	图形界面使用简单，容易入门。文字界面，需要学习才能掌握。
+学习	系统构造复杂、变化频繁，且知识、技能淘汰快，深入学习困难。	系统构造简单、稳定，且知识、技能传承性好，深入学习相对容易。
+软件	每一种特定功能可能都需要商业软件的支持，需要购买相应的授权。	大部分软件都可以自由获取，同样功能的软件选择较少。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/index,tag_id:24,name:table,text:特性	内容
+低风险	使用闭源软件无疑把命运交付给他人，一旦封闭的源代码没有人来维护，你将进退维谷；而且相较于商业软件公司，开源社区很少存在倒闭的问题。
+高品质	相较于闭源软件公司，开源项目通常是由开源社区来研发及维护，参与编写、维护、测试的用户量众多，一般的bug还没有等爆发就已经被修补。
+低成本	开源工作者都是在幕后默默且无偿地付出劳动成果，为美好的世界贡献一份力量，因此使用开源社区推动的软件项目可以节省大量的人力、物力和财力。
+更透明	没有哪个笨蛋会把木马、后门等放到开放的源代码中，这样无疑是把自己的罪行暴露在阳光下。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/index,tag_id:26,name:ul,text:GNU GPL( GNU General Public License, GNU通用许可证)
+BSD (Berkeley Software Distribution, 伯克利软件发布版) 许可协议
+Apache 许可证版本(Apache License Version)许可协议
+MPL (Mozilla Public License, Mozilla公共许可)许可协议
+MIT (Massachusetts Institute of Technology)许可协议,flag:html,attrs:{}
+fr_type:linux/install,tag_id:6,name:p,text: 可以去官网下载最新版本： <a href="https://www.centos.org/download/" rel="noopener noreferrer" target="_blank">  https://www.centos.org/download/ </a>,flag:html,attrs:{}
+fr_type:linux/install,tag_id:6,name:p,text: 可以去官网下载最新版本： <a href="https://www.centos.org/download/" rel="noopener noreferrer" target="_blank">  https://www.centos.org/download/ </a>,flag:html,attrs:{}
+fr_type:linux/ipfirewalld,tag_id:14,name:ul,text:在进行路由选择前处理数据包（PREROUTING）；
+处理流入的数据包（INPUT）；
+处理流出的数据包（OUTPUT）；
+处理转发的数据包（FORWARD）；
+在进行路由选择后处理数据包（POSTROUTING）。,flag:html,attrs:{}
+fr_type:linux/ipfirewalld,tag_id:26,name:table,text:参数	作用
+-P	设置默认策略
+-F	清空规则链
+-L	查看规则链
+-A	在规则链的末尾加入新规则
+-I num	在规则链的头部加入新规则
+-D num	删除某一条规则
+-s	匹配来源地址IP/MASK，加叹号“!”表示除这个IP外
+-d	匹配目标地址
+-i 网卡名称	匹配从这块网卡流入的数据
+-o 网卡名称	匹配从这块网卡流出的数据
+-p	匹配协议，如TCP、UDP、ICMP
+--dport num	匹配目标端口号
+--sport num	匹配来源端口号,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:59,name:table,text:区域	默认策略规则
+trusted	允许所有的数据包
+home	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、mdns、ipp-client、amba-client与dhcpv6-client服务相关，则允许流量
+internal	等同于home区域
+work	拒绝流入的流量，除非与流出的流量数相关；而如果流量与ssh、ipp-client与dhcpv6-client服务相关，则允许流量
+public	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、dhcpv6-client服务相关，则允许流量
+external	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh服务相关，则允许流量
+dmz	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh服务相关，则允许流量
+block	拒绝流入的流量，除非与流出的流量相关
+drop	拒绝流入的流量，除非与流出的流量相关,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:62,name:table,text:参数	作用
+--get-default-zone	查询默认的区域名称
+--set-default-zone=<区域名称>	设置默认的区域，使其永久生效
+--get-zones	显示可用的区域
+--get-services	显示预先定义的服务
+--get-active-zones	显示当前正在使用的区域与网卡名称
+--add-source=	将源自此IP或子网的流量导向指定的区域
+--remove-source=	不再将源自此IP或子网的流量导向某个指定区域
+--add-interface=<网卡名称>	将源自该网卡的所有流量都导向某个指定区域
+--change-interface=<网卡名称>	将某个网卡与区域进行关联
+--list-all	显示当前区域的网卡配置参数、资源、端口以及服务等信息
+--list-all-zones	显示所有区域的网卡配置参数、资源、端口以及服务等信息
+--add-service=<服务名>	设置默认区域允许该服务的流量
+--add-port=<端口号/协议>	设置默认区域允许该端口的流量
+--remove-service=<服务名>	设置默认区域不再允许该服务的流量
+--remove-port=<端口号/协议>	设置默认区域不再允许该端口的流量
+--reload	让“永久生效”的配置规则立即生效，并覆盖当前的配置规则
+--panic-on	开启应急状况模式
+--panic-off	关闭应急状况模式,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:93,name:ol,text:选择运行时（Runtime）模式或永久（Permanent）模式的配置。
+可选的策略集合区域列表。
+常用的系统服务列表。
+当前正在使用的区域。
+管理当前被选中区域中的服务。
+管理当前被选中区域中的端口。
+开启或关闭SNAT（源地址转换协议）技术。
+设置端口转发策略。
+制请求icmp服务的流量。
+管理防火墙的富规则。
+管理网卡设备。
+被选中区域的服务，若勾选了相应服务前面的复选框，则表示允许与之相关 的流量。
+firewall-config工具的运行状态。,flag:html,attrs:{}
+fr_type:linux/ipfirewalld,tag_id:119,name:table,text:客户端类型	示例	满足示例的客户端列表
+单一主机	192.168.10.10	IP地址为192.168.10.10的主机
+指定网段	192.168.10.	IP段为192.168.10.0/24的主机
+指定网段	192.168.10.0/255.255.255.0	IP段为192.168.10.0/24的主机
+指定DNS后缀	.linuxprobe.com	所有DNS后缀为.linuxprobe.com的主机
+指定主机名称	www.linuxprobe.com	主机名称为www.linuxprobe.com的主机
+指定所有客户端	ALL	所有主机全部包括在内,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:121,name:ul,text:编写拒绝策略规则时，填写的是服务名称，而非协议名称；
+建议先编写拒绝策略规则，再编写允许策略规则，以便直观地看到相应的效果。,flag:html,attrs:{}
+fr_type:linux/ipfirewalld,tag_id:14,name:ul,text:在进行路由选择前处理数据包（PREROUTING）；
+处理流入的数据包（INPUT）；
+处理流出的数据包（OUTPUT）；
+处理转发的数据包（FORWARD）；
+在进行路由选择后处理数据包（POSTROUTING）。,flag:html,attrs:{}
+fr_type:linux/ipfirewalld,tag_id:26,name:table,text:参数	作用
+-P	设置默认策略
+-F	清空规则链
+-L	查看规则链
+-A	在规则链的末尾加入新规则
+-I num	在规则链的头部加入新规则
+-D num	删除某一条规则
+-s	匹配来源地址IP/MASK，加叹号“!”表示除这个IP外
+-d	匹配目标地址
+-i 网卡名称	匹配从这块网卡流入的数据
+-o 网卡名称	匹配从这块网卡流出的数据
+-p	匹配协议，如TCP、UDP、ICMP
+--dport num	匹配目标端口号
+--sport num	匹配来源端口号,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:59,name:table,text:区域	默认策略规则
+trusted	允许所有的数据包
+home	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、mdns、ipp-client、amba-client与dhcpv6-client服务相关，则允许流量
+internal	等同于home区域
+work	拒绝流入的流量，除非与流出的流量数相关；而如果流量与ssh、ipp-client与dhcpv6-client服务相关，则允许流量
+public	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、dhcpv6-client服务相关，则允许流量
+external	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh服务相关，则允许流量
+dmz	拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh服务相关，则允许流量
+block	拒绝流入的流量，除非与流出的流量相关
+drop	拒绝流入的流量，除非与流出的流量相关,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:62,name:table,text:参数	作用
+--get-default-zone	查询默认的区域名称
+--set-default-zone=<区域名称>	设置默认的区域，使其永久生效
+--get-zones	显示可用的区域
+--get-services	显示预先定义的服务
+--get-active-zones	显示当前正在使用的区域与网卡名称
+--add-source=	将源自此IP或子网的流量导向指定的区域
+--remove-source=	不再将源自此IP或子网的流量导向某个指定区域
+--add-interface=<网卡名称>	将源自该网卡的所有流量都导向某个指定区域
+--change-interface=<网卡名称>	将某个网卡与区域进行关联
+--list-all	显示当前区域的网卡配置参数、资源、端口以及服务等信息
+--list-all-zones	显示所有区域的网卡配置参数、资源、端口以及服务等信息
+--add-service=<服务名>	设置默认区域允许该服务的流量
+--add-port=<端口号/协议>	设置默认区域允许该端口的流量
+--remove-service=<服务名>	设置默认区域不再允许该服务的流量
+--remove-port=<端口号/协议>	设置默认区域不再允许该端口的流量
+--reload	让“永久生效”的配置规则立即生效，并覆盖当前的配置规则
+--panic-on	开启应急状况模式
+--panic-off	关闭应急状况模式,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:93,name:ol,text:选择运行时（Runtime）模式或永久（Permanent）模式的配置。
+可选的策略集合区域列表。
+常用的系统服务列表。
+当前正在使用的区域。
+管理当前被选中区域中的服务。
+管理当前被选中区域中的端口。
+开启或关闭SNAT（源地址转换协议）技术。
+设置端口转发策略。
+制请求icmp服务的流量。
+管理防火墙的富规则。
+管理网卡设备。
+被选中区域的服务，若勾选了相应服务前面的复选框，则表示允许与之相关 的流量。
+firewall-config工具的运行状态。,flag:html,attrs:{}
+fr_type:linux/ipfirewalld,tag_id:119,name:table,text:客户端类型	示例	满足示例的客户端列表
+单一主机	192.168.10.10	IP地址为192.168.10.10的主机
+指定网段	192.168.10.	IP段为192.168.10.0/24的主机
+指定网段	192.168.10.0/255.255.255.0	IP段为192.168.10.0/24的主机
+指定DNS后缀	.linuxprobe.com	所有DNS后缀为.linuxprobe.com的主机
+指定主机名称	www.linuxprobe.com	主机名称为www.linuxprobe.com的主机
+指定所有客户端	ALL	所有主机全部包括在内,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ipfirewalld,tag_id:121,name:ul,text:编写拒绝策略规则时，填写的是服务名称，而非协议名称；
+建议先编写拒绝策略规则，再编写允许策略规则，以便直观地看到相应的效果。,flag:html,attrs:{}
+fr_type:linux/iscsi,tag_id:7,name:ul,text:IDE是一种成熟稳定、价格便宜的并行传输接口。
+SATA是一种传输速度更快、数据校验更完整的串行传输接口。
+SCSI是一种用于计算机和硬盘、光驱等设备之间系统级接口的通用标准，具有系统资源占用率低、转速高、传输速度快等优点。,flag:html,attrs:{}
+fr_type:linux/iscsi,tag_id:22,name:table,text:主机名称	操作系统	IP地址
+iSCSI服务端	RHEL 7	192.168.10.10
+iSCSI客户端	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/iscsi,tag_id:61,name:table,text:主机名称	操作系统	IP地址
+iSCSI服务端	RHEL 7	192.168.10.10
+Windows客户端	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/iscsi,tag_id:7,name:ul,text:IDE是一种成熟稳定、价格便宜的并行传输接口。
+SATA是一种传输速度更快、数据校验更完整的串行传输接口。
+SCSI是一种用于计算机和硬盘、光驱等设备之间系统级接口的通用标准，具有系统资源占用率低、转速高、传输速度快等优点。,flag:html,attrs:{}
+fr_type:linux/iscsi,tag_id:22,name:table,text:主机名称	操作系统	IP地址
+iSCSI服务端	RHEL 7	192.168.10.10
+iSCSI客户端	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/iscsi,tag_id:61,name:table,text:主机名称	操作系统	IP地址
+iSCSI服务端	RHEL 7	192.168.10.10
+Windows客户端	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/mariadb,tag_id:17,name:ol,text:设置root管理员在数据库中的密码值（注意，该密码并非root管理员在系统中的密码，这里的密码值默认应该为空，可直接按回车键）。
+设置root管理员在数据库中的专有密码。
+随后删除匿名账户，并使用root管理员从远程登录数据库，以确保数据库上运行的业务的安全性。
+删除默认的测试数据库，取消测试数据库的一系列访问权限。
+刷新授权列表，让初始化的设定立即生效。,flag:html,attrs:{}
+fr_type:linux/mariadb,tag_id:36,name:table,text:命令	作用
+GRANT 权限 ON 数据库.表单名称 TO 用户名@主机名	对某个特定数据库中的特定表单给予授权
+GRANT 权限 ON 数据库.* TO 用户名@主机名	对某个特定数据库中的所有表单给予授权
+GRANT 权限 ON *.* TO 用户名@主机名	对所有数据库及所有表单给予授权
+GRANT 权限1,权限2 ON 数据库.* TO 用户名@主机名	对某个数据库中的所有表单给予多个授权
+GRANT ALL PRIVILEGES ON *.* TO 用户名@主机名	对所有数据库及所有表单给予全部授权（需谨慎操作）,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/mariadb,tag_id:50,name:table,text:用法	作用
+CREATE database 数据库名称。	创建新的数据库
+DESCRIBE 表单名称;	描述表单
+UPDATE 表单名称 SET attribute=新值 WHERE attribute > 原始值;	更新表单中的数据
+USE 数据库名称;	指定使用的数据库
+SHOW databases;	显示当前已有的数据库
+SHOW tables;	显示当前数据库中的表单
+SELECT * FROM 表单名称;	从表单中选中某个记录值
+DELETE FROM 表单名 WHERE attribute=值;	从表单中删除某个记录值,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/mariadb,tag_id:66,name:table,text:参数	作用
+=	相等
+<>或!=	不相等
+>	大于
+<	小于
+>=	大于或等于
+<=	小于或等于
+BETWEEN	在某个范围内
+LIKE	搜索一个例子
+IN	在列中搜索多个值,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/mariadb,tag_id:17,name:ol,text:设置root管理员在数据库中的密码值（注意，该密码并非root管理员在系统中的密码，这里的密码值默认应该为空，可直接按回车键）。
+设置root管理员在数据库中的专有密码。
+随后删除匿名账户，并使用root管理员从远程登录数据库，以确保数据库上运行的业务的安全性。
+删除默认的测试数据库，取消测试数据库的一系列访问权限。
+刷新授权列表，让初始化的设定立即生效。,flag:html,attrs:{}
+fr_type:linux/mariadb,tag_id:36,name:table,text:命令	作用
+GRANT 权限 ON 数据库.表单名称 TO 用户名@主机名	对某个特定数据库中的特定表单给予授权
+GRANT 权限 ON 数据库.* TO 用户名@主机名	对某个特定数据库中的所有表单给予授权
+GRANT 权限 ON *.* TO 用户名@主机名	对所有数据库及所有表单给予授权
+GRANT 权限1,权限2 ON 数据库.* TO 用户名@主机名	对某个数据库中的所有表单给予多个授权
+GRANT ALL PRIVILEGES ON *.* TO 用户名@主机名	对所有数据库及所有表单给予全部授权（需谨慎操作）,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/mariadb,tag_id:50,name:table,text:用法	作用
+CREATE database 数据库名称。	创建新的数据库
+DESCRIBE 表单名称;	描述表单
+UPDATE 表单名称 SET attribute=新值 WHERE attribute > 原始值;	更新表单中的数据
+USE 数据库名称;	指定使用的数据库
+SHOW databases;	显示当前已有的数据库
+SHOW tables;	显示当前数据库中的表单
+SELECT * FROM 表单名称;	从表单中选中某个记录值
+DELETE FROM 表单名 WHERE attribute=值;	从表单中删除某个记录值,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/mariadb,tag_id:66,name:table,text:参数	作用
+=	相等
+<>或!=	不相等
+>	大于
+<	小于
+>=	大于或等于
+<=	小于或等于
+BETWEEN	在某个范围内
+LIKE	搜索一个例子
+IN	在列中搜索多个值,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openldap,tag_id:17,name:table,text:属性名称	属性别名	语法	描述	值（举例）
+commonName	cn	Directory String	名字	sean
+surname	sn	Directory String	姓氏	Chow
+organizationalUnitName	ou	Directory String	单位（部门）名称	IT_SECTION
+organization	o	Directory String	组织（公司）名称	linuxprobe
+telephoneNumber		Telephone Number	电话号码	911
+objectClass			内置属性	organizationalPerson,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openldap,tag_id:20,name:table,text:主机名称	操作系统	IP地址
+LDAP服务端(instructor.linuxprobe.com)	红帽RHEL7操作系统	192.168.10.10
+LDAP客户端	红帽RHEL7操作系统	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openldap,tag_id:41,name:table,text:参数	作用
+-x	进行简单认证。
+-D	用于绑定服务器的dn。
+-h：	目录服务的地址。
+-w：	绑定dn的密码。
+-f：	使用LDIF文件进行条目添加的文件。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openldap,tag_id:17,name:table,text:属性名称	属性别名	语法	描述	值（举例）
+commonName	cn	Directory String	名字	sean
+surname	sn	Directory String	姓氏	Chow
+organizationalUnitName	ou	Directory String	单位（部门）名称	IT_SECTION
+organization	o	Directory String	组织（公司）名称	linuxprobe
+telephoneNumber		Telephone Number	电话号码	911
+objectClass			内置属性	organizationalPerson,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openldap,tag_id:20,name:table,text:主机名称	操作系统	IP地址
+LDAP服务端(instructor.linuxprobe.com)	红帽RHEL7操作系统	192.168.10.10
+LDAP客户端	红帽RHEL7操作系统	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openldap,tag_id:41,name:table,text:参数	作用
+-x	进行简单认证。
+-D	用于绑定服务器的dn。
+-h：	目录服务的地址。
+-w：	绑定dn的密码。
+-f：	使用LDIF文件进行条目添加的文件。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openstack,tag_id:10,name:ul,text:Iaas：提供给用户的是云计算基础设施，包括CPU、内存、存储、网络等其他的资源服务，用户不需要控制存储与网络等基础设施。
+Paas：提供给用户的是云计算中的开发和分发应用的解决方案，用户能够部署应用程序，也可以控制相关的托管环境，比如云服务器及操作系统，但用户不需要接触到云计算中的基础设施。
+Saas：提供给用户的是云计算基础设施上的应用程序，用户只需要在客户端界面访问即可使用到所需资源，而接触不到云计算的基础设施。,flag:html,attrs:{}
+fr_type:linux/openstack,tag_id:17,name:table,text:功能	项目名称	描述
+计算服务	Nova	负责虚拟机的创建、开关机、挂起、迁移、调整CPU、内存等规则。
+对象存储	Swift	用于在大规模可扩展系统中通过内置的冗余及高容差机制实现对象存储的系统。
+镜像服务	Glance	用于创建、上传、删除、编辑镜像信息的虚拟机镜像查找及索引系统。
+身份服务	Keystone	为其他的功能服务提供身份验证、服务规则及服务令牌的功能。
+网络管理	Neutron	用于为其他服务提供云计算的网络虚拟化技术，可自定义各种网络规则，支持主流的网络厂商技术。
+块存储	Cinder	为虚拟机实例提供稳定的数据块存储的创建、删除、挂载、卸载、管理等服务。
+图形界面	Horizon	为用户提供简单易用的Web管理界面，降低用户对功能服务的操作难度。
+测量服务	Ceilometer	收集项目内所有的事件，用于监控、计费或为其他服务提供数据支撑。
+部署编排	Heat	实现通过模板方式进行自动化的资源环境部署服务。
+数据库服务	Trove	为用户提供可扩展的关系或非关系性数据库服务。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openstack,tag_id:19,name:table,text:版本名称	发布时间
+Liberty	2015年10月15日
+Kilo	2015年4月30日
+Juno	2014年10月16日
+Icehouse	2014年4月17日
+Havana	2013年10月17日
+Grizzly	2014年4月4日
+Folsom	2012年9月27日
+Essex	2012年4月5日
+Diablo	2011年9月22日
+Cactus	2011年4月15日
+Bexar	2011年2月3日
+Austin	2010年10月21日,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openstack,tag_id:64,name:table,text:主机名称	IP地址/子网	DNS地址
+openstack.linuxprobe.com	192.168.10.10/24	192.168.10.10,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openstack,tag_id:10,name:ul,text:Iaas：提供给用户的是云计算基础设施，包括CPU、内存、存储、网络等其他的资源服务，用户不需要控制存储与网络等基础设施。
+Paas：提供给用户的是云计算中的开发和分发应用的解决方案，用户能够部署应用程序，也可以控制相关的托管环境，比如云服务器及操作系统，但用户不需要接触到云计算中的基础设施。
+Saas：提供给用户的是云计算基础设施上的应用程序，用户只需要在客户端界面访问即可使用到所需资源，而接触不到云计算的基础设施。,flag:html,attrs:{}
+fr_type:linux/openstack,tag_id:17,name:table,text:功能	项目名称	描述
+计算服务	Nova	负责虚拟机的创建、开关机、挂起、迁移、调整CPU、内存等规则。
+对象存储	Swift	用于在大规模可扩展系统中通过内置的冗余及高容差机制实现对象存储的系统。
+镜像服务	Glance	用于创建、上传、删除、编辑镜像信息的虚拟机镜像查找及索引系统。
+身份服务	Keystone	为其他的功能服务提供身份验证、服务规则及服务令牌的功能。
+网络管理	Neutron	用于为其他服务提供云计算的网络虚拟化技术，可自定义各种网络规则，支持主流的网络厂商技术。
+块存储	Cinder	为虚拟机实例提供稳定的数据块存储的创建、删除、挂载、卸载、管理等服务。
+图形界面	Horizon	为用户提供简单易用的Web管理界面，降低用户对功能服务的操作难度。
+测量服务	Ceilometer	收集项目内所有的事件，用于监控、计费或为其他服务提供数据支撑。
+部署编排	Heat	实现通过模板方式进行自动化的资源环境部署服务。
+数据库服务	Trove	为用户提供可扩展的关系或非关系性数据库服务。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openstack,tag_id:19,name:table,text:版本名称	发布时间
+Liberty	2015年10月15日
+Kilo	2015年4月30日
+Juno	2014年10月16日
+Icehouse	2014年4月17日
+Havana	2013年10月17日
+Grizzly	2014年4月4日
+Folsom	2012年9月27日
+Essex	2012年4月5日
+Diablo	2011年9月22日
+Cactus	2011年4月15日
+Bexar	2011年2月3日
+Austin	2010年10月21日,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/openstack,tag_id:64,name:table,text:主机名称	IP地址/子网	DNS地址
+openstack.linuxprobe.com	192.168.10.10/24	192.168.10.10,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/plan,tag_id:4,name:ul,text:一次性计划任务：今晚11点30分开启网站服务。
+长期性计划任务：每周一的凌晨3点25分把/home/wwwroot目录打包备份为backup.tar.gz。,flag:html,attrs:{}
+fr_type:linux/plan,tag_id:15,name:table,text:                字段	                说明
+                分	取值为0～59的整数
+                时	取值为0～23的任意整数
+                日	取值为1～31的任意整数
+                月	取值为1～12的任意整数
+                星期	取值为0～7的任意整数，其中0与7均为星期日
+                命令	要执行的命令或程序脚本,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/plan,tag_id:22,name:ul,text:在crond服务的配置参数中，可以像Shell脚本那样以#号开头写上注释信息，这样在日后回顾这段命令代码时可以快速了解其功能、需求以及编写人员等重要信息。
+计划任务中的“分”字段必须有数值，绝对不能为空或是*号，而“日”和“星期”字段不能同时使用，否则就会发生冲突。,flag:html,attrs:{}
+fr_type:linux/plan,tag_id:4,name:ul,text:一次性计划任务：今晚11点30分开启网站服务。
+长期性计划任务：每周一的凌晨3点25分把/home/wwwroot目录打包备份为backup.tar.gz。,flag:html,attrs:{}
+fr_type:linux/plan,tag_id:15,name:table,text:                字段	                说明
+                分	取值为0～59的整数
+                时	取值为0～23的任意整数
+                日	取值为1～31的任意整数
+                月	取值为1～12的任意整数
+                星期	取值为0～7的任意整数，其中0与7均为星期日
+                命令	要执行的命令或程序脚本,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/plan,tag_id:22,name:ul,text:在crond服务的配置参数中，可以像Shell脚本那样以#号开头写上注释信息，这样在日后回顾这段命令代码时可以快速了解其功能、需求以及编写人员等重要信息。
+计划任务中的“分”字段必须有数值，绝对不能为空或是*号，而“日”和“星期”字段不能同时使用，否则就会发生冲突。,flag:html,attrs:{}
+fr_type:linux/postifxdevecot,tag_id:15,name:ol,text:添加反垃圾与反病毒模块：它能够很有效地阻止垃圾邮件或病毒邮件对企业信箱的干扰。
+对邮件加密：可有效保护邮件内容不被黑客盗取和篡改。
+添加邮件监控审核模块：可有效地监控企业全体员工的邮件中是否有敏感词、是否有透露企业资料等违规行为。
+保障稳定性：电子邮件系统的稳定性至关重要，运维人员应做到保证电子邮件系统的稳定运行，并及时做好防范分布式拒绝服务（Distributed Denial of Service，DDoS）攻击的准备。,flag:html,attrs:{}
+fr_type:linux/postifxdevecot,tag_id:37,name:table,text:参数	作用
+myhostname	邮局系统的主机名
+mydomain	邮局系统的域名
+myorigin	从本机发出邮件的域名名称
+inet_interfaces	监听的网卡接口
+mydestination	可接收邮件的主机名或域名
+mynetworks	设置可转发哪些主机的邮件
+relay_domains	设置可转发哪些网域的邮件,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/postifxdevecot,tag_id:64,name:table,text:主机名称	操作系统	IP地址
+电子邮件系统及DNS服务器	RHEL 7	192.168.10.10
+客户端主机	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/postifxdevecot,tag_id:15,name:ol,text:添加反垃圾与反病毒模块：它能够很有效地阻止垃圾邮件或病毒邮件对企业信箱的干扰。
+对邮件加密：可有效保护邮件内容不被黑客盗取和篡改。
+添加邮件监控审核模块：可有效地监控企业全体员工的邮件中是否有敏感词、是否有透露企业资料等违规行为。
+保障稳定性：电子邮件系统的稳定性至关重要，运维人员应做到保证电子邮件系统的稳定运行，并及时做好防范分布式拒绝服务（Distributed Denial of Service，DDoS）攻击的准备。,flag:html,attrs:{}
+fr_type:linux/postifxdevecot,tag_id:37,name:table,text:参数	作用
+myhostname	邮局系统的主机名
+mydomain	邮局系统的域名
+myorigin	从本机发出邮件的域名名称
+inet_interfaces	监听的网卡接口
+mydestination	可接收邮件的主机名或域名
+mynetworks	设置可转发哪些主机的邮件
+relay_domains	设置可转发哪些网域的邮件,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/postifxdevecot,tag_id:64,name:table,text:主机名称	操作系统	IP地址
+电子邮件系统及DNS服务器	RHEL 7	192.168.10.10
+客户端主机	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/pxekickstart,tag_id:13,name:table,text:主机名称	操作系统	IP地址
+无人值守系统	RHEL 7	192.168.10.10
+客户端	未安装操作系统	,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/pxekickstart,tag_id:13,name:table,text:主机名称	操作系统	IP地址
+无人值守系统	RHEL 7	192.168.10.10
+客户端	未安装操作系统	,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/raidlvm,tag_id:32,name:table,text:参数	作用
+-a	检测设备名称
+-n	指定设备数量
+-l	指定RAID级别
+-C	创建
+-v	显示过程
+-f	模拟设备损坏
+-r	移除设备
+-Q	查看摘要信息
+-D	查看详细信息
+-S	停止RAID磁盘阵列,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/raidlvm,tag_id:70,name:table,text:功能/命令	物理卷管理	卷组管理	逻辑卷管理
+扫描	pvscan	vgscan	lvscan
+建立	pvcreate	vgcreate	lvcreate
+显示	pvdisplay	vgdisplay	lvdisplay
+删除	pvremove	vgremove	lvremove
+扩展		vgextend	lvextend
+缩小		vgreduce	lvreduce,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/raidlvm,tag_id:106,name:ul,text:快照卷的容量必须等同于逻辑卷的容量；
+快照卷仅一次有效，一旦执行还原操作后则会被立即自动删除。首先查看卷组的信息。,flag:html,attrs:{}
+fr_type:linux/raidlvm,tag_id:32,name:table,text:参数	作用
+-a	检测设备名称
+-n	指定设备数量
+-l	指定RAID级别
+-C	创建
+-v	显示过程
+-f	模拟设备损坏
+-r	移除设备
+-Q	查看摘要信息
+-D	查看详细信息
+-S	停止RAID磁盘阵列,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/raidlvm,tag_id:70,name:table,text:功能/命令	物理卷管理	卷组管理	逻辑卷管理
+扫描	pvscan	vgscan	lvscan
+建立	pvcreate	vgcreate	lvcreate
+显示	pvdisplay	vgdisplay	lvdisplay
+删除	pvremove	vgremove	lvremove
+扩展		vgextend	lvextend
+缩小		vgreduce	lvreduce,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/raidlvm,tag_id:106,name:ul,text:快照卷的容量必须等同于逻辑卷的容量；
+快照卷仅一次有效，一旦执行还原操作后则会被立即自动删除。首先查看卷组的信息。,flag:html,attrs:{}
+fr_type:linux/sambanfs,tag_id:12,name:table,text:参数	作用
+    [global]	#全局参数。
+workgroup = MYGROUP	#工作组名称
+server string = Samba Server Version %v	#服务器介绍信息，参数%v为显示SMB版本号
+log file = /var/log/samba/log.%m	#定义日志文件的存放位置与名称，参数%m为来访的主机名
+max log size = 50	#定义日志文件的最大容量为50KB
+security = user	#share：来访主机无需验证口令；比较方便，但安全性很差<ul>#user：需验证来访主机提供的口令后才可以访问；提升了安全性<ul>#server：使用独立的远程主机验证来访主机提供的口令（集中管理账户）<ul>#domain：使用域控制器进行身份验证
+passdb backend = tdbsam	#smbpasswd：使用smbpasswd命令为系统用户设置Samba服务程序的密码<ul>#tdbsam：创建数据库文件并使用pdbedit命令建立Samba服务程序的用户<ul>#ldapsam：基于LDAP服务进行账户验证
+load printers = yes	#设置在Samba服务启动时是否共享打印机设备
+cups options = raw	#打印机的选项
+    [homes]	#共享参数
+comment = Home Directories	#描述信息
+browseable = no	#指定共享信息是否在“网上邻居”中可见
+writable = yes	#定义是否可以执行写入操作，与“read only”相反
+    [printers]	#指定共享信息是否在“网上邻居”中可见
+comment = All Printers	
+path = /var/spool/samba	#共享文件的实际路径(重要)。
+browseable = no	
+guest ok = no	#是否所有人可见，等同于"public"参数。
+writable = no	
+printable = yes	,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:16,name:table,text:参数	作用
+[database]	共享名称为database
+comment = Do not arbitrarily modify the database file	警告用户不要随意修改数据库
+path = /home/database	共享目录为/home/database
+public = no	关闭“所有人可见”
+writable = yes	允许写入操作,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:19,name:table,text:参数	作用
+-a 用户名	建立Samba用户
+-x 用户名	删除Samba用户
+-L	列出用户列表
+-Lv	列出用户详细信息的列表,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:31,name:table,text:主机名称	操作系统	IP地址
+Samba共享服务器	RHEL 7	192.168.10.10
+Linux客户端	RHEL 7	192.168.10.20
+Windows客户端	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:40,name:table,text:主机名称	操作系统	IP地址
+Samba共享服务器	RHEL 7	192.168.10.10
+Linux客户端	RHEL 7	192.168.10.20
+Windows客户端	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:53,name:table,text:主机名称	操作系统	IP地址
+NFS服务端	RHEL 7	192.168.10.10
+NFS客户端	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:60,name:table,text:参数	作用
+ro	只读
+rw	读写
+root_squash	当NFS客户端以root管理员访问时，映射为NFS服务器的匿名用户
+no_root_squash	当NFS客户端以root管理员访问时，映射为NFS服务器的root管理员
+all_squash	无论NFS客户端使用什么账户访问，均映射为NFS服务器的匿名用户
+sync	同时将数据写入到内存与硬盘中，保证不丢失数据
+async	优先将数据保存到内存，然后再写入硬盘；这样效率更高，但可能会丢失数据,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:66,name:table,text:参数	作用
+-e	显示NFS服务器的共享列表
+-a	显示本机挂载的文件资源的情况NFS资源的情况
+-v	显示版本号,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:12,name:table,text:参数	作用
+    [global]	#全局参数。
+workgroup = MYGROUP	#工作组名称
+server string = Samba Server Version %v	#服务器介绍信息，参数%v为显示SMB版本号
+log file = /var/log/samba/log.%m	#定义日志文件的存放位置与名称，参数%m为来访的主机名
+max log size = 50	#定义日志文件的最大容量为50KB
+security = user	#share：来访主机无需验证口令；比较方便，但安全性很差<ul>#user：需验证来访主机提供的口令后才可以访问；提升了安全性<ul>#server：使用独立的远程主机验证来访主机提供的口令（集中管理账户）<ul>#domain：使用域控制器进行身份验证
+passdb backend = tdbsam	#smbpasswd：使用smbpasswd命令为系统用户设置Samba服务程序的密码<ul>#tdbsam：创建数据库文件并使用pdbedit命令建立Samba服务程序的用户<ul>#ldapsam：基于LDAP服务进行账户验证
+load printers = yes	#设置在Samba服务启动时是否共享打印机设备
+cups options = raw	#打印机的选项
+    [homes]	#共享参数
+comment = Home Directories	#描述信息
+browseable = no	#指定共享信息是否在“网上邻居”中可见
+writable = yes	#定义是否可以执行写入操作，与“read only”相反
+    [printers]	#指定共享信息是否在“网上邻居”中可见
+comment = All Printers	
+path = /var/spool/samba	#共享文件的实际路径(重要)。
+browseable = no	
+guest ok = no	#是否所有人可见，等同于"public"参数。
+writable = no	
+printable = yes	,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:16,name:table,text:参数	作用
+[database]	共享名称为database
+comment = Do not arbitrarily modify the database file	警告用户不要随意修改数据库
+path = /home/database	共享目录为/home/database
+public = no	关闭“所有人可见”
+writable = yes	允许写入操作,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:19,name:table,text:参数	作用
+-a 用户名	建立Samba用户
+-x 用户名	删除Samba用户
+-L	列出用户列表
+-Lv	列出用户详细信息的列表,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:31,name:table,text:主机名称	操作系统	IP地址
+Samba共享服务器	RHEL 7	192.168.10.10
+Linux客户端	RHEL 7	192.168.10.20
+Windows客户端	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:40,name:table,text:主机名称	操作系统	IP地址
+Samba共享服务器	RHEL 7	192.168.10.10
+Linux客户端	RHEL 7	192.168.10.20
+Windows客户端	Windows 7	192.168.10.30,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:53,name:table,text:主机名称	操作系统	IP地址
+NFS服务端	RHEL 7	192.168.10.10
+NFS客户端	RHEL 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:60,name:table,text:参数	作用
+ro	只读
+rw	读写
+root_squash	当NFS客户端以root管理员访问时，映射为NFS服务器的匿名用户
+no_root_squash	当NFS客户端以root管理员访问时，映射为NFS服务器的root管理员
+all_squash	无论NFS客户端使用什么账户访问，均映射为NFS服务器的匿名用户
+sync	同时将数据写入到内存与硬盘中，保证不丢失数据
+async	优先将数据保存到内存，然后再写入硬盘；这样效率更高，但可能会丢失数据,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/sambanfs,tag_id:66,name:table,text:参数	作用
+-e	显示NFS服务器的共享列表
+-a	显示本机挂载的文件资源的情况NFS资源的情况
+-v	显示版本号,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/squid,tag_id:21,name:table,text:主机名称	操作系统	IP地址
+Squid服务器	RHEL 7	外网卡：桥接DHCP模式<ul>内网卡：192.168.10.10
+Squid客户端	Windows 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/squid,tag_id:28,name:table,text:参数	作用
+http_port 3128	监听的端口号
+cache_mem 64M	内存缓冲区的大小
+cache_dir ufs /var/spool/squid 2000 16 256	硬盘缓冲区的大小
+cache_effective_user squid	设置缓存的有效用户
+cache_effective_group squid	设置缓存的有效用户组
+dns_nameservers IP地址	一般不设置，而是用服务器默认的DNS地址
+cache_access_log /var/log/squid/access.log	访问日志文件的保存路径
+cache_log /var/log/squid/cache.log	缓存日志文件的保存路径
+visible_hostname linuxprobe.com	设置Squid服务器的名称,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/squid,tag_id:21,name:table,text:主机名称	操作系统	IP地址
+Squid服务器	RHEL 7	外网卡：桥接DHCP模式<ul>内网卡：192.168.10.10
+Squid客户端	Windows 7	192.168.10.20,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/squid,tag_id:28,name:table,text:参数	作用
+http_port 3128	监听的端口号
+cache_mem 64M	内存缓冲区的大小
+cache_dir ufs /var/spool/squid 2000 16 256	硬盘缓冲区的大小
+cache_effective_user squid	设置缓存的有效用户
+cache_effective_group squid	设置缓存的有效用户组
+dns_nameservers IP地址	一般不设置，而是用服务器默认的DNS地址
+cache_access_log /var/log/squid/access.log	访问日志文件的保存路径
+cache_log /var/log/squid/cache.log	缓存日志文件的保存路径
+visible_hostname linuxprobe.com	设置Squid服务器的名称,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ssh,tag_id:43,name:pre,text:[root@linuxprobe ~]#nmcli connection up house 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/2)
+[root@linuxprobe ~]#ifconfig 
+eno1677773628: flags=4163<up,broadcast,running,multicast> mtu 1500
+inet 192.168.100.128 netmask 255.255.255.0 broadcast 192.168.100.255 
+inet6 fe80::20c:29ff:fec4:a409 prefixlen 64 scopeid 0x20<link/>
+ether 00:0c:29:c4:a4:09 txqueuelen 1000(Ethernet)
+RX packets 42 bytes 4198(4.0KiB)
+RX errors 0 dropped 0 overruns 0 frame 0 
+TX packets 75 bytes 10441(10.1KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+
+lo:flags=73<up,loopback,running> mtu 65536
+
+inet 127.0.0.1 netmask 255.0.0.0 
+inet6 ::1 prefixlen 128 scopeid 0x10<host>
+loop txqueuelen 0 (Local Loopback)
+RX packets 518 bytes 44080 (43.0KiB)
+RX errors 0 dropped 0 overruns 0 frame 0 
+TX packets 518 bytes 44080 (43.0KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0,flag:html,attrs:{'class': ['prettyprint', 'lang-bash']}
+fr_type:linux/ssh,tag_id:57,name:ul,text:mode0（平衡负载模式）：平时两块网卡均工作，且自动备援，但需要在与服务器本地网卡相连的交换机设备上进行端口聚合来支持绑定技术。
+mode1（自动备援模式）：平时只有一块网卡工作，在它故障后自动替换为另外的网卡。
+mode6（平衡负载模式）：平时两块网卡均工作，且自动备援，无须交换机设备提供辅助支持。,flag:html,attrs:{}
+fr_type:linux/ssh,tag_id:62,name:pre,text:[root@linuxprobe ~]#systemctl restart network 
+[root@linuxprobe ~]#ifconfig 
+bond0: flags=5187<up,broadcast,running,master,multicast> mtu 1500 
+inet 192.168.10.10 netmask 255.255.255.0 broadcast 192.168.10.255 
+inet6 fe80::20c:29ff:fe9c:637d prefixlen 64 scopeid 0x20<link/>
+ether 00:0c:29:9c:63:7dtxqueuelen0(Ethernet)
+RX packets 700 bytes 82899 (80.9KiB)
+RX errors 0 dropped 6 overruns 0 frame 0 
+TX packets 588 bytes 40260 (39.3KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+
+eno16777736:flags=6211<up,broadcast,running,slave,multicast> mtu 1500 
+ether 00:0c:29:9c:63:73 txqueuelen 1000(Ethernet)
+RX packets 347 bytes 40112 (39.1KiB)
+RX errors 0 dropped 6 overruns 0 frame 0 
+TX packets 263 bytes 20682 (20.1KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+
+eno33554968:flags=6211<up,broadcast,running,slave,multicast> mtu 1500 
+ether00:0c:29:9c:63:7d txqueuelen 1000(Ethernet)
+RX packets 353 bytes 42787(41.7KiB)
+RX errors 0 dropped 0 overruns 0 frame 0 
+TX packets 325 bytes 19578(19.1KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0,flag:html,attrs:{'class': ['prettyprint', 'lang-bash']}
+fr_type:linux/ssh,tag_id:70,name:ul,text:基于口令的验证—用账户和密码来验证登录；
+基于密钥的验证—需要在本地生成密钥对，然后把密钥对中的公钥上传至服务器，并与服务器中的公钥进行比较；该方式相较来说更安全。,flag:html,attrs:{}
+fr_type:linux/ssh,tag_id:72,name:table,text:参数	作用
+Port 22	默认的sshd服务端口
+ListenAddress 0.0.0.0	设定sshd服务器监听的IP地址
+Protocol 2	SSH协议的版本号
+HostKey /etc/ssh/ssh_host_key	SSH协议版本为1时，DES私钥存放的位置
+HostKey /etc/ssh/ssh_host_rsa_key	SSH协议版本为2时，RSA私钥存放的位置
+HostKey /etc/ssh/ssh_host_dsa_key	SSH协议版本为2时，DSA私钥存放的位置
+PermitRootLogin yes	设定是否允许root管理员直接登录
+StrictModes yes	当远程用户的私钥改变时直接拒绝连接
+MaxAuthTries 6	最大密码尝试次数
+MaxSessions 10	最大终端数
+PasswordAuthentication yes	是否允许密码验证
+PermitEmptyPasswords no	是否允许空密码登录（很不安全）,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ssh,tag_id:99,name:table,text:参数	作用
+-v	显示详细的连接进度
+-P	指定远程主机的sshd端口号
+-r	用于传送文件夹
+-6	使用IPv6协议,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ssh,tag_id:43,name:pre,text:[root@linuxprobe ~]#nmcli connection up house 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/2)
+[root@linuxprobe ~]#ifconfig 
+eno1677773628: flags=4163<up,broadcast,running,multicast> mtu 1500
+inet 192.168.100.128 netmask 255.255.255.0 broadcast 192.168.100.255 
+inet6 fe80::20c:29ff:fec4:a409 prefixlen 64 scopeid 0x20<link/>
+ether 00:0c:29:c4:a4:09 txqueuelen 1000(Ethernet)
+RX packets 42 bytes 4198(4.0KiB)
+RX errors 0 dropped 0 overruns 0 frame 0 
+TX packets 75 bytes 10441(10.1KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+
+lo:flags=73<up,loopback,running> mtu 65536
+
+inet 127.0.0.1 netmask 255.0.0.0 
+inet6 ::1 prefixlen 128 scopeid 0x10<host>
+loop txqueuelen 0 (Local Loopback)
+RX packets 518 bytes 44080 (43.0KiB)
+RX errors 0 dropped 0 overruns 0 frame 0 
+TX packets 518 bytes 44080 (43.0KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0,flag:html,attrs:{'class': ['prettyprint', 'lang-bash']}
+fr_type:linux/ssh,tag_id:57,name:ul,text:mode0（平衡负载模式）：平时两块网卡均工作，且自动备援，但需要在与服务器本地网卡相连的交换机设备上进行端口聚合来支持绑定技术。
+mode1（自动备援模式）：平时只有一块网卡工作，在它故障后自动替换为另外的网卡。
+mode6（平衡负载模式）：平时两块网卡均工作，且自动备援，无须交换机设备提供辅助支持。,flag:html,attrs:{}
+fr_type:linux/ssh,tag_id:62,name:pre,text:[root@linuxprobe ~]#systemctl restart network 
+[root@linuxprobe ~]#ifconfig 
+bond0: flags=5187<up,broadcast,running,master,multicast> mtu 1500 
+inet 192.168.10.10 netmask 255.255.255.0 broadcast 192.168.10.255 
+inet6 fe80::20c:29ff:fe9c:637d prefixlen 64 scopeid 0x20<link/>
+ether 00:0c:29:9c:63:7dtxqueuelen0(Ethernet)
+RX packets 700 bytes 82899 (80.9KiB)
+RX errors 0 dropped 6 overruns 0 frame 0 
+TX packets 588 bytes 40260 (39.3KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+
+eno16777736:flags=6211<up,broadcast,running,slave,multicast> mtu 1500 
+ether 00:0c:29:9c:63:73 txqueuelen 1000(Ethernet)
+RX packets 347 bytes 40112 (39.1KiB)
+RX errors 0 dropped 6 overruns 0 frame 0 
+TX packets 263 bytes 20682 (20.1KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+
+eno33554968:flags=6211<up,broadcast,running,slave,multicast> mtu 1500 
+ether00:0c:29:9c:63:7d txqueuelen 1000(Ethernet)
+RX packets 353 bytes 42787(41.7KiB)
+RX errors 0 dropped 0 overruns 0 frame 0 
+TX packets 325 bytes 19578(19.1KiB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0,flag:html,attrs:{'class': ['prettyprint', 'lang-bash']}
+fr_type:linux/ssh,tag_id:70,name:ul,text:基于口令的验证—用账户和密码来验证登录；
+基于密钥的验证—需要在本地生成密钥对，然后把密钥对中的公钥上传至服务器，并与服务器中的公钥进行比较；该方式相较来说更安全。,flag:html,attrs:{}
+fr_type:linux/ssh,tag_id:72,name:table,text:参数	作用
+Port 22	默认的sshd服务端口
+ListenAddress 0.0.0.0	设定sshd服务器监听的IP地址
+Protocol 2	SSH协议的版本号
+HostKey /etc/ssh/ssh_host_key	SSH协议版本为1时，DES私钥存放的位置
+HostKey /etc/ssh/ssh_host_rsa_key	SSH协议版本为2时，RSA私钥存放的位置
+HostKey /etc/ssh/ssh_host_dsa_key	SSH协议版本为2时，DSA私钥存放的位置
+PermitRootLogin yes	设定是否允许root管理员直接登录
+StrictModes yes	当远程用户的私钥改变时直接拒绝连接
+MaxAuthTries 6	最大密码尝试次数
+MaxSessions 10	最大终端数
+PasswordAuthentication yes	是否允许密码验证
+PermitEmptyPasswords no	是否允许空密码登录（很不安全）,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/ssh,tag_id:99,name:table,text:参数	作用
+-v	显示详细的连接进度
+-P	指定远程主机的sshd端口号
+-r	用于传送文件夹
+-6	使用IPv6协议,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:18,name:table,text:参数	作用
+listen=[YES|NO]	是否以独立运行的方式监听服务
+listen_address=IP地址	设置要监听的IP地址
+listen_port=21	设置FTP服务的监听端口
+download_enable＝[YES|NO]	是否允许下载文件
+userlist_enable=[YES|NO]userlist_deny=[YES|NO]	设置用户列表为“允许”还是“禁止”操作
+max_clients=0	最大客户端连接数，0为不限制
+max_per_ip=0	同一IP地址的最大连接数，0为不限制
+anonymous_enable=[YES|NO]	是否允许匿名用户访问
+anon_upload_enable=[YES|NO]	是否允许匿名用户上传文件
+anon_umask=022	匿名用户上传文件的umask值
+anon_root=/var/ftp	匿名用户的FTP根目录
+anon_mkdir_write_enable=[YES|NO]	是否允许匿名用户创建目录
+anon_other_write_enable=[YES|NO]	是否开放匿名用户的其他写入权限（包括重命名、删除等操作权限）
+anon_max_rate=0	匿名用户的最大传输速率（字节/秒），0为不限制
+local_enable=[YES|NO]	是否允许本地用户登录FTP
+local_umask=022	本地用户上传文件的umask值
+local_root=/var/ftp	本地用户的FTP根目录
+chroot_local_user=[YES|NO]	是否将用户权限禁锢在FTP目录，以确保安全
+local_max_rate=0	本地用户最大传输速率（字节/秒），0为不限制,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:27,name:table,text:参数	作用
+anonymous_enable=YES	允许匿名访问模式
+anon_umask=022	匿名用户上传文件的umask值
+anon_upload_enable=YES	允许匿名用户上传文件
+anon_mkdir_write_enable=YES	允许匿名用户创建目录
+anon_other_write_enable=YES	允许匿名用户修改目录名称或删除目录,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:46,name:table,text:参数	作用
+anonymous_enable=NO	禁止匿名访问模式
+local_enable=YES	允许本地用户模式
+write_enable=YES	设置可写权限
+local_umask=022	本地用户模式创建文件的umask值
+userlist_deny=YES	启用“禁止用户名单”，名单文件为ftpusers和user_list
+userlist_enable=YES	开启用户作用名单文件功能,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:79,name:table,text:参数	作用
+anonymous_enable=NO	禁止匿名开放模式
+local_enable=YES	允许本地用户模式
+guest_enable=YES	开启虚拟用户模式
+guest_username=virtual	指定虚拟用户账户
+pam_service_name=vsftpd.vu	指定PAM文件
+allow_writeable_chroot=YES	允许对禁锢的FTP根目录执行写入操作，而且不拒绝用户的登录请求,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:99,name:table,text:参数	作用
+?	帮助信息
+put	上传文件
+get	下载文件
+verbose	显示详细的处理信息
+status	显示当前的状态信息
+binary	使用二进制进行传输
+ascii	使用ASCII码进行传输
+timeout	设置重传的超时时间
+quit	退出,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:18,name:table,text:参数	作用
+listen=[YES|NO]	是否以独立运行的方式监听服务
+listen_address=IP地址	设置要监听的IP地址
+listen_port=21	设置FTP服务的监听端口
+download_enable＝[YES|NO]	是否允许下载文件
+userlist_enable=[YES|NO]userlist_deny=[YES|NO]	设置用户列表为“允许”还是“禁止”操作
+max_clients=0	最大客户端连接数，0为不限制
+max_per_ip=0	同一IP地址的最大连接数，0为不限制
+anonymous_enable=[YES|NO]	是否允许匿名用户访问
+anon_upload_enable=[YES|NO]	是否允许匿名用户上传文件
+anon_umask=022	匿名用户上传文件的umask值
+anon_root=/var/ftp	匿名用户的FTP根目录
+anon_mkdir_write_enable=[YES|NO]	是否允许匿名用户创建目录
+anon_other_write_enable=[YES|NO]	是否开放匿名用户的其他写入权限（包括重命名、删除等操作权限）
+anon_max_rate=0	匿名用户的最大传输速率（字节/秒），0为不限制
+local_enable=[YES|NO]	是否允许本地用户登录FTP
+local_umask=022	本地用户上传文件的umask值
+local_root=/var/ftp	本地用户的FTP根目录
+chroot_local_user=[YES|NO]	是否将用户权限禁锢在FTP目录，以确保安全
+local_max_rate=0	本地用户最大传输速率（字节/秒），0为不限制,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:27,name:table,text:参数	作用
+anonymous_enable=YES	允许匿名访问模式
+anon_umask=022	匿名用户上传文件的umask值
+anon_upload_enable=YES	允许匿名用户上传文件
+anon_mkdir_write_enable=YES	允许匿名用户创建目录
+anon_other_write_enable=YES	允许匿名用户修改目录名称或删除目录,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:46,name:table,text:参数	作用
+anonymous_enable=NO	禁止匿名访问模式
+local_enable=YES	允许本地用户模式
+write_enable=YES	设置可写权限
+local_umask=022	本地用户模式创建文件的umask值
+userlist_deny=YES	启用“禁止用户名单”，名单文件为ftpusers和user_list
+userlist_enable=YES	开启用户作用名单文件功能,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:79,name:table,text:参数	作用
+anonymous_enable=NO	禁止匿名开放模式
+local_enable=YES	允许本地用户模式
+guest_enable=YES	开启虚拟用户模式
+guest_username=virtual	指定虚拟用户账户
+pam_service_name=vsftpd.vu	指定PAM文件
+allow_writeable_chroot=YES	允许对禁锢的FTP根目录执行写入操作，而且不拒绝用户的登录请求,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:linux/vsftpd,tag_id:99,name:table,text:参数	作用
+?	帮助信息
+put	上传文件
+get	下载文件
+verbose	显示详细的处理信息
+status	显示当前的状态信息
+binary	使用二进制进行传输
+ascii	使用ASCII码进行传输
+timeout	设置重传的超时时间
+quit	退出,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/argvs,tag_id:2,name:p,text: 我们可以在执行 Shell 脚本时，向脚本传递参数，脚本内获取参数的格式为： <b>  $n </b> 。 <b>  n </b> 代表一个数字，1        为执行脚本的第一个参数，2 为执行脚本的第二个参数，以此类推……,flag:html,attrs:{}
+fr_type:bash/argvs,tag_id:9,name:table,text:参数处理	说明
+$#	传递到脚本的参数个数
+$*	以一个单字符串显示所有向脚本传递的参数。如"$*"用「"」括起来的情况、以"$1 $2 …                    $n"的形式输出所有参数。                
+$$	脚本运行的当前进程ID号
+$!	后台运行的最后一个进程的ID号
+$@	与$*相同，但是使用时加引号，并在引号中返回每个参数。 如"$@"用「"」括起来的情况、以"$1"                    "$2" … "$n" 的形式输出所有参数。                
+$-	显示Shell使用的当前选项，与set命令功能相同。                
+$?	显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/argvs,tag_id:14,name:ul,text:相同点：都是引用所有参数。
+不同点：只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 " * " 等价于 "1 2            3"（传递了一个参数），而 "@" 等价于 "1" "2" "3"（传递了三个参数）。,flag:html,attrs:{}
+fr_type:bash/argvs,tag_id:2,name:p,text: 我们可以在执行 Shell 脚本时，向脚本传递参数，脚本内获取参数的格式为： <b>  $n </b> 。 <b>  n </b> 代表一个数字，1        为执行脚本的第一个参数，2 为执行脚本的第二个参数，以此类推……,flag:html,attrs:{}
+fr_type:bash/argvs,tag_id:9,name:table,text:参数处理	说明
+$#	传递到脚本的参数个数
+$*	以一个单字符串显示所有向脚本传递的参数。如"$*"用「"」括起来的情况、以"$1 $2 …                    $n"的形式输出所有参数。                
+$$	脚本运行的当前进程ID号
+$!	后台运行的最后一个进程的ID号
+$@	与$*相同，但是使用时加引号，并在引号中返回每个参数。 如"$@"用「"」括起来的情况、以"$1"                    "$2" … "$n" 的形式输出所有参数。                
+$-	显示Shell使用的当前选项，与set命令功能相同。                
+$?	显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/argvs,tag_id:14,name:ul,text:相同点：都是引用所有参数。
+不同点：只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 " * " 等价于 "1 2            3"（传递了一个参数），而 "@" 等价于 "1" "2" "3"（传递了三个参数）。,flag:html,attrs:{}
+fr_type:bash/array,tag_id:2,name:p,text: 数组中可以存放多个值。Bash Shell 只支持一维数组（不支持多维数组），初始化时不需要定义数组大小（与 PHP 类似）。 <br/> 获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于 0。,flag:html,attrs:{}
+fr_type:bash/array,tag_id:13,name:p,text: 使用 BLUE_BG[  @ ]BLUE_BG 或 BLUE_BG[  * ]BLUE_BG 符号可以获取数组中的所有元素，例如：,flag:html,attrs:{}
+fr_type:bash/array,tag_id:2,name:p,text: 数组中可以存放多个值。Bash Shell 只支持一维数组（不支持多维数组），初始化时不需要定义数组大小（与 PHP 类似）。 <br/> 获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于 0。,flag:html,attrs:{}
+fr_type:bash/array,tag_id:13,name:p,text: 使用 BLUE_BG[  @ ]BLUE_BG 或 BLUE_BG[  * ]BLUE_BG 符号可以获取数组中的所有元素，例如：,flag:html,attrs:{}
+fr_type:bash/cmds,tag_id:2,name:table,text:常用命令	说明	结果
+reboot	# 重启系统 需root权限	系统重启
+poweroff	# 关闭系统 需root权限	系统关闭
+echo Linux 	# 输出字符到终端	Linux
+echo $SHELL	# 提取变量并输出到终端	Bash
+date	# 输出固定格式的日期	Mon Aug 24 16:11:23 CST 2017
+date "+%Y-%m-%d %H:%M:%S"	# 输出固定格式时间	2017-08-04 16:29:12
+date -s "20170901 8:30:00"	# 将系统时间设置为2017年9月1日	Fri Sep 1 08:30:00 CST 2017
+date "+%j"	# 查看当年的第几天	244
+wget http://www.linuxprobe.com/docs/LinuxProbe.pdf	# 下载网站上文件	saved
+wget -r -p http://www.linuxprobe.com	# 递归下载网站内的所有页面数据及文件	....
+ps -ef	# 查看进程状态	返回终端进程列表
+top	# 动态查看系统运维状态	返回运维列表
+pidof sshd	# 查询本机sshd 的pid	2156
+kill 2156	# 关闭对应pid的进程	强制停止sshd服务
+killall httpd	# 关闭所有httpd进程	    pidof httpd    killall httpd    pidof httpd    
+ifconfig	# 获取网卡配置与网络状态等信息	    返回ip,ether参数等信息    
+uname -a	# 用于查看系统内核与系统版本等信息	    Linux linuxprobe.com 3.10.0-123.el7.x86_64 #1 SMP Mon May 5 11:16:57 EDT 2017 x86_64 x86_64 x86_64 GRU/Linux    
+cat /etc/redhat-release	# 查看系统详细信息	    Red Hat Enterprise Linux Server release 7.0 (Maipo)    
+uptime	# 查看系统负载信息	    22:49:55 up 10 min, 2 users, load average: 0.01, 0.19, 0.18    
+free -h	# 显示当前系统内存的使用量信息	    返回内存使用列表    
+who	# 查看当前登入主机用户终端信息	    ....    
+last	# 用于查看所有系统登录信息	    ....    
+history	# 用于查看命令历史记录信息	    ....    
+history -c	# 用于清空当前 用户命令历史记录信息	    ....    
+sosreport	# 用于收集系统配置及架构信息并输出诊断档案	    ....    
+pwd	# 显示用户当前所处的工作目录	    /etc    
+cd /etc	# 用于切换工作路径	    /etc    
+ls -al	# 用于显示目录中的文件信息	    ...    
+ls -al	# 用于显示目录中的文件信息(包含隐藏文件)	    ...    
+cat -n initial-setup-ks.cfg	# 用于查看纯文本文件，内容少的(包含行号)	    ...    
+more initial-setup-ks.cfg	# 用于查看纯文本文件，内容多的	    ...    
+head -n 20 initial-setup-ks.cfg	# 用于查看纯文本文件前N行	    ...    
+tail -f /var/log/messages	# 用于查看查看纯文本文档的后N行或持续刷新内容	    ...    
+cat anaconda-ks.cfg | tr [a-z] [A-Z]	# 用于替换文本文件中的字符	    ...    
+wc -l /etc/passwd	# 用于统计指定文本的行数	    ...    
+stat anaconda-ks.cfg	# 用于查看文件的具体存储信息和时间等信息	    ...    
+cut -d: -f1 /etc/passwd	# 用于按“列”提取文本字符	    ...    
+diff --brief diff_A.txt diff_B.txt	# 用于比较多个文本文件的差异(显示比较结果)	    ...    
+diff -c diff_A.txt diff_B.txt	# 用于比较多个文本文件的差异(描述具体的不同)	    ...    
+diff -c diff_A.txt diff_B.txt	# 用于比较多个文本文件的差异(描述具体的不同)	    ...    
+touch -d "2017-05-04 15:44" anaconda-ks.cfg	# 用于创建空白文件或设置文件的时间(同时修改atime 与 mtime)	    ...    
+mkdir linuxprobe	# 用于创建空白目录	    ...    
+cp install.log x.log	# 用于复制文件或目录	    ...    
+mv install.log x.log	# 用于剪切或重命名文件	    ...    
+rm install.log	# 用于删除文件或目录	    ...    
+dd if=/dev/zero of=560_file count=1 bs=560M	# 用于按照指定大小和个数的数据块来复制文件或转换文件	    ...    
+file anaconda-ks.cfg	# 用于查看文件的类型	    ...    
+tar -czvf etc.tar.gz /etc	# 用于对文件进行打包压缩或解压	    ...    
+grep /sbin/nologin /etc/passwd	# 用于在文本中执行关键词搜索	    ...    
+find /etc -name "host*" -print	# 用于按照指定条件来查找文件	    ...    ,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/cmds,tag_id:2,name:table,text:常用命令	说明	结果
+reboot	# 重启系统 需root权限	系统重启
+poweroff	# 关闭系统 需root权限	系统关闭
+echo Linux 	# 输出字符到终端	Linux
+echo $SHELL	# 提取变量并输出到终端	Bash
+date	# 输出固定格式的日期	Mon Aug 24 16:11:23 CST 2017
+date "+%Y-%m-%d %H:%M:%S"	# 输出固定格式时间	2017-08-04 16:29:12
+date -s "20170901 8:30:00"	# 将系统时间设置为2017年9月1日	Fri Sep 1 08:30:00 CST 2017
+date "+%j"	# 查看当年的第几天	244
+wget http://www.linuxprobe.com/docs/LinuxProbe.pdf	# 下载网站上文件	saved
+wget -r -p http://www.linuxprobe.com	# 递归下载网站内的所有页面数据及文件	....
+ps -ef	# 查看进程状态	返回终端进程列表
+top	# 动态查看系统运维状态	返回运维列表
+pidof sshd	# 查询本机sshd 的pid	2156
+kill 2156	# 关闭对应pid的进程	强制停止sshd服务
+killall httpd	# 关闭所有httpd进程	    pidof httpd    killall httpd    pidof httpd    
+ifconfig	# 获取网卡配置与网络状态等信息	    返回ip,ether参数等信息    
+uname -a	# 用于查看系统内核与系统版本等信息	    Linux linuxprobe.com 3.10.0-123.el7.x86_64 #1 SMP Mon May 5 11:16:57 EDT 2017 x86_64 x86_64 x86_64 GRU/Linux    
+cat /etc/redhat-release	# 查看系统详细信息	    Red Hat Enterprise Linux Server release 7.0 (Maipo)    
+uptime	# 查看系统负载信息	    22:49:55 up 10 min, 2 users, load average: 0.01, 0.19, 0.18    
+free -h	# 显示当前系统内存的使用量信息	    返回内存使用列表    
+who	# 查看当前登入主机用户终端信息	    ....    
+last	# 用于查看所有系统登录信息	    ....    
+history	# 用于查看命令历史记录信息	    ....    
+history -c	# 用于清空当前 用户命令历史记录信息	    ....    
+sosreport	# 用于收集系统配置及架构信息并输出诊断档案	    ....    
+pwd	# 显示用户当前所处的工作目录	    /etc    
+cd /etc	# 用于切换工作路径	    /etc    
+ls -al	# 用于显示目录中的文件信息	    ...    
+ls -al	# 用于显示目录中的文件信息(包含隐藏文件)	    ...    
+cat -n initial-setup-ks.cfg	# 用于查看纯文本文件，内容少的(包含行号)	    ...    
+more initial-setup-ks.cfg	# 用于查看纯文本文件，内容多的	    ...    
+head -n 20 initial-setup-ks.cfg	# 用于查看纯文本文件前N行	    ...    
+tail -f /var/log/messages	# 用于查看查看纯文本文档的后N行或持续刷新内容	    ...    
+cat anaconda-ks.cfg | tr [a-z] [A-Z]	# 用于替换文本文件中的字符	    ...    
+wc -l /etc/passwd	# 用于统计指定文本的行数	    ...    
+stat anaconda-ks.cfg	# 用于查看文件的具体存储信息和时间等信息	    ...    
+cut -d: -f1 /etc/passwd	# 用于按“列”提取文本字符	    ...    
+diff --brief diff_A.txt diff_B.txt	# 用于比较多个文本文件的差异(显示比较结果)	    ...    
+diff -c diff_A.txt diff_B.txt	# 用于比较多个文本文件的差异(描述具体的不同)	    ...    
+diff -c diff_A.txt diff_B.txt	# 用于比较多个文本文件的差异(描述具体的不同)	    ...    
+touch -d "2017-05-04 15:44" anaconda-ks.cfg	# 用于创建空白文件或设置文件的时间(同时修改atime 与 mtime)	    ...    
+mkdir linuxprobe	# 用于创建空白目录	    ...    
+cp install.log x.log	# 用于复制文件或目录	    ...    
+mv install.log x.log	# 用于剪切或重命名文件	    ...    
+rm install.log	# 用于删除文件或目录	    ...    
+dd if=/dev/zero of=560_file count=1 bs=560M	# 用于按照指定大小和个数的数据块来复制文件或转换文件	    ...    
+file anaconda-ks.cfg	# 用于查看文件的类型	    ...    
+tar -czvf etc.tar.gz /etc	# 用于对文件进行打包压缩或解压	    ...    
+grep /sbin/nologin /etc/passwd	# 用于在文本中执行关键词搜索	    ...    
+find /etc -name "host*" -print	# 用于按照指定条件来查找文件	    ...    ,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/comment,tag_id:2,name:p,text: 以 BLUE_BG[  # ]BLUE_BG 开头的行就是注释，会被解释器忽略。,flag:html,attrs:{}
+fr_type:bash/comment,tag_id:2,name:p,text: 以 BLUE_BG[  # ]BLUE_BG 开头的行就是注释，会被解释器忽略。,flag:html,attrs:{}
+fr_type:bash/env,tag_id:6,name:ul,text:1、判断用户是否以绝对路径或相对路径的方式输入命令（如/bin/ls），如果是的话则直接执行。
+ 2、Linux系统检查用户输入的命令是否为“别名命令”，即用一个自定义的命令名称来替换原本的命令名称。可以用alias命令来创建一个属于自己的命令别名，格式为“alias别名=命令”。若要取消一个命令别名，则是用unalias命令，格式为“unalias别名”。我们之前在使用rm命令删除文件时，Linux系统都会要求我们再确认是否执行删除操作，其实这就是Linux系统为了防止用户误删除文件而特意设置的rm别名命令，接下来我们把它取消掉： <pre class="prettyprint lang-bash">[root@linuxprobe ~]# ls anaconda-ks.cfg Documents initial-setup-ks.cfg Pictures Templates Desktop Downloads Music Public Videos [root@linuxprobe ~]# rm anaconda-ks.cfg rm:remove regular file ‘anaconda-ks.cfg’? y [root@linuxprobe ~]# alias rm alias rm='rm -i'[root@linuxprobe ~]# unalias rm [root@linuxprobe ~]# rm initial-setup-ks.cfg [root@linuxprobe ~]#    </pre>
+3、Bash解释器判断用户输入的是内部命令还是外部命令。内部命令是解释器内部的指令，会被直接执行；而用户在绝大部分时间输入的是外部命令，这些命令交由步骤4继续处理。可以使用“type命令名称”来判断用户输入的命令是内部命令还是外部命令。
+ 4、系统在多个路径中查找用户输入的命令文件，而定义这些路径的变量叫作PATH，可以简单地把它理解成是“解释器的小助手”，作用是告诉Bash解释器待执行的命令可能存放的位置，然后Bash解释器就会乖乖地在这些位置中逐个查找。PATH是由多个路径值组成的变量，每个路径值之间用冒号间隔，对这些路径的增加和删除操作将影响到Bash解释器对Linux命令的查找。 <pre class="prettyprint lang-bash">[root@linuxprobe ~]# echo $PATH /usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin [root@linuxprobe ~]# PATH=$PATH:/root/bin [root@linuxprobe ~]# echo $PATH /usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/root/bin</pre>,flag:html,attrs:{}
+fr_type:bash/env,tag_id:15,name:table,text:变量名称	作用
+HOME	用户的主目录（即家目录）
+SHELL	用户在使用的Shell解释器名称
+HISTSIZE	输出的历史命令记录条数
+HISTFILESIZE	保存的历史命令记录条数
+MAIL	邮件保存路径
+LANG	系统语言、语系名称
+RANDOM	生成一个随机数字
+PS1	Bash解释器的提示符
+PATH	定义解释器搜索用户执行命令的路径
+EDITOR	用户默认的文本编辑器,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/env,tag_id:20,name:ul,text:全局环境变量
+本地环境变量,flag:html,attrs:{}
+fr_type:bash/env,tag_id:34,name:ul,text:变量被删除后不能再次使用。unset 命令不能删除只读变量。
+如果在子shell下删除全局环境变量，删除操作只对子shell有效，如果回到父shell下，该全局变量还能引用,flag:html,attrs:{}
+fr_type:bash/env,tag_id:35,name:p,text: <b>  实例 </b>,flag:html,attrs:{}
+fr_type:bash/env,tag_id:42,name:ul,text:登录式shell
+非登录式shell
+交互式shell
+非交互式shell,flag:html,attrs:{}
+fr_type:bash/env,tag_id:6,name:ul,text:1、判断用户是否以绝对路径或相对路径的方式输入命令（如/bin/ls），如果是的话则直接执行。
+ 2、Linux系统检查用户输入的命令是否为“别名命令”，即用一个自定义的命令名称来替换原本的命令名称。可以用alias命令来创建一个属于自己的命令别名，格式为“alias别名=命令”。若要取消一个命令别名，则是用unalias命令，格式为“unalias别名”。我们之前在使用rm命令删除文件时，Linux系统都会要求我们再确认是否执行删除操作，其实这就是Linux系统为了防止用户误删除文件而特意设置的rm别名命令，接下来我们把它取消掉： <pre class="prettyprint lang-bash">[root@linuxprobe ~]# ls anaconda-ks.cfg Documents initial-setup-ks.cfg Pictures Templates Desktop Downloads Music Public Videos [root@linuxprobe ~]# rm anaconda-ks.cfg rm:remove regular file ‘anaconda-ks.cfg’? y [root@linuxprobe ~]# alias rm alias rm='rm -i'[root@linuxprobe ~]# unalias rm [root@linuxprobe ~]# rm initial-setup-ks.cfg [root@linuxprobe ~]#    </pre>
+3、Bash解释器判断用户输入的是内部命令还是外部命令。内部命令是解释器内部的指令，会被直接执行；而用户在绝大部分时间输入的是外部命令，这些命令交由步骤4继续处理。可以使用“type命令名称”来判断用户输入的命令是内部命令还是外部命令。
+ 4、系统在多个路径中查找用户输入的命令文件，而定义这些路径的变量叫作PATH，可以简单地把它理解成是“解释器的小助手”，作用是告诉Bash解释器待执行的命令可能存放的位置，然后Bash解释器就会乖乖地在这些位置中逐个查找。PATH是由多个路径值组成的变量，每个路径值之间用冒号间隔，对这些路径的增加和删除操作将影响到Bash解释器对Linux命令的查找。 <pre class="prettyprint lang-bash">[root@linuxprobe ~]# echo $PATH /usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin [root@linuxprobe ~]# PATH=$PATH:/root/bin [root@linuxprobe ~]# echo $PATH /usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/root/bin</pre>,flag:html,attrs:{}
+fr_type:bash/env,tag_id:15,name:table,text:变量名称	作用
+HOME	用户的主目录（即家目录）
+SHELL	用户在使用的Shell解释器名称
+HISTSIZE	输出的历史命令记录条数
+HISTFILESIZE	保存的历史命令记录条数
+MAIL	邮件保存路径
+LANG	系统语言、语系名称
+RANDOM	生成一个随机数字
+PS1	Bash解释器的提示符
+PATH	定义解释器搜索用户执行命令的路径
+EDITOR	用户默认的文本编辑器,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/env,tag_id:20,name:ul,text:全局环境变量
+本地环境变量,flag:html,attrs:{}
+fr_type:bash/env,tag_id:34,name:ul,text:变量被删除后不能再次使用。unset 命令不能删除只读变量。
+如果在子shell下删除全局环境变量，删除操作只对子shell有效，如果回到父shell下，该全局变量还能引用,flag:html,attrs:{}
+fr_type:bash/env,tag_id:35,name:p,text: <b>  实例 </b>,flag:html,attrs:{}
+fr_type:bash/env,tag_id:42,name:ul,text:登录式shell
+非登录式shell
+交互式shell
+非交互式shell,flag:html,attrs:{}
+fr_type:bash/escapechar,tag_id:3,name:ul,text:反斜杠（\）：使反斜杠后面的一个变量变为单纯的字符串。
+单引号（''）：转义其中所有的变量为单纯的字符串。
+双引号（""）：保留其中的变量属性，不进行转义处理。
+反引号（``）：把其中的命令执行后返回结果。,flag:html,attrs:{}
+fr_type:bash/escapechar,tag_id:3,name:ul,text:反斜杠（\）：使反斜杠后面的一个变量变为单纯的字符串。
+单引号（''）：转义其中所有的变量为单纯的字符串。
+双引号（""）：保留其中的变量属性，不进行转义处理。
+反引号（``）：把其中的命令执行后返回结果。,flag:html,attrs:{}
+fr_type:bash/forever,tag_id:61,name:p,text: 以上实例使用了 Bash let 命令，它用于执行一个或多个表达式，变量计算中不需要加上 $ 来表示变量，具体可查阅： <a href="//www.runoob.com/linux/linux-comm-let.html" rel="noopener noreferrer" target="_blank">  Bash let 命令 </a>,flag:html,attrs:{}
+fr_type:bash/forever,tag_id:73,name:p,text:,flag:html,attrs:{}
+fr_type:bash/forever,tag_id:61,name:p,text: 以上实例使用了 Bash let 命令，它用于执行一个或多个表达式，变量计算中不需要加上 $ 来表示变量，具体可查阅： <a href="//www.runoob.com/linux/linux-comm-let.html" rel="noopener noreferrer" target="_blank">  Bash let 命令 </a>,flag:html,attrs:{}
+fr_type:bash/forever,tag_id:73,name:p,text:,flag:html,attrs:{}
+fr_type:bash/func,tag_id:6,name:ul,text:1、可以带function fun() 定义，也可以直接fun() 定义,不带任何参数。
+2、参数返回，可以显示加：return 返回，如果不加，将以最后一条命令运行结果，作为返回值。            return后跟数值n(0-255,flag:html,attrs:{}
+fr_type:bash/func,tag_id:26,name:table,text:参数处理	说明
+$#	传递到脚本的参数个数
+$*	以一个单字符串显示所有向脚本传递的参数
+$$	脚本运行的当前进程ID号
+$!	后台运行的最后一个进程的ID号
+$@	与$*相同，但是使用时加引号，并在引号中返回每个参数。
+$-	显示Shell使用的当前选项，与set命令功能相同。
+$?	显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/func,tag_id:27,name:p,text: BLUE_BG[  $? ]BLUE_BG 仅对其上一条指令负责，一旦函数返回后其返回值没有立即保存入参数，那么其返回值将不再能通过 BLUE_BG[  $? ]BLUE_BG 获得。,flag:html,attrs:{}
+fr_type:bash/func,tag_id:6,name:ul,text:1、可以带function fun() 定义，也可以直接fun() 定义,不带任何参数。
+2、参数返回，可以显示加：return 返回，如果不加，将以最后一条命令运行结果，作为返回值。            return后跟数值n(0-255,flag:html,attrs:{}
+fr_type:bash/func,tag_id:26,name:table,text:参数处理	说明
+$#	传递到脚本的参数个数
+$*	以一个单字符串显示所有向脚本传递的参数
+$$	脚本运行的当前进程ID号
+$!	后台运行的最后一个进程的ID号
+$@	与$*相同，但是使用时加引号，并在引号中返回每个参数。
+$-	显示Shell使用的当前选项，与set命令功能相同。
+$?	显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/func,tag_id:27,name:p,text: BLUE_BG[  $? ]BLUE_BG 仅对其上一条指令负责，一旦函数返回后其返回值没有立即保存入参数，那么其返回值将不再能通过 BLUE_BG[  $? ]BLUE_BG 获得。,flag:html,attrs:{}
+fr_type:bash/hash,tag_id:2,name:p,text: 哈希中可以存放多个值。 <br/> 获取哈希中的元素要利用哈希键，哈希键可以是整数或字符串，其值应唯一。,flag:html,attrs:{}
+fr_type:bash/hash,tag_id:13,name:p,text: 使用 BLUE_BG[  *或@ ]BLUE_BG 和 BLUE_BG[  ! ]BLUE_BG 符号可以哈希所有key值，例如：,flag:html,attrs:{}
+fr_type:bash/hash,tag_id:16,name:p,text: 使用 BLUE_BG[  *或@ ]BLUE_BG 符号可以哈希所有value值，例如：,flag:html,attrs:{}
+fr_type:bash/hash,tag_id:2,name:p,text: 哈希中可以存放多个值。 <br/> 获取哈希中的元素要利用哈希键，哈希键可以是整数或字符串，其值应唯一。,flag:html,attrs:{}
+fr_type:bash/hash,tag_id:13,name:p,text: 使用 BLUE_BG[  *或@ ]BLUE_BG 和 BLUE_BG[  ! ]BLUE_BG 符号可以哈希所有key值，例如：,flag:html,attrs:{}
+fr_type:bash/hash,tag_id:16,name:p,text: 使用 BLUE_BG[  *或@ ]BLUE_BG 符号可以哈希所有value值，例如：,flag:html,attrs:{}
+fr_type:bash/include,tag_id:13,name:blockquote,text: <p>  <b>   注：  </b>  被包含的文件 test1.sh 不需要可执行权限。 </p>,flag:html,attrs:{}
+fr_type:bash/include,tag_id:13,name:blockquote,text: <p>  <b>   注：  </b>  被包含的文件 test1.sh 不需要可执行权限。 </p>,flag:html,attrs:{}
+fr_type:bash/index,tag_id:6,name:ul,text:通过上下方向键来调取过往执行过的Linux命令；
+命令或参数仅需输入前几位就可以用Tab键补全；
+具有强大的批处理脚本；
+具有实用的环境变量功能；,flag:html,attrs:{}
+fr_type:bash/index,tag_id:6,name:ul,text:通过上下方向键来调取过往执行过的Linux命令；
+命令或参数仅需输入前几位就可以用Tab键补全；
+具有强大的批处理脚本；
+具有实用的环境变量功能；,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:3,name:ul,text:算数运算符
+关系运算符
+布尔运算符
+字符串运算符
+文件测试运算符,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:7,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bashval=`expr 2 + 2`echo "两数之和为 : $val"</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:11,name:ul,text:        表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成 2 + 2，这与我们熟悉的大多数编程语言不一样。
+ 完整的表达式要被 BLUE_BG[  ` ` ]BLUE_BG 包含，注意这个字符不是常用的单引号，在 Esc 键下边。,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:15,name:table,text:                运算符	                说明	                举例
+                +	                加法	                `expr $a + $b` 结果为 30。
+                -	                减法	                `expr $a - $b` 结果为 -10。
+                *	                乘法	                `expr $a \* $b` 结果为  200。
+                /	                除法	                `expr $b / $a` 结果为 2。
+                %	                取余	                `expr $b % $a` 结果为 0。
+                =	                赋值	                a=$b 将把变量 b 的值赋给 a。
+                ==	                相等。用于比较两个数字，相同则返回 true。	                [ $a == $b ] 返回 false。
+                !=	                不相等。用于比较两个数字，不相同则返回 true。	                [ $a != $b ] 返回 true。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:16,name:p,text: <b>  注意： </b> 条件表达式要放在方括号之间，并且要有空格，例如: <b>  [$a==$b] </b> 是错误的，必须写成 <b>  [ $a == $b ] </b> 。,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:19,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20val=`expr $a + $b`echo "a + b : $val"val=`expr $a - $b`echo "a - b : $val"val=`expr $a \* $b`echo "a * b : $val"val=`expr $b / $a`echo "b / a : $val"val=`expr $b % $a`echo "b % a : $val"if [ $a == $b ]then   echo "a 等于 b"fiif [ $a != $b ]then   echo "a 不等于 b"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:27,name:table,text:                运算符	                说明	                举例
+                -eq	                检测两个数是否相等，相等返回 true。	                [ $a -eq $b ] 返回 false。
+                -ne	                检测两个数是否不相等，不相等返回 true。	                [ $a -ne $b ] 返回 true。
+                -gt	                检测左边的数是否大于右边的，如果是，则返回 true。	                [ $a -gt $b ] 返回 false。
+                -lt	                检测左边的数是否小于右边的，如果是，则返回 true。	                [ $a -lt $b ] 返回 true。
+                -ge	                检测左边的数是否大于等于右边的，如果是，则返回 true。	                [ $a -ge $b ] 返回 false。
+                -le	                检测左边的数是否小于等于右边的，如果是，则返回 true。	                [ $a -le $b ] 返回 true。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:30,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20if [ $a -eq $b ]then   echo "$a -eq $b : a 等于 b"else   echo "$a -eq $b: a 不等于 b"fiif [ $a -ne $b ]then   echo "$a -ne $b: a 不等于 b"else   echo "$a -ne $b : a 等于 b"fiif [ $a -gt $b ]then   echo "$a -gt $b: a 大于 b"else   echo "$a -gt $b: a 不大于 b"fiif [ $a -lt $b ]then   echo "$a -lt $b: a 小于 b"else   echo "$a -lt $b: a 不小于 b"fiif [ $a -ge $b ]then   echo "$a -ge $b: a 大于或等于 b"else   echo "$a -ge $b: a 小于 b"fiif [ $a -le $b ]then   echo "$a -le $b: a 小于或等于 b"else   echo "$a -le $b: a 大于 b"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:36,name:table,text:                运算符	                说明	                举例
+                !	                非运算，表达式为 true 则返回 false，否则返回 true。	                [ ! false ] 返回 true。
+                -o	                或运算，有一个表达式为 true 则返回 true。	                [ $a -lt 20 -o $b -gt 100 ] 返回 true。
+                -a	                与运算，两个表达式都为 true 才返回 true。	                [ $a -lt 20 -a $b -gt 100 ] 返回 false。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:39,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20if [ $a != $b ]then   echo "$a != $b : a 不等于 b"else   echo "$a == $b: a 等于 b"fiif [ $a -lt 100 -a $b -gt 15 ]then   echo "$a 小于 100 且 $b 大于 15 : 返回 true"else   echo "$a 小于 100 且 $b 大于 15 : 返回 false"fiif [ $a -lt 100 -o $b -gt 100 ]then   echo "$a 小于 100 或 $b 大于 100 : 返回 true"else   echo "$a 小于 100 或 $b 大于 100 : 返回 false"fiif [ $a -lt 5 -o $b -gt 100 ]then   echo "$a 小于 5 或 $b 大于 100 : 返回 true"else   echo "$a 小于 5 或 $b 大于 100 : 返回 false"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:45,name:table,text:                运算符	                说明	                举例
+                &&    	                逻辑的 AND 	                [[ $a -lt 100 && $b -gt 100 ]] 返回 false
+                ||	                逻辑的 OR	                [[ $a -lt 100 || $b -gt 100 ]] 返回 true,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:48,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20if [[ $a -lt 100 &amp;&amp; $b -gt 100 ]]then   echo "返回 true"else   echo "返回 false"fiif [[ $a -lt 100 || $b -gt 100 ]]then   echo "返回 true"else   echo "返回 false"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:54,name:table,text:                运算符	                说明	                举例
+                =	                检测两个字符串是否相等，相等返回 true。	                [ $a = $b ] 返回 false。
+                !=	                检测两个字符串是否相等，不相等返回 true。	                [ $a != $b ] 返回 true。
+                -z	                检测字符串长度是否为0，为0返回 true。	                [ -z $a ] 返回 false。
+                -n	                检测字符串长度是否为0，不为0返回 true。	                [ -n "$a" ] 返回 true。
+                $	                检测字符串是否为空，不为空返回 true。	                [ $a ] 返回 true。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:3,name:ul,text:算数运算符
+关系运算符
+布尔运算符
+字符串运算符
+文件测试运算符,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:7,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bashval=`expr 2 + 2`echo "两数之和为 : $val"</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:11,name:ul,text:        表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成 2 + 2，这与我们熟悉的大多数编程语言不一样。
+ 完整的表达式要被 BLUE_BG[  ` ` ]BLUE_BG 包含，注意这个字符不是常用的单引号，在 Esc 键下边。,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:15,name:table,text:                运算符	                说明	                举例
+                +	                加法	                `expr $a + $b` 结果为 30。
+                -	                减法	                `expr $a - $b` 结果为 -10。
+                *	                乘法	                `expr $a \* $b` 结果为  200。
+                /	                除法	                `expr $b / $a` 结果为 2。
+                %	                取余	                `expr $b % $a` 结果为 0。
+                =	                赋值	                a=$b 将把变量 b 的值赋给 a。
+                ==	                相等。用于比较两个数字，相同则返回 true。	                [ $a == $b ] 返回 false。
+                !=	                不相等。用于比较两个数字，不相同则返回 true。	                [ $a != $b ] 返回 true。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:16,name:p,text: <b>  注意： </b> 条件表达式要放在方括号之间，并且要有空格，例如: <b>  [$a==$b] </b> 是错误的，必须写成 <b>  [ $a == $b ] </b> 。,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:19,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20val=`expr $a + $b`echo "a + b : $val"val=`expr $a - $b`echo "a - b : $val"val=`expr $a \* $b`echo "a * b : $val"val=`expr $b / $a`echo "b / a : $val"val=`expr $b % $a`echo "b % a : $val"if [ $a == $b ]then   echo "a 等于 b"fiif [ $a != $b ]then   echo "a 不等于 b"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:27,name:table,text:                运算符	                说明	                举例
+                -eq	                检测两个数是否相等，相等返回 true。	                [ $a -eq $b ] 返回 false。
+                -ne	                检测两个数是否不相等，不相等返回 true。	                [ $a -ne $b ] 返回 true。
+                -gt	                检测左边的数是否大于右边的，如果是，则返回 true。	                [ $a -gt $b ] 返回 false。
+                -lt	                检测左边的数是否小于右边的，如果是，则返回 true。	                [ $a -lt $b ] 返回 true。
+                -ge	                检测左边的数是否大于等于右边的，如果是，则返回 true。	                [ $a -ge $b ] 返回 false。
+                -le	                检测左边的数是否小于等于右边的，如果是，则返回 true。	                [ $a -le $b ] 返回 true。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:30,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20if [ $a -eq $b ]then   echo "$a -eq $b : a 等于 b"else   echo "$a -eq $b: a 不等于 b"fiif [ $a -ne $b ]then   echo "$a -ne $b: a 不等于 b"else   echo "$a -ne $b : a 等于 b"fiif [ $a -gt $b ]then   echo "$a -gt $b: a 大于 b"else   echo "$a -gt $b: a 不大于 b"fiif [ $a -lt $b ]then   echo "$a -lt $b: a 小于 b"else   echo "$a -lt $b: a 不小于 b"fiif [ $a -ge $b ]then   echo "$a -ge $b: a 大于或等于 b"else   echo "$a -ge $b: a 小于 b"fiif [ $a -le $b ]then   echo "$a -le $b: a 小于或等于 b"else   echo "$a -le $b: a 大于 b"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:36,name:table,text:                运算符	                说明	                举例
+                !	                非运算，表达式为 true 则返回 false，否则返回 true。	                [ ! false ] 返回 true。
+                -o	                或运算，有一个表达式为 true 则返回 true。	                [ $a -lt 20 -o $b -gt 100 ] 返回 true。
+                -a	                与运算，两个表达式都为 true 才返回 true。	                [ $a -lt 20 -a $b -gt 100 ] 返回 false。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:39,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20if [ $a != $b ]then   echo "$a != $b : a 不等于 b"else   echo "$a == $b: a 等于 b"fiif [ $a -lt 100 -a $b -gt 15 ]then   echo "$a 小于 100 且 $b 大于 15 : 返回 true"else   echo "$a 小于 100 且 $b 大于 15 : 返回 false"fiif [ $a -lt 100 -o $b -gt 100 ]then   echo "$a 小于 100 或 $b 大于 100 : 返回 true"else   echo "$a 小于 100 或 $b 大于 100 : 返回 false"fiif [ $a -lt 5 -o $b -gt 100 ]then   echo "$a 小于 5 或 $b 大于 100 : 返回 true"else   echo "$a 小于 5 或 $b 大于 100 : 返回 false"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:45,name:table,text:                运算符	                说明	                举例
+                &&    	                逻辑的 AND 	                [[ $a -lt 100 && $b -gt 100 ]] 返回 false
+                ||	                逻辑的 OR	                [[ $a -lt 100 || $b -gt 100 ]] 返回 true,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/operator,tag_id:48,name:div,text: <h2>  实例 </h2> <pre class="prettyprint lang-bash">#!/bin/bash# author:菜鸟教程# url:www.runoob.coma=10b=20if [[ $a -lt 100 &amp;&amp; $b -gt 100 ]]then   echo "返回 true"else   echo "返回 false"fiif [[ $a -lt 100 || $b -gt 100 ]]then   echo "返回 true"else   echo "返回 false"fi</pre>,flag:html,attrs:{}
+fr_type:bash/operator,tag_id:54,name:table,text:                运算符	                说明	                举例
+                =	                检测两个字符串是否相等，相等返回 true。	                [ $a = $b ] 返回 false。
+                !=	                检测两个字符串是否相等，不相等返回 true。	                [ $a != $b ] 返回 true。
+                -z	                检测字符串长度是否为0，为0返回 true。	                [ -z $a ] 返回 false。
+                -n	                检测字符串长度是否为0，不为0返回 true。	                [ -n "$a" ] 返回 true。
+                $	                检测字符串是否为空，不为空返回 true。	                [ $a ] 返回 true。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/output,tag_id:4,name:table,text:                命令	                说明
+                command > file	                将输出重定向到 file。
+                command < file	                将输入重定向到 file。
+                command >> file	                将输出以追加的方式重定向到 file。
+                n > file	                将文件描述符为 n 的文件重定向到 file。
+                n >> file	                将文件描述符为 n 的文件以追加的方式重定向到 file。
+                n >& m	                将输出文件 m 和 n 合并。
+                n <& m	                将输入文件 m 和 n 合并。
+                << tag	                将开始标记 tag 和结束标记 tag 之间的内容作为输入。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/output,tag_id:5,name:blockquote,text: <p>  需要注意的是文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。 </p>,flag:html,attrs:{}
+fr_type:bash/output,tag_id:38,name:ul,text:        标准输入文件(stdin)：stdin的文件描述符为0，Unix程序默认从stdin读取数据。
+        标准输出文件(stdout)：stdout 的文件描述符为1，Unix程序默认向stdout输出数据。
+        标准错误文件(stderr)：stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。,flag:html,attrs:{}
+fr_type:bash/output,tag_id:44,name:p,text: <b>  2 </b> 表示标准错误文件(stderr)。,flag:html,attrs:{}
+fr_type:bash/output,tag_id:56,name:blockquote,text: <p>  注意： </p> <ul>  <li>   结尾的delimiter 一定要顶格写，前面不能有任何字符，后面也不能有任何字符，包括空格和 tab 缩进。  </li>  <li>   开始的delimiter前后的空格会被忽略掉。  </li> </ul>,flag:html,attrs:{}
+fr_type:bash/output,tag_id:71,name:blockquote,text: <p>  <b>   注意：  </b>  0 是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。 </p>,flag:html,attrs:{}
+fr_type:bash/output,tag_id:73,name:p,text: 这里的 BLUE_BG[  &amp; ]BLUE_BG 没有固定的意思,flag:html,attrs:{'data-title': 'Shell 重定向 2>&1 含义说明', 'data-commid': '35273'}
+fr_type:bash/output,tag_id:74,name:p,text: 放在 BLUE_BG[  > ]BLUE_BG 后面的 BLUE_BG[  &amp; ]BLUE_BG ，表示重定向的目标不是一个 BLUE_BG[  文件 ]BLUE_BG ，而是一个 BLUE_BG[  文件描述符 ]BLUE_BG ，内置的文件描述符如下,flag:html,attrs:{}
+fr_type:bash/output,tag_id:76,name:p,text: 换言之 BLUE_BG[  2>1 ]BLUE_BG 代表将 BLUE_BG[  stderr ]BLUE_BG 重定向到当前路径下文件名为 BLUE_BG[  1 ]BLUE_BG 的 BLUE_BG[  regular file ]BLUE_BG 中，而 BLUE_BG[  2>&amp;1 ]BLUE_BG 代表将 BLUE_BG[  stderr ]BLUE_BG 重定向到 BLUE_BG[  文件描述符 ]BLUE_BG 为 BLUE_BG[  1 ]BLUE_BG 的文件(即 BLUE_BG[  /dev/stdout ]BLUE_BG )中，这个文件就是 BLUE_BG[  stdout ]BLUE_BG 在 BLUE_BG[  file system ]BLUE_BG 中的映射,flag:html,attrs:{}
+fr_type:bash/output,tag_id:77,name:p,text: 而 BLUE_BG[  &amp;>file ]BLUE_BG 是一种特殊的用法，也可以写成 BLUE_BG[  >&amp;file ]BLUE_BG ，二者的意思完全相同，都等价于,flag:html,attrs:{}
+fr_type:bash/output,tag_id:79,name:p,text: 此处 BLUE_BG[  &amp;> ]BLUE_BG 或者 BLUE_BG[  >&amp; ]BLUE_BG 视作整体，分开没有单独的含义,flag:html,attrs:{}
+fr_type:bash/output,tag_id:86,name:p,text: 先将要输出到 BLUE_BG[  stdout ]BLUE_BG 的内容重定向到文件，此时文件 BLUE_BG[  list ]BLUE_BG 就是这个程序的 BLUE_BG[  stdout ]BLUE_BG ，再将 BLUE_BG[  stderr ]BLUE_BG 重定向到 BLUE_BG[  stdout ]BLUE_BG ，也就是文件 BLUE_BG[  list ]BLUE_BG,flag:html,attrs:{}
+fr_type:bash/output,tag_id:89,name:p,text: 先将要输出到 BLUE_BG[  stderr ]BLUE_BG 的内容重定向到 BLUE_BG[  stdout ]BLUE_BG ，此时会产生一个 BLUE_BG[  stdout ]BLUE_BG 的拷贝，作为程序的 BLUE_BG[  stderr ]BLUE_BG ，而程序原本要输出到 BLUE_BG[  stdout ]BLUE_BG 的内容，依然是对接在 BLUE_BG[  stdout原身 ]BLUE_BG 上的，因此第二步重定向 BLUE_BG[  stdout ]BLUE_BG ，对 BLUE_BG[  stdout ]BLUE_BG 的拷贝不产生任何影响,flag:html,attrs:{}
+fr_type:bash/output,tag_id:4,name:table,text:                命令	                说明
+                command > file	                将输出重定向到 file。
+                command < file	                将输入重定向到 file。
+                command >> file	                将输出以追加的方式重定向到 file。
+                n > file	                将文件描述符为 n 的文件重定向到 file。
+                n >> file	                将文件描述符为 n 的文件以追加的方式重定向到 file。
+                n >& m	                将输出文件 m 和 n 合并。
+                n <& m	                将输入文件 m 和 n 合并。
+                << tag	                将开始标记 tag 和结束标记 tag 之间的内容作为输入。,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/output,tag_id:5,name:blockquote,text: <p>  需要注意的是文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。 </p>,flag:html,attrs:{}
+fr_type:bash/output,tag_id:38,name:ul,text:        标准输入文件(stdin)：stdin的文件描述符为0，Unix程序默认从stdin读取数据。
+        标准输出文件(stdout)：stdout 的文件描述符为1，Unix程序默认向stdout输出数据。
+        标准错误文件(stderr)：stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。,flag:html,attrs:{}
+fr_type:bash/output,tag_id:44,name:p,text: <b>  2 </b> 表示标准错误文件(stderr)。,flag:html,attrs:{}
+fr_type:bash/output,tag_id:56,name:blockquote,text: <p>  注意： </p> <ul>  <li>   结尾的delimiter 一定要顶格写，前面不能有任何字符，后面也不能有任何字符，包括空格和 tab 缩进。  </li>  <li>   开始的delimiter前后的空格会被忽略掉。  </li> </ul>,flag:html,attrs:{}
+fr_type:bash/output,tag_id:71,name:blockquote,text: <p>  <b>   注意：  </b>  0 是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。 </p>,flag:html,attrs:{}
+fr_type:bash/output,tag_id:73,name:p,text: 这里的 BLUE_BG[  &amp; ]BLUE_BG 没有固定的意思,flag:html,attrs:{'data-title': 'Shell 重定向 2>&1 含义说明', 'data-commid': '35273'}
+fr_type:bash/output,tag_id:74,name:p,text: 放在 BLUE_BG[  > ]BLUE_BG 后面的 BLUE_BG[  &amp; ]BLUE_BG ，表示重定向的目标不是一个 BLUE_BG[  文件 ]BLUE_BG ，而是一个 BLUE_BG[  文件描述符 ]BLUE_BG ，内置的文件描述符如下,flag:html,attrs:{}
+fr_type:bash/output,tag_id:76,name:p,text: 换言之 BLUE_BG[  2>1 ]BLUE_BG 代表将 BLUE_BG[  stderr ]BLUE_BG 重定向到当前路径下文件名为 BLUE_BG[  1 ]BLUE_BG 的 BLUE_BG[  regular file ]BLUE_BG 中，而 BLUE_BG[  2>&amp;1 ]BLUE_BG 代表将 BLUE_BG[  stderr ]BLUE_BG 重定向到 BLUE_BG[  文件描述符 ]BLUE_BG 为 BLUE_BG[  1 ]BLUE_BG 的文件(即 BLUE_BG[  /dev/stdout ]BLUE_BG )中，这个文件就是 BLUE_BG[  stdout ]BLUE_BG 在 BLUE_BG[  file system ]BLUE_BG 中的映射,flag:html,attrs:{}
+fr_type:bash/output,tag_id:77,name:p,text: 而 BLUE_BG[  &amp;>file ]BLUE_BG 是一种特殊的用法，也可以写成 BLUE_BG[  >&amp;file ]BLUE_BG ，二者的意思完全相同，都等价于,flag:html,attrs:{}
+fr_type:bash/output,tag_id:79,name:p,text: 此处 BLUE_BG[  &amp;> ]BLUE_BG 或者 BLUE_BG[  >&amp; ]BLUE_BG 视作整体，分开没有单独的含义,flag:html,attrs:{}
+fr_type:bash/output,tag_id:86,name:p,text: 先将要输出到 BLUE_BG[  stdout ]BLUE_BG 的内容重定向到文件，此时文件 BLUE_BG[  list ]BLUE_BG 就是这个程序的 BLUE_BG[  stdout ]BLUE_BG ，再将 BLUE_BG[  stderr ]BLUE_BG 重定向到 BLUE_BG[  stdout ]BLUE_BG ，也就是文件 BLUE_BG[  list ]BLUE_BG,flag:html,attrs:{}
+fr_type:bash/output,tag_id:89,name:p,text: 先将要输出到 BLUE_BG[  stderr ]BLUE_BG 的内容重定向到 BLUE_BG[  stdout ]BLUE_BG ，此时会产生一个 BLUE_BG[  stdout ]BLUE_BG 的拷贝，作为程序的 BLUE_BG[  stderr ]BLUE_BG ，而程序原本要输出到 BLUE_BG[  stdout ]BLUE_BG 的内容，依然是对接在 BLUE_BG[  stdout原身 ]BLUE_BG 上的，因此第二步重定向 BLUE_BG[  stdout ]BLUE_BG ，对 BLUE_BG[  stdout ]BLUE_BG 的拷贝不产生任何影响,flag:html,attrs:{}
+fr_type:bash/param,tag_id:4,name:ol,text:局部变量 : 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
+环境变量 : 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。
+shell变量 : shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行。,flag:html,attrs:{}
+fr_type:bash/param,tag_id:8,name:ul,text:命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。
+中间不能有空格，可以使用下划线（_）。
+不能使用标点符号。
+不能使用bash里的关键字（可用help命令查看保留关键字）。,flag:html,attrs:{}
+fr_type:bash/param,tag_id:4,name:ol,text:局部变量 : 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
+环境变量 : 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。
+shell变量 : shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行。,flag:html,attrs:{}
+fr_type:bash/param,tag_id:8,name:ul,text:命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。
+中间不能有空格，可以使用下划线（_）。
+不能使用标点符号。
+不能使用bash里的关键字（可用help命令查看保留关键字）。,flag:html,attrs:{}
+fr_type:bash/string,tag_id:6,name:ul,text:单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；
+单引号字串中不能出现单独一个的单引号（对单引号使用转义符后也不行），但可成对出现，作为字符串拼接使用。,flag:html,attrs:{}
+fr_type:bash/string,tag_id:12,name:ul,text:双引号里可以有变量
+双引号里可以出现转义字符,flag:html,attrs:{}
+fr_type:bash/string,tag_id:6,name:ul,text:单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；
+单引号字串中不能出现单独一个的单引号（对单引号使用转义符后也不行），但可成对出现，作为字符串拼接使用。,flag:html,attrs:{}
+fr_type:bash/string,tag_id:12,name:ul,text:双引号里可以有变量
+双引号里可以出现转义字符,flag:html,attrs:{}
+fr_type:bash/test,tag_id:5,name:table,text:                参数	英语源由	                说明
+                -eq	equal的缩写	                等于则为真
+                -ne	not equal的缩写	                不等于则为真
+                -gt	greater than的缩写	                大于则为真
+                -ge	greater & equal的缩写	                大于等于则为真
+                -lt	lower than的缩写	                小于则为真
+                -le	lower&equal的缩写	                小于等于则为真,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/test,tag_id:16,name:table,text:                参数	                说明
+                =	                等于则为真
+                !=	                不相等则为真
+                -z 字符串	                字符串的长度为零则为真
+                -n 字符串	                字符串的长度不为零则为真,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/test,tag_id:23,name:table,text:                参数	                说明
+                -e 文件名	                如果文件存在则为真
+                -r 文件名	                如果文件存在且可读则为真
+                -w 文件名	                如果文件存在且可写则为真
+                -x 文件名	                如果文件存在且可执行则为真
+                -s 文件名	                如果文件存在且至少有一个字符则为真
+                -d 文件名	                如果文件存在且为目录则为真
+                -f 文件名	                如果文件存在且为普通文件则为真
+                -c 文件名	                如果文件存在且为字符型特殊文件则为真
+                -b 文件名	                如果文件存在且为块特殊文件则为真
+                -L 文件名	                如果文件存在且为符号链接则为真
+                -h 文件名	                如果文件存在且为软链接则为真
+                -O 文件名	                如果文件存在且属于当前用户则为真
+                -G 文件名	                如果文件存在且属于当前用户组则为真
+                文件名 -nt 文件名	                判断file1是否比file2新 [ "/data/file1" -nt "/data/file2" ]
+                文件名 -ot 文件名	                判断file1是否比file2旧 [ "/data/file1" -ot "/data/file2" ],flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/test,tag_id:5,name:table,text:                参数	英语源由	                说明
+                -eq	equal的缩写	                等于则为真
+                -ne	not equal的缩写	                不等于则为真
+                -gt	greater than的缩写	                大于则为真
+                -ge	greater & equal的缩写	                大于等于则为真
+                -lt	lower than的缩写	                小于则为真
+                -le	lower&equal的缩写	                小于等于则为真,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/test,tag_id:16,name:table,text:                参数	                说明
+                =	                等于则为真
+                !=	                不相等则为真
+                -z 字符串	                字符串的长度为零则为真
+                -n 字符串	                字符串的长度不为零则为真,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/test,tag_id:23,name:table,text:                参数	                说明
+                -e 文件名	                如果文件存在则为真
+                -r 文件名	                如果文件存在且可读则为真
+                -w 文件名	                如果文件存在且可写则为真
+                -x 文件名	                如果文件存在且可执行则为真
+                -s 文件名	                如果文件存在且至少有一个字符则为真
+                -d 文件名	                如果文件存在且为目录则为真
+                -f 文件名	                如果文件存在且为普通文件则为真
+                -c 文件名	                如果文件存在且为字符型特殊文件则为真
+                -b 文件名	                如果文件存在且为块特殊文件则为真
+                -L 文件名	                如果文件存在且为符号链接则为真
+                -h 文件名	                如果文件存在且为软链接则为真
+                -O 文件名	                如果文件存在且属于当前用户则为真
+                -G 文件名	                如果文件存在且属于当前用户组则为真
+                文件名 -nt 文件名	                判断file1是否比file2新 [ "/data/file1" -nt "/data/file2" ]
+                文件名 -ot 文件名	                判断file1是否比file2旧 [ "/data/file1" -ot "/data/file2" ],flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:7,name:p,text: 连 vim 的官方网站 ( <a href="http://www.vim.org" rel="noopener noreferrer" target="_blank">  http://www.vim.org </a> ) 自己也说 vim 是一个程序开发工具而不是文字处理软件。,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:23,name:ul,text: <b>  字符按键以及Shift组合 </b> ，输入字符
+ <b>  ENTER </b> ，回车键，换行
+ <b>  BACK SPACE </b> ，退格键，删除光标前一个字符
+ <b>  DEL </b> ，删除键，删除光标后一个字符
+ <b>  方向键 </b> ，在文本中移动光标
+ <b>  HOME </b> / <b>  END </b> ，移动光标到行首/行尾
+ <b>  Page Up </b> / <b>  Page Down </b> ，上/下翻页
+ <b>  Insert </b> ，切换光标为输入/替换模式，光标将变成竖线/下划线
+ <b>  ESC </b> ，退出输入模式，切换到命令模式,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:28,name:ul,text:q 退出程序
+w 保存文件,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:54,name:table,text:移动光标的方法
+h 或 向左箭头键(←)	光标向左移动一个字符
+j 或 向下箭头键(↓)	光标向下移动一个字符
+k 或 向上箭头键(↑)	光标向上移动一个字符
+l 或 向右箭头键(→)	光标向右移动一个字符
+        如果你将右手放在键盘上的话，你会发现 hjkl 是排列在一起的，因此可以使用这四个按钮来移动光标。        如果想要进行多次移动的话，例如向下移动 30 行，可以使用 "30j" 或 "30↓" 的组合按键，        亦即加上想要进行的次数(数字)后，按下动作即可！
+[Ctrl] + [f]	屏幕『向下』移动一页，相当于 [Page Down]按键        (常用)
+[Ctrl] + [b]	屏幕『向上』移动一页，相当于 [Page Up] 按键        (常用)
+[Ctrl] + [d]	屏幕『向下』移动半页
+[Ctrl] + [u]	屏幕『向上』移动半页
++	光标移动到非空格符的下一行
+-	光标移动到非空格符的上一行
+n<space>	那个 n 表示『数字』，例如 20 。按下数字后再按空格键，光标会向右移动这一行的 n        个字符。例如 20<space> 则光标会向后面移动 20 个字符距离。
+0 或功能键[Home]	这是数字『 0 』：移动到这一行的最前面字符处        (常用)
+$ 或功能键[End]	移动到这一行的最后面字符处(常用)
+H	光标移动到这个屏幕的最上方那一行的第一个字符
+M	光标移动到这个屏幕的中央那一行的第一个字符
+L	光标移动到这个屏幕的最下方那一行的第一个字符
+G	移动到这个档案的最后一行(常用)
+nG	n 为数字。移动到这个档案的第 n 行。例如 20G 则会移动到这个档案的第 20         行(可配合 :set nu)
+gg	移动到这个档案的第一行，相当于 1G 啊！        (常用)
+n<Enter>	n 为数字。光标向下移动 n 行(常用)
+搜索替换
+/word	向光标之下寻找一个名称为 word 的字符串。例如要在档案内搜寻 vbird         这个字符串，就输入 /vbird 即可！        (常用)
+?word	向光标之上寻找一个字符串名称为 word 的字符串。
+n	这个 n 是英文按键。代表重复前一个搜寻的动作。举例来说，        如果刚刚我们执行 /vbird 去向下搜寻 vbird 这个字符串，则按下 n 后，会向下继续搜寻下一个名称为 vbird         的字符串。如果是执行 ?vbird 的话，那么按下 n 则会向上继续搜寻名称为 vbird 的字符串！
+N	这个 N 是英文按键。与 n 刚好相反，为『反向』进行前一个搜寻动作。        例如 /vbird 后，按下 N 则表示『向上』搜寻 vbird 。
+        使用 /word 配合 n 及 N 是非常有帮助的！可以让你重复的找到一些你搜寻的关键词！    
+:n1,n2s/word1/word2/g	n1 与 n2 为数字。在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为        word2 ！举例来说，在 100 到 200 行之间搜寻 vbird 并取代为 VBIRD 则：        『:100,200s/vbird/VBIRD/g』。(常用)
+ BLUE_BG[  :1,$s/word1/word2/g ]BLUE_BG 或 BLUE_BG[  :%s/word1/word2/g ]BLUE_BG	从第一行到最后一行寻找 word1 字符串，并将该字符串取代为        word2 ！(常用)
+ BLUE_BG[  :1,$s/word1/word2/gc ]BLUE_BG 或 BLUE_BG[  :%s/word1/word2/gc ]BLUE_BG	从第一行到最后一行寻找 word1 字符串，并将该字符串取代为        word2 ！且在取代前显示提示字符给用户确认 (confirm)        是否需要取代！(常用)
+删除、复制与贴上
+x, X	在一行字当中，x 为向后删除一个字符 (相当于 [del] 按键)，         X 为向前删除一个字符(相当于 [backspace] 亦即是退格键)        (常用)
+nx	n 为数字，连续向后删除 n 个字符。举例来说，我要连续删除 10 个字符，        『10x』。
+dd	删除游标所在的那一整行(常用)
+ndd	n 为数字。删除光标所在的向下 n 行，例如 20dd 则是删除 20 行        (常用)
+d1G	删除光标所在到第一行的所有数据
+dG	删除光标所在到最后一行的所有数据
+d$	删除游标所在处，到该行的最后一个字符
+d0	那个是数字的 0 ，删除游标所在处，到该行的最前面一个字符
+yy	复制游标所在的那一行(常用)
+nyy	n 为数字。复制光标所在的向下 n 行，例如 20yy 则是复制 20        行(常用)
+y1G	复制游标所在行到第一行的所有数据
+yG	复制游标所在行到最后一行的所有数据
+y0	复制光标所在的那个字符到该行行首的所有数据
+y$	复制光标所在的那个字符到该行行尾的所有数据
+p, P	p 为将已复制的数据在光标下一行贴上，P 则为贴在游标上一行！        举例来说，我目前光标在第 20 行，且已经复制了 10 行数据。则按下 p 后，        那 10 行数据会贴在原本的 20 行之后，亦即由 21 行开始贴。但如果是按下 P 呢？        那么原本的第 20 行会被推到变成 30 行。        (常用)
+J	将光标所在行与下一行的数据结合成同一行
+c	重复删除多个数据，例如向下删除 10 行，[ 10cj ]
+u	复原前一个动作。(常用)
+[Ctrl]+r	重做上一个动作。(常用)
+这个 u 与 [Ctrl]+r 是很常用的指令！一个是复原，另一个则是重做一次～        利用这两个功能按键，你的编辑，嘿嘿！很快乐的啦！
+.	不要怀疑！这就是小数点！意思是重复前一个动作的意思。        如果你想要重复删除、重复贴上等等动作，按下小数点『.』就好了！        (常用),flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:56,name:table,text:进入输入或取代的编辑模式
+i, I	进入输入模式(Insert mode)：	        i 为『从目前光标所在处输入』， I 为『在目前所在行的第一个非空格符处开始输入』。        (常用)
+a, A	进入输入模式(Insert mode)：	        a 为『从目前光标所在的下一个字符处开始输入』， A        为『从光标所在行的最后一个字符处开始输入』。(常用)
+o, O	进入输入模式(Insert mode)：	        这是英文字母 o 的大小写。o 为『在目前光标所在的下一行处输入新的一行』；        O 为在目前光标所在处的上一行输入新的一行！(常用)
+r, R	进入取代模式(Replace mode)：	        r 只会取代光标所在的那一个字符一次；R会一直取代光标所在的文字，直到按下        ESC 为止；(常用)
+上面这些按键中，在 vi 画面的左下角处会出现『--INSERT--』或『--REPLACE--』的字样。        由名称就知道该动作了吧！！特别注意的是，我们上面也提过了，你想要在档案里面输入字符时，        一定要在左下角处看到 INSERT 或 REPLACE 才能输入喔！
+[Esc]	退出编辑模式，回到一般模式中(常用),flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:58,name:table,text:指令行的储存、离开等指令
+:w	将编辑的数据写入硬盘档案中(常用)
+:w!	若文件属性为『只读』时，强制写入该档案。不过，到底能不能写入，        还是跟你对该档案的档案权限有关啊！
+:q	离开 vi (常用)
+:q!	若曾修改过档案，又不想储存，使用 ! 为强制离开不储存档案。
+注意一下啊，那个惊叹号 (!) 在 vi 当中，常常具有『强制』的意思～
+:wq	储存后离开，若为 :wq! 则为强制储存后离开        (常用)
+ZZ	这是大写的 Z 喔！若档案没有更动，则不储存离开，若档案已经被更动过，则储存后离开！
+:w [filename]	将编辑的数据储存成另一个档案（类似另存新档）
+:r [filename]	在编辑的数据中，读入另一个档案的数据。亦即将 『filename』        这个档案内容加到游标所在行后面
+:n1,n2 w [filename]	将 n1 到 n2 的内容储存成 filename 这个档案。
+:! command	暂时离开 vi 到指令行模式下执行 command 的显示结果！例如:        『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！
+vim 环境的变更
+:set nu	显示行号，设定之后，会在每一行的前缀显示该行的行号
+:set nonu	与 set nu 相反，为取消行号！,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:70,name:p,text: 使用名命令格式： BLUE_BG[  :起始行号,结束行号s/^/注释符/g ]BLUE_BG （注意冒号）。,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:72,name:p,text: 使用名命令格式： BLUE_BG[  :起始行号,结束行号s/^注释符//g ]BLUE_BG （注意冒号）。,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:7,name:p,text: 连 vim 的官方网站 ( <a href="http://www.vim.org" rel="noopener noreferrer" target="_blank">  http://www.vim.org </a> ) 自己也说 vim 是一个程序开发工具而不是文字处理软件。,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:23,name:ul,text: <b>  字符按键以及Shift组合 </b> ，输入字符
+ <b>  ENTER </b> ，回车键，换行
+ <b>  BACK SPACE </b> ，退格键，删除光标前一个字符
+ <b>  DEL </b> ，删除键，删除光标后一个字符
+ <b>  方向键 </b> ，在文本中移动光标
+ <b>  HOME </b> / <b>  END </b> ，移动光标到行首/行尾
+ <b>  Page Up </b> / <b>  Page Down </b> ，上/下翻页
+ <b>  Insert </b> ，切换光标为输入/替换模式，光标将变成竖线/下划线
+ <b>  ESC </b> ，退出输入模式，切换到命令模式,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:28,name:ul,text:q 退出程序
+w 保存文件,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:54,name:table,text:移动光标的方法
+h 或 向左箭头键(←)	光标向左移动一个字符
+j 或 向下箭头键(↓)	光标向下移动一个字符
+k 或 向上箭头键(↑)	光标向上移动一个字符
+l 或 向右箭头键(→)	光标向右移动一个字符
+        如果你将右手放在键盘上的话，你会发现 hjkl 是排列在一起的，因此可以使用这四个按钮来移动光标。        如果想要进行多次移动的话，例如向下移动 30 行，可以使用 "30j" 或 "30↓" 的组合按键，        亦即加上想要进行的次数(数字)后，按下动作即可！
+[Ctrl] + [f]	屏幕『向下』移动一页，相当于 [Page Down]按键        (常用)
+[Ctrl] + [b]	屏幕『向上』移动一页，相当于 [Page Up] 按键        (常用)
+[Ctrl] + [d]	屏幕『向下』移动半页
+[Ctrl] + [u]	屏幕『向上』移动半页
++	光标移动到非空格符的下一行
+-	光标移动到非空格符的上一行
+n<space>	那个 n 表示『数字』，例如 20 。按下数字后再按空格键，光标会向右移动这一行的 n        个字符。例如 20<space> 则光标会向后面移动 20 个字符距离。
+0 或功能键[Home]	这是数字『 0 』：移动到这一行的最前面字符处        (常用)
+$ 或功能键[End]	移动到这一行的最后面字符处(常用)
+H	光标移动到这个屏幕的最上方那一行的第一个字符
+M	光标移动到这个屏幕的中央那一行的第一个字符
+L	光标移动到这个屏幕的最下方那一行的第一个字符
+G	移动到这个档案的最后一行(常用)
+nG	n 为数字。移动到这个档案的第 n 行。例如 20G 则会移动到这个档案的第 20         行(可配合 :set nu)
+gg	移动到这个档案的第一行，相当于 1G 啊！        (常用)
+n<Enter>	n 为数字。光标向下移动 n 行(常用)
+搜索替换
+/word	向光标之下寻找一个名称为 word 的字符串。例如要在档案内搜寻 vbird         这个字符串，就输入 /vbird 即可！        (常用)
+?word	向光标之上寻找一个字符串名称为 word 的字符串。
+n	这个 n 是英文按键。代表重复前一个搜寻的动作。举例来说，        如果刚刚我们执行 /vbird 去向下搜寻 vbird 这个字符串，则按下 n 后，会向下继续搜寻下一个名称为 vbird         的字符串。如果是执行 ?vbird 的话，那么按下 n 则会向上继续搜寻名称为 vbird 的字符串！
+N	这个 N 是英文按键。与 n 刚好相反，为『反向』进行前一个搜寻动作。        例如 /vbird 后，按下 N 则表示『向上』搜寻 vbird 。
+        使用 /word 配合 n 及 N 是非常有帮助的！可以让你重复的找到一些你搜寻的关键词！    
+:n1,n2s/word1/word2/g	n1 与 n2 为数字。在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为        word2 ！举例来说，在 100 到 200 行之间搜寻 vbird 并取代为 VBIRD 则：        『:100,200s/vbird/VBIRD/g』。(常用)
+ BLUE_BG[  :1,$s/word1/word2/g ]BLUE_BG 或 BLUE_BG[  :%s/word1/word2/g ]BLUE_BG	从第一行到最后一行寻找 word1 字符串，并将该字符串取代为        word2 ！(常用)
+ BLUE_BG[  :1,$s/word1/word2/gc ]BLUE_BG 或 BLUE_BG[  :%s/word1/word2/gc ]BLUE_BG	从第一行到最后一行寻找 word1 字符串，并将该字符串取代为        word2 ！且在取代前显示提示字符给用户确认 (confirm)        是否需要取代！(常用)
+删除、复制与贴上
+x, X	在一行字当中，x 为向后删除一个字符 (相当于 [del] 按键)，         X 为向前删除一个字符(相当于 [backspace] 亦即是退格键)        (常用)
+nx	n 为数字，连续向后删除 n 个字符。举例来说，我要连续删除 10 个字符，        『10x』。
+dd	删除游标所在的那一整行(常用)
+ndd	n 为数字。删除光标所在的向下 n 行，例如 20dd 则是删除 20 行        (常用)
+d1G	删除光标所在到第一行的所有数据
+dG	删除光标所在到最后一行的所有数据
+d$	删除游标所在处，到该行的最后一个字符
+d0	那个是数字的 0 ，删除游标所在处，到该行的最前面一个字符
+yy	复制游标所在的那一行(常用)
+nyy	n 为数字。复制光标所在的向下 n 行，例如 20yy 则是复制 20        行(常用)
+y1G	复制游标所在行到第一行的所有数据
+yG	复制游标所在行到最后一行的所有数据
+y0	复制光标所在的那个字符到该行行首的所有数据
+y$	复制光标所在的那个字符到该行行尾的所有数据
+p, P	p 为将已复制的数据在光标下一行贴上，P 则为贴在游标上一行！        举例来说，我目前光标在第 20 行，且已经复制了 10 行数据。则按下 p 后，        那 10 行数据会贴在原本的 20 行之后，亦即由 21 行开始贴。但如果是按下 P 呢？        那么原本的第 20 行会被推到变成 30 行。        (常用)
+J	将光标所在行与下一行的数据结合成同一行
+c	重复删除多个数据，例如向下删除 10 行，[ 10cj ]
+u	复原前一个动作。(常用)
+[Ctrl]+r	重做上一个动作。(常用)
+这个 u 与 [Ctrl]+r 是很常用的指令！一个是复原，另一个则是重做一次～        利用这两个功能按键，你的编辑，嘿嘿！很快乐的啦！
+.	不要怀疑！这就是小数点！意思是重复前一个动作的意思。        如果你想要重复删除、重复贴上等等动作，按下小数点『.』就好了！        (常用),flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:56,name:table,text:进入输入或取代的编辑模式
+i, I	进入输入模式(Insert mode)：	        i 为『从目前光标所在处输入』， I 为『在目前所在行的第一个非空格符处开始输入』。        (常用)
+a, A	进入输入模式(Insert mode)：	        a 为『从目前光标所在的下一个字符处开始输入』， A        为『从光标所在行的最后一个字符处开始输入』。(常用)
+o, O	进入输入模式(Insert mode)：	        这是英文字母 o 的大小写。o 为『在目前光标所在的下一行处输入新的一行』；        O 为在目前光标所在处的上一行输入新的一行！(常用)
+r, R	进入取代模式(Replace mode)：	        r 只会取代光标所在的那一个字符一次；R会一直取代光标所在的文字，直到按下        ESC 为止；(常用)
+上面这些按键中，在 vi 画面的左下角处会出现『--INSERT--』或『--REPLACE--』的字样。        由名称就知道该动作了吧！！特别注意的是，我们上面也提过了，你想要在档案里面输入字符时，        一定要在左下角处看到 INSERT 或 REPLACE 才能输入喔！
+[Esc]	退出编辑模式，回到一般模式中(常用),flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:58,name:table,text:指令行的储存、离开等指令
+:w	将编辑的数据写入硬盘档案中(常用)
+:w!	若文件属性为『只读』时，强制写入该档案。不过，到底能不能写入，        还是跟你对该档案的档案权限有关啊！
+:q	离开 vi (常用)
+:q!	若曾修改过档案，又不想储存，使用 ! 为强制离开不储存档案。
+注意一下啊，那个惊叹号 (!) 在 vi 当中，常常具有『强制』的意思～
+:wq	储存后离开，若为 :wq! 则为强制储存后离开        (常用)
+ZZ	这是大写的 Z 喔！若档案没有更动，则不储存离开，若档案已经被更动过，则储存后离开！
+:w [filename]	将编辑的数据储存成另一个档案（类似另存新档）
+:r [filename]	在编辑的数据中，读入另一个档案的数据。亦即将 『filename』        这个档案内容加到游标所在行后面
+:n1,n2 w [filename]	将 n1 到 n2 的内容储存成 filename 这个档案。
+:! command	暂时离开 vi 到指令行模式下执行 command 的显示结果！例如:        『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！
+vim 环境的变更
+:set nu	显示行号，设定之后，会在每一行的前缀显示该行的行号
+:set nonu	与 set nu 相反，为取消行号！,flag:html,attrs:{'class': ['table', 'table-bordered', 'table-striped']}
+fr_type:bash/vim,tag_id:70,name:p,text: 使用名命令格式： BLUE_BG[  :起始行号,结束行号s/^/注释符/g ]BLUE_BG （注意冒号）。,flag:html,attrs:{}
+fr_type:bash/vim,tag_id:72,name:p,text: 使用名命令格式： BLUE_BG[  :起始行号,结束行号s/^注释符//g ]BLUE_BG （注意冒号）。,flag:html,attrs:{}

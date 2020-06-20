@@ -30,7 +30,6 @@ class DateConverter(object):
             if date_str is not None:
                 self.holiday_list.append(date_str)
 
-
     def date2time(self,date_obj):
         return time.mktime(date_obj.timetuple())
 

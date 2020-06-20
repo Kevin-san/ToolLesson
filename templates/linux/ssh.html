@@ -114,6 +114,7 @@ eno16777736 ec77579b-2ced-481f-9c09-f562b321e268 802-3-etherneteno16777736
 </pre>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用nmcli命令配置过的网络会话是永久生效的，这样当我们下班回家后，顺手启用house 网络会话，网卡就能自动通过DHCP获取到IP地址了。</p>
 <pre class="prettyprint lang-bash">
+
 [root@linuxprobe ~]#nmcli connection up house 
 Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/2)
 [root@linuxprobe ~]#ifconfig 
@@ -192,6 +193,7 @@ options bond0 miimon=100 mode=6
 </pre>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>第四步</strong>：重启网络服务后网卡绑定操作即可成功。正常情况下只有bond0网卡设备才会有IP地址等信息：</p>
 <pre class="prettyprint lang-bash">
+
 [root@linuxprobe ~]#systemctl restart network 
 [root@linuxprobe ~]#ifconfig 
 bond0: flags=5187<UP,BROADCAST,RUNNING,MASTER,MULTICAST> mtu 1500 

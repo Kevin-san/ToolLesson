@@ -190,106 +190,129 @@ Linux系统的内核负责完成对硬件资源的分配、调度等管理任务
 <h3>
 1、安装软件包
 </h3>
-<pre class="prettyprint prettyprinted" style="">
-<span class="pln">rpm -ivh filename.rpm</span> <span class="com">#安装单一软件包</span>
-<span class="pln">rpm -ivh filename1.rpm ... filenameN.rpm</span> <span class="com">#安装互相依赖软件包</span>
+<pre class="prettyprint lang-bash">
+rpm -ivh filename.rpm #安装单一软件包
+rpm -ivh filename1.rpm ... filenameN.rpm #安装互相依赖软件包
 </pre>
 <h3>
 2、安装软件包（忽略依赖，强制安装）
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm --nodeps -ivh filename.rpm</pre>
+<pre class="prettyprint lang-bash">rpm --nodeps -ivh filename.rpm</pre>
 <h3>
 3、升级软件包
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -Uvh filename.rpm</pre>
+<pre class="prettyprint lang-bash">rpm -Uvh filename.rpm</pre>
 <h3>
 4、卸载软件包
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -e filename.rpm</pre>
+<pre class="prettyprint lang-bash">rpm -e filename.rpm</pre>
 <h3>
 5、查询软件描述信息的命令格式
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -qpi filename.rpm</pre>
+<pre class="prettyprint lang-bash">rpm -qpi filename.rpm</pre>
 <h3>
 6、列出软件文件信息的命令格式
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -qpl filename.rpm</pre>
+<pre class="prettyprint lang-bash">rpm -qpl filename.rpm</pre>
 <h3>
 7、查询文件属于哪个RPM的命令格式
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -qf filename</pre>
+<pre class="prettyprint lang-bash">rpm -qf filename</pre>
 <h3>
 8、列出所有安装过的包
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -qa</pre>
+<pre class="prettyprint lang-bash">rpm -qa</pre>
 <h3>
 9、获得软件包全名
 </h3>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">rpm -q file</span>
-<span class="str">filename.x.x.x.el6.x86_64</span>
+<pre class="prettyprint lang-bash">
+rpm -q file
+filename.x.x.x.el6.x86_64
 </pre>
 <h3>
 10、根据关键字查询已安装的某个软件包
 </h3>
-<pre class="prettyprint prettyprinted" style="">rpm -qa | grep 'file'</pre>
+<pre class="prettyprint lang-bash">rpm -qa | grep 'file'</pre>
 
 <h2>Shell echo命令</h2>
 <p>Shell 的 echo 指令与 PHP 的 echo 指令类似，都是用于字符串的输出。命令格式：</p>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="kwd">string</span><span> | </span><span class="kwd">$变量</span></pre>
+<pre class="prettyprint lang-bash">echo string | $变量</pre>
 <p>
 您可以使用echo实现更复杂的输出格式控制。
 </p>
 <h3>
 1.显示普通字符串:</h3>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="str">"It is a test"</span></pre>
+<pre class="prettyprint lang-bash">echo "It is a test"</pre>
 <p>
 这里的双引号完全可以省略，以下命令与上面实例效果一致：</p>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="typ">It</span><span class="pln"> </span><span class="kwd">is</span><span class="pln"> a test</span></pre><h3>
-2.显示转义字符</h3>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="str">"\"It is a test\""</span></pre>
+<pre class="prettyprint lang-bash">echo It is a test</pre>
+<h3>2.显示转义字符</h3>
+<pre class="prettyprint lang-bash">echo "\"It is a test\""</pre>
 <p>
 结果将是:</p>
-<pre class="prettyprint prettyprinted" style=""><span class="str">"It is a test"</span></pre>
+<pre class="prettyprint lang-bash">"It is a test"</pre>
 <p>
 同样，双引号也可以省略</p>
 <h3>
 3.显示变量</h3>
 <p>read 命令从标准输入中读取一行,并把输入行的每个字段的值指定给 shell 变量</p>
-<pre class="prettyprint prettyprinted" style=""><span class="com">#!/bin/sh</span><span class="pln">
+<pre class="prettyprint lang-bash">
+!/bin/sh
 read name 
-echo </span><span class="str">"$name It is a test"</span></pre>
+echo "$name It is a test"</pre>
 <p>以上代码保存为 test.sh，name 接收标准输入的变量，结果将是: </p>
-<pre class="prettyprint prettyprinted" style=""><span class="pun">[</span><span class="pln">root@www </span><span class="pun">~]#</span><span class="pln"> sh test</span><span class="pun">.</span><span class="pln">sh
-OK                     </span><span class="com">#标准输入</span><span class="pln">
-OK </span><span class="typ">It</span><span class="pln"> </span><span class="kwd">is</span><span class="pln"> a test        </span><span class="com">#输出</span></pre>
+<pre class="prettyprint lang-bash">
+[root@www ~]# sh test.sh
+OK                     #标准输入
+OK It is a test        #输出
+</pre>
 <h3>
 4.显示换行</h3>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="pun">-</span><span class="pln">e </span><span class="str">"OK! \n"</span><span class="pln"> </span><span class="com"># -e 开启转义</span><span class="pln">
-echo </span><span class="str">"It is a test"</span></pre>
+<pre class="prettyprint lang-bash">
+echo -e "OK! \n" # -e 开启转义
+echo "It is a test"
+</pre>
 <p>输出结果：</p>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">OK</span><span class="pun">!</span><span class="pln">
+<pre class="prettyprint lang-bash">
+OK!
 
-</span><span class="typ">It</span><span class="pln"> </span><span class="kwd">is</span><span class="pln"> a test</span></pre>
+It is a test
+</pre>
 <h3>
 5.显示不换行
-</h3><pre class="prettyprint prettyprinted" style=""><span class="com">#!/bin/sh</span><span class="pln">
-echo </span><span class="pun">-</span><span class="pln">e </span><span class="str">"OK! \c"</span><span class="pln"> </span><span class="com"># -e 开启转义 \c 不换行</span><span class="pln">
-echo </span><span class="str">"It is a test"</span></pre>
+</h3><pre class="prettyprint lang-bash">
+#!/bin/sh
+echo -e "OK! \c" # -e 开启转义 \c 不换行
+echo "It is a test"
+</pre>
 <p>输出结果：</p>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">OK</span><span class="pun">!</span><span class="pln"> </span><span class="typ">It</span><span class="pln"> </span><span class="kwd">is</span><span class="pln"> a test</span></pre>
+<pre class="prettyprint lang-bash">
+OK! It is a test
+</pre>
 <h3>
 6.显示结果定向至文件</h3>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="str">"It is a test"</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> myfile</span></pre>
+<pre class="prettyprint lang-bash">
+echo "It is a test" &gt; myfile
+</pre>
 <h3>
 7.原样输出字符串，不进行转义或取变量(用单引号)</h3>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="str">'$name\"'</span></pre>
+<pre class="prettyprint lang-bash">
+echo '$name\"'
+</pre>
 <p>输出结果：</p>
-<pre class="prettyprint prettyprinted" style=""><span class="pln">$name\"</span></pre>
+<pre class="prettyprint lang-bash">
+$name\"
+</pre>
 <h3>
-8.显示命令执行结果</h3><pre class="prettyprint prettyprinted" style=""><span class="pln">echo </span><span class="str">`date`</span></pre>
+8.显示命令执行结果</h3>
+<pre class="prettyprint lang-bash">
+echo `date`
+</pre>
 <p><strong>注意：</strong> 这里使用的是反引号 <span class="marked">`</span>, 而不是单引号 <span class="marked">'</span>。</p>
 <p>
 结果将显示当前日期</p>
-<pre class="prettyprint prettyprinted" style=""><span class="typ">Thu</span><span class="pln"> </span><span class="typ">Jul</span><span class="pln"> </span><span class="lit">24</span><span class="pln"> </span><span class="lit">10</span><span class="pun">:</span><span class="lit">08</span><span class="pun">:</span><span class="lit">46</span><span class="pln"> CST </span><span class="lit">2014</span></pre>			
+<pre class="prettyprint lang-bash">
+Thu Jul 24 10 08 46 CST 2014
+</pre>			
 </div>
 {% endblock %}

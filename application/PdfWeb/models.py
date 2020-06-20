@@ -7,6 +7,10 @@ Created on 2019/12/28
 from django.db import models
 from tools import common_tools
 
+class ChapterInfo(models.Model):
+    pass
+class ContentInfo(models.Model):
+    pass
 class ImageInfo(models.Model):
     ImgKey=models.CharField(max_length=100,verbose_name='类别')
     Alt=models.CharField(max_length=100,verbose_name='别名')
