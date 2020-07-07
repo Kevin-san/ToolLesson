@@ -16,16 +16,60 @@ def get_group_str_key(detail_info):
     return detail_info.ParentKey
 
 def get_home_index():
-    menu_list = db.get_menus('index')
+    menu_list = db.get_book_lesson_type_info()
     val_list = []
-    for menu in menu_list:
-        menu_type = menu.Href.split('#')[1]
-        index_list = db.get_menu_indexs(menu_type)
-        item = HomeIndexItem(menu_type,menu.Text,index_list)
+    for book_lesson_type in menu_list:
+        index_list = db.get_book_lesson_image_info(book_lesson_type.Id)
+        item = HomeIndexItem('index',book_lesson_type.CommonType,index_list)
         val_list.append(item)
     keys = ['menu_list','val_list']
     vals = [menu_list,val_list]
     return common_tools.create_map(keys,vals)
+
+def get_chapter_headers(book_lesson_id):
+    return db.get_chapter_infos(book_lesson_id)
+
+def get_chapter_contents(chapter_id):
+    return db.get_content_infos(chapter_id)
+    
+def get_chapters(book_lesson_id,chapter_href):
+    header_list=get_chapter_headers(book_lesson_id)
+    chapter_info=db.get_chapter_by_href(chapter_href)
+    detail_list=get_chapter_contents(chapter_info.Id)
+    content_html=convert_details_to_html(detail_list)
+    keys = ['header_list','content_html']
+    vals = [header_list,content_html]
+    return common_tools.create_map(keys, vals)
+        
+def convert_details_to_html(detail_list):
+    content_html=""
+    rules1=['h2','p','pre','h1_span']
+    rules2=['line']
+"h1_span"
+"line"
+"p"
+"h2"
+"image"
+"ul"
+"table"
+"blockquote"
+"h3"
+"pre"
+"em"
+"ol"
+"h1"
+"strong"
+"h4"
+"h5"
+"a"
+
+
+    for content_info in detail_list:
+        tag = content_info.ElementTag
+        text = content_info.Text
+        dict = eval(content_info.AttributeMap)
+    return ""
+
 
 def convert_children_to_parent(children_details,check_cnt):
     if len(children_details) == check_cnt:

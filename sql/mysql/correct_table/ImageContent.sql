@@ -4,7 +4,7 @@ drop table `ImageContent`;
 
 create table IF NOT EXISTS `ImageContent`(
 	`Id` INT UNSIGNED AUTO_INCREMENT,
-	`Directory` VARCHAR(100) NOT NULL,
+	`Directory` VARCHAR(100),
 	`ImageName` VARCHAR(100) NOT NULL,
 	`Width` INT NOT NULL, 
 	`Height` INT NOT NULL, 

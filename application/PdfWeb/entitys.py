@@ -148,3 +148,12 @@ class HomeIndexItem():
         self.id = id_name
         self.title = menu_title
         self.infos = menu_infos
+
+class HomeInfoItem():
+    def __init__(self,book_lesson,image_content):
+        self.LessonHref = book_lesson.LessonHref
+        self.LessonName = book_lesson.LessonName
+        self.Description = book_lesson.Description
+        self.ImageName = image_content.ImageName
+        self.Width = image_content.Width
+        self.Height = image_content.Height

@@ -94,15 +94,21 @@ class SimpleHtmlReader():
                 index=index+1
         return self.item_list
     
+def get_child_files(correct_dir):
+    map_dirs=dict()
+    map_dirs['linux']=["index","install","plan","raidlvm","ipfirewalld","ssh","apache","vsftpd","sambanfs","bind","dhcp","postifxdevecot","squid","iscsi","mariadb","pxekickstart","lnmp","git","openstack","openldap"]
+    map_dirs['bash']=["index","param","env","string","comment","argvs","escapechar","operator","array","hash","test","forever","func","output","include","vim","cmds"]
+    return map_dirs[correct_dir]
 
 def remove_django_pattern_parse_htm(directory,sub_dirs,suffix,replace_strs_dict):
     htm_dict={}
     for dirpath in sub_dirs:
         replace_strs=replace_strs_dict[dirpath]
         correct_dir=F"{directory}/{dirpath}"
-        child_files=common_filer.get_child_files(correct_dir)
+        child_files=get_child_files(dirpath)
         htm_list=[]
         for child_file in child_files:
+            child_file=F"{child_file}.html"
             if child_file in ["base.html","header.html"]:
                 continue
             html_file=F"{correct_dir}/{child_file}"
@@ -167,8 +173,8 @@ def parse_htm_list_to_sql(htm_dict,chapter_sql,content_sql):
 if __name__ == "__main__":
     directory="C:/Users/xcKev/git/CorePdfPage/templates"
     sql_dir="C:/Users/xcKev/git/CorePdfPage/sql/mysql/correct_table"
-    chapter_sql_file=F"{sql_dir}/ChapterData.sql"
-    content_sql_file=F"{sql_dir}/ContentData.sql"
+    chapter_sql_file=F"{sql_dir}/ChapterData1.sql"
+    content_sql_file=F"{sql_dir}/ContentData1.sql"
     dirs=["linux","bash"]
     replace_strs_dict={}
     for corr_dir in dirs:

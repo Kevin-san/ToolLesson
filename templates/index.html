@@ -28,7 +28,7 @@
 					<li><a href="#">全部教程</a></li>
 					{% if menu_list %}
             			{% for menu in menu_list %}
-            			<li><a href="{{ menu.Href }}">{{ menu.Text }}</a></li>
+            			<li><a href="{{ menu.CommonValue }}">{{ menu.CommonType }}</a></li>
             			{% endfor %}
         			{% endif %}
 				</ul>
@@ -40,11 +40,11 @@
 						<h1 class="page-header" id="{{ item.id }}">{{ item.title }}</h1>
 							{% for info in item.infos %}
 								<div class="col-xs-6 col-sm-4 placeholder">
-									<a href="{{ info.Href }}">
-									<img src="/static/img/{{ info.ImgSrc }}" width="{{ info.ImgWidth }}" height="{{ info.ImgHeight }}" class="img-responsive" alt="{{ info.Alt }}">
-									<h4>{{ info.Title }}</h4>
-									<span class="text-muted">{{ info.Text }}</span>
-									</a>
+    								<a href="{{ info.LessonHref }}">
+    									<img src="/static/img/{{ info.ImageName }}" width="{{ info.Width }}" height="{{ info.Height }}" class="img-responsive" alt="{{ info.LessonName }}">
+    									<h4>{{ info.LessonName }}</h4>
+    									<span class="text-muted">{{ info.Description }}</span>
+   	 								</a>
 								</div>
 							{% endfor %}
 						</div>

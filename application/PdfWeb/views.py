@@ -5,8 +5,9 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.shortcuts import render,render_to_response
-from PdfWeb import services
-from PdfWeb import restful
+from PdfWeb import services,restful
+
+menus=['linux','bash']
 
 def index(request):
     result = services.get_home_index()

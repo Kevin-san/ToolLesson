@@ -2,7 +2,7 @@ use alvin;
 drop table `Chapter`;
 create table IF NOT EXISTS `Chapter`( -- 书的大章节表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
-	`BookLessonId` VARCHAR(100), -- 课程id
+	`BookLessonId` INT NOT NULL, -- 课程id
 	`ChapterNo` INT NOT NULL, -- 第几章
 	`ChapterName` VARCHAR(100) character set utf8 NOT NULL, -- 章节名
 	`Href` VARCHAR(100) NOT NULL, -- 网页章节所对应的超链接 
