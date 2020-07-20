@@ -44,7 +44,6 @@ def create_map(keylist,valuelist):
 def html_to_detail_sql(html_file):
     html_str = common_filer.get_file_details(html_file)
 
-
 def group_by_list(func,item,group_dicts):
     par_key = func(item)
     if par_key in group_dicts:

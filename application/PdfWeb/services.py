@@ -5,15 +5,23 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from PdfWeb.entitys import HomeIndexItem
-from PdfWeb import db
-from tools import common_tools
+from PdfWeb import db,entitys
+from tools import common_tools, common_converter
+
+html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
+html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
+html_child_rules=db.get_common_rules_by_type_and_rule('html5', 'child_text')
+html_children_rules=db.get_common_rules_by_type_and_rule('html5', 'children_text')
+html_dirty_rules=db.get_common_rules_by_type_and_rule('html5', 'dirty_text')
+html_no_tags=entitys.convert_common_rules_to_tag_dict(html_no_rules)
+html_clean_tags=entitys.convert_common_rules_to_tag_dict(html_clean_rules)
+html_child_tags=entitys.convert_common_rules_to_tag_dict(html_child_rules)
+html_children_tags=entitys.convert_common_rules_to_tag_dict(html_children_rules)
+html_dirty_tags=entitys.convert_common_rules_to_tag_dict(html_dirty_rules)
+font_rules=db.get_common_rules_by_type('font')
+font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
 
 
-def get_group_list_key(detail_info):
-    return '-'.join(detail_info.ParentKey.split('-')[0:3])
-
-def get_group_str_key(detail_info):
-    return detail_info.ParentKey
 
 def get_home_index():
     menu_list = db.get_book_lesson_type_info()
@@ -40,81 +48,123 @@ def get_chapters(book_lesson_id,chapter_href):
     keys = ['header_list','content_html']
     vals = [header_list,content_html]
     return common_tools.create_map(keys, vals)
-        
-def convert_details_to_html(detail_list):
-    content_html=""
-    rules1=['h2','p','pre','h1_span']
-    rules2=['line']
-"h1_span"
-"line"
-"p"
-"h2"
-"image"
-"ul"
-"table"
-"blockquote"
-"h3"
-"pre"
-"em"
-"ol"
-"h1"
-"strong"
-"h4"
-"h5"
-"a"
 
-
-    for content_info in detail_list:
-        tag = content_info.ElementTag
-        text = content_info.Text
-        dict = eval(content_info.AttributeMap)
+def convert_attribute_map_to_str(content_detail):
+    if content_detail.AttributeMap !="{}":
+        attribute_map=eval(content_detail.AttributeMap)
+        attribute_str=""
+        for key,value in attribute_map.items():
+            str_value=value
+            if common_tools.is_list(value):
+                str_value=" ".join(value)
+            attribute_str=F'{attribute_str} {key}="{str_value}"'
+        return attribute_str
     return ""
 
+def convert_font_to_html(str_text):
+    text_html=str_text
+    for val in font_tags.keys():
+        text_html.replace(F'{val}[',font_tags[val].RulesDescrption).replace(F']{val}',font_tags[val].RuelsText)
+    return text_html
+def convert_html_text(content_detail):
+    tag_name=content_detail.ElementTag
+    text_html=convert_font_to_html(content_detail.Text)
+    html_text=common_converter.str2htmlspec(text_html)
+    if tag_name == 'pre':
+        html_text=content_detail.Text.replace("<","&lt;")
+    return html_text
 
-def convert_children_to_parent(children_details,check_cnt):
-    if len(children_details) == check_cnt:
-        return children_details
-    val_dicts=common_tools.group_detail_by_dist_parent_key(common_tools.group_by_str, get_group_str_key, children_details)
-    children_details.clear()
-    for par_key,child_html in val_dicts.items():
-        par_detail = db.get_parent_detail(par_key)
-        detail_text = par_detail.Text
-        par_detail.Text=common_tools.get_spec_var(detail_text, F"{child_html}", F"{par_detail.Text}{child_html}")
-        children_details.append(par_detail)
-    return convert_children_to_parent(children_details, check_cnt)
+def convert_child_html_text(content_detail,common_rule):
+    childs_text=content_detail.Text.split("\n")
+    child_tag=common_rule.RulesDescription
+    html_text=""
+    for child_str in childs_text:
+        text_html=convert_font_to_html(child_str)
+        child_str=common_converter.str2htmlspec(text_html)
+        html_text=F'{html_text}<{child_tag}>{child_str}</{child_tag}>'
+    return html_text
 
-def get_complex_details(parent_key):
-    typekey=F"{parent_key}"
-    children_details=db.get_children_detail(typekey)
-    child_details = db.get_child_details(parent_key)
-    group_dicts = common_tools.group_detail_by_dist_parent_key(common_tools.group_by_list, get_group_list_key, children_details)
-    children_details = convert_children_to_parent(children_details, len(group_dicts))
-    child_details.extend(children_details)
-    result_dicts = {}
-    key_list = []
-    for item in child_details:
-        result_dicts[item.OrderIndex]=item.__str__()
-        key_list.append(item.OrderIndex)
-    sorted(key_list)
-    return (key_list,result_dicts)
+def convert_common_html_text(childs_list,parent_tag,child_tag):
+    child_html=""
+    for childs_str in childs_list:
+        text_html=convert_font_to_html(childs_str)
+        childs_str=common_converter.str2htmlspec(text_html)
+        child_html=F'{child_html}<{child_tag}>{childs_str}</{child_tag}>'
+    return F'<{parent_tag}>{child_html}</{parent_tag}>'
 
-def convert_details_to_out_html(key_list,result_dicts):
-    out_html=''
-    for key_id in key_list:
-        out_html=F"{out_html}{result_dicts[key_id]}"
-    return out_html
+def convert_no_text(content_detail):
+    tag_name=content_detail.ElementTag
+    attribute_str=convert_attribute_map_to_str(content_detail)
+    return F'<{tag_name}{attribute_str}>'
 
-def get_out_html(detail_info):
-    tag = detail_info.Type
-    t_class_str = F" class='{detail_info.ClassVal}'"
-    t_id_str=F" id='{detail_info.IdVal}'"
-    class_str=common_tools.get_spec_var(detail_info.ClassVal, "", t_class_str)
-    id_str=common_tools.get_spec_var(detail_info.IdVal,"",t_id_str)
-    class_id=F"{class_str}{id_str}"
-    detail_text = common_tools.get_spec_var(detail_info.Text,"",detail_info.Text)
-    if tag in ['hr','br']:
-        return F"<{tag}>"
-    if tag == 'img':
-        img_info = db.get_image(detail_info.Text)
-        return F'<{tag} src="{img_info.Src}" width="{img_info.Width}" height="{img_info.Height}" alt="{img_info.Alt}"{class_id}>'
-    return F"<{tag}{class_id}>{detail_text}</{tag}>"
+def convert_clean_text(content_detail):
+    tag_name=content_detail.ElementTag
+    html_text=convert_html_text(content_detail)
+    attribute_str=convert_attribute_map_to_str(content_detail)
+    return F'<{tag_name}{attribute_str}>{html_text}</{tag_name}>'
+
+def convert_child_text(content_detail,common_rule):
+    tag_name=content_detail.ElementTag
+    html_text=convert_child_html_text(content_detail,common_rule)
+    attribute_str=convert_attribute_map_to_str(content_detail)
+    return F'<{tag_name}{attribute_str}>{html_text}</{tag_name}>'
+
+def convert_children_text(content_detail,common_rule):
+    tag_name=content_detail.ElementTag
+    childs_text=content_detail.Text.split("\n")
+    child_tags=common_rule.RulesDescription.split(":")
+    body_tag=child_tags[0]
+    header_tag=child_tags[1]
+    detail_tag=child_tags[2]
+    child_tag=child_tags[-1]
+    header_list=childs_text[0].split("\t")
+    header_str=convert_common_html_text(header_list,header_tag,child_tag)
+    detail_list = []
+    for child_str in childs_text[1:]:
+        detail_str=convert_common_html_text(child_str.split("\t"), detail_tag, child_tag)
+        detail_list.append(detail_str)
+    detail_strs="".join(detail_list)
+    return F'<{tag_name}><{body_tag}>{header_str}{detail_strs}</{body_tag}></{tag_name}>'
+
+def convert_spec_tag(tag_name,attribute_str,html_text=""):
+    tag_id= tag_name.find(".")
+    if tag_id >0:
+        real_tag = tag_name[tag_id:]
+        return F'<{tag_name}{attribute_str}>'
+    return F'<{tag_name}{attribute_str}>{html_text}</{tag_name}>'
+
+def convert_dirty_text(content_detail,common_rule):
+    tag_name=content_detail.ElementTag
+    child_tags=common_rule.RulesDescription.split(":")
+    html_text=""
+    main_id=int(common_rule.RulesText)-1
+    main_tag=child_tags[main_id]
+    for child_tag in child_tags[::-1]:
+        attribute_str=""
+        if child_tag == main_tag:
+            attribute_str=convert_attribute_map_to_str(content_detail)
+        tag_id= child_tag.find(".")
+        if tag_id >0:
+            real_tag = tag_name[tag_id:]
+            html_text = F'<{real_tag}{attribute_str}>'
+        else:
+            html_text= F'<{child_tag}{attribute_str}>{html_text}</{child_tag}>'
+    return html_text
+            
+def convert_details_to_html(detail_list):
+    detail_html_list=[]
+    for content_detail in detail_list:
+        tag_name = content_detail.ElementTag
+        detail_html=""
+        if tag_name in html_no_tags.keys():
+            detail_html=convert_no_text(content_detail)
+        elif tag_name in html_clean_tags.keys():
+            detail_html=convert_clean_text(content_detail)
+        elif tag_name in html_child_tags.keys():
+            detail_html=convert_child_text(content_detail, html_child_tags[tag_name])
+        elif tag_name in html_children_tags.keys():
+            detail_html=convert_children_text(content_detail, html_children_tags[tag_name])
+        elif tag_name in html_dirty_tags.keys():
+            detail_html=convert_dirty_text(content_detail, html_dirty_tags[tag_name])
+        detail_html_list.append(detail_html)
+    return "\n".join(detail_html_list)

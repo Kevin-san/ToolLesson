@@ -12,8 +12,8 @@ insert into CommonRules values(10,'html5','a','clean_text','clean_text','clean_t
 insert into CommonRules values(11,'html5','i','clean_text','clean_text','clean_text',0,'alvin',curdate());
 insert into CommonRules values(12,'html5','ul','child_text','li','child_text',0,'alvin',curdate());
 insert into CommonRules values(13,'html5','ol','child_text','li','child_text',0,'alvin',curdate());
-insert into CommonRules values(14,'html5','table','children_text','tbody','children_text',0,'alvin',curdate());
-insert into CommonRules values(15,'html5','image','dirty_text','p','dirty_text',0,'alvin',curdate());
+insert into CommonRules values(14,'html5','table','children_text','tbody:tr:th:td','children_text',0,'alvin',curdate());
+insert into CommonRules values(15,'html5','image','dirty_text','p:.img','2',0,'alvin',curdate());
 insert into CommonRules values(16,'html5','line','no_text','no_text','no_text',0,'alvin',curdate());
-insert into CommonRules values(17,'font','BOLD','html5','<strong>','html5',0,'alvin',curdate());
-insert into CommonRules values(18,'font','BLUE_BG','html5','<span class="label label-info">','html5',0,'alvin',curdate());
+insert into CommonRules values(17,'font','BOLD','html5','<strong>','</strong>',0,'alvin',curdate());
+insert into CommonRules values(18,'font','BLUE_BG','html5','<span class="label label-info">','</span>',0,'alvin',curdate());

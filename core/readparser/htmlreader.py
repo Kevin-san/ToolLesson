@@ -159,7 +159,7 @@ def parse_htm_list_to_sql(htm_dict,chapter_sql,content_sql):
             chapter_no=chapter_id+1
             href=F"{directory_path}/{file_name}"
             item_list=htm_rder.html2list(href)
-            chapter_data_sql=F"insert into Chapter values({index_no},'{directory_path}',{chapter_no},'{file_name}','{href}',0,'alvin',sysdate());"
+            chapter_data_sql=F"insert into Chapter values({index_no},'{directory_path}',{chapter_no},'{file_name}','{href}',0,'alvin',curdate());"
             chapter_sql_wrter.append_new_line(chapter_data_sql)
             for item in item_list:
                 tag_name=item.tag_name

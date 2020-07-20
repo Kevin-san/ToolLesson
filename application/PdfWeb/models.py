@@ -87,7 +87,7 @@ class ImageContentInfo(models.Model):
         return self.Text
 
 class CommonRulesInfo(models.Model):
-    Id=models.IntegerField(verbose_name='图片Id')
+    Id=models.IntegerField(verbose_name='Id')
     TypeKey=models.CharField(max_length=100,verbose_name='类型键')
     TypeValue=models.CharField(max_length=100,verbose_name='类型值')
     Rules=models.CharField(max_length=100,verbose_name='规则')

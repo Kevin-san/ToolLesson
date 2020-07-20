@@ -15,6 +15,7 @@ def index(request):
 
 def linux(request,api_key):
     if api_key in restful.get_linux_restful():
+        services.get_chapters(book_lesson_id, chapter_href)
         return render(request, 'linux/%s.html' %(api_key))
     return render(request, '404.html')
 
