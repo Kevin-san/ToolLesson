@@ -7,7 +7,17 @@ Created on 2019/12/28
 from django.shortcuts import render,render_to_response
 from PdfWeb import services,restful
 
-menus=['linux','bash']
+linux_menus=['linux','bash','regex','design','docker','maven','python','java','perl','cpp']
+database_menus=['sql','mysql','oracle','sqlserver','sybase','sqlite','postgresql','mongodb','redis']
+webpage_menus=['html','js','css']
+telphone_menus=['android','kotlin','gradle']
+math_menus=['math','linemath','ratemath','scoremath','theorymath']
+frontkill_menus=['geek','machinelearn','deeplearn','datamine','crawler','speechsyn','voicerecog','blchain','3dmodel','unity3d']
+lang_menus=['eng','jpn','chi']
+
+def get_template_detail(book_lesson_id,api_key,menus):
+    main_name=menus[book_lesson_id-1]
+    return services.get_chapters(book_lesson_id, F'{main_name}/{api_key}')
 
 def index(request):
     result = services.get_home_index()
@@ -15,12 +25,13 @@ def index(request):
 
 def linux(request,api_key):
     if api_key in restful.get_linux_restful():
-        services.get_chapters(book_lesson_id, chapter_href)
-        return render(request, 'linux/%s.html' %(api_key))
+        result_dict=get_template_detail(1,api_key,linux_menus)
+        return render(request,'linux/base.html',result_dict)
     return render(request, '404.html')
 
 def bash(request,api_key):
     if api_key in restful.get_bash_restful():
-        return render(request, 'bash/%s.html' %(api_key))
+        result_dict=get_template_detail(2,api_key,linux_menus)
+        return render(request,'bash/base.html',result_dict)
     return render(request, '404.html')
 

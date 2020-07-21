@@ -42,7 +42,8 @@ def get_chapter_contents(chapter_id):
     
 def get_chapters(book_lesson_id,chapter_href):
     header_list=get_chapter_headers(book_lesson_id)
-    chapter_info=db.get_chapter_by_href(chapter_href)
+    chapter_infos=db.get_chapter_by_href(chapter_href)
+    chapter_info=chapter_infos[0]
     detail_list=get_chapter_contents(chapter_info.Id)
     content_html=convert_details_to_html(detail_list)
     keys = ['header_list','content_html']
@@ -64,8 +65,9 @@ def convert_attribute_map_to_str(content_detail):
 def convert_font_to_html(str_text):
     text_html=str_text
     for val in font_tags.keys():
-        text_html.replace(F'{val}[',font_tags[val].RulesDescrption).replace(F']{val}',font_tags[val].RuelsText)
+        text_html=text_html.replace(F'{val}[',font_tags[val].RulesDescription).replace(F']{val}',font_tags[val].RulesText)
     return text_html
+
 def convert_html_text(content_detail):
     tag_name=content_detail.ElementTag
     text_html=convert_font_to_html(content_detail.Text)
@@ -92,10 +94,10 @@ def convert_common_html_text(childs_list,parent_tag,child_tag):
         child_html=F'{child_html}<{child_tag}>{childs_str}</{child_tag}>'
     return F'<{parent_tag}>{child_html}</{parent_tag}>'
 
-def convert_no_text(content_detail):
-    tag_name=content_detail.ElementTag
+def convert_no_text(content_detail,common_rule):
+    tag_name=common_rule.RulesDescription
     attribute_str=convert_attribute_map_to_str(content_detail)
-    return F'<{tag_name}{attribute_str}>'
+    return F'<{tag_name}{attribute_str}/>'
 
 def convert_clean_text(content_detail):
     tag_name=content_detail.ElementTag
@@ -114,27 +116,20 @@ def convert_children_text(content_detail,common_rule):
     childs_text=content_detail.Text.split("\n")
     child_tags=common_rule.RulesDescription.split(":")
     body_tag=child_tags[0]
-    header_tag=child_tags[1]
-    detail_tag=child_tags[2]
-    child_tag=child_tags[-1]
+    parent_tag=child_tags[1]
+    header_tag=child_tags[2]
+    detail_tag=child_tags[-1]
     header_list=childs_text[0].split("\t")
-    header_str=convert_common_html_text(header_list,header_tag,child_tag)
+    header_str=convert_common_html_text(header_list,parent_tag,header_tag)
     detail_list = []
     for child_str in childs_text[1:]:
-        detail_str=convert_common_html_text(child_str.split("\t"), detail_tag, child_tag)
+        detail_str=convert_common_html_text(child_str.split("\t"), parent_tag, detail_tag)
         detail_list.append(detail_str)
     detail_strs="".join(detail_list)
-    return F'<{tag_name}><{body_tag}>{header_str}{detail_strs}</{body_tag}></{tag_name}>'
-
-def convert_spec_tag(tag_name,attribute_str,html_text=""):
-    tag_id= tag_name.find(".")
-    if tag_id >0:
-        real_tag = tag_name[tag_id:]
-        return F'<{tag_name}{attribute_str}>'
-    return F'<{tag_name}{attribute_str}>{html_text}</{tag_name}>'
+    attribute_str=convert_attribute_map_to_str(content_detail)
+    return F'<{tag_name}{attribute_str}><{body_tag}>{header_str}{detail_strs}</{body_tag}></{tag_name}>'
 
 def convert_dirty_text(content_detail,common_rule):
-    tag_name=content_detail.ElementTag
     child_tags=common_rule.RulesDescription.split(":")
     html_text=""
     main_id=int(common_rule.RulesText)-1
@@ -144,8 +139,8 @@ def convert_dirty_text(content_detail,common_rule):
         if child_tag == main_tag:
             attribute_str=convert_attribute_map_to_str(content_detail)
         tag_id= child_tag.find(".")
-        if tag_id >0:
-            real_tag = tag_name[tag_id:]
+        if tag_id >-1:
+            real_tag = child_tag[tag_id+1:]
             html_text = F'<{real_tag}{attribute_str}>'
         else:
             html_text= F'<{child_tag}{attribute_str}>{html_text}</{child_tag}>'
@@ -157,7 +152,7 @@ def convert_details_to_html(detail_list):
         tag_name = content_detail.ElementTag
         detail_html=""
         if tag_name in html_no_tags.keys():
-            detail_html=convert_no_text(content_detail)
+            detail_html=convert_no_text(content_detail,html_no_tags[tag_name])
         elif tag_name in html_clean_tags.keys():
             detail_html=convert_clean_text(content_detail)
         elif tag_name in html_child_tags.keys():

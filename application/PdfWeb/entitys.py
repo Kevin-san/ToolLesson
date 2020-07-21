@@ -18,7 +18,7 @@ def get_val_max(num_list):
 def convert_common_rules_to_tag_dict(rule_list):
     tag_dict=dict()
     for common_rule in rule_list:
-        tag_dict[common_rule.TypeValue]=common_rule
+        tag_dict[common_rule.TypeVal]=common_rule
     return tag_dict
 
 class PdfInitParams():
