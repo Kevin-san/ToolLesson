@@ -19,6 +19,9 @@ current_log=log.get_log('filer', '/temp', 'filer')
 def get_file_name(file_path):
     return os.path.basename(file_path)
 
+def get_parent_dir(file_path):
+    return os.path.dirname(file_path)
+
 def get_file_c_date(file_path):
     file_date=time.localtime(os.stat(file_path).st_ctime)
     return time.strftime('%Y-%m-%d %H:%M:%S',file_date)

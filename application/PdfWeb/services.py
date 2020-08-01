@@ -65,7 +65,16 @@ def convert_attribute_map_to_str(content_detail):
 def convert_font_to_html(str_text):
     text_html=str_text
     for val in font_tags.keys():
-        text_html=text_html.replace(F'{val}[',font_tags[val].RulesDescription).replace(F']{val}',font_tags[val].RulesText)
+        font1_list = text_html.split(F'{val}[')
+        for num in range(0..len(font1_list)):
+            if num %2 ==1:
+                font1_list[num]=font1_list[num].lstrip()
+        text_html=font_tags[val].RulesDescription.join(font1_list)
+        font2_list = text_html.split(F']{val}')
+        for num in range(0..len(font2_list)):
+            if num %2 ==0:
+                font1_list[num]=font2_list[num].rstrip()
+        text_html=font_tags[val].RulesText.join(font2_list)
     return text_html
 
 def convert_html_text(content_detail):

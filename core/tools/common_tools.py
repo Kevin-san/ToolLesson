@@ -129,6 +129,12 @@ def is_list_and_ge_len(object_item,length):
 def to_normalize(param_str):
     return param_str[:1].upper()+param_str[1:]
 
+def to_integer_list(param_array):
+    param_list=[]
+    for i in range(len(param_array)):
+        param_list.append(int(param_array[i]))
+    return param_list
+
 def to_unique_list(param_list):
     new_param_list=list(set(param_list))
     new_param_list.sort(key=param_list.index)

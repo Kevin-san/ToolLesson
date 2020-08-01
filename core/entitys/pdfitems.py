@@ -20,6 +20,94 @@ def get_val_step(val_max):
         return 1
     return 10
 
+class PdfSpan():
+    
+    def __init__(self,pageno,bbox,size,text):
+        self.pageno=pageno
+        self.x0=bbox[0]
+        self.y0=bbox[1]
+        self.index=self.y0
+        self.x1=bbox[2]
+        self.bbox=bbox
+        self.size=size
+        self.text=text
+        self.item_type="span"
+    
+    def __str__(self):
+        return F"pageno:{self.pageno},x0:{self.x0},y0:{self.y0},x1:{self.x1},size:{self.size},text:{self.text},position:{self.bbox}"
+    
+    
+class PdfText():
+    
+    def __init__(self,pageno,bbox,size,text):
+        self.pageno=pageno
+        self.index=bbox[1]
+        self.bbox=bbox
+        self.size=size
+        self.text=text
+        self.item_type="paragraph"
+        
+    def __str__(self):
+        return F"pageno:{self.pageno},index:{self.index},size:{self.size},text:{self.text},position:{self.bbox}"
+    
+
+class PdfTable():
+    
+    def __init__(self,pageno,bbox,size,headers,details):
+        self.pageno=pageno
+        self.index=bbox[1]
+        self.bbox=bbox
+        self.size=size
+        self.headers=headers
+        self.details=details
+        self.item_type="table"
+    
+    def __str__(self):
+        return F"pageno:{self.pageno},index:{self.index},size:{self.size},headers:{self.headers},position:{self.bbox}"
+    
+class PdfLink():
+    
+    def __init__(self,pageno,xref,bbox,size,text,to_pageno):
+        self.pageno=pageno
+        self.index=bbox[1]
+        self.bbox=bbox
+        self.xref=xref
+        self.size=size
+        self.text=text
+        self.to_pageno=to_pageno
+        self.item_type="link"
+    
+    def __str__(self):
+        return F"pageno:{self.pageno},index:{self.index},xref:{self.xref},size:{self.size},text:{self.text},to_page:{self.to_pageno},positions:{self.bbox}"
+
+class PdfImg():
+    def __init__(self,pageno,bbox,pdf_image=None):
+        self.pageno=pageno
+        self.index=bbox[1]
+        self.bbox=bbox
+        if pdf_image:
+            self.xref=pdf_image.xref
+            self.ext=pdf_image.ext
+            self.imgdata=pdf_image.imgdata
+            self.pixn=pdf_image.pixn
+        self.item_type="image"
+    
+    def __str__(self):
+        return F"pageno:{self.pageno},index:{self.index},xref:{self.xref},ext:{self.ext},pixn:{self.pixn},imgdata:{self.imgdata},positions:{self.bbox}"
+    
+    
+class PdfImage():
+    
+    def __init__(self,pageno,xref,ext,imgdata,pixn):
+        self.pageno=pageno
+        self.xref=xref
+        self.ext=ext
+        self.imgdata=imgdata
+        self.pixn=pixn
+    
+    def __str__(self):
+        return F"pageno:{self.pageno},xref:{self.xref},ext:{self.ext},pixn:{self.pixn},imgdata:{self.imgdata}"
+    
 class PdfInitParams():
     
     def __init__(self,pdf_file,password=b'',out_file=None,encoding='utf-8',imgdir=None):
