@@ -8,8 +8,8 @@ import fitz
 from writecreater.fileswriter import SimpleFileWriter
 import pdfplumber
 from tools import common_filer,common_tools
-from entitys.pdfitems import PdfImage,PdfImg,PdfText,PdfTable,PdfLink, PdfSpan
-
+from entitys.pdfitems import PdfImage,PdfImg,PdfText,PdfLink, PdfSpan,PdfLine
+#PdfTable,
 
 class SimplePdfReader(object):
 
@@ -161,8 +161,8 @@ class SimplePdfReader(object):
                 bbox=common_tools.to_integer_list(img_block['bbox'])
                 items.append(PdfImg(pageno,bbox,pdf_image))
         if span_blocks:
-            span_dicts=self.to_pdf_span_dicts(pageno, span_blocks)
-            items=items+self.to_pdf_table_order_text_items(pageno, span_dicts)
+            span_dicts,pdf_tab_dicts=self.to_pdf_span_dicts(pageno, span_blocks)
+            items=items+self.to_pdf_table_order_text_items(pageno, span_dicts,pdf_tab_dicts)
         final_items=self.sort_pdf_items(items)
         return final_items
     
@@ -201,19 +201,25 @@ class SimplePdfReader(object):
             pdf_item=self.to_pdf_final_item(y0_dict[y0])
             final_results.append(pdf_item)
         return final_results
-    
     def to_pdf_span_dicts(self,pageno,span_blocks):
         span_dicts=dict()
+        pdf_tab_dicts=dict()
         for pdf_block in span_blocks:
             texts=pdf_block['lines']
             for line_text in texts:
                 bbox=line_text['bbox']
+                span_its = self.to_pdf_span_item(pageno, line_text)
                 span_key=str(common_tools.to_integer_list(bbox))
-                if span_key in span_dicts:
-                    span_dicts[span_key]=span_dicts[span_key]+self.to_pdf_span_item(pageno, line_text)
+                pdf_key= bbox[1]
+                if pdf_key in pdf_tab_dicts:
+                    pdf_tab_dicts[pdf_key]=pdf_tab_dicts[pdf_key]+span_its
                 else:
-                    span_dicts[span_key]=self.to_pdf_span_item(pageno, line_text)
-        return span_dicts
+                    pdf_tab_dicts[pdf_key]=span_its
+                if span_key in span_dicts:
+                    span_dicts[span_key]=span_dicts[span_key]+span_its
+                else:
+                    span_dicts[span_key]=span_its
+        return span_dicts,pdf_tab_dicts
     
     def to_pdf_span_item(self,pageno,lines_text):
         spans=lines_text['spans']
@@ -236,9 +242,23 @@ class SimplePdfReader(object):
             bbox[i]=int(bbox[i].strip())
         return bbox
 
-    def to_pdf_table_order_text_items(self,pageno,span_dicts):
+    def to_pdf_table_order_text_items(self,pageno,span_dicts,pdf_tab_dicts):
         page_links=self.get_page_links(pageno)
         common_items=[]
+        tab_key_map=dict()
+        pdf_key_list=common_tools.to_unique_list(pdf_tab_dicts.keys())
+        for pdf_key,span_items in pdf_tab_dicts.items():
+            pdf_key_list.append(pdf_key)
+            spec_key = len(span_items)
+            if spec_key in tab_key_map:
+                tab_key_map[spec_key].append(pdf_key)
+            else:
+                tab_key_map[spec_key]=[pdf_key]
+        pdf_key_list.sort()
+        for tab_cnt, pdf_keys in tab_key_map.items():
+            tab_keys = [ val for val in pdf_keys if val in pdf_key_list ]
+            if tab_cnt>1 and tab_keys == pdf_keys:
+                pass
         for bbox_key,span_items in span_dicts.items():
             bbox=self.to_bbox_int_list(bbox_key)
             if page_links:
@@ -246,7 +266,6 @@ class SimplePdfReader(object):
             elif self.is_text(span_items):
                 pdf_text_item=self.to_pdf_text_item(pageno,bbox,span_items)
                 common_items.append(pdf_text_item)
-                
         return common_items        
 
     def is_text(self,span_its):
@@ -259,7 +278,7 @@ class SimplePdfReader(object):
         return cnt == len(span_its)-1
     
     def is_dup_columns(self,span_its):
-        pass    
+        pass
     
     def to_pdf_text_value(self,span_its):
         text_val=""

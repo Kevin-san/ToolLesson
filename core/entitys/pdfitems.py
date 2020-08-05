@@ -20,6 +20,14 @@ def get_val_step(val_max):
         return 1
     return 10
 
+class PdfLine():
+    
+    def __init__(self,page,index,span_items,span_count):
+        self.page=page
+        self.index=index
+        self.span_items=span_items
+        self.span_count=span_count
+
 class PdfSpan():
     
     def __init__(self,pageno,bbox,size,text):
