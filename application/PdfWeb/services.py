@@ -21,7 +21,13 @@ html_dirty_tags=entitys.convert_common_rules_to_tag_dict(html_dirty_rules)
 font_rules=db.get_common_rules_by_type('font')
 font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
 
-
+def content_infos_to_text(content_infos):
+    text_list=[]
+    for content_info in content_infos:
+        if content_info.ElementTag not in ['image','line']:
+            text_str = content_info.Text.replace("BOLD[","").replace("]BOLD","").replace("BLUE_BG[","").replace("]BLUE_BG","")
+            text_list.append(text_str)
+    return "\n".join(text_list)
 
 def get_home_index():
     menu_list = db.get_book_lesson_type_info()
@@ -66,15 +72,15 @@ def convert_font_to_html(str_text):
     text_html=str_text
     for val in font_tags.keys():
         font1_list = text_html.split(F'{val}[')
-        for num in range(0..len(font1_list)):
-            if num %2 ==1:
-                font1_list[num]=font1_list[num].lstrip()
-        text_html=font_tags[val].RulesDescription.join(font1_list)
         font2_list = text_html.split(F']{val}')
-        for num in range(0..len(font2_list)):
-            if num %2 ==0:
-                font1_list[num]=font2_list[num].rstrip()
-        text_html=font_tags[val].RulesText.join(font2_list)
+        if font1_list and font2_list and len(font1_list) == len(font2_list) and len(font1_list) >1:
+            for num in range(len(font1_list)):
+                if num %2 ==1:
+                    font1_list[num]=font1_list[num].lstrip()
+                    text_html=font_tags[val].RulesDescription.join(font1_list)
+                else:
+                    font2_list[num]=font2_list[num].rstrip()
+                    text_html=font_tags[val].RulesText.join(font2_list)
     return text_html
 
 def convert_html_text(content_detail):

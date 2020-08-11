@@ -15,28 +15,33 @@
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/holder.min.js"></script>
 <script src="/static/js/run_prettify.min.js"></script>
+<script src="/static/js/speaker.js"></script>
 </head>
 <body data-spy="scroll" data-target="#myScrollspy">
 	<nav class="navbar navbar-inverse navbar-fixed-top">
-		{% include "common/learn_header.html" %}
-	</nav>
+	{% include "common/learn_header.html" %}</nav>
 	<div class="container-fluid">
 		<div class="row">
+			
 			{% block content %}
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					{% if header_list %}
-            			{% for header in header_list %}
-            			<li><a href="/{{ header.Href }}">{{ header.ChapterName }}</a></li>
-            			{% endfor %}
-        			{% endif %}
+					{% if header_list %} 
+					{% for header in header_list %}
+					<li><a href="/{{ header.Href }}">{{ header.ChapterName }}</a></li>
+					{% endfor %} 
+					{% endif %}
 				</ul>
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" id="myScrollspy">
 				<div class="article-intro" id="content">
-					{% autoescape on %}
-					{{ content_html }}
-					{% endautoescape %}
+					<button type="button" class="btn btn-default" onclick="speakText()">
+						<span class="glyphicon glyphicon-play" id="sayer"></span>
+					</button>
+					<button type="button" class="btn btn-default" onclick="stopSpeak()">
+						<span class="glyphicon glyphicon-stop"></span>
+					</button>
+				{% autoescape on %} {{ content_html }} {% endautoescape %}
 				</div>
 			</div>
 			{% endblock %}
