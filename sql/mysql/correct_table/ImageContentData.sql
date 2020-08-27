@@ -1,6 +1,6 @@
 delete from ImageContent;
 insert into ImageContent values(1,'','linux.png',100,100,0,'alvin',curdate());
-insert into ImageContent values(2,'','bash.png',120,120,0,'alvin',curdate());
+insert into ImageContent values(2,'','bash.png',100,100,0,'alvin',curdate());
 insert into ImageContent values(3,'','regex.png',100,100,0,'alvin',curdate());
 insert into ImageContent values(4,'','design.png',100,100,0,'alvin',curdate());
 insert into ImageContent values(5,'','docker.png',150,150,0,'alvin',curdate());

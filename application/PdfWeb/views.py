@@ -26,12 +26,12 @@ def index(request):
 def linux(request,api_key):
     if api_key in restful.get_linux_restful():
         result_dict=get_template_detail(1,api_key,linux_menus)
-        return render(request,'linux/base.html',result_dict)
+        return render(request,'learnbase.html',result_dict)
     return render(request, '404.html')
 
 def bash(request,api_key):
     if api_key in restful.get_bash_restful():
         result_dict=get_template_detail(2,api_key,linux_menus)
-        return render(request,'bash/base.html',result_dict)
+        return render(request,'learnbase.html',result_dict)
     return render(request, '404.html')
 

@@ -20,6 +20,13 @@ html_children_tags=entitys.convert_common_rules_to_tag_dict(html_children_rules)
 html_dirty_tags=entitys.convert_common_rules_to_tag_dict(html_dirty_rules)
 font_rules=db.get_common_rules_by_type('font')
 font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
+menu_list = db.get_book_lesson_type_info()
+val_list = []
+for book_lesson_type in menu_list:
+    index_list = db.get_book_lesson_image_info(book_lesson_type.Id)
+    id_name = book_lesson_type.CommonValue.replace('#','')
+    item = HomeIndexItem(id_name,book_lesson_type.CommonType,index_list)
+    val_list.append(item)
 
 def content_infos_to_text(content_infos):
     text_list=[]
@@ -30,12 +37,6 @@ def content_infos_to_text(content_infos):
     return "\n".join(text_list)
 
 def get_home_index():
-    menu_list = db.get_book_lesson_type_info()
-    val_list = []
-    for book_lesson_type in menu_list:
-        index_list = db.get_book_lesson_image_info(book_lesson_type.Id)
-        item = HomeIndexItem('index',book_lesson_type.CommonType,index_list)
-        val_list.append(item)
     keys = ['menu_list','val_list']
     vals = [menu_list,val_list]
     return common_tools.create_map(keys,vals)
@@ -52,8 +53,8 @@ def get_chapters(book_lesson_id,chapter_href):
     chapter_info=chapter_infos[0]
     detail_list=get_chapter_contents(chapter_info.Id)
     content_html=convert_details_to_html(detail_list)
-    keys = ['header_list','content_html']
-    vals = [header_list,content_html]
+    keys = ['val_list','header_list','content_html']
+    vals = [val_list,header_list,content_html]
     return common_tools.create_map(keys, vals)
 
 def convert_attribute_map_to_str(content_detail):

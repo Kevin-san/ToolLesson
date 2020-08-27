@@ -2,6 +2,7 @@ var speaker = new window.SpeechSynthesisUtterance();
 var speakTimer, stopTimer;
 var play = false;
 var isStart = false;
+var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'}; 
 // 开始朗读
 function speakText() {
 	if (!isStart) {
@@ -10,7 +11,7 @@ function speakText() {
 		window.speechSynthesis.cancel();
 		speakTimer = setTimeout(function() {
 			speaker.volume = 0.9
-			speaker.text = context.innerHTML;
+			speaker.text = context.innerHTML.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];}); 
 			window.speechSynthesis.speak(speaker);
 		}, 200);
 		isStart = true;
@@ -33,7 +34,11 @@ function speakText() {
 function stopSpeak() {
 	clearTimeout(stopTimer);
 	clearTimeout(speakTimer);
+	document.getElementById('sayer').className = "glyphicon glyphicon-play";
+	isStart = false;
+	play = false;
 	stopTimer = setTimeout(function() {
 		window.speechSynthesis.cancel();
 	}, 20);
+	
 }
