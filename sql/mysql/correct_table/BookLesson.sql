@@ -5,9 +5,9 @@ create table IF NOT EXISTS `BookLesson`( -- 书的信息表
 	`BookName` VARCHAR(100) NOT NULL, -- 书名
 	`LessonName` VARCHAR(100) NOT NULL, -- 书名
 	`LessonHref` VARCHAR(100) NOT NULL, -- 网页大章节所对应的超链接
-	`LessonTypeId` INT NOT NULL, -- 大章分类
+	`BookLessonType_Id` INT NOT NULL, -- 大章分类
 	`Description` VARCHAR(100) NOT NULL, -- 介绍
-	`ImageId` INT NOT NULL, -- 图片Id
+	`ImageContent_Id` INT NOT NULL, -- 图片Id
 	`DeleteFlag` TINYINT NOT NULL DEFAULT 0, -- 删除状态
 	`submission_user` VARCHAR(30), -- 上传人
 	`submission_date` DATE, -- 上传时间

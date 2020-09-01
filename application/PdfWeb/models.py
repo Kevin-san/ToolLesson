@@ -6,8 +6,26 @@ Created on 2019/12/28
 '''
 from django.db import models
 
-class BookLessonTypeInfo(models.Model):
-    Id=models.IntegerField(verbose_name='课程类别Id')
+class User(models.Model):
+    gender = (
+        ('male', "1"),
+        ('female', "0"),
+    )
+    Name = models.CharField(max_length=128, unique=True,verbose_name='用户名')
+    Password = models.CharField(max_length=256,verbose_name='用户密码')
+    Email = models.EmailField(unique=True,verbose_name='用户邮箱')
+    Sex = models.CharField(max_length=32, choices=gender, default="1",verbose_name='用户性别')
+    DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
+    submission_user=models.CharField(max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(verbose_name="上传时间")
+    class Meta:
+        db_table='User'
+        verbose_name = "用户"
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.name
+
+class BookLessonType(models.Model):
     CommonType=models.CharField(max_length=100,verbose_name='类别')
     CommonValue=models.CharField(max_length=100,verbose_name='链接')
     DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
@@ -20,17 +38,18 @@ class BookLessonTypeInfo(models.Model):
     def __str__(self):
         return self.CommonType
 
-class BookLessonInfo(models.Model):
-    Id=models.IntegerField(verbose_name='书课Id')
+class BookLesson(models.Model):
     BookName=models.CharField(max_length=100,verbose_name='书名')
     LessonName=models.CharField(max_length=100,verbose_name='课程名')
     LessonHref=models.CharField(max_length=100,verbose_name='链接')
-    LessonTypeId=models.IntegerField(verbose_name='课程类别Id')
+    
     Description=models.CharField(max_length=100,verbose_name='大略介绍')
-    ImageId=models.CharField(max_length=100,verbose_name='图片Id')
+    
     DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
     submission_user=models.CharField(max_length=30,verbose_name="上传用户")
     submission_date=models.DateField(verbose_name="上传时间")
+    imageContent=models.ForeignKey(to='ImageContent',null=False,on_delete=models.DO_NOTHING,related_name='image_content',db_constraint=False,verbose_name='图片Id')
+    bookLessonType=models.ForeignKey(to='BookLessonType',null=False,on_delete=models.DO_NOTHING,related_name='type_book_lesson',db_constraint=False,verbose_name='课程类别Id')
     class Meta:
         db_table='BookLesson'
         verbose_name='书本课程'
@@ -38,8 +57,7 @@ class BookLessonInfo(models.Model):
     def __str__(self):
         return self.Description
 
-class ChapterInfo(models.Model):
-    Id=models.IntegerField(verbose_name='章节Id')
+class Chapter(models.Model):
     BookLessonId=models.IntegerField(verbose_name='书本课程Id')
     ChapterNo=models.IntegerField(verbose_name='章节号')
     ChapterName=models.CharField(max_length=100,verbose_name='章节名')
@@ -53,8 +71,7 @@ class ChapterInfo(models.Model):
         verbose_name_plural=verbose_name
     def __str__(self):
         return self.ChapterName
-class ContentInfo(models.Model):
-    Id=models.IntegerField(verbose_name='段落Id')
+class Content(models.Model):
     ChapterId=models.IntegerField(verbose_name='章节Id')
     ElementTag=models.CharField(max_length=100,verbose_name='段落类')
     OrderIndex=models.IntegerField(verbose_name='段落号')
@@ -70,8 +87,7 @@ class ContentInfo(models.Model):
         verbose_name_plural=verbose_name
     def __str__(self):
         return self.Text
-class ImageContentInfo(models.Model):
-    Id=models.IntegerField(verbose_name='图片Id')
+class ImageContent(models.Model):
     Directory=models.CharField(max_length=100,verbose_name='目录')
     ImageName=models.CharField(max_length=100,verbose_name='图片名称')
     Width=models.IntegerField(verbose_name='宽度')
@@ -86,8 +102,7 @@ class ImageContentInfo(models.Model):
     def __str__(self):
         return self.Text
 
-class CommonRulesInfo(models.Model):
-    Id=models.IntegerField(verbose_name='Id')
+class CommonRules(models.Model):
     TypeKey=models.CharField(max_length=100,verbose_name='类型键')
     TypeVal=models.CharField(max_length=100,verbose_name='类型值')
     Rules=models.CharField(max_length=100,verbose_name='规则')
