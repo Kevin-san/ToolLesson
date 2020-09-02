@@ -1,6 +1,6 @@
 use alvin;
 
-drop table `UserRole`;
+drop table IF EXISTS `UserRole`;
 
 create table IF NOT EXISTS `UserRole`(
 	`Id` INT NOT NULL,

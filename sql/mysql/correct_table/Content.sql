@@ -1,6 +1,6 @@
 use alvin;
 
-drop table `Content`;
+drop table IF EXISTS `Content`;
 
 create table IF NOT EXISTS `Content`(
 	`Id` INT UNSIGNED AUTO_INCREMENT,

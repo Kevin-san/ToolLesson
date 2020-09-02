@@ -4,8 +4,8 @@ Created on 2019/12/28
 
 @author: xcKev
 '''
-from PdfWeb.entitys import HomeIndexItem
 from PdfWeb import db,entitys
+from PdfWeb.entitys import HomeIndexItem
 from tools import common_tools, common_converter
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
@@ -40,6 +40,21 @@ def get_home_index():
     keys = ['menu_list','val_list']
     vals = [menu_list,val_list]
     return common_tools.create_map(keys,vals)
+
+def get_menus(book_type_id):
+    book_lessons= db.get_book_lesson_info(book_type_id)
+    menus = []
+    for book_lesson in book_lessons:
+        menus.append(book_lesson.LessonHref.replace("/learn/","").replace("/index",""))
+    return menus
+
+def get_restful(book_lesson_id,lesson_key):
+    chapters = db.get_chapter_infos(book_lesson_id)
+    restfuls = []
+    for chapter in chapters:
+        single_href=chapter.Href.replace(F"learn/{lesson_key}/","")
+        restfuls.append(single_href)
+    return restfuls
 
 def get_chapter_headers(book_lesson_id):
     return db.get_chapter_infos(book_lesson_id)

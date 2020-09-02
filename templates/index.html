@@ -17,50 +17,102 @@
 <script src="/static/js/holder.min.js"></script>
 <script src="/static/js/speaker.js"></script>
 </head>
-<body data-spy="scroll" data-target="#myScrollspy">
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container-fluid">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		{% include "common/alvin_header.html" %}
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		{% include "common/home_menu.html" %}
-		{% include "common/search_form.html" %}
-		</div><!-- /.navbar-collapse -->
-		</div><!-- /.container-fluid -->
-	</nav>
-	<div class="container-fluid">
-		<div class="row" id="content">
-		{% block content %}
-			<div class="col-sm-3 col-md-2 sidebar" id="myScrollspy">
-				<ul class="nav nav-sidebar" data-spy="affix" data-offset-top="150">
-					<li><a href="#">全部教程</a></li>
-					{% if menu_list %}
-            			{% for menu in menu_list %}
-            			<li><a href="{{ menu.CommonValue }}">{{ menu.CommonType }}</a></li>
-            			{% endfor %}
-        			{% endif %}
-				</ul>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-inverse navbar-fixed-top">
+					<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					{% include "common/alvin_header.html" %}
+					<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						{% include "common/home_menu.html" %}
+						{% include "common/login_register.html" %}
+						</div><!-- /.navbar-collapse -->
+					</div><!-- /.container-fluid -->
+				</nav>
+				<div class="jumbotron">
+					<h1>
+						Hello, Programmers!
+					</h1>
+					<p>
+						This is a simple website for knowledge sharing!
+					</p>
+				</div>
 			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					{% if val_list %}
-						{% for item in val_list %}
-						<div class="row placeholders">
-						<h1 class="page-header" id="{{ item.id }}">{{ item.title }}</h1>
-							{% for info in item.infos %}
-								<div class="col-xs-6 col-sm-4 placeholder">
-    								<a href="{{ info.LessonHref }}">
-    									<img src="/static/img/{{ info.ImageName }}" width="{{ info.Width }}" height="{{ info.Height }}" class="img-responsive" alt="{{ info.LessonName }}">
-    									<h4>{{ info.LessonName }}</h4>
-    									<span class="text-muted">{{ info.Description }}</span>
-   	 								</a>
-								</div>
-							{% endfor %}
-						</div>
-						{% endfor %}
-        			{% endif %}
+		</div>
+		<div id="content">
+		<div class="row clearfix">
+			<div class="col-md-4 column">
+				<h1>
+					Lesson
+				</h1>
+				<p>
+					Lesson website!
+				</p>
+				<p>
+					<a class="btn" href="/learn/index">View details</a>
+				</p>
 			</div>
-			{% endblock %}
+			<div class="col-md-4 column">
+				<h1>
+					Tool
+				</h1>
+				<p>
+					Tool website!
+				</p>
+				<p>
+					<a class="btn" href="/tool/index">View details</a>
+				</p>
+			</div>
+			<div class="col-md-4 column">
+				<h1>
+					Blog
+				</h1>
+				<p>
+					Blog website!
+				</p>
+				<p>
+					<a class="btn" href="/blog/index">View details</a>
+				</p>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-4 column">
+				<h1>
+					Novel
+				</h1>
+				<p>
+					Novel website!
+				</p>
+				<p>
+					<a class="btn" href="/novel/index">View details</a>
+				</p>
+			</div>
+			<div class="col-md-4 column">
+				<h1>
+					Music
+				</h1>
+				<p>
+					Music website!
+				</p>
+				<p>
+					<a class="btn" href="/music/index">View details</a>
+				</p>
+			</div>
+			<div class="col-md-4 column">
+				<h1>
+					Video
+				</h1>
+				<p>
+					Video website!
+				</p>
+				<p>
+					<a class="btn" href="/video/index">View details</a>
+				</p>
+			</div>
+		</div>
 		</div>
 	</div>
 </body>

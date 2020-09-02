@@ -22,8 +22,9 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^index/$',views.index, name='index'),
-    url(r'^linux/([a-z]+)/$',views.linux,name='linux'),
-    url(r'^bash/([a-z]+)/$',views.bash,name='bash'),
+    url(r'^index',views.index,name='index'),
+    url(r'^learn/index',views.learn_index, name='learn_index'),
+    url(r'^learn/linux/([a-z]+)/$',views.learn_linux,name='learn_linux'),
+    url(r'^learn/bash/([a-z]+)/$',views.learn_bash,name='learn_bash'),
     url(r'^favicon.ico$',RedirectView.as_view(url=r'static/favicon.ico')),
 ]+ static(settings.STATIC_URL, document_root = settings.STATICFILES_DIRS)

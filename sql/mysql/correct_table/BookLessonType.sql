@@ -1,5 +1,5 @@
 use alvin;
-drop table `BookLessonType`;
+drop table IF EXISTS `BookLessonType`;
 create table IF NOT EXISTS `BookLessonType`( -- 书的分类表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
 	`CommonType` VARCHAR(100) NOT NULL, -- 分类

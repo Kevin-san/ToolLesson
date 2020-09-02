@@ -1,6 +1,6 @@
 use alvin;
 
-drop table `CommonRules`;
+drop table IF EXISTS `CommonRules`;
 
 create table IF NOT EXISTS `CommonRules`(
 	`Id` INT UNSIGNED AUTO_INCREMENT,

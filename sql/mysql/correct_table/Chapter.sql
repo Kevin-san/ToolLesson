@@ -1,5 +1,5 @@
 use alvin;
-drop table `Chapter`;
+drop table IF EXISTS `Chapter`;
 create table IF NOT EXISTS `Chapter`( -- 书的大章节表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
 	`BookLesson_Id` INT NOT NULL, -- 课程id

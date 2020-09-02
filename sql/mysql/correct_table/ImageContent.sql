@@ -1,6 +1,6 @@
 use alvin;
 
-drop table `ImageContent`;
+drop table IF EXISTS `ImageContent`;
 
 create table IF NOT EXISTS `ImageContent`(
 	`Id` INT UNSIGNED AUTO_INCREMENT,

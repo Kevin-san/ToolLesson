@@ -1,6 +1,6 @@
 use alvin;
 
-drop table `UserFunction`;
+drop table IF EXISTS `UserFunction`;
 
 create table IF NOT EXISTS `UserFunction`(
 	`Id` INT UNSIGNED AUTO_INCREMENT,

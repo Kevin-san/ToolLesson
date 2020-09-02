@@ -1,5 +1,5 @@
 use alvin;
-drop table `BookLesson`;
+drop table IF EXISTS `BookLesson`;
 create table IF NOT EXISTS `BookLesson`( -- 书的信息表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
 	`BookName` VARCHAR(100) NOT NULL, -- 书名

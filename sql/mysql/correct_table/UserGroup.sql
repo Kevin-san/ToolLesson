@@ -1,6 +1,6 @@
 use alvin;
 
-drop table `UserGroup`;
+drop table IF EXISTS `UserGroup`;
 
 create table IF NOT EXISTS `UserGroup`(
 	`NameKey` VARCHAR(128) NOT NULL,
