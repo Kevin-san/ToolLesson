@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url
+from django.conf.urls import include
 import PdfWeb.views as views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,6 +24,11 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^index',views.index,name='index'),
+    url(r'^login',views.login,name='login'),
+    url(r'^register',views.register,name='register'),
+    url(r'^logout',views.logout,name='logout'),
+    url(r'^confirm/$', views.user_confirm,name='confirm'),
+    url(r'^captcha', include('captcha.urls')),
     url(r'^learn/index',views.learn_index, name='learn_index'),
     url(r'^learn/linux/([a-z]+)/$',views.learn_linux,name='learn_linux'),
     url(r'^learn/bash/([a-z]+)/$',views.learn_bash,name='learn_bash'),

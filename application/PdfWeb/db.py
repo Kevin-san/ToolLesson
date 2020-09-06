@@ -5,8 +5,32 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLessonType,BookLesson,Chapter,Content,ImageContent,CommonRules
+from PdfWeb.models import BookLessonType,BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString
 from PdfWeb.entitys import HomeInfoItem
+from django.contrib.auth.hashers import make_password
+
+def get_user_by_name(user_name):
+    return User.objects.filter(Name=user_name)
+
+def get_user_by_email(mail):
+    return User.objects.filter(Email=mail)
+
+def get_user_by_id(user_id):
+    return User.objects.filter(Id=user_id)
+
+def create_user(user_name,password,email,sex,permission):
+    password1=make_password(password,user_name,'pbkdf2_sha256')
+    User.objects.create(Name = user_name,Password = password1,Email = email,Sex = sex,Permissions = permission)
+    user = get_user_by_name(user_name)
+    if user:
+        return user[0]
+    return None
+    
+def create_confirm_msg(user,code):
+    UserConfirmString.objects.create(code=code, User_Id=user.Id)
+
+def get_confirm_item(code):
+    return UserConfirmString.objects.filter(code=code)
 
 def get_book_lesson_type_by_id(book_lesson_type_id):
     return BookLessonType().objects.get(pk=book_lesson_type_id,DeleteFlag=0)

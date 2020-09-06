@@ -7,6 +7,8 @@ Created on 2019/12/28
 from PdfWeb import db,entitys
 from PdfWeb.entitys import HomeIndexItem
 from tools import common_tools, common_converter
+import datetime
+from django.contrib.auth.hashers import make_password
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
@@ -55,6 +57,42 @@ def get_restful(book_lesson_id,lesson_key):
         single_href=chapter.Href.replace(F"learn/{lesson_key}/","")
         restfuls.append(single_href)
     return restfuls
+
+def get_user_by_name(user_name):
+    users=db.get_user_by_name(user_name)
+    if users:
+        return users[0]
+    return None
+
+def get_user_by_email(mail):
+    users=db.get_user_by_email(mail)
+    if users:
+        return users[0]
+    return None
+
+def new_user(user_name,password,email,sex,permission):
+    return db.create_user(user_name, password, email, sex, permission)
+
+def make_confirm_string(user):
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    code = make_password(now,user.Name,'pbkdf2_sha256')
+    db.create_confirm_msg(user, code)
+    return code
+
+def delete_by_confirm(confirm):
+    users = db.get_user_by_id(confirm.User_Id)
+    users.update(DeleteFlag = 1)
+
+def update_user_by_confirm(confirm):
+    users = db.get_user_by_id(confirm.User_Id)
+    users.update(DeleteFlag = 0)
+    confirm.delete()
+
+def get_confirm(code):
+    confirms = db.get_confirm_item(code)
+    if confirms:
+        return confirms[0]
+    return None
 
 def get_chapter_headers(book_lesson_id):
     return db.get_chapter_infos(book_lesson_id)
