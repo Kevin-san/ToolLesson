@@ -5,7 +5,8 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLessonType,BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString
+from PdfWeb.models import BookLessonType,BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,\
+    UserFunction
 from PdfWeb.entitys import HomeInfoItem
 from django.contrib.auth.hashers import make_password
 
@@ -17,6 +18,9 @@ def get_user_by_email(mail):
 
 def get_user_by_id(user_id):
     return User.objects.filter(Id=user_id)
+
+def get_user_function(group_key,role_id):
+    return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0)
 
 def create_user(user_name,password,email,sex,permission):
     password1=make_password(password,user_name,'pbkdf2_sha256')

@@ -39,6 +39,21 @@ def content_infos_to_text(content_infos):
     return "\n".join(text_list)
 
 def get_home_index():
+    user_funcs = db.get_user_function('a', 1)
+    content_list=[]
+    for i, user_func in enumerate(user_funcs):
+        func_str =user_func.FunctionStr
+        title = func_str.split("/")[1].capitalize()
+        temp_str=F'<div class="col-md-4 column"><h1>{title}</h1><p>{title} website!</p><p><a class="btn" href="{func_str}">View details</a></p></div>'
+        check_id = i+1
+        if check_id % 3 ==1:
+            temp_str=F'<div class="row clearfix">{temp_str}'
+        elif check_id % 3 ==0:
+            temp_str=F'{temp_str}</div>'
+        content_list.append(temp_str)
+    return "".join(content_list)
+
+def get_learn_home_index():
     keys = ['menu_list','val_list']
     vals = [menu_list,val_list]
     return common_tools.create_map(keys,vals)

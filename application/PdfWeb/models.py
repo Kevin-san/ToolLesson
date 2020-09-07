@@ -27,6 +27,21 @@ class User(models.Model):
     def __str__(self):
         return self.Name
 
+class UserFunction(models.Model):
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    GroupKey = models.CharField(max_length=30, unique=True,verbose_name='用户组')
+    RoleId = models.IntegerField(verbose_name='权限Id')
+    FunctionStr = models.CharField(max_length=256,verbose_name='功能模块')
+    DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='UserFunction'
+        verbose_name = "用户功能"
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.FunctionStr
+
 class UserConfirmString(models.Model):
     Id=models.IntegerField(primary_key=True,verbose_name='Id')
     code = models.CharField(max_length=256)

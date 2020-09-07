@@ -32,7 +32,7 @@
 						</div><!-- /.navbar-collapse -->
 					</div><!-- /.container-fluid -->
 				</nav>
-				<div class="jumbotron">
+				<div class="jumbotron jumbotron-fluid" style="opacity:0.7">
 					<h1>
 						Hello, Programmers!
 					</h1>
@@ -43,76 +43,7 @@
 			</div>
 		</div>
 		<div id="content">
-		<div class="row clearfix">
-			<div class="col-md-4 column">
-				<h1>
-					Lesson
-				</h1>
-				<p>
-					Lesson website!
-				</p>
-				<p>
-					<a class="btn" href="/learn/index">View details</a>
-				</p>
-			</div>
-			<div class="col-md-4 column">
-				<h1>
-					Tool
-				</h1>
-				<p>
-					Tool website!
-				</p>
-				<p>
-					<a class="btn" href="/tool/index">View details</a>
-				</p>
-			</div>
-			<div class="col-md-4 column">
-				<h1>
-					Blog
-				</h1>
-				<p>
-					Blog website!
-				</p>
-				<p>
-					<a class="btn" href="/blog/index">View details</a>
-				</p>
-			</div>
-		</div>
-		<div class="row clearfix">
-			<div class="col-md-4 column">
-				<h1>
-					Novel
-				</h1>
-				<p>
-					Novel website!
-				</p>
-				<p>
-					<a class="btn" href="/novel/index">View details</a>
-				</p>
-			</div>
-			<div class="col-md-4 column">
-				<h1>
-					Music
-				</h1>
-				<p>
-					Music website!
-				</p>
-				<p>
-					<a class="btn" href="/music/index">View details</a>
-				</p>
-			</div>
-			<div class="col-md-4 column">
-				<h1>
-					Video
-				</h1>
-				<p>
-					Video website!
-				</p>
-				<p>
-					<a class="btn" href="/video/index">View details</a>
-				</p>
-			</div>
-		</div>
+		{% autoescape off %} {{ content }} {% endautoescape %}
 		</div>
 	</div>
 </body>

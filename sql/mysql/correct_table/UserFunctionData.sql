@@ -3,3 +3,9 @@ insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) select 'b',2,replace(LessonHref,'/index','/ins'), 0,'alvin',curdate() from BookLesson;
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) select 'b',2,replace(LessonHref,'/index','/upd'), 0,'alvin',curdate() from BookLesson;
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) select 'b',2,replace(LessonHref,'/index','/del'), 0,'alvin',curdate() from BookLesson;
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/learn/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/tool/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/blog/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/novel/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/music/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/video/index',0,'alvin',curdate());

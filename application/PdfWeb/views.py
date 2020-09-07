@@ -25,7 +25,10 @@ def get_template_detail(book_lesson_id,api_key,menus):
     return services.get_chapters(book_lesson_id, F'learn/{main_name}/{api_key}')
 
 def index(request):
-    return render(request,'index.html')
+    content=services.get_home_index()
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+    return render(request,'index.html',locals())
 
 def login(request):
     if request.session.get('is_login',None):
@@ -122,19 +125,31 @@ def user_confirm(request):
         return render(request, 'confirm.html', locals())
 
 def learn_index(request):
-    if request.session.get('is_login', None):
-        result = services.get_home_index()
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_learn_home_index()
         return render(request,'learnindex.html',result)
+    
 
 def learn_linux(request,api_key):
     if api_key in linux_restfuls:
-        result_dict=get_template_detail(1,api_key,linux_menus)
-        return render(request,'learnbase.html',result_dict)
+        if not request.session.get('is_login',None):
+            content="你还没有权限访问任何画面！请登录"
+            return render(request,'index.html',locals())
+        else:
+            result_dict=get_template_detail(1,api_key,linux_menus)
+            return render(request,'learnbase.html',result_dict)
     return render(request, '404.html')
 
 def learn_bash(request,api_key):
     if api_key in bash_restfuls:
-        result_dict=get_template_detail(2,api_key,linux_menus)
-        return render(request,'learnbase.html',result_dict)
+        if not request.session.get('is_login',None):
+            content="你还没有权限访问任何画面！请登录"
+            return render(request,'index.html',locals())
+        else:
+            result_dict=get_template_detail(2,api_key,linux_menus)
+            return render(request,'learnbase.html',result_dict)
     return render(request, '404.html')
 
