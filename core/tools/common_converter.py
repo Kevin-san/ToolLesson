@@ -396,14 +396,14 @@ def set_java_entity(json_key,import_class, import_strs, property_strs, method_st
 
 
 def set_java_class_bodys(json_key, import_strs, property_strs, method_strs, json_val):
-    if common_tools.is_float(json_val):
-        set_java_entity(json_key, "java.math.BigDecimal", import_strs, property_strs, method_strs)
-    if common_tools.is_str(json_val):
+    if common_tools.is_time(json_val):
+        set_java_entity(json_key, "java.sql.Timestamp", import_strs, property_strs, method_strs)
+    elif common_tools.is_str(json_val):
         set_java_entity(json_key, "String", import_strs, property_strs, method_strs)
     if common_tools.is_int(json_val):
         set_java_entity(json_key, "Integer", import_strs, property_strs, method_strs)
-    if common_tools.is_time(json_val):
-        set_java_entity(json_key, "java.sql.Timestamp", import_strs, property_strs, method_strs)
+    if common_tools.is_float(json_val):
+        set_java_entity(json_key, "java.math.BigDecimal", import_strs, property_strs, method_strs)
     if common_tools.is_dict(json_val):
         set_java_entity(json_key, "java.util.Map", import_strs, property_strs, method_strs)
     if common_tools.is_list(json_val):
@@ -432,18 +432,19 @@ def set_cs_entity(json_key,prop_class, property_strs):
     property_strs.append(csharp_const.PRIVATE_PROP % (prop_class, json_key))
 
 def set_cs_class_bodys(json_key, property_strs, json_val):
-    if common_tools.is_float(json_val):
-        set_cs_entity(json_key, "decimal",  property_strs)
-    if common_tools.is_str(json_val):
-        set_cs_entity(json_key, "string", property_strs)
-    if common_tools.is_int(json_val):
-        set_cs_entity(json_key, "int", property_strs)
     if common_tools.is_time(json_val):
         set_cs_entity(json_key, "DateTime",  property_strs)
+    elif common_tools.is_str(json_val):
+        set_cs_entity(json_key, "string", property_strs)
+    if common_tools.is_float(json_val):
+        set_cs_entity(json_key, "decimal",  property_strs)
+    if common_tools.is_int(json_val):
+        set_cs_entity(json_key, "int", property_strs)
     if common_tools.is_dict(json_val):
         set_cs_entity(json_key, "Dictionary<?,?>", property_strs)
     if common_tools.is_list(json_val):
         set_cs_entity(json_key, "List<?>", property_strs)
+    
 
 
 def json2csent(json_str):
