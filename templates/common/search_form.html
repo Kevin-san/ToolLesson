@@ -1,6 +1,23 @@
-<form action="/search/" method="get" class="navbar-form navbar-left">
-	<div class="form-group">
-		<input type="text" class="form-control" placeholder="请输入关键字">
+<div class="input-group navbar-form navbar-left">
+	<div class="input-group-btn form-group" id="toolspicker">
+		<input id="toolintext" type="text" class="form-control">
+		<span id="clickbutton" class="btn btn-default">
+			<span id="clickspan" class="glyphicon glyphicon-search"><i></i></span>
+		</span>
+		<div id="dropdowndiv" class="btn-group">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        	<span class="caret"></span>
+ 			<span class="sr-only">Toggle Dropdown</span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a href="javascript:void(0);" onclick="tool_picker('searcher')"><span class="glyphicon glyphicon-search"></span></a></li>
+			<li><a href="javascript:void(0);" onclick="tool_picker('timer')"><span class="glyphicon glyphicon-time"></span></a></li>
+			<li><a href="javascript:void(0);" onclick="tool_picker('qrcodew')"><span class="glyphicon glyphicon-qrcode"></span></a></li>
+			<li><a href="javascript:void(0);" onclick="tool_picker('barcodew')"><span class="glyphicon glyphicon-barcode"></span></a></li>
+			<li><a href="javascript:void(0);" onclick="tool_picker('colorpicker')"><span class="glyphicon glyphicon-tint"></span></a></li>
+			<li><a href="javascript:void(0);" onclick="tool_picker('colorpickerHSLFormat')"><span class="glyphicon glyphicon-edit"></span></a></li>
+			<li><a href="javascript:void(0);" onclick="tool_picker('colorpickerRGBFormat')"><span class="glyphicon glyphicon-map-marker"></span></a></li>
+		</ul>
+		</div>
 	</div>
-	<button type="submit" class="btn btn-default">搜索</button>
-</form>
+</div>

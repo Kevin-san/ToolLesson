@@ -163,3 +163,4 @@ class HomeInfoItem():
         self.ImageName = image_content.ImageName
         self.Width = image_content.Width
         self.Height = image_content.Height
+        

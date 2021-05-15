@@ -69,7 +69,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'alvin',
         'USER': 'root',
-        'PASSWORD':'xxxxxxxx',
+        'PASSWORD':'xc19901109',
         'HOST':'127.0.0.1',
         'PORT':'3306',
     }
@@ -112,8 +112,8 @@ EMAIL_USE_SSL = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'myown@qq.com'
-EMAIL_HOST_PASSWORD = 'xxxxxxxx'
+EMAIL_HOST_USER = '1244785530@qq.com'
+EMAIL_HOST_PASSWORD = 'vxoscpiizamxghha'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CONFIRM_DAYS = 7
 

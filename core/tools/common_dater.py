@@ -17,6 +17,7 @@ DATE_FORMATS={'yyyy-mm-dd':'%Y-%m-%d','yyyy/mm/dd':'%Y/%m/%d',
               'mm/dd/yyyy':'%m/%d/%Y',
               'mm/dd/yy':'%m/%d/%y'}
 WEEKDAY_MAP={1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat',7:'Sun'}
+holiy_file="C:/Users/xcKev/eclipse-workspace/KToolApps/test/holiy_cn.txt"
 
 class DateConverter(object):
 
@@ -68,6 +69,14 @@ class DateConverter(object):
     
     def today(self):
         return datetime.datetime.today()
+    
+    def calculate_dates(self,before_of_day,date_format):
+        today = self.today()
+        calc_dates=[]
+        for i in range(0,before_of_day):
+            real_i = 0-i-1
+            calc_dates.append(self.date2str(self.calc_date(today, real_i), date_format))
+        return calc_dates
     
     def is_week_end(self,date_obj):
         week_int = self.get_week(date_obj)
@@ -123,7 +132,7 @@ class DateConverter(object):
     def get_month_biz_beg(self,date_str):
         pass
 if __name__=='__main__':
-    dateutil=DateConverter(holiy_file="C:/Users/xcKev/eclipse-workspace/KToolApps/test/holiy_cn.txt")
+    dateutil=DateConverter(holiy_file=holiy_file)
     print(dateutil.str2date('2018-12-13', 'yyyy-mm-dd'))
     print(dateutil.str2date('2018/12/13', 'yyyy/mm/dd'))
     print(dateutil.str2date('2018-12-13 23:27:32', 'yyyy-mm-dd HH:mm:ss'))

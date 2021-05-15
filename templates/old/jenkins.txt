@@ -158,3 +158,252 @@ split str = 。_。
 TableHeaderContents()
 
 TableDetailContents()
+1244785530
+vxoscpiizamxghha
+xc19901109
+
+Alvin
+xc19901109
+昆虫机甲
+
+前端日期控件
+前端取色器控件
+前端生成n维码控件
+前端秒表控件
+前端时间控件
+
+---------------------------------------------
+
+---------------------------------------------
+
+adfdf  @@|##|##|##|##
+      |               | [select] |                    |
+      |               |  button  |                    |
+
+json 工具     json 格式化   | json 转义 |json 排序
+  			格式化/压缩| 转义/去转义| 升序/降序
+      
+<div class="col-md-12 column">
+			<div class="tabbable" id="tabs-822600">
+				<ul class="nav nav-tabs">
+					<li>
+						 <a href="#panel-632442" data-toggle="tab">Section 1</a>
+					</li>
+					<li class="active">
+						 <a href="#panel-527975" data-toggle="tab">Section 2</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane" id="panel-632442">
+						<p>
+							I'm in Section 1.
+						</p>
+					</div>
+					<div class="tab-pane active" id="panel-527975">
+						<p>
+							Howdy, I'm in Section 2.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+dfsad
+
+python run - docker
+
+还缺一个子集
+第一级 CommonMainType
+第二级 CommonSubFuncs
+第三级 CommonChildFuncs  缺三
+猫咪
+<div id="page_end_html">
+        <canvas id="catw" width="500" height="500" style="position: fixed; bottom: 0;right:0;"></canvas>
+ <script src="https://cdn.zhangxinxu.com/sp/demo/live2d/live2d/js/live2d.js"></script>
+ <script type="text/javascript">
+        loadlive2d("catw", "https://cdn.jsdelivr.net/gh/QiShaoXuan/live2DModel@1.0.0/live2d-widget-model-tororo/assets/tororo.model.json");
+ </script>
+    </div>
+未实现   ： 加密 rabbit escape/unescape 编码
+可实现： htpasswd   
+可以省略：  摩斯码转换
+
+
+url->groups->indexs->pages->pics
+
+www.7160.com->xingganmeinv->
+
+图片网站结构
+
+win4000.com
+	|_组元素 (下标多个url div:class=pages [a href], 多个人物图片 : div:class=tab_box[a href:img ]
+		|_图片页元素 (下标多个url div:class=pic-next-img [a href], 多个人物图片 : div:pic-meinv[a href:img src/url]
+
+meizitu.com
+	|_组元素 (下标多个url div:class=nav-links [a href], 多个人物图片 : div:class=postlist[a href]
+		|_图片页元素 (下标多个url div:class=pagenavi [a href], 多个人物图片 : div:main-image[img src/url]
+
+7160.com
+	|_组元素 (下标多个url div:class=page [a href], 多个人物图片 : div:class=news_bom-left
+		|_图片页元素 (下标多个url div:class=itempage [a href], 多个人物图片 : div:picsbox picsboxcenter[img src/url]
+
+tor broswer
+
+
+图片网站
+	根url(组级别) -> 多个人
+
+alvin网站
+	
+				
+create table IF NOT EXISTS `BookLessonType`( -- 书的分类表
+	`Id` INT UNSIGNED AUTO_INCREMENT,
+	`CommonType` VARCHAR(100) NOT NULL, -- 分类
+	`CommonValue` VARCHAR(100) NOT NULL, -- # id
+	`DeleteFlag` TINYINT NOT NULL DEFAULT 0, -- 删除状态
+	`submission_user` VARCHAR(30), -- 上传人
+	`submission_date` DATE, -- 上传时间
+	PRIMARY KEY ( `Id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+delete from BookLessonType;
+insert into BookLessonType values(1,'服务端','#linux',0,'alvin',curdate());
+insert into BookLessonType values(2,'数据库端','#database',0,'alvin',curdate());
+insert into BookLessonType values(3,'网页端','#webpage',0,'alvin',curdate());
+insert into BookLessonType values(4,'移动端','#telphone',0,'alvin',curdate());
+insert into BookLessonType values(5,'数学端','#math',0,'alvin',curdate());
+insert into BookLessonType values(6,'前沿端','#frontkill',0,'alvin',curdate());
+insert into BookLessonType values(7,'语言端','#foreignlang',0,'alvin',curdate());
+
+
+use alvin;
+drop table IF EXISTS `CommonMainType`;
+create table IF NOT EXISTS `CommonMainType`( -- 各个功能主页的分类表
+	`Id` INT UNSIGNED AUTO_INCREMENT,
+	`CommonKey` VARCHAR(100) NOT NULL, -- 主功能名
+	`CommonType` VARCHAR(100) NOT NULL, -- 子功能分类
+	`CommonValue` VARCHAR(100) NOT NULL, -- # id
+	`DeleteFlag` TINYINT NOT NULL DEFAULT 0, -- 删除状态
+	`submission_user` VARCHAR(30), -- 上传人
+	`submission_date` DATE, -- 上传时间
+	PRIMARY KEY ( `Id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+delete from CommonMainType;
+insert into CommonMainType values(1,'learn','服务端','#linux',0,'alvin',curdate());
+insert into CommonMainType values(2,'learn','数据库端','#database',0,'alvin',curdate());
+insert into CommonMainType values(3,'learn','网页端','#webpage',0,'alvin',curdate());
+insert into CommonMainType values(4,'learn','移动端','#telphone',0,'alvin',curdate());
+insert into CommonMainType values(5,'learn','数学端','#math',0,'alvin',curdate());
+insert into CommonMainType values(6,'learn','前沿端','#frontkill',0,'alvin',curdate());
+insert into CommonMainType values(7,'learn','语言端','#foreignlang',0,'alvin',curdate());
+insert into CommonMainType values(8,'tool','Json工具','#jsontool',0,'alvin',curdate());
+insert into CommonMainType values(9,'tool','密码工具','#codetool',0,'alvin',curdate());
+insert into CommonMainType values(10,'tool','编码工具','#codingtool',0,'alvin',curdate());
+insert into CommonMainType values(11,'tool','压缩工具','#ziptool',0,'alvin',curdate());
+insert into CommonMainType values(12,'tool','网络工具','#webtool',0,'alvin',curdate());
+insert into CommonMainType values(13,'tool','转换工具','#converttool',0,'alvin',curdate());
+insert into CommonMainType values(14,'tool','换算工具','#calctool',0,'alvin',curdate());
+insert into CommonMainType values(15,'tool','正则工具','#regextool',0,'alvin',curdate());
+insert into CommonMainType values(16,'tool','运行工具','#runtool',0,'alvin',curdate());
+insert into CommonMainType values(17,'tool','字符工具','#strtool',0,'alvin',curdate());
+insert into CommonMainType values(18,'tool','日期工具','#datetool',0,'alvin',curdate());
+
+use alvin;
+
+drop table IF EXISTS `UserGroup`;
+
+create table IF NOT EXISTS `UserGroup`(
+	`NameKey` VARCHAR(128) NOT NULL,
+	`Name` VARCHAR(128) NOT NULL,
+	`DeleteFlag` TINYINT NOT NULL DEFAULT 0,
+	`submission_user` VARCHAR(30),
+	`submission_date` DATE,
+	PRIMARY KEY ( `NameKey` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+	分类表
+
+create table IF NOT EXISTS `Category`(
+	`CategoryId` INT UNSIGNED AUTO_INCREMENT,
+	`CategoryName` VARCHAR(200) NOT NULL,
+	`CategoryValue1` VARCHAR(200),
+	`CategoryValue2` VARCHAR(200),
+	`CategoryValue3` VARCHAR(200),
+	`CategoryFather` INT NOT NULL,
+	`DeleteFlag` TINYINT NOT NULL DEFAULT 0,
+	`submission_user` VARCHAR(30),
+	`submission_date` DATE,
+	PRIMARY KEY ( `NameKey` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into Category values(1,'master','','','',0,0,'alvin',curdate());
+insert into Category values(2,'lessons','b','','',1,0,'alvin',curdate());
+insert into Category values(3,'blogs','c','','',1,0,'alvin',curdate());
+insert into Category values(4,'tools','d','','',1,0,'alvin',curdate());
+insert into Category values(5,'musics','e','','',1,0,'alvin',curdate());
+insert into Category values(6,'videos','f','','',1,0,'alvin',curdate());
+insert into Category values(7,'novels','g','','',1,0,'alvin',curdate());
+insert into Category values(8,'hiders','h','','',1,0,'alvin',curdate());
+insert into Category values(9,'learn','','','',2,0,'alvin',curdate());
+insert into Category values(10,'tool','','','',3,0,'alvin',curdate());
+insert into Category values(11,'服务端','#linux','','',9,0,'alvin',curdate());
+insert into Category values(12,'数据库端','#database','','',9,0,'alvin',curdate());
+insert into Category values(13,'网页端','#webpage','','',9,0,'alvin',curdate());
+insert into Category values(14,'移动端','#telphone','','',9,0,'alvin',curdate());
+insert into Category values(15,'数学端','#math','','',9,0,'alvin',curdate());
+insert into Category values(16,'前沿端','#frontkill','','',9,0,'alvin',curdate());
+insert into Category values(17,'语言端','#foreignlang','','',9,0,'alvin',curdate());
+insert into Category values(18,'Json工具','#jsontool','','',10,0,'alvin',curdate());
+insert into Category values(19,'密码工具','#codetool','','',10,0,'alvin',curdate());
+insert into Category values(20,'编码工具','#codingtool','','',10,0,'alvin',curdate());
+insert into Category values(21,'压缩工具','#ziptool','','',10,0,'alvin',curdate());
+insert into Category values(22,'网络工具','#webtool','','',10,0,'alvin',curdate());
+insert into Category values(23,'转换工具','#converttool','','',10,0,'alvin',curdate());
+insert into Category values(24,'换算工具','#calctool','','',10,0,'alvin',curdate());
+insert into Category values(25,'正则工具','#regextool','','',10,0,'alvin',curdate());
+insert into Category values(26,'运行工具','#runtool','','',10,0,'alvin',curdate());
+insert into Category values(27,'字符工具','#strtool','','',10,0,'alvin',curdate());
+insert into Category values(28,'日期工具','#datetool','','',10,0,'alvin',curdate());
+
+
+
+
+insert into Category values(5,'musics','e','','',1,0,'alvin',curdate());
+insert into Category values(6,'videos','f','','',1,0,'alvin',curdate());
+insert into Category values(7,'novels','g','','',1,0,'alvin',curdate());
+insert into Category values(8,'hiders','h','','',1,0,'alvin',curdate());
+
+insert into CommonMainType values(8,'tool','Json工具','#jsontool',0,'alvin',curdate());
+insert into CommonMainType values(9,'tool','密码工具','#codetool',0,'alvin',curdate());
+insert into CommonMainType values(10,'tool','编码工具','#codingtool',0,'alvin',curdate());
+insert into CommonMainType values(11,'tool','压缩工具','#ziptool',0,'alvin',curdate());
+insert into CommonMainType values(12,'tool','网络工具','#webtool',0,'alvin',curdate());
+insert into CommonMainType values(13,'tool','转换工具','#converttool',0,'alvin',curdate());
+insert into CommonMainType values(14,'tool','换算工具','#calctool',0,'alvin',curdate());
+insert into CommonMainType values(15,'tool','正则工具','#regextool',0,'alvin',curdate());
+insert into CommonMainType values(16,'tool','运行工具','#runtool',0,'alvin',curdate());
+insert into CommonMainType values(17,'tool','字符工具','#strtool',0,'alvin',curdate());
+insert into CommonMainType values(18,'tool','日期工具','#datetool',0,'alvin',curdate());
+
+爬虫
+
+	用户验证码表(程序级别)
+				UserConfirmString
+				django_session
+				
+	用户
+		注册	用户信息表(User)	选择一个组，每个组对应不同的权限
+				用户功能表(UserFunction)	保存不同的组，一个组有多个权限
+		登录	用户权限表(UserRole)	保存不同的权限（增删改查）
+				X页面模块组表(UserGroup)	不同子页面
+				
+	教程
+				教程书本表(BookLesson)	一个教程一本书
+				X教程分类表(BookLessonType)	大的分类
+				章节表(Chapter)	章节名与对应的url
+				内容表(Content)	一个章节多个内容
+				图片内容表(ImageContent)	一个章节多个图片
+				
+	工具
+				X功能主页的分类表(CommonMainType)	
+				自定义常用规则表(CommonRules)
+				功能方法表(CommonSubFuncsData)

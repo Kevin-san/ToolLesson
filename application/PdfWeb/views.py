@@ -8,17 +8,20 @@ from django.shortcuts import render,redirect
 from PdfWeb import services,forms,settings
 import datetime
 from django.contrib.auth.hashers import check_password
+from django.http.response import HttpResponse
+import json
 
-linux_menus=services.get_menus(1)
-database_menus=services.get_menus(2)
-webpage_menus=services.get_menus(3)
-telphone_menus=services.get_menus(4)
-math_menus=services.get_menus(5)
-frontkill_menus=services.get_menus(6)
-lang_menus=services.get_menus(7)
+linux_menus=services.get_menus(11)
+database_menus=services.get_menus(12)
+webpage_menus=services.get_menus(13)
+telphone_menus=services.get_menus(14)
+math_menus=services.get_menus(15)
+frontkill_menus=services.get_menus(16)
+lang_menus=services.get_menus(17)
 
 linux_restfuls = services.get_restful(1, "linux")
 bash_restfuls = services.get_restful(2, "bash")
+regex_restfuls = services.get_restful(3, "regex")
 
 def get_template_detail(book_lesson_id,api_key,menus):
     main_name=menus[book_lesson_id-1]
@@ -124,6 +127,23 @@ def user_confirm(request):
         message = '感谢确认，请使用账户登录！'
         return render(request, 'confirm.html', locals())
 
+def tool_index(request):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_tool_home_index()
+        return render(request,'toolindex.html',result)
+
+def tool_funcs(request):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result_str = services.get_tool_func(request.POST.get('tool'),request.POST.get('method'),request.POST.get('inputarea'),request.POST.get('passkey'));
+        result_dict = {'outputarea':result_str};
+        return HttpResponse(json.dumps(result_dict))
+
 def learn_index(request):
     if not request.session.get('is_login',None):
         content="你还没有权限访问任何画面！请登录"
@@ -153,3 +173,12 @@ def learn_bash(request,api_key):
             return render(request,'learnbase.html',result_dict)
     return render(request, '404.html')
 
+def learn_regex(request,api_key):
+    if api_key in regex_restfuls:
+        if not request.session.get('is_login',None):
+            content="你还没有权限访问任何画面！请登录"
+            return render(request,'index.html',locals())
+        else:
+            result_dict=get_template_detail(3,api_key,linux_menus)
+            return render(request,'learnbase.html',result_dict)
+    return render(request, '404.html')

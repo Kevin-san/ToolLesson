@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 """alvin_tool URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -30,7 +31,10 @@ urlpatterns = [
     url(r'^confirm/$', views.user_confirm,name='confirm'),
     url(r'^captcha', include('captcha.urls')),
     url(r'^learn/index',views.learn_index, name='learn_index'),
+    url(r'^tool/index',views.tool_index, name='tool_index'),
+    url(r'^tool/funcs',views.tool_funcs,name='tool_funcs'),
     url(r'^learn/linux/([a-z]+)/$',views.learn_linux,name='learn_linux'),
     url(r'^learn/bash/([a-z]+)/$',views.learn_bash,name='learn_bash'),
+    url(r'^learn/regex/([a-z]+)/$',views.learn_regex,name='learn_regex'),
     url(r'^favicon.ico$',RedirectView.as_view(url=r'static/favicon.ico')),
 ]+ static(settings.STATIC_URL, document_root = settings.STATICFILES_DIRS)

@@ -7,90 +7,90 @@ Created on 2019/6/30
 
 import json
 import re
-from re.RegexFlag import IGNORECASE
-from deps import sql_format
+import sqlparse
 import tools.common_converter as converter
-import tools.common_tools as common
-
-def format_js(js_str):
-    lines = js_str.split(";")
-    indent = 0
-    formatted = []
-    for line in lines:
-        newline = []
-        for char in line:
-            newline.append(char)
-            if char=='{':
-                indent+=1
-                newline.append("\n")
-                newline.append("\t"*indent)
-            if char=='}':
-                indent-=1
-                newline.append("\n")
-                newline.append("\t"*indent)
-        formatted.append("\t"*indent+"".join(newline))
-    return ";\n".join(formatted)
+from bs4 import BeautifulSoup
+from htmlmin.minify import html_minify
+from rjsmin import jsmin
+from rcssmin import cssmin
+from xml.dom import minidom
+import jsbeautifier
 
 def format_json(json_str):
+    dic = converter.json_to_dict(json_str)
+    format_js = json.dumps(dic,indent=4,separators=(',',':'))
+    return format_js
+
+def format_json_esc(json_str):
     dic = converter.json_to_dict(json_str)
     format_js = json.dumps(dic,sort_keys=True,indent=4,separators=(',',':'))
     return format_js
 
+def format_json_desc(json_str):
+    dic = converter.json_to_dict(json_str)
+    dic_list = list(dic.items())
+    dic_list.sort(reverse=True)
+    format_js = json.dumps(dict(dic_list),sort_keys=False,indent=4,separators=(',',':'))
+    return format_js
+
+def trans_json(json_str):
+    trans_json_str=json.dumps(json_str)
+    return trans_json_str[1:-1]
+
+def re_trans_json(json_str):
+    trans_json_str=json_str.replace('\\"','"')
+    return json.dumps(json.loads(trans_json_str),indent=4,separators=(',',':'))
+
+def format_js(js_str):
+    return jsbeautifier.beautify(js_str)
+
 def format_sql(sql_str):
-    return sql_format(sql_str, wrap_add=None, mode='upper')
+    stmts=sqlparse.split(sql_str)
+    sql_strs=[]
+    for stmt in stmts:
+        sql_strs.append(sqlparse.format(stmt, reindent=True, keyword_case='upper'))
+    return "\n".join(sql_strs)
+
+def format_html(html_str):
+    html=BeautifulSoup(html_str,'html5lib')
+    return html.prettify()
 
 def format_xml(xml_str):
-    new_xml_list=""
-    xml_list = re.split(r'([>])',xml_str)
-    xml_list = ["".join(i) for i in zip(xml_list[0::2],xml_list[1::2])]
-    level=0
-    for node in xml_list:
-        if re.match(r'<\?xml .*version.*\?>', node):
-            new_xml_list=new_xml_list+node
-            continue
-        elif re.match(r'<[^\?^/].*[^/]>', node):
-            new_xml_list=new_xml_list+common.get_space(level)+node
-            level=level+1
-            continue
-        elif re.match(r'</.*[^/]>', node):
-            level=level-1
-            new_xml_list=new_xml_list+common.get_space(level)+node
-            continue
-        elif re.match(r'<[^/].*/>',node):
-            new_xml_list=new_xml_list+common.get_space(level)+node
-        elif re.match(r'.+</.*[^/]>',node):
-            new_xml_list=new_xml_list+node
-            level=level-1
-        else:
-            new_xml_list=new_xml_list+node
-    return new_xml_list
+    reparsed=minidom.parseString(compress_xml(xml_str))
+    return reparsed.toprettyxml(indent='\t')
 
 def format_css(css_str):
     return css_str.replace("{","{\n\t").replace("}","\n}\n").replace(";",";\n\t")
+
+def compress_str(format_str):
+    str_list=re.split(r'\s+(?=[^"]*(?:"[^"]*"[^"]*)*$)|\s+(?=[^\']*(?:\'[^\']*\'[^\']*)*$)',format_str)
+    return " ".join(str_list)
+
+def compress_js(js_str):
+    return jsmin(js_str, keep_bang_comments=True)
 
 def compress_json(json_str):
     dic = converter.json_to_dict(json_str)
     return converter.dict_to_json(dic)
 
 def compress_sql(sql_str):
-    next_str=' '.join(sql_str.split('\n')).replace('    ','')
-    return re.sub(r"\s{2,}"," ",next_str)
+    sql_strs=[]
+    for sql_item in sql_str.split('\n'):
+        comments = sql_item.split('--');
+        if len(comments) >1:
+            sql_strs.append(compress_str(sql_item)+'\n')
+        else:
+            sql_strs.append(compress_str(sql_item))
+    return "".join(sql_strs)
+
+def compress_html(html_str):
+    return html_minify(html_str)
 
 def compress_xml(xml_str):
-    next_str=' '.join(xml_str.split('\n')).replace('    ','').replace('> ','>').replace(' <','<')
-    return re.sub(r"\s{2,}"," ",next_str)
+    return html_minify(xml_str,parser='xml')
 
 def compress_css(css_str):
-    css_str=re.sub(r"\n\t+","",css_str)
-    css_str=css_str.replace("\n","")
-    ignore_pattern=re.compile(r'\s*\:\s*', IGNORECASE)
-    css_str=ignore_pattern.sub(':',css_str)
-    ignore_pattern=re.compile(r';?\s*\}\s*', IGNORECASE)
-    css_str=ignore_pattern.sub('}',css_str)
-    ignore_pattern=re.compile(r'\s*\{\s*', IGNORECASE)
-    css_str=ignore_pattern.sub('{',css_str)
-    ignore_pattern=re.compile(r'\s{2,}', IGNORECASE)
-    css_str=ignore_pattern.sub(' ',css_str)
-    ignore_pattern=re.compile(r'/\*[\s\S]*?\*/', IGNORECASE)
-    css_str=ignore_pattern.sub('',css_str)
-    return css_str
+    return cssmin(css_str,keep_bang_comments=False)
+
+
+

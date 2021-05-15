@@ -36,3 +36,14 @@ insert into Chapter values(34,2,14,'输入/输出重定向','learn/bash/output',
 insert into Chapter values(35,2,15,'文件包含','learn/bash/include',0,'alvin',curdate());
 insert into Chapter values(36,2,16,'vi/vim','learn/bash/vim',0,'alvin',curdate());
 insert into Chapter values(37,2,17,'常用命令大全','learn/bash/cmds',0,'alvin',curdate());
+
+insert into Chapter values(38,3,1,'正则表达式入门','learn/regex/index',0,'alvin',curdate());
+insert into Chapter values(39,3,2,'入门示例拓展','learn/regex/samples',0,'alvin',curdate());
+insert into Chapter values(40,3,3,'正则表达式的特性和流派概览','learn/regex/characters',0,'alvin',curdate());
+insert into Chapter values(41,3,4,'表达式的匹配原理','learn/regex/matchrules',0,'alvin',curdate());
+insert into Chapter values(42,3,5,'正则表达式实用技巧','learn/regex/skills',0,'alvin',curdate());
+insert into Chapter values(43,3,6,'打造高效正则表达式','learn/regex/createrules',0,'alvin',curdate());
+insert into Chapter values(44,3,7,'Perl','learn/regex/perlsample',0,'alvin',curdate());
+insert into Chapter values(45,3,8,'Java','learn/regex/javasample',0,'alvin',curdate());
+insert into Chapter values(46,3,9,'.NET','learn/regex/donetsample',0,'alvin',curdate());
+insert into Chapter values(47,3,10,'PHP','learn/regex/phpsample',0,'alvin',curdate());

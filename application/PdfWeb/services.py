@@ -6,7 +6,8 @@ Created on 2019/12/28
 '''
 from PdfWeb import db,entitys
 from PdfWeb.entitys import HomeIndexItem
-from tools import common_tools, common_converter
+from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,\
+    common_executer
 import datetime
 from django.contrib.auth.hashers import make_password
 
@@ -22,13 +23,20 @@ html_children_tags=entitys.convert_common_rules_to_tag_dict(html_children_rules)
 html_dirty_tags=entitys.convert_common_rules_to_tag_dict(html_dirty_rules)
 font_rules=db.get_common_rules_by_type('font')
 font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
-menu_list = db.get_book_lesson_type_info()
-val_list = []
-for book_lesson_type in menu_list:
-    index_list = db.get_book_lesson_image_info(book_lesson_type.Id)
-    id_name = book_lesson_type.CommonValue.replace('#','')
-    item = HomeIndexItem(id_name,book_lesson_type.CommonType,index_list)
-    val_list.append(item)
+learn_menu_list = db.get_book_lesson_type_info()
+tool_menu_list = db.get_common_tool_type_info()
+learn_val_list = []
+for book_lesson_type in learn_menu_list:
+    index_list = db.get_book_lesson_image_info(book_lesson_type.CategoryId)
+    id_name = book_lesson_type.CategoryValue1.replace('#','')
+    item = HomeIndexItem(id_name,book_lesson_type.CategoryName,index_list)
+    learn_val_list.append(item)
+tool_val_list = []
+for common_tool_type in tool_menu_list:
+    tool_items = db.get_common_sub_func_info(common_tool_type.CategoryId)
+    id_name = common_tool_type.CategoryValue1.replace('#','')
+    item = HomeIndexItem(id_name,common_tool_type.CategoryName,tool_items)
+    tool_val_list.append(item)
 
 def content_infos_to_text(content_infos):
     text_list=[]
@@ -53,9 +61,60 @@ def get_home_index():
         content_list.append(temp_str)
     return "".join(content_list)
 
+def get_tool_home_index():
+    keys = ['menu_list','val_list']
+    vals = [tool_menu_list,tool_val_list]
+    return common_tools.create_map(keys,vals)
+
+def get_tool_func(tool,method,inputarea,passkey):
+    if tool in ("codetool","converttool"):
+        return eval(tool)(method,inputarea,passkey)
+    return eval(tool)(method,inputarea)
+    
+def jsontool(method,inputval):
+    func = getattr(common_formater,method)
+    return func(inputval)
+    
+def codetool(method,inputval,passkey):
+    func = getattr(common_coder, method)
+    need_key_methods=['encode2hmacsha1','encode2hmacmd5','encode2hmacsha224','encode2hmacsha256','encode2hmacsha384','encode2hmacsha512','encode2rc4','decode2rc4','encode2aes','decode2aes','encode2des3','decode2des3','encode2rsa','decode2rsa','encode2des','decode2des']
+    if method in need_key_methods:
+        return func(inputval,passkey)
+    return func(inputval)
+
+def codingtool(method,inputval):
+    func = getattr(common_coder,method)
+    return func(inputval)
+
+def ziptool(method,inputval):
+    func = getattr(common_formater,method)
+    return func(inputval)
+# def webtool(method,inputval):
+#     return 
+def converttool(method,inputval,spec_val):
+    func = getattr(common_converter,method)
+    need_key_methods=["first_ones_lower","last_ones_lower","first_ones_upper","last_ones_upper","delete_first_ones","delete_last_ones","add_first_specs","add_last_specs"]
+    if method in need_key_methods:
+        return func(inputval,spec_val)
+    return func(inputval)
+def calctool(method,inputval):
+    func = getattr(common_calculator,method)
+    return func(inputval)
+# def regextool(method,inputval):
+#     func = getattr(common_converter,method)
+#     return func(inputval)
+def runtool(method,inputval):
+    func = getattr(common_executer,method)
+    return func(list(inputval.split("\n")))
+def strtool(method,inputval):
+    func = getattr(common_converter,method)
+    return func(inputval)
+# def datetool(inputval):
+#     pass
+
 def get_learn_home_index():
     keys = ['menu_list','val_list']
-    vals = [menu_list,val_list]
+    vals = [learn_menu_list,learn_val_list]
     return common_tools.create_map(keys,vals)
 
 def get_menus(book_type_id):
@@ -122,7 +181,7 @@ def get_chapters(book_lesson_id,chapter_href):
     detail_list=get_chapter_contents(chapter_info.Id)
     content_html=convert_details_to_html(detail_list)
     keys = ['val_list','header_list','content_html']
-    vals = [val_list,header_list,content_html]
+    vals = [learn_val_list,header_list,content_html]
     return common_tools.create_map(keys, vals)
 
 def convert_attribute_map_to_str(content_detail):

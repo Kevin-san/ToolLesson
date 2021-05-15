@@ -7,15 +7,20 @@ Created on 2019/11/30
 import decimal
 import unicodedata
 import tools.common_converter as converter
+import tools.common_logger as log
 import const.javatmps as javatmps
 from const.filesuffixs import FileSuffix
 from tools import common_filer
+import time
+import re
+from fitz.__main__ import get_list
+from bokeh.plotting.tests.test_figure import source
 
 filesuffix=FileSuffix()
 
 java_cons=javatmps.JavaConst()
 suffix_names=filesuffix.file_suffix_names + filesuffix.compiled_suffix_names+filesuffix.config_suffix_names+filesuffix.html_suffix_names+filesuffix.img_suffix_names+filesuffix.video_suffix_names+filesuffix.msc_suffix_names+filesuffix.package_suffix_names+filesuffix.run_suffix_names
-
+current_log=log.get_log('tools', '/temp', 'tools')
 
 def obj_to_string(cls, obj):
     """
@@ -84,6 +89,21 @@ def is_bool(obj_val):
 def is_str(obj_val):
     return check_obj_type(obj_val, str)
 
+def is_time(obj_val):
+    if is_str(obj_val):
+        try:
+            date_strs=re.findall(":",obj_val)
+            if len(date_strs) >=2 :
+                time.strptime(obj_val,"%Y-%m-%d %H:%M:%S")
+            elif 0 < len(date_strs) < 2:
+                time.strptime(obj_val,"%Y-%m-%d %H:%M")
+            else:
+                time.strptime(obj_val,"%Y-%m-%d")
+            return True
+        except Exception as e:
+            return False
+    return False
+
 def is_float(obj_val):
     return check_obj_type(obj_val, float)
 def is_dict(dict_obj):
@@ -137,8 +157,13 @@ def to_integer_list(param_array):
 
 def to_unique_list(param_list):
     new_param_list=list(set(param_list))
-    new_param_list.sort(key=param_list.index)
+    new_param_list.sort(key=list(param_list).index)
     return new_param_list
+
+def get_filter_list_baseon_list(target_list,source_list):
+    if source_list:
+        return sorted(set(target_list).difference(set(source_list)),key=target_list.index)
+    return target_list
 
 def to_template_str(str_template,val_list):
     val_tuple=tuple(val_list)
@@ -193,6 +218,38 @@ def get_home_path(url_path):
         url_path=url_path+'/'
     return url_path
 
+def is_single_list(list_vals):
+    for list_v in list_vals:
+        if is_complex_item(list_v):
+            return False
+    return True
+
+def is_complex_item(item_val):
+    return is_list(item_val) or is_dict(item_val)
+
+def find_vals_from_dict_by_keystr(complex_dict,key_str,result_vals):
+    get_dict_vals(complex_dict, key_str, result_vals)
+    current_log.info(result_vals)
+    return result_vals
+                
+def get_list_vals(values,key_str,result_vals):
+    for val in values:
+        if is_str(val) and val.find(key_str)!=-1:
+            result_vals.append(val)
+        if is_list(val):
+            get_list_vals(val,key_str,result_vals)
+        elif is_dict(val):
+            get_dict_vals(val, key_str, result_vals)
+
+def get_dict_vals(valdics,key_str,result_vals):
+    for key, val in valdics.items():
+        if is_str(val) and val.find(key_str)!=-1:
+            result_vals.append(val)
+        if is_list(val):
+            get_list_vals(val, key_str,result_vals)
+        elif is_dict(val):
+            get_dict_vals(val, key_str, result_vals)
+
 def get_dir_file(name_path):
     file_arrs=name_path.split('.')
     new_file_arrs=file_arrs[:-1]
@@ -221,7 +278,7 @@ def get_csv_headers(csv_list,header_index,split_char):
 def get_csv_str_from_dict(header_keys,split_char,item_dict):
     item_list=[]
     for key in header_keys:
-        item_list.append(item_dict[key])
+        item_list.append(str(item_dict[key]))
     return split_char.join(item_list)
 
 def get_dict_from_csv_str(header_keys,split_char,csv_str):

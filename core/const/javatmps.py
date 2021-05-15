@@ -7,15 +7,16 @@ Created on 2019/6/1
 
 class JavaConst(object):
     def __init__(self):
+        self.KEYS=['package','class','classBody']
         self.GETTER='''
-        public %s get%s(){
-            return this.%s;
-        }'''
+    public %s get%s(){
+        return this.%s;
+    }'''
         self.SETTER='''
-        public void set%s(%s %s){
-            this.%s=%s;
-        }'''
-        self.PRI_PROP="private %s %s;"
+    public void set%s(%s %s){
+        this.%s=%s;
+    }'''
+        self.PRI_PROP="    private %s %s;"
         self.METHOD='''
         public %s %s(%s) %s 
         {
@@ -26,16 +27,16 @@ class JavaConst(object):
         public static %s %s(%s) %s {
             %s
         }'''
-        self.PRI_CONSTRUCTOR="private %s(){}"
+        self.PRI_CONSTRUCTOR="    private %s(){}"
         self.CONSTRUCTOR='''
         public %s(%s){
             %s
         }'''
         self.PACKAGE="package %s;"
         self.CLASS_OBJ='''
-        public class %s{
-            %s
-        }'''
+public class %s{
+%s
+}'''
         self.INTERFACE_OBJ='''
         public interface %s{
             %s

@@ -5,10 +5,20 @@ Created on 2020/5/3
 @author: xcKev
 '''
 import fitz
+import time
 from writecreater.fileswriter import SimpleFileWriter
-from tools import common_filer, common_tools
+from tools import common_filer, common_tools, common_logger
 from entitys.pdfitems import PdfImage, PdfImg, PdfText, PdfLink, PdfTable, PdfSpan
-
+from aip import AipOcr
+APP_ID='22838451'
+API_KEY='bmz77GlmsKDlLsHd1zDGsMlx'
+SERCRET_KEY = 'B4I96wFfrlbpzccosQVkjL7c691Yb9y7'
+client = AipOcr(APP_ID, API_KEY, SERCRET_KEY)
+pdfreader_logger = common_logger.get_log('pdfreader', common_logger.LOG_DIR, 'pdfreader')
+book_dir='E:/lib/books'
+img_pdf_dir='imgpdf'
+text_pdf_dir='textpdf'
+done_dir='donepdf'
 class SimplePdfReader(object):
 
     def __init__(self, pdffile):
@@ -236,9 +246,11 @@ class SimplePdfReader(object):
     
     def to_pdf_text_item(self, pageno, span_its):
         text_val = self.to_pdf_text_value(span_its)
-        bbox_end = span_its[-1]['bbox']
-        bbox_start = span_its[0]['bbox']
-        bbox = [bbox_start[0], bbox_start[1], bbox_end[2], bbox_end[3]]
+        bbox = list(span_its[0].bbox)
+        if len(span_its) > 1:
+            bbox_end = span_its[-1].bbox
+            bbox_start = span_its[0].bbox
+            bbox = [bbox_start[0], bbox_start[1], bbox_end[2], bbox_end[3]]
         return PdfText(pageno, bbox, span_its[0].size, text_val)
 
     def to_pdf_table_item(self, pageno, span_dicts):
@@ -370,33 +382,119 @@ class SimplePdfReader(object):
         file_wrtr.append_lines(self.get_structures())
         file_wrtr.close()
     
+    def convert_img(self):
+        pdfreader_logger.info("start to convert pdf to images.")
+        output_name = self.get_pdf_generate_file_name()
+        common_filer.make_dirs(output_name)
+        output_childs = common_filer.get_child_files(output_name)
+        if len(output_childs) == self.get_page_cnt():
+            return
+        for pg in range(self.get_page_cnt()):
+            page = self.document[pg]
+            rotate = int(0)
+            zoom_x =2.0
+            zoom_y =2.0
+            trans = fitz.Matrix(zoom_x,zoom_y).preRotate(rotate)
+            pm = page.getPixmap(matrix=trans,alpha=False)
+            pm.writePNG(F"{output_name}/{pg}.png")
+            pdfreader_logger.info(F"{output_name}/{pg}.png")
+    
+    def pdf_img_to_txt(self,pg):
+        output_name = self.get_pdf_generate_file_name()
+        pdfreader_logger.info(F'开始识别{output_name},写入{output_name}.txt')
+        wrtr = SimpleFileWriter(F'{output_name}.txt')
+        png_name=F'{output_name}/{pg}.png'
+        img = common_filer.get_stream_data(png_name)
+        message = client.basicGeneral(img)
+        if 'words_result' not in message:
+            message = client.basicAccurate(img)
+        pdfreader_logger.info('识别成功！')
+        for text in message.get('words_result'):
+            words = text.get('words')
+            pdfreader_logger.info(words)
+            wrtr.append_new_line(words)
+        pdfreader_logger.info(F'{pg}.png')
+        wrtr.close()
+
+    def pdf_imgs_to_txt(self,from_id=None,count=None):
+        if from_id is None:
+            from_id = 0
+        if count is None:
+            count = self.get_page_cnt()
+        for pg in range(from_id,count):
+            self.pdf_img_to_txt(pg)
+    
+    def pdf_to_txt(self):
+        output_name = self.get_pdf_generate_file_name()
+        pdfreader_logger.info(F'开始识别{output_name},写入{output_name}.txt')
+        wrtr = SimpleFileWriter(F'{output_name}.txt')
+        texts = self.get_texts()
+        for i,text in enumerate(texts):
+            pdfreader_logger.info(text)
+            wrtr.append_new_line(text)
+            pdfreader_logger.info(F'page no {i}')
+        wrtr.close()
+
     def close(self):
         self.document.close()
-# https://github.com/HelloGitHub-Team/HelloDjango-blog-tutorial
-# https://recomm.cnblogs.com/blogpost/9472390
-# https://blog.csdn.net/m0_46976252/article
-# https://www.cnblogs.com/hujc/p/11273361.html
+
+def start_img_pdfs_process():
+    img_parent_dir = F'{book_dir}/{img_pdf_dir}'
+    done_parent_dir = F'{book_dir}/{done_dir}'
+    img_pdfs = common_filer.get_child_files(img_parent_dir)
+    pdfreader_logger.info(img_pdfs)
+    if img_pdfs:
+        for img_pdf in img_pdfs:
+            src_path = F'{img_parent_dir}/{img_pdf}'
+            if common_filer.is_file(src_path):
+                to_path = F'{done_parent_dir}/{img_pdf}'
+                common_filer.move_file(src_path, to_path)
+                pdfreader = SimplePdfReader(to_path)
+                pdfreader.convert_img()
+                pdfreader.pdf_imgs_to_txt()
+    else:
+        time.sleep(10)
+    
+def start_text_pdfs_process():
+    text_parent_dir = F'{book_dir}/{text_pdf_dir}'
+    done_parent_dir = F'{book_dir}/{done_dir}'
+    text_pdfs = common_filer.get_child_files(text_parent_dir)
+    if text_pdfs:
+        for text_pdf in text_pdfs:
+            src_path = F'{text_parent_dir}/{text_pdf}'
+            if common_filer.is_file(src_path):
+                to_path = F'{done_parent_dir}/{text_pdf}'
+                common_filer.move_file(src_path, to_path)
+                pdfreader = SimplePdfReader(to_path)
+                pdfreader.pdf_to_txt()
+    else:
+        time.sleep(10)
 if __name__ == "__main__":
+#     start_text_pdfs_process()
+#     start_img_pdfs_process()
     pdf1 = "F:\EBook\Python修炼之道V1.0.pdf"
     pdf_out = "F:\EBook\Python修炼之道V1.0_test.txt"
     file_wrtr1 = SimpleFileWriter(pdf_out)
     pdfreader1 = SimplePdfReader(pdf1)
-    items = pdfreader1.extract_dict_to_items(0)
+    print(pdfreader1.get_page_structure_dict(6))
+    items = pdfreader1.extract_dict_to_items(5)
     for item in items:
         file_wrtr1.append_new_line(item)
-    file_wrtr1.close()
-    pdf = "F:\EBook\高级Bash脚本编程指南.3.9.1 (杨春敏 黄毅 译).pdf"
-    pdfreader = SimplePdfReader(pdf)
-    for item in pdfreader.extract_dict_to_items(1):
-        if common_tools.is_list(item):
-            for it in item:
-                print(it)
-        else:
-            print(item)
-    output_name = pdfreader.get_pdf_generate_file_name()
-    output_file = F"{output_name}_struct.txt"
-    file_wrtr = SimpleFileWriter(output_file)
-    for i in range(2):
-        struct_dict = pdfreader.get_page_structure_dict(i)
-        file_wrtr.append_new_line(str(struct_dict))
-    file_wrtr.close()
+    file_wrtr1.close() 
+    #'flags': 4, 'font': 'LucidaConsole' pre
+    #'flags': 20, 'font': 'MicrosoftYaHei-Bold' p
+#     pdf = "F:\EBook\高级Bash脚本编程指南.3.9.1 (杨春敏 黄毅 译).pdf"
+#     pdfreader = SimplePdfReader(pdf)
+#     for item in pdfreader.extract_dict_to_items(1):
+#         if common_tools.is_list(item):
+#             for it in item:
+#                 print(it)
+#         else:
+#             print(item)
+#     output_name = pdfreader.get_pdf_generate_file_name()
+#     output_file = F"{output_name}_struct.txt"
+#     file_wrtr = SimpleFileWriter(output_file)
+#     for i in range(2):
+#         struct_dict = pdfreader.get_page_structure_dict(i)
+#         file_wrtr.append_new_line(str(struct_dict))
+#     file_wrtr.close()

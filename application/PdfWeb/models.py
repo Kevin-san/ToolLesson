@@ -55,20 +55,6 @@ class UserConfirmString(models.Model):
         verbose_name = "确认码"
         verbose_name_plural = "确认码"
 
-class BookLessonType(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='课程类别Id')
-    CommonType=models.CharField(max_length=100,verbose_name='类别')
-    CommonValue=models.CharField(max_length=100,verbose_name='链接')
-    DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
-    submission_user=models.CharField(max_length=30,verbose_name="上传用户")
-    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
-    class Meta:
-        db_table='BookLessonType'
-        verbose_name='书本课程类'
-        verbose_name_plural=verbose_name
-    def __str__(self):
-        return self.CommonType
-
 class BookLesson(models.Model):
     Id=models.IntegerField(primary_key=True,verbose_name='书课Id')
     BookName=models.CharField(max_length=100,verbose_name='书名')
@@ -154,3 +140,52 @@ class CommonRules(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.RulesText
+
+class Category(models.Model):
+    CategoryId=models.IntegerField(primary_key=True,verbose_name='Id')
+    CategoryName=models.CharField(max_length=200,verbose_name='类别名')
+    CategoryValue1=models.CharField(max_length=200,verbose_name='类别值1')
+    CategoryValue2=models.CharField(max_length=200,verbose_name='类别值2')
+    CategoryValue3=models.CharField(max_length=200,verbose_name='类别值3')
+    CategoryFather=models.IntegerField(verbose_name='父类Id')
+    DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
+    submission_user=models.CharField(max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='Category'
+        verbose_name='分类表'
+        verbose_name_plural=verbose_name
+    def __str__(self):
+        return self.CategoryName
+
+class CommonSubFuncs(models.Model):
+    Id=models.IntegerField(primary_key=True,verbose_name='功能Id')
+    FunctionName=models.CharField(max_length=100,verbose_name='功能名')
+    FunctionHref=models.CharField(max_length=100,verbose_name='功能链接')
+    FunctionDesc=models.CharField(max_length=500,verbose_name='功能细节')
+    CommonMainType_Id=models.IntegerField(verbose_name='主功能类别Id')
+    DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
+    submission_user=models.CharField(max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='CommonSubFuncs'
+        verbose_name='功能信息表'
+        verbose_name_plural=verbose_name
+    def __str__(self):
+        return self.FunctionName
+    
+class UnitDictionary(models.Model):
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    ConversionType=models.CharField(max_length=100,verbose_name='换算种类')
+    UnitFromKey=models.CharField(max_length=100,verbose_name='因单位')
+    UnitToKey=models.CharField(max_length=500,verbose_name='果单位')
+    UnitValue=models.IntegerField(verbose_name='单位值')
+    DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
+    submission_user=models.CharField(max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='UnitDictionary'
+        verbose_name='换算信息表'
+        verbose_name_plural=verbose_name
+    def __str__(self):
+        return self.UnitValue

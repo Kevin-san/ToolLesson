@@ -9,7 +9,7 @@ import difflib
 import tools.common_filer as filer
 import tools.common_logger as log
 import sys
-current_log=log.get_log('comparer', '/temp', 'comparer')
+current_log=log.get_log('comparer', log.LOG_DIR, 'comparer')
 
 def compare_file(file_path1,file_path2,diff_path):
     if file_path1 == "" or file_path2 =="":

@@ -33,8 +33,6 @@ class CsvWriter(object):
 class SimpleFileWriter(object):
     def __init__(self,filename,mode='a+'):
         self._filename = filename
-        if os.path.exists(filename) and mode =='a+':
-            os.remove(filename)
         self._file_handler = open(self._filename,mode,encoding='UTF-8')
     
     def append_string(self,string):

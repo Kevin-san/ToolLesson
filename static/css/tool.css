@@ -1,0 +1,44 @@
+.textareas {
+	white-space: pre-line;
+	word-break: break-all;
+	border:1px solid #eaeaea; 
+    outline:none; 
+    float:left;
+    width:95%; 
+    height:750px; 
+    resize: none;
+    background: rgb(250,250,250);
+    line-height: 24px;
+    font-size: 14px;
+    padding:10px 8px;
+    font-family: inherit; 
+}
+
+#page_middle_html{
+	position:fixed;
+	top: 80%;
+    left: 50%;
+    margin-top: -250px;
+    margin-left: -150px;
+	width: 300;
+	height: 500;
+	z-index:9999;
+}
+
+.leftNum{ 
+	float:left;
+    width:5%;
+    height:750px;  
+    outline:none;
+    resize:none;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    border:0;
+    background:rgb(240,240,240);
+    color:#999;
+    text-align:right;
+    padding:12px 4px;
+    line-height:24px;
+    font-size:14px; 
+    font-weight: bold;
+}

@@ -12,9 +12,19 @@ import os
 import time
 import chardet
 import sys
+import shutil
+from natsort.natsort import natsorted
+from retrying import retry
+from Crypto.Cipher import AES
 
+current_log=log.get_log('filer', log.LOG_DIR, 'filer')
 
-current_log=log.get_log('filer', '/temp', 'filer')
+def get_stream_data(file_path):
+    current_log.info(F'read {file_path}')
+    stream_reader = open(file_path,'rb')
+    stream_data = stream_reader.read()
+    stream_reader.close()
+    return stream_data
 
 def get_file_name(file_path):
     return os.path.basename(file_path)
@@ -32,6 +42,32 @@ def get_file_m_date(file_path):
 
 def get_child_files(file_path):
     return os.listdir(file_path)
+
+def get_child_absolute_files(file_path):
+    paths=[]
+    for file in os.listdir(file_path):
+        paths.append(file_path+'/'+file)
+    return paths
+
+def is_file(file_path):
+    return os.path.isfile(file_path)
+
+def exists(file_path):
+    return os.path.exists(file_path)
+
+def is_dir(dir_path):
+    return os.path.isdir(dir_path)
+
+def move_file(file_path,to_path):
+    return shutil.move(file_path,to_path)
+
+def make_dirs(directory):
+    if os.path.isdir(directory):
+        return True
+    return os.makedirs(directory)
+
+def get_file_size(file_path):
+    return getsize(file_path)
 
 def get_file_dir_size(directory):
     if os.path.isfile(directory):
@@ -70,6 +106,44 @@ def make_sub_file(lines,src_name,sub):
     finally:
         fout.close()
 
+def create_category_dir(home_dir,category,name):
+    folder=home_dir+'/'+category+'/'+name
+    make_dirs(folder)
+    return folder
+
+def merge_ts_files(ts_dir,key_map,ts_path):
+    files=get_child_absolute_files(ts_dir)
+    files = natsorted(files)
+    ts_path_h=open(ts_path,'ab+')
+    for file in files:
+        tmp_file=open(file,'rb+')
+        if key_map:
+            key = key_map['key']
+            cryptor = AES.new(key, AES.MODE_CBC,key)
+            ts_path_h.write(cryptor.decrypt(tmp_file.read()))
+        else:
+            ts_path_h.write(tmp_file.read())
+        tmp_file.close()
+    ts_path_h.close()
+    mp4_path=to_mp4_files(ts_path)
+#     os.remove(ts_path)
+#     remove_dir(ts_dir)
+    return mp4_path
+
+def to_mp4_files(ts_file):
+    mp4_path=ts_file.replace(".ts",".mp4")
+    ffmpeg_path="E:/IDE/ffmpeg-2021-01-05/bin/ffmpeg.exe"
+    cmd = ffmpeg_path + " -i " + ts_file + " -c copy " + mp4_path
+    os.system(cmd)
+    return mp4_path
+
+def remove_files(file_list):
+    for file in file_list:
+        os.remove(file)
+
+def remove_dir(dir_path):
+    shutil.rmtree(dir_path)
+
 def split_big_file_by_count(file_name,count):
     fin=open(file_name,'r')
     try:
@@ -85,11 +159,34 @@ def split_big_file_by_count(file_name,count):
     finally:
         fin.close()
 
+def get_dict_from_file(file_path):
+    dict_result=dict()
+    file_r=open(file_path,"r",encoding='utf8')
+    line_list=file_r.readlines()
+    for line in line_list:
+        line_vals=line.split(" ",1)
+        line_key=line_vals[1].replace('\n','')
+        href_url=line_vals[0]
+        dict_result[line_key]=href_url
+    file_r.close()
+    return dict_result
+
 def get_file_details(file_path):
     try:
-        file_h = open(file_path,'r')
+        file_h = open(file_path,'r',encoding="utf-8")
         text_lines = file_h.read().splitlines()
+        file_h.close()
         return text_lines
+    except IOError as error:
+        current_log.error(F'Read input file Error:{error}')
+        sys.exit()
+@retry(stop_max_attempt_number=5,wait_fixed=10000)
+def get_file_detail(file_path):
+    try:
+        file_h = open(file_path,'r',encoding="utf-8")
+        text_line = file_h.read()
+        file_h.close()
+        return text_line
     except IOError as error:
         current_log.error(F'Read input file Error:{error}')
         sys.exit()

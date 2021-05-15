@@ -18,6 +18,18 @@ from reportlab.graphics.shapes import Drawing, Rect, Circle
 from reportlab.lib.colors import HexColor
 from reportlab.graphics.widgets.markers import makeMarker
 from reportlab.graphics.charts.legends import Legend
+from pdf2image import convert_from_path
+from tools import common_filer
+import os
+
+def pdf2images(pdf_path):
+    output_file_dir = common_filer.get_file_name(pdf_path)
+    parent_dir = common_filer.get_parent_dir(pdf_path)
+    output_path=F'{parent_dir}/{output_file_dir}'
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    convert_from_path(pdf_path,dpi=100,output_folder=output_path,fmt='jpeg')
+    
 class SimplePdfWriter(object):
     
     def __init__(self, pdf_file, font_dicts={}, default_fonts={}):
@@ -221,7 +233,7 @@ def merge_pdf(in_list, out_file):
             pdf_writer.addPage(page_obj)
         pdf_writer.write(open(out_file, 'wb'))
 if __name__=='__main__':
-    pass
+    pdf2images('E:/lib/books/[精通正则表达式(第三版)].（美）佛瑞德.扫描版.pdf')
 #    sheet_names=['test1','sheet1','value1']
 #    excel_writer=ExcelWriter('C:/Users/xcKev/eclipse-workspace/KToolApps/test/test.xlsx',sheet_names=sheet_names)
 #    excel_writer.set_current_sheet('value1')
