@@ -10,7 +10,7 @@ import tools.common_converter as converter
 import tools.common_logger as log
 import const.javatmps as javatmps
 from const.filesuffixs import FileSuffix
-from tools import common_filer
+from tools import common_filer, common_converter
 import time
 import re
 from fitz.__main__ import get_list
@@ -81,6 +81,10 @@ def is_base_object(obj_val):
     return is_str(obj_val) or is_int(obj_val) or is_float(obj_val) or is_bool(obj_val)
 
 def is_int(obj_val):
+    try:
+        obj_val = int(obj_val)
+    except Exception:
+        pass
     return check_obj_type(obj_val, int)
 
 def is_bool(obj_val):
@@ -425,7 +429,7 @@ def list_to_sort_str(val_list,org_str,reverse_flag):
 
 def to_camel_core(param_list):
     for (index,param) in enumerate(param_list):
-        param_list[index]=param.replace(" ","").capitalize()
+        param_list[index]=common_converter.first_upper(param.replace(" ",""), 1)
     return "".join(param_list)
 
 def to_camel(param_str):

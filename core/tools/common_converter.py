@@ -27,8 +27,14 @@ from deps.renderer import UbbRenderer
 from const.html5tmps import HtmlTypes
 from const.javatmps import JavaConst
 from const.csharptmps import CSharpConst
+from const.langtypes import _const
+from sphinx.ext.inheritance_diagram import import_classes
 java_const = JavaConst()
 csharp_const=CSharpConst()
+common_const=_const()
+column_types=common_const.sql_column_types
+sql_java_column_map = common_const.sql_java_col_map
+sql_cs_column_map=common_const.sql_csharp_col_map
 
 current_log=log.get_log('converter', log.LOG_DIR, 'converter')
 h = html2text.HTML2Text()
@@ -444,24 +450,91 @@ def set_cs_class_bodys(json_key, property_strs, json_val):
         set_cs_entity(json_key, "Dictionary<?,?>", property_strs)
     if common_tools.is_list(json_val):
         set_cs_entity(json_key, "List<?>", property_strs)
-    
-
 
 def json2csent(json_str):
     json_dict=json_to_dict(json_str)
     for json_key in csharp_const.KEYS:
         if json_key not in json_dict:
             return "please input valid format as description"
-    
     property_strs=[]
-    
     for json_key,json_val in json_dict['classBody'].items():
         set_cs_class_bodys(json_key, property_strs, json_val)
     class_obj="\n".join(property_strs)
     class_val=csharp_const.CLASS_OBJ %(json_dict['class'],class_obj)
     cs_str = csharp_const.NAMESPACE %(json_dict['namespace'],class_val)
     return cs_str
+    
 
+def add_str_except_center(org_str):
+    str_list=org_str.split('\n')
+    front_str=str_list[-2]
+    end_str=str_list[-1]
+    val_list=str_list[0:-2]
+    results = []
+    for val_str in val_list:
+        results.append(front_str+val_str+end_str)
+    return '\n'.join(results)
+
+def camel2underline(camel_str):
+    return common_tools.to_underscore(camel_str)
+
+def underline2camel(underline_str):
+    return common_tools.to_camel(underline_str)
+
+def str2specf(org_str):
+    str_list=org_str.split('\n')
+    if len(str_list) < 4:
+        return 'please input string as format'
+    start_id=str_list[-2]
+    end_id=str_list[-1]
+    split_char=str_list[-3]
+    if common_tools.is_int(end_id) and common_tools.is_int(start_id) and int(start_id) <= int(end_id):
+        val_list=str_list[0:-3]
+        results=[]
+        for val_str in val_list:
+            vals=val_str.split(split_char)
+            results.append(split_char.join(vals[int(start_id):int(end_id)]))
+        return '\n'.join(results)
+    return 'please input string as format'
+
+def distinct_arr(input_str):
+    try:
+        input_list=eval(input_str)
+        val_list=[]
+        for input_itstr in input_list:
+            if common_tools.is_int(input_itstr):
+                val_list.append(str(input_itstr))
+            else:
+                val_list.append('"'+input_itstr+'"')
+        return '['+ ','.join(common_tools.to_unique_list(val_list))+']'
+    except Exception:
+        return 'please input format as description'
+
+def distinct_str(input_str):
+    input_list=list(input_str)
+    return "".join(common_tools.to_unique_list(input_list))
+
+def sort_str_array(input_str):
+    try:
+        input_list=eval(input_str)
+        if common_tools.is_list(input_list):
+            input_list.sort()
+            val_list=[]
+            for input_itstr in input_list:
+                if common_tools.is_int(input_itstr):
+                    val_list.append(str(input_itstr))
+                else:
+                    val_list.append('"'+input_itstr+'"')
+            return '['+ ','.join(val_list)+']'
+        else:
+            result_list=list(input_str)
+            result_list.sort()
+            return "".join(result_list)
+    except Exception:
+        result_list=list(input_str)
+        result_list.sort()
+        return "".join(result_list)
+    
 def prop2dict(prop_str):
     prop_lines=prop_str.split('\n')
     return proplines2dict(prop_lines)
@@ -511,7 +584,198 @@ def get_yaml_file_to_dict(yaml_file):
     yaml_f=open(yaml_file,'r')
     loaded_yaml=yaml.load(yaml_f)
     return loaded_yaml
-            
+
+def parse_create_sql(create_sql_str):
+    sql_array=create_sql_str.strip().split("\n")
+    table_name = sql_array[0].split('(')[0].split(" ")[-1].replace('`','')
+    sql_map={"table_name":table_name}
+    sql_map['columns']=[]
+    for sql_str in sql_array[1:]:
+        column_array=sql_str.strip().split(" ")
+        column_name=column_array[0]
+        column_type=column_array[1].split('(')[0].split(',')[0].lower()
+        if column_type in column_types:
+            sql_map['columns'].append([column_name.replace('`',''),column_type])
+    return sql_map
+
+def sql2javaent(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    sql_map=parse_create_sql(create_sql_str)
+    java_strs=[]
+    import_strs=set()
+    property_strs=[]
+    method_strs=[]
+    for column_array in sql_map['columns']:
+        column_name = column_array[0]
+        if column_name.find("_")>-1:
+            property_name = first_lower(common_tools.to_camel(column_name),1)
+        else:
+            property_name = first_lower(column_name,1)
+        import_class = sql_java_column_map[column_array[1]]
+        set_java_entity(property_name, import_class, import_strs, property_strs, method_strs)
+    java_strs.append("\n".join(import_strs))
+    class_obj="\n".join(property_strs) + "\n".join(method_strs)
+    java_strs.append(java_const.CLASS_OBJ %(sql_map['table_name'],class_obj))
+    return "\n\n".join(java_strs)
+
+def sql2csent(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    sql_map=parse_create_sql(create_sql_str)
+    property_strs=[]
+    for column_array in sql_map['columns']:
+        column_name=column_array[0]
+        column_type=column_array[1]
+        if column_name.find("_")>-1:
+            property_name = first_lower(common_tools.to_camel(column_name),1)
+        else:
+            property_name = first_lower(column_name,1)
+        set_cs_entity(property_name,sql_cs_column_map[column_type], property_strs)
+    class_obj="\n".join(property_strs)
+    class_val=csharp_const.CLASS_OBJ %(sql_map['table_name'],class_obj)
+    cs_str = csharp_const.NAMESPACE %("Default",class_val)
+    return cs_str
+    
+def sql2insert(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    sql_map=parse_create_sql(create_sql_str)
+    insert_sql="insert into "+sql_map['table_name']+" ("
+    col_strs=[]
+    question_strs=[]
+    for column_array in sql_map['columns']:
+        col_strs.append(column_array[0])
+        question_strs.append("?")
+    insert_sql= insert_sql + ",".join(col_strs) + ") values(" +",".join(question_strs) +")"
+    return insert_sql
+
+def sql2select(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    sql_map=parse_create_sql(create_sql_str)
+    col_strs=[]
+    for column_array in sql_map['columns']:
+        col_strs.append(column_array[0])
+    select_sql= "select " + ",".join(col_strs) + " from " + sql_map['table_name']
+    return select_sql
+
+def sql2delete(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    sql_map=parse_create_sql(create_sql_str)
+    delete_sql= "delete " + sql_map['table_name']
+    return delete_sql
+
+def sql2update(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    sql_map=parse_create_sql(create_sql_str)
+    update_sql= "update " + sql_map['table_name']
+    update_cols=[]
+    for column_array in sql_map['columns']:
+        update_cols.append(" set "+column_array[0]+"=?")
+    update_sql=update_sql+",".join(update_cols)
+    return update_sql
+
+def sql2javadao(create_sql_str):
+    sql_map=parse_create_sql(create_sql_str)
+    table_name=sql_map['table_name']
+    entity='com.test.entity.'+ table_name
+    insert_sql=sql2insert(create_sql_str)
+    select_sql=sql2select(create_sql_str)
+    delete_sql=sql2delete(create_sql_str)
+    update_sql=sql2update(create_sql_str)
+    import_classs= ['import com.test.entity.'+ table_name+';','import java.util.List;','import java.sql.SQLException;']
+    package_name='package com.test.dao;'
+    insert_method='insert'+table_name
+    update_method='update'+table_name
+    delete_method='delete'+table_name
+    select_method='select'+table_name+'List'
+    methods=['public Integer '+insert_method+'('+table_name+' item) throws SQLException;','public Integer '+update_method+'('+table_name+' item) throws SQLException;','public Integer '+delete_method+'('+table_name+' item) throws SQLException;','public List<'+table_name+'> '+select_method+'() throws SQLException;']
+    java_dao_str=package_name+'\n'+'\n'.join(import_classs)+'public interface '+ sql_map['table_name']+'Dao {\n'
+    java_dao_str=java_dao_str + '\n'.join(methods)
+    java_dao_str=java_dao_str+"}"
+    mapper_xmls=[]
+    mapper_xmls.append('''
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+''')
+    mapper_xmls.append('<mapper namespace="com.test.dao.'+table_name+'Dao">')
+    mapper_xmls.append('<select id="'+select_method+'" resultType="'+entity+'">\n'+select_sql+"\n</select>")
+    mapper_xmls.append('<insert id="'+insert_method+'" parameterType="'+entity+'">\n'+insert_sql+"\n</insert>")
+    mapper_xmls.append('<update id="'+update_method+'" parameterType="'+entity+'">\n'+update_sql+"\n</update>")
+    mapper_xmls.append('<delete id="'+delete_method+'" parameterType="'+entity+'">\n'+delete_sql+"\n</delete>")
+    mapper_xmls.append('</mapper>')
+    return java_dao_str +"\n\n"+"\n".join(mapper_xmls)
+    
+def sql2mybatis(create_sql_str):
+    if not create_sql_str.startswith('create table '):
+        return 'please input correct format'
+    java_entity_str=sql2javaent(create_sql_str)
+    java_dao_str=sql2javadao(create_sql_str)
+    return "package com.test.entity;\n"+java_entity_str+"\n\n"+java_dao_str
+
+def parse_insert_sql(insert_sql_str):
+    sql_cols_str=insert_sql_str.split(" values(")[-1].replace(");","").replace("\n","")
+    return sql_cols_str
+def sql_add_dquote(insert_sql_str):
+    if not insert_sql_str.startswith('insert into ') or insert_sql_str.find(' values(')==-1:
+        return 'please input correct format'
+    sql_cols_str=parse_insert_sql(insert_sql_str)
+    front_str=insert_sql_str.replace("("+sql_cols_str+");","").replace("\n","")
+    sql_cols=[]
+    for sql_col_val in sql_cols_str.split(','):
+        if sql_col_val.find('"')==-1 and sql_col_val.find("'")==-1 and sql_col_val.find("()")==-1:
+            sql_cols.append('"'+sql_col_val+'"')
+        else:
+            sql_cols.append(sql_col_val)
+    result_sql_str=front_str+'(' +','.join(sql_cols)+');'
+    return result_sql_str
+ 
+def sql_rem_dquote(insert_sql_str):
+    if not insert_sql_str.startswith('insert into '):
+        return 'please input correct format'
+    sql_cols_str=parse_insert_sql(insert_sql_str)
+    front_str=insert_sql_str.replace("("+sql_cols_str+");","").replace("\n","")
+    sql_cols=[]
+    for sql_col_val in sql_cols_str.split(','):
+        if sql_col_val.find('"')>-1:
+            sql_cols.append(sql_col_val.replace('"',""))
+        else:
+            sql_cols.append(sql_col_val)
+    result_sql_str=front_str+'(' +','.join(sql_cols)+');'
+    return result_sql_str
+
+def sql_add_squote(insert_sql_str):
+    if not insert_sql_str.startswith('insert into ') or insert_sql_str.find(' values(')==-1:
+        return 'please input correct format'
+    sql_cols_str=parse_insert_sql(insert_sql_str)
+    front_str=insert_sql_str.replace("("+sql_cols_str+");","").replace("\n","")
+    sql_cols=[]
+    for sql_col_val in sql_cols_str.split(','):
+        if sql_col_val.find('"')==-1 and sql_col_val.find("'")==-1 and sql_col_val.find("()")==-1:
+            sql_cols.append("'"+sql_col_val+"'")
+        else:
+            sql_cols.append(sql_col_val)
+    result_sql_str=front_str+'(' +','.join(sql_cols)+');'
+    return result_sql_str
+def sql_rem_squote(insert_sql_str):
+    if not insert_sql_str.startswith('insert into '):
+        return 'please input correct format'
+    sql_cols_str=parse_insert_sql(insert_sql_str)
+    front_str=insert_sql_str.replace("("+sql_cols_str+");","").replace("\n","")
+    sql_cols=[]
+    for sql_col_val in sql_cols_str.split(','):
+        if sql_col_val.find("'")>-1:
+            sql_cols.append(sql_col_val.replace("'",""))
+        else:
+            sql_cols.append(sql_col_val)
+    result_sql_str=front_str+'(' +','.join(sql_cols)+');'
+    return result_sql_str
+
+
 def init_params():
     rsrcmgr=PDFResourceManager(caching=True)
     laparams=LAParams()
@@ -636,3 +900,7 @@ if __name__ == '__main__':
 '''
     dict_result=json2prop(json_str)
     print(dict_result)
+    insert_sql_str='''insert into CommonSubFuncs values(470,'sql去除单引号','sql_rem_squote','',27,0,'alvin',curdate());
+'''
+    print(sql_rem_squote(sql_add_squote(insert_sql_str)))
+    

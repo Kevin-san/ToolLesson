@@ -41,7 +41,7 @@ function ajaxFunction(paramId){
 			},
 			success:function(data){
 				outputItem.empty();
-				if(paramId == "ziptool" || paramId == "converttool" || paramId == "strtool"){
+				if(paramId == "ziptool" || paramId == "converttool" || paramId == "strtool" || paramId == "runtool"){
 					outputItem.val(data.outputarea);
 				}else{
 					outputItem.val(eval("'"+fixText(data.outputarea)+"'"));
