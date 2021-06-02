@@ -5,10 +5,44 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,\
-    UserFunction, CommonSubFuncs, Category, UnitDictionary
+from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article
 from PdfWeb.entitys import HomeInfoItem
 from django.contrib.auth.hashers import make_password
+
+def get_articles_by_type(article_type='2'):
+    return Article.objects.filter(Type=article_type).order_by('-CreateTime')
+
+def get_article_by_id(article_id):
+    return Article.objects.filter(Id=article_id)
+
+def get_articles_by_author_id(author_id):
+    return Article.objects.filter(AuthorId=author_id).order_by('-CreateTime')
+
+def get_articles_order_by_click_count():
+    return Article.objects.order_by('-Click')
+
+def get_articles_by_category_id_order_by_click_count(category_id):
+    return Article.objects.filter(CategoryId=category_id).order_by('-Click')
+
+def get_articles_by_category_id(category_id):
+    return Article.objects.filter(CategoryId=category_id).order_by('-CreateTime')
+
+def get_page_articles_by_id(article_id):
+    article=Article.objects.filter(Id=article_id)
+    articles=get_articles_by_author_id(article.AuthorId)
+    for i in range(0..len(articles)):
+        if articles[i].Id == article.Id:
+            pre_id = i-1
+            next_id = i+1
+            if pre_id >=0:
+                p_article=articles[pre_id]
+            else:
+                p_article=None
+            if next_id < len(articles):
+                n_article=articles[next_id]
+            else:
+                n_article=None
+            return [p_article,article,n_article]
 
 def get_user_by_name(user_name):
     return User.objects.filter(Name=user_name)
@@ -22,9 +56,9 @@ def get_user_by_id(user_id):
 def get_user_function(group_key,role_id):
     return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0)
 
-def create_user(user_name,password,email,sex,permission):
+def create_user(user_name,password,email,sex,detail,permission):
     password1=make_password(password,user_name,'pbkdf2_sha256')
-    User.objects.create(Name = user_name,Password = password1,Email = email,Sex = sex,Permissions = permission)
+    User.objects.create(Name = user_name,Password = password1,Email = email,Sex = sex,Detail=detail,Permissions = permission)
     user = get_user_by_name(user_name)
     if user:
         return user[0]
@@ -61,6 +95,13 @@ def get_book_lesson_type_info():
 def get_common_tool_type_info():
     category=Category.objects.get(CategoryName='tool',DeleteFlag=0)
     return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+
+def get_blog_category_type_info():
+    category=Category.objects.get(CategoryName='blog',DeleteFlag=0)
+    return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+
+def get_category_by_id(category_id):
+    return Category.objects.filter(DeleteFlag=0,CategoryId=category_id)
 
 def get_book_lesson_info(book_lesson_type_id):
     return BookLesson.objects.filter(BookLessonType_Id=book_lesson_type_id,DeleteFlag=0)

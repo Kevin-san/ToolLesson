@@ -81,6 +81,7 @@ def register(request):
             password2 = register_form.cleaned_data['password2']
             email = register_form.cleaned_data['email']
             sex = register_form.cleaned_data['sex']
+            detail = register_form.cleaned_data['detail']
             permission = register_form.cleaned_data['permissions']
             same_name_user = services.get_user_by_name(username)
             same_email_user = services.get_user_by_email(email)
@@ -93,7 +94,7 @@ def register(request):
             if same_email_user:  # 邮箱地址唯一
                 message = '该邮箱地址已被注册，请使用别的邮箱！'
                 return render(request, 'register.html', locals())
-            new_user=services.new_user(username, password1, email, sex, permission)
+            new_user=services.new_user(username, password1, email, sex,detail, permission)
             send_email(email,services.make_confirm_string(new_user))
             return redirect('/login')  # 自动跳转到登录页面
     register_form = forms.RegisterForm()
@@ -127,6 +128,31 @@ def user_confirm(request):
         message = '感谢确认，请使用账户登录！'
         return render(request, 'confirm.html', locals())
 
+def blog_index(request):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_blog_home_index() 
+        return render(request,'blogindex.html',result)
+
+def blog_list(request,category_id,page_no):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_blog_home_list(category_id,page_no)
+        return render(request,'blogindex.html',result)
+    
+def blog_article(request,article_id):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_blog_article(article_id)
+        return render(request,'blogbase.html',result)
+    
+    
 def tool_index(request):
     if not request.session.get('is_login',None):
         content="你还没有权限访问任何画面！请登录"
@@ -182,3 +208,12 @@ def learn_regex(request,api_key):
             result_dict=get_template_detail(3,api_key,linux_menus)
             return render(request,'learnbase.html',result_dict)
     return render(request, '404.html')
+
+def blog_detail(request,id):
+    pass
+
+def blog_add(request,id):
+    pass
+
+def blog_upd(request,id):
+    pass

@@ -8,6 +8,7 @@ create table IF NOT EXISTS `User`(
 	`Password` VARCHAR(256) NOT NULL,
 	`Email` VARCHAR(256) NOT NULL, 
 	`Sex` CHAR(1) NOT NULL,
+	`Detail` VARCHAR(1000),
 	`Permissions` VARCHAR(24) NOT NULL,
 	`DeleteFlag` TINYINT NOT NULL DEFAULT 0,
 	`submission_user` VARCHAR(30),

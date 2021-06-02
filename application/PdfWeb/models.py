@@ -6,6 +6,23 @@ Created on 2019/12/28
 '''
 from django.db import models
 
+def user_directory_path(instance,filename):
+    return 'article/{0}/%Y/%m/{1}'.format(instance.user.Id,filename)
+
+class AcImage(models.Model):
+    '''相册'''
+    image_title = models.CharField(max_length=20, verbose_name=u'图片标题', default='')
+    image_detail = models.CharField(max_length=200, verbose_name=u'图片简介', default='')
+    image_path = models.ImageField(upload_to="upload/%Y/%m", default="upload/default.jpg", max_length=100, verbose_name=u"图片")
+
+    class Meta:
+        db_table='AcImage'
+        verbose_name = u'网站相册'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.image_title
+
 class User(models.Model):
     gender = (
         ('1', "1"),
@@ -16,6 +33,7 @@ class User(models.Model):
     Password = models.CharField(max_length=256,verbose_name='用户密码')
     Email = models.EmailField(unique=True,verbose_name='用户邮箱')
     Sex = models.CharField(max_length=1, choices=gender, default='1',verbose_name='用户性别')
+    Detail= models.CharField(max_length=1000,verbose_name='个人简介')
     Permissions = models.CharField(max_length=128,verbose_name='角色')
     DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
     submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
@@ -189,3 +207,64 @@ class UnitDictionary(models.Model):
         verbose_name_plural=verbose_name
     def __str__(self):
         return self.UnitValue
+    
+class Article(models.Model):
+    """博客文章"""
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Title = models.CharField(max_length=50, verbose_name=u'日志标题', default='')
+    Synopsis = models.TextField(verbose_name=u'日志简介', default='')
+    Image = models.ImageField(upload_to=user_directory_path, default="article/default.png", max_length=100, verbose_name=u"文章配图")
+    AuthorId = models.IntegerField(verbose_name=u'作者Id')
+    AuthorName = models.CharField(max_length=200, verbose_name=u'作者昵称')
+    CategoryId = models.IntegerField(verbose_name=u'所属分类')
+    CategoryName = models.CharField(max_length=200, verbose_name=u'分类名称')
+    Tag = models.CharField(max_length=50, verbose_name=u'日志标签', default='')
+    Content = models.TextField(verbose_name=u'博客正文', default='')
+    Type = models.CharField(max_length=10, choices=(("0",u"草稿"),("1","软删除"),("2","正常")), default="0", verbose_name=u"文章类别")
+    Original = models.CharField(max_length=10, choices=(("1", "原创"), ("0", "转载")), default="1", verbose_name=u"是否原创")
+    Click = models.PositiveIntegerField(verbose_name=u'文章点击量', default=0)
+    Up = models.CharField(max_length=10, choices=(("1",u"置顶"),("0","取消置顶")), default="0", verbose_name=u"文章置顶")
+    Support= models.CharField(max_length=10, choices=(("1",u"推荐"),("0","取消推荐")), default="0", verbose_name=u"文章推荐")
+    CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
+    UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
+    DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+        
+    class Meta:
+        db_table='Article'
+        verbose_name=u'文章表'
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.Title
+    def increase_article_click(self):
+        """文章点击量"""
+        self.Click += 1
+        self.save(update_fields=['Click'])
+        
+class SiteInfo(models.Model):
+    """站点信息"""
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Name = models.CharField(max_length=20, verbose_name=u'站点名称', default='')
+    Detail = models.CharField(max_length=100, verbose_name=u'站点介绍', default='')
+    User = models.ForeignKey(User,verbose_name=u'管理员',on_delete=models.CASCADE)
+    Logo = models.ImageField(upload_to="site/", default="site/default.png", max_length=100, verbose_name=u"站点logo")
+    TopImage = models.ImageField(upload_to="site/", default="site/topbg.jpg", max_length=100, verbose_name=u"顶部大图")
+    Powered = models.CharField(max_length=100, verbose_name=u'Powered By', default='')
+    Links = models.CharField(max_length=100, verbose_name=u'links', default='')
+    ContactEmail = models.CharField(max_length=100,verbose_name=u'contact me Email:', default='')
+    ContactQQ = models.CharField(max_length=100,verbose_name=u'contact me QQ:', default='')
+    DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+#     site_footer = models.TextField(verbose_name=u'站点底部代码', default='')
+#     site_changyan = models.TextField(verbose_name='文章底部广告代码', default='')
+    
+
+    class Meta:
+        db_table='SiteInfo'
+        verbose_name = u'网站信息'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.site_name

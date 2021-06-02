@@ -5,11 +5,12 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from PdfWeb import db,entitys
-from PdfWeb.entitys import HomeIndexItem
+from PdfWeb.entitys import HomeIndexItem, PageInfoItem
 from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,\
     common_executer
 import datetime
 from django.contrib.auth.hashers import make_password
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
@@ -25,18 +26,52 @@ font_rules=db.get_common_rules_by_type('font')
 font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
 learn_menu_list = db.get_book_lesson_type_info()
 tool_menu_list = db.get_common_tool_type_info()
-learn_val_list = []
-for book_lesson_type in learn_menu_list:
-    index_list = db.get_book_lesson_image_info(book_lesson_type.CategoryId)
-    id_name = book_lesson_type.CategoryValue1.replace('#','')
-    item = HomeIndexItem(id_name,book_lesson_type.CategoryName,index_list)
-    learn_val_list.append(item)
-tool_val_list = []
-for common_tool_type in tool_menu_list:
-    tool_items = db.get_common_sub_func_info(common_tool_type.CategoryId)
-    id_name = common_tool_type.CategoryValue1.replace('#','')
-    item = HomeIndexItem(id_name,common_tool_type.CategoryName,tool_items)
-    tool_val_list.append(item)
+blog_category_list= db.get_blog_category_type_info()
+
+def get_pages(begin_no,end_no,category_id):
+    pages = []
+    for i in range(begin_no, end_no):
+        page_no=i+1
+        page=PageInfoItem(page_no,F'{category_id}/{page_no}')
+        pages.append(page)
+    return pages
+
+def pages_help(page,num_pages,category_id,maxpage):
+    '''
+    Paginator Django数据分页优化
+        使数据分页列表处显示规定的页数
+    :param page: 当前页码
+    :param num_pages: 总页数
+    :param category_id:分类Id
+    :param maxpage: 列表处最多显示的页数
+    :return:
+    '''
+    
+    if page is None:#首页时page=None
+        p=1
+    else:
+        p = int(page)
+    # print(num_pages,p,maxpage)
+    offset = num_pages-p
+    if num_pages > maxpage and offset <= maxpage and p>= maxpage:
+        #假设100页 100-98=2,页尾处理
+        # 结果小于规定数但是当前页大于规定页数
+        # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(num_pages - maxpage, num_pages)])
+        return get_pages(num_pages - maxpage, num_pages,category_id)
+    elif num_pages > maxpage and offset >= maxpage and p <= maxpage:
+        #假设100页 100-2=98，页头
+        # 结果小于规定数但是当前页大于规定页数
+        # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(maxpage)])
+        return get_pages(0, maxpage,category_id)
+    elif num_pages <= maxpage:
+        #假设3页  3<6，总页数很少，少于规定页数
+        # 当前页码数小于规定数
+        # print("当前页码数小于规定数",[i + 1 for i in range(num_pages)])
+        return get_pages(0, num_pages,category_id)
+    else:
+        # 正常页数分配
+        # print("正常页数分配",[i + 1 for i in range(p - int(maxpage / 2), p + int(maxpage / 2))])
+        return get_pages(p - int(maxpage / 2), p + int(maxpage / 2),category_id)
 
 def content_infos_to_text(content_infos):
     text_list=[]
@@ -61,8 +96,18 @@ def get_home_index():
         content_list.append(temp_str)
     return "".join(content_list)
 
+def get_tool_val_list():
+    tool_val_list = []
+    for common_tool_type in tool_menu_list:
+        tool_items = db.get_common_sub_func_info(common_tool_type.CategoryId)
+        id_name = common_tool_type.CategoryValue1.replace('#', '')
+        item = HomeIndexItem(id_name, common_tool_type.CategoryName, tool_items)
+        tool_val_list.append(item)
+    return tool_val_list
+
 def get_tool_home_index():
     keys = ['menu_list','val_list']
+    tool_val_list = get_tool_val_list()
     vals = [tool_menu_list,tool_val_list]
     return common_tools.create_map(keys,vals)
 
@@ -89,8 +134,6 @@ def codingtool(method,inputval):
 def ziptool(method,inputval):
     func = getattr(common_formater,method)
     return func(inputval)
-# def webtool(method,inputval):
-#     return 
 def converttool(method,inputval,spec_val):
     func = getattr(common_converter,method)
     need_key_methods=["first_ones_lower","last_ones_lower","first_ones_upper","last_ones_upper","delete_first_ones","delete_last_ones","add_first_specs","add_last_specs"]
@@ -100,21 +143,55 @@ def converttool(method,inputval,spec_val):
 def calctool(method,inputval):
     func = getattr(common_calculator,method)
     return func(inputval)
-# def regextool(method,inputval):
-#     func = getattr(common_converter,method)
-#     return func(inputval)
 def runtool(method,inputval):
     func = getattr(common_executer,method)
     return func(list(inputval.split("\n")))
 def strtool(method,inputval):
     func = getattr(common_converter,method)
     return func(inputval)
-# def datetool(inputval):
-#     pass
+
+
+
+def get_blog_home_index():
+    return get_blog_home_list(0, 1)
+
+def get_blog_home_list(category_id,page_no):
+    keys = ['category_list','article_list','contacts','hot_article_list','pages']
+    if category_id == 0:
+        article_list=db.get_articles_by_type()
+    else:
+        article_list=db.get_articles_by_category_id(category_id)
+    paginator = Paginator(article_list, 8)  # 第二个参数是每页显示的数量
+    try:
+        contacts = paginator.page(page_no)
+    except PageNotAnInteger:  # 若不是整数则跳到第一页
+        contacts = paginator.page(1)
+    except EmptyPage:  # 若超过了则最后一页
+        contacts = paginator.page(paginator.num_pages)
+    #优化数据翻页
+    pages = pages_help(page_no,paginator.num_pages,category_id,6)
+    if category_id ==0 :
+        hot_article_list=db.get_articles_order_by_click_count()[0:10]
+    else:
+        hot_article_list=db.get_articles_by_category_id_order_by_click_count(category_id)[0:10]
+    vals=[blog_category_list,article_list,contacts,hot_article_list,pages]
+    return common_tools.create_map(keys,vals)
+
+def get_blog_article(article_id):
+    pass
+
+def get_learn_val_list():
+    learn_val_list = []
+    for book_lesson_type in learn_menu_list:
+        index_list = db.get_book_lesson_image_info(book_lesson_type.CategoryId)
+        id_name = book_lesson_type.CategoryValue1.replace('#','')
+        item = HomeIndexItem(id_name,book_lesson_type.CategoryName,index_list)
+        learn_val_list.append(item)
+    return learn_val_list
 
 def get_learn_home_index():
     keys = ['menu_list','val_list']
-    vals = [learn_menu_list,learn_val_list]
+    vals = [learn_menu_list,get_learn_val_list()]
     return common_tools.create_map(keys,vals)
 
 def get_menus(book_type_id):
@@ -144,8 +221,8 @@ def get_user_by_email(mail):
         return users[0]
     return None
 
-def new_user(user_name,password,email,sex,permission):
-    return db.create_user(user_name, password, email, sex, permission)
+def new_user(user_name,password,email,sex,detail,permission):
+    return db.create_user(user_name, password, email, sex,detail, permission)
 
 def make_confirm_string(user):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -181,7 +258,7 @@ def get_chapters(book_lesson_id,chapter_href):
     detail_list=get_chapter_contents(chapter_info.Id)
     content_html=convert_details_to_html(detail_list)
     keys = ['val_list','header_list','content_html']
-    vals = [learn_val_list,header_list,content_html]
+    vals = [get_learn_val_list(),header_list,content_html]
     return common_tools.create_map(keys, vals)
 
 def convert_attribute_map_to_str(content_detail):
@@ -306,3 +383,4 @@ def convert_details_to_html(detail_list):
             detail_html=convert_dirty_text(content_detail, html_dirty_tags[tag_name])
         detail_html_list.append(detail_html)
     return "\n".join(detail_html_list)
+
