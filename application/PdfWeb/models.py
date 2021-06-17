@@ -5,9 +5,12 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.db import models
+from mdeditor.fields import MDTextField
+import time
 
 def user_directory_path(instance,filename):
-    return 'article/{0}/%Y/%m/{1}'.format(instance.user.Id,filename)
+    childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
+    return 'article/{0}/{1}'.format(childdir,filename)
 
 class AcImage(models.Model):
     '''相册'''
@@ -33,6 +36,7 @@ class User(models.Model):
     Password = models.CharField(max_length=256,verbose_name='用户密码')
     Email = models.EmailField(unique=True,verbose_name='用户邮箱')
     Sex = models.CharField(max_length=1, choices=gender, default='1',verbose_name='用户性别')
+    Logo = models.ImageField(upload_to=user_directory_path,null=True,blank=True)
     Detail= models.CharField(max_length=1000,verbose_name='个人简介')
     Permissions = models.CharField(max_length=128,verbose_name='角色')
     DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
@@ -207,19 +211,36 @@ class UnitDictionary(models.Model):
         verbose_name_plural=verbose_name
     def __str__(self):
         return self.UnitValue
+
+class Comment(models.Model):
+    """博客评论"""
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    ArticleId=models.IntegerField(verbose_name='ArticleId')
+    Content= models.TextField(verbose_name=u'评论内容', default='')
+    AuthorId = models.IntegerField(verbose_name=u'作者Id')
+    AuthorName = models.CharField(max_length=200, verbose_name=u'作者昵称')
+    DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
+    CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
+    UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
     
+    class Meta:
+        db_table='Comment'
+        verbose_name=u'评论表'
+        verbose_name_plural = verbose_name
+
 class Article(models.Model):
     """博客文章"""
     Id=models.IntegerField(primary_key=True,verbose_name='Id')
     Title = models.CharField(max_length=50, verbose_name=u'日志标题', default='')
     Synopsis = models.TextField(verbose_name=u'日志简介', default='')
-    Image = models.ImageField(upload_to=user_directory_path, default="article/default.png", max_length=100, verbose_name=u"文章配图")
     AuthorId = models.IntegerField(verbose_name=u'作者Id')
     AuthorName = models.CharField(max_length=200, verbose_name=u'作者昵称')
     CategoryId = models.IntegerField(verbose_name=u'所属分类')
     CategoryName = models.CharField(max_length=200, verbose_name=u'分类名称')
     Tag = models.CharField(max_length=50, verbose_name=u'日志标签', default='')
-    Content = models.TextField(verbose_name=u'博客正文', default='')
+    Content = MDTextField()
     Type = models.CharField(max_length=10, choices=(("0",u"草稿"),("1","软删除"),("2","正常")), default="0", verbose_name=u"文章类别")
     Original = models.CharField(max_length=10, choices=(("1", "原创"), ("0", "转载")), default="1", verbose_name=u"是否原创")
     Click = models.PositiveIntegerField(verbose_name=u'文章点击量', default=0)

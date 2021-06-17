@@ -5,31 +5,74 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article
+from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment
 from PdfWeb.entitys import HomeInfoItem
 from django.contrib.auth.hashers import make_password
+from tools import common_converter
 
 def get_articles_by_type(article_type='2'):
-    return Article.objects.filter(Type=article_type).order_by('-CreateTime')
+    return Article.objects.filter(Type=article_type,DeleteFlag=0).order_by('-CreateTime')
 
 def get_article_by_id(article_id):
-    return Article.objects.filter(Id=article_id)
+    return Article.objects.filter(Id=article_id,DeleteFlag=0)
 
 def get_articles_by_author_id(author_id):
-    return Article.objects.filter(AuthorId=author_id).order_by('-CreateTime')
+    return Article.objects.filter(AuthorId=author_id,DeleteFlag=0).order_by('-CreateTime')
 
 def get_articles_order_by_click_count():
-    return Article.objects.order_by('-Click')
+    return Article.objects.filter(DeleteFlag=0).order_by('-Click')
 
 def get_articles_by_category_id_order_by_click_count(category_id):
-    return Article.objects.filter(CategoryId=category_id).order_by('-Click')
+    return Article.objects.filter(CategoryId=category_id,DeleteFlag=0).order_by('-Click')
 
 def get_articles_by_category_id(category_id):
-    return Article.objects.filter(CategoryId=category_id).order_by('-CreateTime')
+    return Article.objects.filter(CategoryId=category_id,DeleteFlag=0).order_by('-CreateTime')
+
+def get_articles_group_by_tag(articles):
+    tag_dict = {}
+    for article in articles:
+        if article.Tag in tag_dict:
+            tag_dict[article.Tag].append(article)
+        else:
+            tag_dict[article.Tag]=[article]
+    return tag_dict
+
+def get_articles_group_by_month(articles):
+    month_dict={}
+    for article in articles:
+        year_month = format(article.UpdateTime,'%Y-%m')
+        if year_month in month_dict:
+            month_dict[year_month].append(article)
+        else:
+            month_dict[year_month]=[article]
+    return month_dict
+
+def get_blog_articles_info_by_author_id(author_id):
+    articles=get_articles_by_author_id(author_id)
+    author = get_user_by_id(author_id)[0]
+    tag_dict=get_articles_group_by_tag(articles)
+    month_dict=get_articles_group_by_month(articles)
+    view_count = 0 
+    for article in articles:
+        view_count += article.Click
+    return {'author':author,'tag':tag_dict,'month':month_dict,'articles':articles,'view_count':view_count}
+
+def del_article_by_article_id(article_id):
+    article = Article.objects.filter(Id=article_id)
+    article.DeleteFlag = 1
+    article.save(update_fields=['DeleteFlag'])
+    
+def ins_article(article):
+    article.save()
+def upd_article(article):
+    article.save(update_fields=['Title','Synopsis','Tag','CategoryName','Content'])
 
 def get_page_articles_by_id(article_id):
-    article=Article.objects.filter(Id=article_id)
-    articles=get_articles_by_author_id(article.AuthorId)
+    article=get_article_by_id(article_id)
+    article.Content = common_converter.markdown2htmlspec(article.Content)
+    article.increase_article_click()
+    detail_info=get_blog_articles_info_by_author_id(article.AuthorId)
+    articles = detail_info['articles']
     for i in range(0..len(articles)):
         if articles[i].Id == article.Id:
             pre_id = i-1
@@ -42,7 +85,10 @@ def get_page_articles_by_id(article_id):
                 n_article=articles[next_id]
             else:
                 n_article=None
-            return [p_article,article,n_article]
+            return {'p_article':p_article,'article':article,'n_article':n_article}.update(detail_info)
+
+def get_comments_by_article_id(article_id):
+    return Comment.objects.filter(ArticleId=article_id,DeleteFlag = 0)
 
 def get_user_by_name(user_name):
     return User.objects.filter(Name=user_name)
@@ -56,10 +102,17 @@ def get_user_by_id(user_id):
 def get_user_function(group_key,role_id):
     return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0)
 
-def create_user(user_name,password,email,sex,detail,permission):
+def create_user(user_name,password,email,sex,detail,logo,permission):
     password1=make_password(password,user_name,'pbkdf2_sha256')
-    User.objects.create(Name = user_name,Password = password1,Email = email,Sex = sex,Detail=detail,Permissions = permission)
+    User.objects.create(Name = user_name,Password = password1,Email = email,Logo=logo,Sex = sex,Detail=detail,Permissions = permission)
     user = get_user_by_name(user_name)
+    if user:
+        return user[0]
+    return None
+
+def update_user(user_id,user_name,email,sex,detail,logo):
+    User.objects.update(Id=user_id,Name=user_name,Email = email,Logo=logo,Sex = sex,Detail=detail)
+    user = get_user_by_id(user_id)
     if user:
         return user[0]
     return None

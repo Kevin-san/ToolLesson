@@ -19,7 +19,7 @@ from django.conf.urls import url
 from django.conf.urls import include
 import PdfWeb.views as views
 from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls.static import static,serve
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^index',views.index,name='index'),
     url(r'^login',views.login,name='login'),
     url(r'^register',views.register,name='register'),
+    url(r'^useredit',views.useredit,name='useredit'),
     url(r'^logout',views.logout,name='logout'),
     url(r'^confirm/$', views.user_confirm,name='confirm'),
     url(r'^captcha', include('captcha.urls')),
@@ -34,12 +35,17 @@ urlpatterns = [
     url(r'^tool/index',views.tool_index, name='tool_index'),
     url(r'^blog/index',views.blog_index, name='blog_index'),
     url(r'^blog/(\d+)/(\d+)/$',views.blog_list, name='blog_list'),
-    url(r'^blog/article/(\d+)/$',views.blog_detail, name='blog_detail'),
+    url(r'^blog/article/(\d+)/$',views.blog_article, name='blog_article'),
     url(r'^blog/articleadd/$',views.blog_add, name='blog_add'),
+    url(r'^blog/articleadd/submit/$',views.blog_add_submit, name='blog_add_submit'),
     url(r'^blog/articleupd/(\d+)/$',views.blog_upd, name='blog_upd'),
+    url(r'^blog/articleupd/submit/(\d+)/$',views.blog_upd_submit, name='blog_upd_submit'),
+    url(r'^blog/articledel/(\d+)/$',views.blog_del,name='blog_del'),
     url(r'^tool/funcs',views.tool_funcs,name='tool_funcs'),
     url(r'^learn/linux/([a-z]+)/$',views.learn_linux,name='learn_linux'),
     url(r'^learn/bash/([a-z]+)/$',views.learn_bash,name='learn_bash'),
     url(r'^learn/regex/([a-z]+)/$',views.learn_regex,name='learn_regex'),
     url(r'^favicon.ico$',RedirectView.as_view(url=r'static/favicon.ico')),
-]+ static(settings.STATIC_URL, document_root = settings.STATICFILES_DIRS)
+    url(r'^img/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'mdeditor/',include('mdeditor.urls')),
+]+ static(settings.STATIC_URL, document_root = settings.STATICFILES_DIRS) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

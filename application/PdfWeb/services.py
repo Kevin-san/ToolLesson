@@ -177,8 +177,26 @@ def get_blog_home_list(category_id,page_no):
     vals=[blog_category_list,article_list,contacts,hot_article_list,pages]
     return common_tools.create_map(keys,vals)
 
+def del_blog_article_by_id(article_id):
+    db.del_article_by_article_id(article_id)
+    
+def ins_blog_article(article):
+    db.ins_article(article)
+    
+def upd_blog_article(article):
+    db.upd_article(article)
+
 def get_blog_article(article_id):
-    pass
+    result = db.get_page_articles_by_id(article_id)
+    comments = db.get_comments_by_article_id(article_id)
+    result['blog_category_list'] = blog_category_list
+    result['comments'] = comments
+    return result
+
+def get_blog_article_info(author_id):
+    result = db.get_blog_articles_info_by_author_id(author_id)
+    result['blog_category_list'] = blog_category_list
+    return result
 
 def get_learn_val_list():
     learn_val_list = []
@@ -221,8 +239,14 @@ def get_user_by_email(mail):
         return users[0]
     return None
 
-def new_user(user_name,password,email,sex,detail,permission):
-    return db.create_user(user_name, password, email, sex,detail, permission)
+def get_user_by_id(user_id):
+    return db.get_user_by_id(user_id)[0]
+
+def new_user(user_name,password,email,sex,detail,logo,permission):
+    return db.create_user(user_name, password, email, sex,detail, logo,permission)
+
+def update_user(user_id,user_name,email,sex,detail,logo):
+    return db.update_user(user_id,user_name, email, sex,detail, logo)
 
 def make_confirm_string(user):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

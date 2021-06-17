@@ -6,28 +6,39 @@ Created on 2020/09/06
 '''
 from django import forms
 from captcha.fields import CaptchaField
-
-
-class Searchform(forms.Form):
-    """搜索表单"""
-    s = forms.CharField(max_length=20)
-
-
-class Tagform(forms.Form):
-    """tag搜索表单"""
-    t = forms.CharField(max_length=20)
-
-class UserForm(forms.Form):
-    username = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label="密码", max_length=256, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    captcha = CaptchaField(label='验证码')
-    
-class RegisterForm(forms.Form):
-    gender = (
+from PdfWeb import models
+from django.forms import fields
+gender = (
         ('1', "男"),
         ('0', "女"),
     )
-    permissions= [
+blog_categorys = (
+(30,'Python'),
+(31,'Java'),
+(32,'架构'),
+(33,'人工智能'),
+(34,'移动开发'),
+(35,'程序人生'),
+(36,'计算机基础'),
+(37,'物联网'),
+(38,'前端'),
+(39,'区块链'),
+(40,'游戏开发'),
+(41,'运维'),
+(42,'5G'),
+(43,'音视频开发'),
+(44,'结算服务'),
+(45,'信息安全'),
+(46,'数据库'),
+(47,'云计算'),
+(48,'吃货'),
+(49,'游玩'),
+(50,'穿搭'),
+(51,'搞笑'),
+(52,'体育'),
+(53,'摄影')
+    )
+permissions= [
         ('b1c1d8e4f4g1','默认游客'), # 博客 读 课程 读  小说 读 
         ('b1c2d8e4f4g1','博客博主'), # 博客 读写
         ('b4c2d8e4f4g1','课程文人'), # 课程 读写上传
@@ -39,11 +50,101 @@ class RegisterForm(forms.Form):
         ('b8c8d8e8f8g8','都要大人'), # 所有 除了 hiders
         ('0','幕后黑手'), # + hiders
     ]
+class Searchform(forms.Form):
+    """搜索表单"""
+    s = forms.CharField(max_length=20)
+
+class CommentForm(forms.ModelForm):
+    """博客评论"""
+    class Meta:
+        model = models.Comment
+        fields = '__all__'
+        widgets = {
+            'Id':forms.HiddenInput(),
+            'ArticleId':forms.HiddenInput(),
+            'AuthorId':forms.HiddenInput(),
+            'AuthorName':forms.HiddenInput(),
+            'DeleteFlag':forms.HiddenInput(),
+            'CreateTime':forms.HiddenInput(),
+            'UpdateTime':forms.HiddenInput(),
+            'submission_user':forms.HiddenInput(),
+            'submission_date':forms.HiddenInput()
+        }
+        labels={
+            'Content':'评论'
+        }
+
+class ArticleForm(forms.ModelForm):
+    """博客内容  form 需要修改优化,views services 同步修改"""
+    class Meta:
+        model=models.Article
+        fields = '__all__'
+        widgets = {
+            'Id':forms.HiddenInput(),
+            'AuthorId':forms.HiddenInput(),
+            'AuthorName':forms.HiddenInput(),
+            'CategoryName':forms.HiddenInput(),
+            'Type':forms.HiddenInput(),
+            'Original':forms.HiddenInput(),
+            'Click':forms.HiddenInput(),
+            'Like':forms.HiddenInput(),
+            'Up':forms.HiddenInput(),
+            'Support':forms.HiddenInput(),
+            'DeleteFlag':forms.HiddenInput(),
+            'CreateTime':forms.HiddenInput(),
+            'UpdateTime':forms.HiddenInput(),
+            'submission_user':forms.HiddenInput(),
+            'submission_date':forms.HiddenInput()
+        }
+        labels={
+            'Title':"标题",
+            'Synopsis':"简介",
+            'CategoryId':"分类",
+            'Tag':"标签",
+            'Content':"正文"
+        }
+        def __init__(self, request, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.request = request
+            # 找到想要的字段，重新绑定显示的数据
+            self.fields['CategoryId']= fields.TypedChoiceField(coerce=lambda x:int(x),choices=blog_categorys)
+
+class Tagform(forms.Form):
+    """tag搜索表单"""
+    t = forms.CharField(max_length=20)
+
+class EditUserForm(forms.ModelForm):
+    
+    class Meta:
+        model = models.User
+        fields = '__all__'
+        exclude = ['Id','Password','Permissions','DeleteFlag','submission_user','submission_date']
+        labels={
+            'Name':'用户名',
+            'Email':'邮箱地址',
+            'Sex':'性别',
+            'Logo':'个人头像',
+            'Detail':'个人简介'
+            }
+    def __init__(self, request, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+        # 找到想要的字段，重新绑定显示的数据
+        self.fields['Sex'].choices = gender
+
+class UserForm(forms.Form):
+    username = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label="密码", max_length=256, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    captcha = CaptchaField(label='验证码')
+    
+class RegisterForm(forms.Form):
+
     username = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
     password1 = forms.CharField(label="密码", max_length=256, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(label="确认密码", max_length=256, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label="邮箱地址", widget=forms.EmailInput(attrs={'class': 'form-control'}))
     sex = forms.ChoiceField(label='性别', choices=gender)
+    logo = forms.ImageField(label='个人头像')
     detail = forms.CharField(label="个人简介",max_length=1000,widget=forms.TextInput(attrs={'class': 'form-control'}))
     permissions = forms.ChoiceField(label='角色',choices=permissions)
     captcha = CaptchaField(label='验证码')

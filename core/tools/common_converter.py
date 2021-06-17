@@ -28,7 +28,6 @@ from const.html5tmps import HtmlTypes
 from const.javatmps import JavaConst
 from const.csharptmps import CSharpConst
 from const.langtypes import _const
-from sphinx.ext.inheritance_diagram import import_classes
 java_const = JavaConst()
 csharp_const=CSharpConst()
 common_const=_const()
@@ -282,6 +281,14 @@ def money2number(amount):
 
 def markdown2html(mark_str):
     return markdown.markdown(mark_str)
+
+def markdown2htmlspec(mark_str):
+    return markdown.markdown(mark_str,
+        extensions=[
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
+    ])
 
 def html2markdown(html_str):
     return h.handle(html_str)
