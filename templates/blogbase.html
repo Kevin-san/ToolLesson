@@ -26,6 +26,8 @@
 <script type="text/javascript" src="/static/js/run_prettify.min.js"></script>
 <script type="text/javascript" src="/static/js/speaker.js"></script>
 {% load static %}
+<script type="text/javascript" src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+<link href="{% static 'mdeditor/css/editormd.css' %}" rel="stylesheet">
 </head>
 <body data-spy="scroll" data-target="#myScrollspy">
 	{% block content %}
@@ -100,21 +102,46 @@
 					{% endfor %}
               	</div>
               	{% endif %}
-              	{% if action == 'add' %}
+              	{% if action == 'add' or action == 'upd' %}
               	<div class="row">
-              		<form action="/blog/articleadd/submit" method="post">
-              		{{ form.media }}
-              		{{ form.as_p }}
-              		<input type="submit" name="提交">
-              		</form>
-              	</div>
-              	{% endif %}
-              	{% if action == 'upd' %}
-              	<div class="row">
-              		<form action="/blog/articleupd/submit" method="post">
-              		{{ form.media }}
-              		{{ form.as_p }}
-              		<input type="submit" name="提交">
+              		<form enctype="multipart/form-data" class='form-register' action="/blog/article{{action}}/submit" method="post">
+
+              		{% csrf_token %}
+              		<h2 class="text-center">欢迎使用</h2>
+              		<div class="form-group">
+                  		{{ form.Id }}
+                  		{{ form.AuthorId}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Title.label_tag }}
+                  		{{ form.Title}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Synopsis.label_tag }}
+                  		{{ form.Synopsis}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Category.label_tag }}
+                  		{{ form.Category}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Tag.label_tag }}
+                  		{{ form.Tag}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Type.label_tag }}
+                  		{{ form.Type}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Original.label_tag }}
+                  		{{ form.Original}}
+              		</div>
+              		<div class="form-group">
+                  		{{ form.Content.label_tag }}
+                  		{{ form.Content}}
+              		</div>
+              		<button type="reset" class="btn btn-default pull-left">重置</button>
+              		<button type="submit" class="btn btn-primary pull-right">提交</button>
               		</form>
               	</div>
               	{% endif %}
@@ -133,7 +160,7 @@
 					</div>
 					<div class="panel-footer">
 						<div class="col-md-4 column">
-						文章数:{{ aritcles|length}}
+						文章数:<a href="/blog/articles/{{article.AuthorId}}">{{ aritcles|length}}</a>
 						</div>
 						<div class="col-md-4 column">
 						阅读人数:{{ view_count }}

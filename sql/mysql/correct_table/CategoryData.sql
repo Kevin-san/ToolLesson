@@ -10,6 +10,7 @@ insert into Category values(8,'hiders','h','','',1,0,'alvin',curdate());
 insert into Category values(1001,'learn','','','',2,0,'alvin',curdate());
 insert into Category values(1002,'tool','','','',3,0,'alvin',curdate());
 insert into Category values(1003,'blog','','','',4,0,'alvin',curdate());
+insert into Category values(1004,'blogtag','','','',4,0,'alvin',curdate());
 
 insert into Category values(11,'服务端','#linux','','',1001,0,'alvin',curdate());
 insert into Category values(12,'数据库端','#database','','',1001,0,'alvin',curdate());
@@ -53,6 +54,40 @@ insert into Category VALUES(50,'穿搭','clothes','','',1003,0,'alvin',CURDATE()
 insert into Category VALUES(51,'搞笑','fun','','',1003,0,'alvin',CURDATE());
 insert into Category VALUES(52,'体育','sport','','',1003,0,'alvin',CURDATE());
 insert into Category VALUES(53,'摄影','camera','','',1003,0,'alvin',curdate());
+
+insert into Category values(60,'Python','python','','',1004,0,'alvin',curdate());
+insert into Category values(61,'Java','java','','',1004,0,'alvin',curdate());
+insert into Category values(62,'Perl','perl','','',1004,0,'alvin',curdate());
+insert into Category values(63,'Android','android','','',1004,0,'alvin',curdate());
+insert into Category values(64,'Shell','shell','','',1004,0,'alvin',curdate());
+insert into Category values(65,'Linux','linux','','',1004,0,'alvin',curdate());
+insert into Category values(66,'Windows','windows','','',1004,0,'alvin',curdate());
+insert into Category values(67,'IOS','ios','','',1004,0,'alvin',curdate());
+insert into Category values(68,'Mac','mac','','',1004,0,'alvin',curdate());
+insert into Category values(69,'Html','html','','',1004,0,'alvin',curdate());
+insert into Category values(70,'Javascript','javascript','','',1004,0,'alvin',curdate());
+insert into Category values(71,'Css','css','','',1004,0,'alvin',curdate());
+insert into Category values(72,'Sql','sql','','',1004,0,'alvin',curdate());
+insert into Category values(73,'Docker','docker','','',1004,0,'alvin',curdate());
+insert into Category values(74,'Git','git','','',1004,0,'alvin',curdate());
+insert into Category values(75,'C++','c++','','',1004,0,'alvin',curdate());
+insert into Category values(76,'C#','c#','','',1004,0,'alvin',curdate());
+insert into Category values(77,'Spring','spring','','',1004,0,'alvin',curdate());
+insert into Category values(78,'Springboot','springboot','','',1004,0,'alvin',curdate());
+insert into Category values(79,'Mybatis','mybatis','','',1004,0,'alvin',CURDATE());
+insert into Category values(80,'Go','go','','',1004,0,'alvin',CURDATE());
+insert into Category VALUES(81,'VB','vb','','',1004,0,'alvin',CURDATE());
+insert into Category VALUES(82,'Maven','maven','','',1004,0,'alvin',CURDATE());
+insert into Category VALUES(83,'Rpm','rpm','','',1004,0,'alvin',CURDATE());
+insert into Category VALUES(84,'Gradle','gradle','','',1004,0,'alvin',curdate());
+insert into Category VALUES(85,'Ant','ant','','',1004,0,'alvin',curdate());
+insert into Category VALUES(86,'Maya','maya','','',1004,0,'alvin',curdate());
+insert into Category VALUES(87,'3dMax','3dmax','','',1004,0,'alvin',curdate());
+insert into Category VALUES(88,'Photoshop','ps','','',1004,0,'alvin',curdate());
+insert into Category VALUES(89,'Vocaloid','vocaloid','','',1004,0,'alvin',curdate());
+insert into Category VALUES(90,'前沿技术','front','','',1004,0,'alvin',curdate());
+insert into Category VALUES(91,'语言学习','learn','','',1004,0,'alvin',curdate());
+insert into Category VALUES(92,'休闲娱乐','relaxation','','',1004,0,'alvin',curdate());
 --insert into Category values(28,'常用工具','#datetool','','',10,0,'alvin',curdate());
 
 --insert into Category values(22,'网络工具','#webtool','','',10,0,'alvin',curdate());

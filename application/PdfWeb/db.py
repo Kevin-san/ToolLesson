@@ -153,6 +153,10 @@ def get_blog_category_type_info():
     category=Category.objects.get(CategoryName='blog',DeleteFlag=0)
     return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
 
+def get_blog_tag_category_type_info():
+    category=Category.objects.get(CategoryName='blogtag',DeleteFlag=0)
+    return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+
 def get_category_by_id(category_id):
     return Category.objects.filter(DeleteFlag=0,CategoryId=category_id)
 

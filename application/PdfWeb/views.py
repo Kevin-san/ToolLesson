@@ -190,6 +190,17 @@ def blog_article(request,article_id):
         result['action'] = 'detail'
         result['comment_form'] = forms.CommentForm()
         return render(request,'blogbase.html',result)
+    
+def blog_articles(request,author_id):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        # ----
+        result = services.get_blog_article(author_id)
+        result['action'] = 'detaillist'
+        result['comment_form'] = forms.CommentForm()
+        return render(request,'blogbase.html',result)
 
 def blog_add(request):
     if not request.session.get('is_login',None):
@@ -219,7 +230,8 @@ def blog_upd(request,article_id):
     else:
         author_id = request.session['user_id']
         result=services.get_blog_article(author_id)
-        article_form = forms.ArticleForm(instance=result['article'])
+        article  = result['article']
+        article_form = forms.ArticleForm(initial={'Id':article.Id,'AuthorId':article.AuthorId,'Title':article.Title,'Synopsis':article.Synopsis,'Category':article.CategoryId,'Tag':article.TagId,'Type':article.Type,'Original':article.Original,'Content':article.Content})
         result['action'] = 'upd'
         result['form']=article_form
         return render(request,'blogbase.html',result)

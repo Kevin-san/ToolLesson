@@ -8,7 +8,8 @@ create table IF NOT EXISTS `Article`( -- 博客文章表
 	`AuthorName` VARCHAR(200) NOT NULL,
 	`CategoryId` INT UNSIGNED NOT NULL, -- 分类
 	`CategoryName` VARCHAR(200) NOT NULL,
-	`Tag` CHAR(50), --标签
+	`TagId` INT UNSIGNED NOT NULL, --
+	`TagName` VARCHAR(200) NOT NULL, -- 标签
 	`Content` TEXT NOT NULL DEFAULT '', --正文
 	`Type` CHAR(1) NOT NULL DEFAULT '0', -- 文章类别
 	`Original` CHAR(1) NOT NULL DEFAULT '1', -- 是否原创

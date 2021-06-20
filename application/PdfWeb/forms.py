@@ -7,37 +7,25 @@ Created on 2020/09/06
 from django import forms
 from captcha.fields import CaptchaField
 from PdfWeb import models
+from PdfWeb import db
 from django.forms import fields
+from mdeditor.fields import MDTextFormField
 gender = (
         ('1', "男"),
         ('0', "女"),
     )
-blog_categorys = (
-(30,'Python'),
-(31,'Java'),
-(32,'架构'),
-(33,'人工智能'),
-(34,'移动开发'),
-(35,'程序人生'),
-(36,'计算机基础'),
-(37,'物联网'),
-(38,'前端'),
-(39,'区块链'),
-(40,'游戏开发'),
-(41,'运维'),
-(42,'5G'),
-(43,'音视频开发'),
-(44,'结算服务'),
-(45,'信息安全'),
-(46,'数据库'),
-(47,'云计算'),
-(48,'吃货'),
-(49,'游玩'),
-(50,'穿搭'),
-(51,'搞笑'),
-(52,'体育'),
-(53,'摄影')
-    )
+blog_categorys = db.get_blog_category_type_info().values_list('CategoryId','CategoryName')
+tag_categorys = db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName')
+original_categorys = (
+    (0,'原创'),
+    (1,'转载')
+)
+
+type_categorys = (
+    (0,'草稿'),
+    (1,'正式')
+)
+
 permissions= [
         ('b1c1d8e4f4g1','默认游客'), # 博客 读 课程 读  小说 读 
         ('b1c2d8e4f4g1','博客博主'), # 博客 读写
@@ -54,61 +42,22 @@ class Searchform(forms.Form):
     """搜索表单"""
     s = forms.CharField(max_length=20)
 
-class CommentForm(forms.ModelForm):
+class CommentForm(forms.Form):
     """博客评论"""
-    class Meta:
-        model = models.Comment
-        fields = '__all__'
-        widgets = {
-            'Id':forms.HiddenInput(),
-            'ArticleId':forms.HiddenInput(),
-            'AuthorId':forms.HiddenInput(),
-            'AuthorName':forms.HiddenInput(),
-            'DeleteFlag':forms.HiddenInput(),
-            'CreateTime':forms.HiddenInput(),
-            'UpdateTime':forms.HiddenInput(),
-            'submission_user':forms.HiddenInput(),
-            'submission_date':forms.HiddenInput()
-        }
-        labels={
-            'Content':'评论'
-        }
+    Content = fields.CharField(label="评论内容",min_length=10,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"评论内容最短10位"})
 
-class ArticleForm(forms.ModelForm):
+class ArticleForm(forms.Form):
     """博客内容  form 需要修改优化,views services 同步修改"""
-    class Meta:
-        model=models.Article
-        fields = '__all__'
-        widgets = {
-            'Id':forms.HiddenInput(),
-            'AuthorId':forms.HiddenInput(),
-            'AuthorName':forms.HiddenInput(),
-            'CategoryName':forms.HiddenInput(),
-            'Type':forms.HiddenInput(),
-            'Original':forms.HiddenInput(),
-            'Click':forms.HiddenInput(),
-            'Like':forms.HiddenInput(),
-            'Up':forms.HiddenInput(),
-            'Support':forms.HiddenInput(),
-            'DeleteFlag':forms.HiddenInput(),
-            'CreateTime':forms.HiddenInput(),
-            'UpdateTime':forms.HiddenInput(),
-            'submission_user':forms.HiddenInput(),
-            'submission_date':forms.HiddenInput()
-        }
-        labels={
-            'Title':"标题",
-            'Synopsis':"简介",
-            'CategoryId':"分类",
-            'Tag':"标签",
-            'Content':"正文"
-        }
-        def __init__(self, request, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.request = request
-            # 找到想要的字段，重新绑定显示的数据
-            self.fields['CategoryId']= fields.TypedChoiceField(coerce=lambda x:int(x),choices=blog_categorys)
-
+    Id= fields.IntegerField(initial=-1,widget=forms.widgets.HiddenInput)
+    AuthorId = fields.IntegerField(initial=-1,widget=forms.widgets.HiddenInput)
+    Title = fields.CharField(label="标题",min_length=10,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"标题最短10位"})
+    Synopsis = fields.CharField(label="简介",min_length=20,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"简介最短20位"})
+    Category = fields.ChoiceField(label="所属分类",choices=blog_categorys,initial=30,widget=forms.widgets.Select)
+    Tag = fields.ChoiceField(label="所属标签",choices=tag_categorys,initial=60,widget=forms.widgets.Select)
+    Type = fields.ChoiceField(label="草稿正式",choices=type_categorys,initial=0,widget=forms.widgets.Select)
+    Original = fields.ChoiceField(label="转载原创",choices=original_categorys,initial=0,widget=forms.widgets.Select)
+    Content = MDTextFormField(label="正文内容",min_length=100,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"简介最短100位"})
+    
 class Tagform(forms.Form):
     """tag搜索表单"""
     t = forms.CharField(max_length=20)
