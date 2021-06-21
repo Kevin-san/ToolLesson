@@ -13,7 +13,7 @@ from mdeditor.fields import MDTextFormField
 gender = (
         ('1', "男"),
         ('0', "女"),
-    )
+)
 blog_categorys = db.get_blog_category_type_info().values_list('CategoryId','CategoryName')
 tag_categorys = db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName')
 original_categorys = (
@@ -26,7 +26,7 @@ type_categorys = (
     (1,'正式')
 )
 
-permissions= [
+permissions= (
         ('b1c1d8e4f4g1','默认游客'), # 博客 读 课程 读  小说 读 
         ('b1c2d8e4f4g1','博客博主'), # 博客 读写
         ('b4c2d8e4f4g1','课程文人'), # 课程 读写上传
@@ -37,7 +37,7 @@ permissions= [
         ('b1c1d8e8f8g1','视频光影'), # 视频 上传 下载
         ('b8c8d8e8f8g8','都要大人'), # 所有 除了 hiders
         ('0','幕后黑手'), # + hiders
-    ]
+)
 class Searchform(forms.Form):
     """搜索表单"""
     s = forms.CharField(max_length=20)
@@ -52,8 +52,8 @@ class ArticleForm(forms.Form):
     AuthorId = fields.IntegerField(initial=-1,widget=forms.widgets.HiddenInput)
     Title = fields.CharField(label="标题",min_length=10,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"标题最短10位"})
     Synopsis = fields.CharField(label="简介",min_length=20,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"简介最短20位"})
-    Category = fields.ChoiceField(label="所属分类",choices=blog_categorys,initial=30,widget=forms.widgets.Select)
-    Tag = fields.ChoiceField(label="所属标签",choices=tag_categorys,initial=60,widget=forms.widgets.Select)
+    CategoryId = fields.ChoiceField(label="所属分类",choices=blog_categorys,initial=30,widget=forms.widgets.Select)
+    TagId = fields.ChoiceField(label="所属标签",choices=tag_categorys,initial=60,widget=forms.widgets.Select)
     Type = fields.ChoiceField(label="草稿正式",choices=type_categorys,initial=0,widget=forms.widgets.Select)
     Original = fields.ChoiceField(label="转载原创",choices=original_categorys,initial=0,widget=forms.widgets.Select)
     Content = MDTextFormField(label="正文内容",min_length=100,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"简介最短100位"})

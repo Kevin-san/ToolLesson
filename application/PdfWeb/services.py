@@ -4,7 +4,7 @@ Created on 2019/12/28
 
 @author: xcKev
 '''
-from PdfWeb import db,entitys
+from PdfWeb import db,entitys,current_log
 from PdfWeb.entitys import HomeIndexItem, PageInfoItem
 from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,\
     common_executer
@@ -180,15 +180,18 @@ def get_blog_home_list(category_id,page_no):
 def del_blog_article_by_id(article_id):
     db.del_article_by_article_id(article_id)
     
-def ins_blog_article(article):
-    db.ins_article(article)
+def ins_blog_article(article_dict):
+    return db.ins_article(article_dict)
     
 def upd_blog_article(article):
     db.upd_article(article)
+    return article
 
 def get_blog_article(article_id):
     result = db.get_page_articles_by_id(article_id)
     comments = db.get_comments_by_article_id(article_id)
+    current_log.info(result)
+    current_log.info(blog_category_list)
     result['blog_category_list'] = blog_category_list
     result['comments'] = comments
     return result

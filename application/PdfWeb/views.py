@@ -5,7 +5,7 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.shortcuts import render,redirect
-from PdfWeb import services,forms,settings
+from PdfWeb import services,forms,settings,db,current_log
 import datetime
 from django.contrib.auth.hashers import check_password
 from django.http.response import HttpResponse
@@ -22,6 +22,22 @@ lang_menus=services.get_menus(17)
 linux_restfuls = services.get_restful(1, "linux")
 bash_restfuls = services.get_restful(2, "bash")
 regex_restfuls = services.get_restful(3, "regex")
+blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
+tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
+def create_dict_from_keys_form(keys_list,int_keys,form_data):
+    dict_result={}
+    for dict_key in keys_list:
+        dict_result[dict_key] = form_data.cleaned_data[dict_key]
+    for dict_key in int_keys:
+        dict_result[dict_key] = int(form_data.cleaned_data[dict_key])
+        if dict_key == 'CategoryId':
+            dict_result['CategoryId'] = int(form_data.cleaned_data[dict_key])
+            dict_result['CategoryName'] = blog_categorys_map[dict_result['CategoryId']]
+        elif dict_key == 'TagId':
+            dict_result['TagId'] = int(form_data.cleaned_data[dict_key])
+            dict_result['TagName'] = tag_categorys_map[dict_result['TagId']]
+    return dict_result
+    
 
 def get_template_detail(book_lesson_id,api_key,menus):
     main_name=menus[book_lesson_id-1]
@@ -186,6 +202,7 @@ def blog_article(request,article_id):
         content="你还没有权限访问任何画面！请登录"
         return render(request,'index.html',locals())
     else:
+        current_log.info(article_id)
         result = services.get_blog_article(article_id)
         result['action'] = 'detail'
         result['comment_form'] = forms.CommentForm()
@@ -197,9 +214,8 @@ def blog_articles(request,author_id):
         return render(request,'index.html',locals())
     else:
         # ----
-        result = services.get_blog_article(author_id)
+        result = services.get_blog_article_info(author_id)
         result['action'] = 'detaillist'
-        result['comment_form'] = forms.CommentForm()
         return render(request,'blogbase.html',result)
 
 def blog_add(request):
@@ -208,11 +224,9 @@ def blog_add(request):
         return render(request,'index.html',locals())
     else:
         author_id = request.session['user_id']
-        print(author_id)
         result=services.get_blog_article_info(author_id)
         result['action'] = 'add'
         result['form'] = forms.ArticleForm()
-        print(result)
         return render(request,'blogbase.html',result)
 
 def blog_del(request,article_id):
@@ -220,33 +234,47 @@ def blog_del(request,article_id):
         content="你还没有权限访问任何画面！请登录"
         return render(request,'index.html',locals())
     else:
+        author_id = request.session['user_id']
         services.del_blog_article_by_id(article_id)
-        return redirect('/blog/index')
+        return redirect('/blog/articles/'+author_id)
 
 def blog_upd(request,article_id):
     if not request.session.get('is_login',None):
         content="你还没有权限访问任何画面！请登录"
         return render(request,'index.html',locals())
     else:
-        author_id = request.session['user_id']
-        result=services.get_blog_article(author_id)
+        result=services.get_blog_article(article_id)
         article  = result['article']
-        article_form = forms.ArticleForm(initial={'Id':article.Id,'AuthorId':article.AuthorId,'Title':article.Title,'Synopsis':article.Synopsis,'Category':article.CategoryId,'Tag':article.TagId,'Type':article.Type,'Original':article.Original,'Content':article.Content})
+        article_form = forms.ArticleForm(initial={'Id':article.Id,'AuthorId':article.AuthorId,'Title':article.Title,'Synopsis':article.Synopsis,'CategoryId':article.CategoryId,'TagId':article.TagId,'Type':article.Type,'Original':article.Original,'Content':article.Content})
         result['action'] = 'upd'
         result['form']=article_form
         return render(request,'blogbase.html',result)
 
 def blog_add_submit(request):
     article_form = forms.ArticleForm(request.POST,request.FILES)
+    article_keys = ['Title','Synopsis','CategoryId','TagId','Type','Original','Content']
+    int_keys = ['CategoryId','TagId','Type','Original']
     if article_form.is_valid():
-        article = article_form.instance
-        services.ins_blog_article(article)
+        article_dict = create_dict_from_keys_form(article_keys,int_keys, article_form)
+        author_dict = {'AuthorId':request.session['user_id'],'AuthorName':request.session['user_name']}
+        real_dict = dict(article_dict,**author_dict)
+        article=services.ins_blog_article(real_dict)
         return blog_article(request, article.Id)
     return blog_add(request)
+
 def blog_upd_submit(request,article_id):
     article_form = forms.ArticleForm(request.POST,request.FILES)
     if article_form.is_valid():
-        article = article_form.instance
+        article = services.get_blog_article(article_form.cleaned_data['Id'])
+        article.Title = article_form.cleaned_data['Title']
+        article.Synopsis = article_form.cleaned_data['Synopsis']
+        article.CategoryId = article_form.cleaned_data['CategoryId']
+        article.CategoryName = blog_categorys_map[article.CategoryId]
+        article.TagId = article_form.cleaned_data['TagId']
+        article.TagName = blog_categorys_map[article.TagId]
+        article.Type = article_form.cleaned_data['Type']
+        article.Original = article_form.cleaned_data['Original']
+        article.Content = article_form.cleaned_data['Content']
         services.upd_blog_article(article)
         return blog_article(request, article_id)
     return blog_upd(request, article_id)

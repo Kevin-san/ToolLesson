@@ -74,7 +74,36 @@
 					<br>
 					<br>
 					<div>
-						{{ article.Content | safe }}
+						<div id="blog_content">
+							<textarea>
+							{{ article.Content}}
+							</textarea>
+						</div>
+						<script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/raphael.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/underscore.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/sequence-diagram.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/flowchart.min.js' %}"></script>
+  						<script src="{% static 'mdeditor/js/lib/jquery.flowchart.min.js' %}"></script>
+						<script>
+						 $(function () {
+						      // js 解析markdown
+						      editormd.markdownToHTML("blog_content", {
+						          //htmlDecode      : "style,script,iframe",  // you can filter tags decode
+						          emoji           : true,
+						          taskList        : true,
+						          tex             : true,  // 默认不解析
+						          flowChart       : true,  // 默认不解析
+						          sequenceDiagram : true,  // 默认不解析
+						      });
+
+						      $(".reference-link").each(function (i,obj) {
+						        console.log(obj)
+						      })
+						  })
+						</script>
 					</div>
 				</div>
 				<div class="row">
@@ -94,7 +123,10 @@
 					<form action="/blog/comment/{{ article.Id }}" method="post">
 						{% csrf_token %}
 						<!-- {{ form.media }} -->
-						{{ comment_form.as_p }}
+						<div class="form-group">
+                  			{{ comment_form.Content.label_tag }}
+                  			{{ comment_form.Content}}
+              			</div>
 						<input type="submit" name="提交">
 					</form>
 					{% for comment_item in comments %}
@@ -102,9 +134,43 @@
 					{% endfor %}
               	</div>
               	{% endif %}
+              	{% if action == 'detaillist' %}
+              	<div class="row">
+				{% if articles %} 
+				{% for article in articles %}
+					<div class="row clearfix">
+					<h3>
+						{% if article.Original == 1 %}
+          				<button type="button" class="btn btn-success " title="本文为{{ article.AuthorName }}原创博文">原</button>
+          				{% endif %}
+          				{% if article.Original == 0 %}
+          				<button type="button" class="btn btn-primary" title="本文为转载文章">转</button>
+          				{% endif %}
+        				<a href="/blog/article/{{ article.Id }}">{{ article.Title }}</a>
+					</h3>
+					<h4>作者：<span class="label label-success"><a>{{ article.AuthorName }}</a></span>
+         					/ 发表：<span class="label label-success"> {{ article.CreateTime }} </span>
+       					/ <span class="label label-success"><a href="#" >{{ article.CategoryName }}/ 阅读量：{{ article.Click }}</a></span>
+      				</h4>
+					<p>
+						{% autoescape off %}
+        					{{ article.Synopsis }}
+       					{% endautoescape %}
+					</p>
+					<p>
+						<a href="/blog/article/{{ article.id }}">CONTINUE READING</a>
+					</p>
+					</div>
+					<hr>
+				{% endfor %}
+				{% else %}
+				<a href="/blog/articleadd">创建日志</a>
+				{% endif %}
+				</div>
+				{% endif %}
               	{% if action == 'add' or action == 'upd' %}
               	<div class="row">
-              		<form enctype="multipart/form-data" class='form-register' action="/blog/article{{action}}/submit" method="post">
+              		<form enctype="multipart/form-data" class='form-register' action="/blog/article{{action}}/submit/" method="post">
 
               		{% csrf_token %}
               		<h2 class="text-center">欢迎使用</h2>
@@ -121,12 +187,12 @@
                   		{{ form.Synopsis}}
               		</div>
               		<div class="form-group">
-                  		{{ form.Category.label_tag }}
-                  		{{ form.Category}}
+                  		{{ form.CategoryId.label_tag }}
+                  		{{ form.CategoryId}}
               		</div>
               		<div class="form-group">
-                  		{{ form.Tag.label_tag }}
-                  		{{ form.Tag}}
+                  		{{ form.TagId.label_tag }}
+                  		{{ form.TagId}}
               		</div>
               		<div class="form-group">
                   		{{ form.Type.label_tag }}
@@ -160,7 +226,7 @@
 					</div>
 					<div class="panel-footer">
 						<div class="col-md-4 column">
-						文章数:<a href="/blog/articles/{{article.AuthorId}}">{{ aritcles|length}}</a>
+						文章数:<a href="/blog/articles/{{article.AuthorId}}">{{ article_cnt }}</a>
 						</div>
 						<div class="col-md-4 column">
 						阅读人数:{{ view_count }}

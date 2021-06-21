@@ -5,7 +5,6 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.db import models
-from mdeditor.fields import MDTextField
 import time
 
 def user_directory_path(instance,filename):
@@ -31,7 +30,7 @@ class User(models.Model):
         ('1', "1"),
         ('0', "0"),
     )
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     Name = models.CharField(max_length=128, unique=True,verbose_name='用户名')
     Password = models.CharField(max_length=256,verbose_name='用户密码')
     Email = models.EmailField(unique=True,verbose_name='用户邮箱')
@@ -50,7 +49,7 @@ class User(models.Model):
         return self.Name
 
 class UserFunction(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     GroupKey = models.CharField(max_length=30, unique=True,verbose_name='用户组')
     RoleId = models.IntegerField(verbose_name='权限Id')
     FunctionStr = models.CharField(max_length=256,verbose_name='功能模块')
@@ -65,7 +64,7 @@ class UserFunction(models.Model):
         return self.FunctionStr
 
 class UserConfirmString(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     code = models.CharField(max_length=256)
     User_Id = models.IntegerField(verbose_name='用户Id')
     c_time = models.DateTimeField(auto_now_add=True)
@@ -78,7 +77,7 @@ class UserConfirmString(models.Model):
         verbose_name_plural = "确认码"
 
 class BookLesson(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='书课Id')
+    Id=models.AutoField(primary_key=True,verbose_name='书课Id')
     BookName=models.CharField(max_length=100,verbose_name='书名')
     LessonName=models.CharField(max_length=100,verbose_name='课程名')
     LessonHref=models.CharField(max_length=100,verbose_name='链接')
@@ -96,7 +95,7 @@ class BookLesson(models.Model):
         return self.Description
 
 class Chapter(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='章节Id')
+    Id=models.AutoField(primary_key=True,verbose_name='章节Id')
     BookLesson_Id=models.IntegerField(verbose_name='书本课程Id')
     ChapterNo=models.IntegerField(verbose_name='章节号')
     ChapterName=models.CharField(max_length=100,verbose_name='章节名')
@@ -112,7 +111,7 @@ class Chapter(models.Model):
         return self.ChapterName
 
 class Content(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='段落Id')
+    Id=models.AutoField(primary_key=True,verbose_name='段落Id')
     Chapter_Id=models.IntegerField(verbose_name='章节Id')
     ElementTag=models.CharField(max_length=100,verbose_name='段落类')
     OrderIndex=models.IntegerField(verbose_name='段落号')
@@ -131,7 +130,7 @@ class Content(models.Model):
         return self.Text
 
 class ImageContent(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='图片Id')
+    Id=models.AutoField(primary_key=True,verbose_name='图片Id')
     Directory=models.CharField(max_length=100,verbose_name='目录')
     ImageName=models.CharField(max_length=100,verbose_name='图片名称')
     Width=models.IntegerField(verbose_name='宽度')
@@ -147,7 +146,7 @@ class ImageContent(models.Model):
         return self.Text
 
 class CommonRules(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     TypeKey=models.CharField(max_length=100,verbose_name='类型键')
     TypeVal=models.CharField(max_length=100,verbose_name='类型值')
     Rules=models.CharField(max_length=100,verbose_name='规则')
@@ -164,7 +163,7 @@ class CommonRules(models.Model):
         return self.RulesText
 
 class Category(models.Model):
-    CategoryId=models.IntegerField(primary_key=True,verbose_name='Id')
+    CategoryId=models.AutoField(primary_key=True,verbose_name='CategoryId')
     CategoryName=models.CharField(max_length=200,verbose_name='类别名')
     CategoryValue1=models.CharField(max_length=200,verbose_name='类别值1')
     CategoryValue2=models.CharField(max_length=200,verbose_name='类别值2')
@@ -181,7 +180,7 @@ class Category(models.Model):
         return self.CategoryName
 
 class CommonSubFuncs(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='功能Id')
+    Id=models.AutoField(primary_key=True,verbose_name='功能Id')
     FunctionName=models.CharField(max_length=100,verbose_name='功能名')
     FunctionHref=models.CharField(max_length=100,verbose_name='功能链接')
     FunctionDesc=models.CharField(max_length=500,verbose_name='功能细节')
@@ -197,7 +196,7 @@ class CommonSubFuncs(models.Model):
         return self.FunctionName
     
 class UnitDictionary(models.Model):
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     ConversionType=models.CharField(max_length=100,verbose_name='换算种类')
     UnitFromKey=models.CharField(max_length=100,verbose_name='因单位')
     UnitToKey=models.CharField(max_length=500,verbose_name='果单位')
@@ -214,7 +213,7 @@ class UnitDictionary(models.Model):
 
 class Comment(models.Model):
     """博客评论"""
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     ArticleId=models.IntegerField(verbose_name='ArticleId')
     Content= models.TextField(verbose_name=u'评论内容', default='')
     AuthorId = models.IntegerField(verbose_name=u'作者Id')
@@ -232,7 +231,7 @@ class Comment(models.Model):
 
 class Article(models.Model):
     """博客文章"""
-    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
     Title = models.CharField(max_length=50, verbose_name=u'日志标题', default='')
     Synopsis = models.TextField(verbose_name=u'日志简介', default='')
     AuthorId = models.IntegerField(verbose_name=u'作者Id')
@@ -241,15 +240,15 @@ class Article(models.Model):
     CategoryName = models.CharField(max_length=200, verbose_name=u'分类名称')
     TagId = models.IntegerField(verbose_name=u'所属标签')
     TagName = models.CharField(max_length=200,verbose_name=u'日志标签',default='')
-    Content = MDTextField()
-    Type = models.CharField(max_length=10, choices=(("0",u"草稿"),("1","软删除"),("2","正常")), default="0", verbose_name=u"文章类别")
-    Original = models.CharField(max_length=10, choices=(("1", "原创"), ("0", "转载")), default="1", verbose_name=u"是否原创")
+    Content = models.TextField(verbose_name=u'日志正文')
+    Type = models.IntegerField(default=0, verbose_name=u"文章类别")
+    Original = models.IntegerField(default=1, verbose_name=u"是否原创")
     Click = models.PositiveIntegerField(verbose_name=u'文章点击量', default=0)
-    Up = models.CharField(max_length=10, choices=(("1",u"置顶"),("0","取消置顶")), default="0", verbose_name=u"文章置顶")
-    Support= models.CharField(max_length=10, choices=(("1",u"推荐"),("0","取消推荐")), default="0", verbose_name=u"文章推荐")
+    Up = models.IntegerField(default=0, verbose_name=u"文章置顶")
+    Support= models.IntegerField(default=0, verbose_name=u"文章推荐")
     CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
     UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
-    DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
+    DeleteFlag=models.BooleanField(default=0,verbose_name='删除状态')
     submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
     submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
         

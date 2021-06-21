@@ -8,16 +8,16 @@ Created on 2019/12/28
 from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment
 from PdfWeb.entitys import HomeInfoItem
 from django.contrib.auth.hashers import make_password
-from tools import common_converter
+from PdfWeb import current_log
 
 def get_articles_by_type(article_type='2'):
-    return Article.objects.filter(Type=article_type,DeleteFlag=0).order_by('-CreateTime')
+    return Article.objects.filter(Type=article_type,DeleteFlag=0).order_by('CreateTime')
 
 def get_article_by_id(article_id):
-    return Article.objects.filter(Id=article_id,DeleteFlag=0)
+    return Article.objects.get(Id=article_id,DeleteFlag=0)
 
 def get_articles_by_author_id(author_id):
-    return Article.objects.filter(AuthorId=author_id,DeleteFlag=0).order_by('-CreateTime')
+    return Article.objects.filter(AuthorId=author_id,DeleteFlag=0).order_by('CreateTime')
 
 def get_articles_order_by_click_count():
     return Article.objects.filter(DeleteFlag=0).order_by('-Click')
@@ -26,15 +26,15 @@ def get_articles_by_category_id_order_by_click_count(category_id):
     return Article.objects.filter(CategoryId=category_id,DeleteFlag=0).order_by('-Click')
 
 def get_articles_by_category_id(category_id):
-    return Article.objects.filter(CategoryId=category_id,DeleteFlag=0).order_by('-CreateTime')
+    return Article.objects.filter(CategoryId=category_id,DeleteFlag=0).order_by('CreateTime')
 
 def get_articles_group_by_tag(articles):
     tag_dict = {}
     for article in articles:
-        if article.Tag in tag_dict:
-            tag_dict[article.Tag].append(article)
+        if article.TagName in tag_dict:
+            tag_dict[article.TagName].append(article)
         else:
-            tag_dict[article.Tag]=[article]
+            tag_dict[article.TagName]=[article]
     return tag_dict
 
 def get_articles_group_by_month(articles):
@@ -53,39 +53,39 @@ def get_blog_articles_info_by_author_id(author_id):
     tag_dict=get_articles_group_by_tag(articles)
     month_dict=get_articles_group_by_month(articles)
     view_count = 0 
+    article_cnt = len(articles)
     for article in articles:
         view_count += article.Click
-    return {'author':author,'tag':tag_dict,'month':month_dict,'articles':articles,'view_count':view_count}
+    return {'author':author,'tag':tag_dict,'month':month_dict,'articles':articles,'article_cnt':article_cnt,'view_count':view_count}
 
 def del_article_by_article_id(article_id):
     article = Article.objects.filter(Id=article_id)
     article.DeleteFlag = 1
     article.save(update_fields=['DeleteFlag'])
     
-def ins_article(article):
-    article.save()
+def ins_article(article_dict):
+    return Article.objects.create(**article_dict)
+
 def upd_article(article):
-    article.save(update_fields=['Title','Synopsis','Tag','CategoryName','Content'])
+    article.save()
 
 def get_page_articles_by_id(article_id):
     article=get_article_by_id(article_id)
-    article.Content = common_converter.markdown2htmlspec(article.Content)
     article.increase_article_click()
     detail_info=get_blog_articles_info_by_author_id(article.AuthorId)
     articles = detail_info['articles']
-    for i in range(0..len(articles)):
+    current_log.info(articles)
+    p_article=None
+    n_article=None
+    for i in range(0,len(articles)):
         if articles[i].Id == article.Id:
             pre_id = i-1
             next_id = i+1
             if pre_id >=0:
-                p_article=articles[pre_id]
-            else:
-                p_article=None
+                p_article=articles[pre_id]   
             if next_id < len(articles):
                 n_article=articles[next_id]
-            else:
-                n_article=None
-            return {'p_article':p_article,'article':article,'n_article':n_article}.update(detail_info)
+    return dict({'p_article':p_article,'article':article,'n_article':n_article},**detail_info)
 
 def get_comments_by_article_id(article_id):
     return Comment.objects.filter(ArticleId=article_id,DeleteFlag = 0)
