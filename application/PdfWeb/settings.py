@@ -125,7 +125,7 @@ STATICFILES_DIRS = (
     os.path.join(PARENT_DIR,'static'),
 )
 # 图片储存根路径
-MEDIA_ROOT = os.path.join(BASE_DIR,'static/img')
+MEDIA_ROOT = os.path.join(PARENT_DIR,'static/img')
 # 图片访问url
 MEDIA_URL = '/img/'
 

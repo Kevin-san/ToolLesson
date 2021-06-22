@@ -6,7 +6,6 @@ Created on 2020/09/06
 '''
 from django import forms
 from captcha.fields import CaptchaField
-from PdfWeb import models
 from PdfWeb import db
 from django.forms import fields
 from mdeditor.fields import MDTextFormField
@@ -63,23 +62,13 @@ class Tagform(forms.Form):
     t = forms.CharField(max_length=20)
 
 class EditUserForm(forms.ModelForm):
+    Id= fields.IntegerField(widget=forms.widgets.HiddenInput)
+    Name = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    Email = forms.EmailField(label="邮箱地址", widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    Sex = forms.ChoiceField(label='性别', choices=gender)
+    Logo = forms.ImageField(label='个人头像')
+    Detail = forms.CharField(label="个人简介",max_length=1000,widget=forms.TextInput(attrs={'class': 'form-control'}))
     
-    class Meta:
-        model = models.User
-        fields = '__all__'
-        exclude = ['Id','Password','Permissions','DeleteFlag','submission_user','submission_date']
-        labels={
-            'Name':'用户名',
-            'Email':'邮箱地址',
-            'Sex':'性别',
-            'Logo':'个人头像',
-            'Detail':'个人简介'
-            }
-    def __init__(self, request, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.request = request
-        # 找到想要的字段，重新绑定显示的数据
-        self.fields['Sex'].choices = gender
 
 class UserForm(forms.Form):
     username = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))

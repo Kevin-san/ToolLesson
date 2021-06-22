@@ -49,40 +49,46 @@ def index(request):
         content="你还没有权限访问任何画面！请登录"
     return render(request,'index.html',locals())
 
+def userprofile(request):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        user_id = request.session['user_id']
+        user = services.get_user_by_id(user_id)
+        edit_form = forms.EditUserForm(initial={'Id':user.Id,'Name':user.Name,'Email':user.Email,'Sex':user.Sex,'Logo':user.Logo,'Detail':user.Detail})
+        request.session['org_user'] = user
+        return render(request,'userprofile.html',locals())
+
 def useredit(request):
-    if request.session.get('is_login',None):
-        if request.method == "GET":
-            user_id = request.session['user_id']
-            user = services.get_user_by_id(user_id)
-            user.Password = ''
-            edit_form = forms.EditUserForm(request.GET,instance=user)
-            request.session['org_user'] = user
-            return render(request,'userprofile.html',locals())
-        elif request.method == "POST":
-            edited_form=forms.EditUserForm(request.POST)
-            if edited_form.is_valid():  # 获取数据
-                username = edited_form.cleaned_data['Name']
-                email = edited_form.cleaned_data['Email']
-                sex = edited_form.cleaned_data['Sex']
-                logo = edited_form.cleaned_data['Logo']
-                detail = edited_form.cleaned_data['Detail']
-                same_name_user = services.get_user_by_name(username)
-                same_email_user = services.get_user_by_email(email)
-                if same_name_user.Id != request.session['user_id']:  # 用户名唯一
-                    message = '用户已经存在，请重新选择用户名！'
-                    return redirect('/useredit')
-                if same_email_user.Id != request.session['user_id']:  # 邮箱地址唯一
-                    message = '该邮箱地址已被注册，请使用别的邮箱！'
-                    return redirect('/useredit')
-                org_user = request.session['org_user']
-                if email != org_user.Email or username != org_user.Name or sex != org_user.Sex or logo != org_user.Logo or detail != org_user.Detail:
-                    services.update_user(org_user.Id,username,email,sex,detail,logo)
-                    user = services.get_user_by_name(org_user.Id)
-                    request.session['is_login'] = True
-                    request.session['user_id'] = user.Id
-                    request.session['user_name'] = user.Name
-                    request.session['user_logo'] = user.Logo.url
-    return render(request, 'login.html', locals())
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        edited_form=forms.EditUserForm(request.POST)
+        if edited_form.is_valid():  # 获取数据
+            username = edited_form.cleaned_data['Name']
+            email = edited_form.cleaned_data['Email']
+            sex = edited_form.cleaned_data['Sex']
+            logo = edited_form.cleaned_data['Logo']
+            detail = edited_form.cleaned_data['Detail']
+            same_name_user = services.get_user_by_name(username)
+            same_email_user = services.get_user_by_email(email)
+            if same_name_user.Id != request.session['user_id']:  # 用户名唯一
+                message = '用户已经存在，请重新选择用户名！'
+                return redirect('/userprofile')
+            if same_email_user.Id != request.session['user_id']:  # 邮箱地址唯一
+                message = '该邮箱地址已被注册，请使用别的邮箱！'
+                return redirect('/userprofile')
+            org_user = request.session['org_user']
+            if email != org_user.Email or username != org_user.Name or sex != org_user.Sex or logo != org_user.Logo or detail != org_user.Detail:
+                services.update_user(org_user.Id,username,email,sex,detail,logo)
+                user = services.get_user_by_name(org_user.Id)
+                request.session['is_login'] = True
+                request.session['user_id'] = user.Id
+                request.session['user_name'] = user.Name
+                request.session['user_logo'] = user.Logo.url
+        return render(request, 'login.html', locals())
 
 def login(request):
     if request.session.get('is_login',None):
@@ -262,22 +268,23 @@ def blog_add_submit(request):
         return blog_article(request, article.Id)
     return blog_add(request)
 
-def blog_upd_submit(request,article_id):
+def blog_upd_submit(request):
     article_form = forms.ArticleForm(request.POST,request.FILES)
     if article_form.is_valid():
-        article = services.get_blog_article(article_form.cleaned_data['Id'])
-        article.Title = article_form.cleaned_data['Title']
+        article_dict = services.get_blog_article(int(article_form.cleaned_data['Id']))
+        article = article_dict['article']
         article.Synopsis = article_form.cleaned_data['Synopsis']
-        article.CategoryId = article_form.cleaned_data['CategoryId']
+        article.CategoryId = int(article_form.cleaned_data['CategoryId'])
         article.CategoryName = blog_categorys_map[article.CategoryId]
-        article.TagId = article_form.cleaned_data['TagId']
-        article.TagName = blog_categorys_map[article.TagId]
-        article.Type = article_form.cleaned_data['Type']
-        article.Original = article_form.cleaned_data['Original']
+        article.TagId = int(article_form.cleaned_data['TagId'])
+        article.TagName = tag_categorys_map[article.TagId]
+        article.Type = int(article_form.cleaned_data['Type'])
+        article.Original = int(article_form.cleaned_data['Original'])
         article.Content = article_form.cleaned_data['Content']
+        article.Title = article_form.cleaned_data['Title']
         services.upd_blog_article(article)
-        return blog_article(request, article_id)
-    return blog_upd(request, article_id)
+        return blog_article(request, article.Id)
+    return blog_upd(request, article.Id)
 
 def tool_index(request):
     if not request.session.get('is_login',None):
