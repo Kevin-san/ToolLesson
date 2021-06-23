@@ -16,8 +16,8 @@ gender = (
 blog_categorys = db.get_blog_category_type_info().values_list('CategoryId','CategoryName')
 tag_categorys = db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName')
 original_categorys = (
-    (0,'原创'),
-    (1,'转载')
+    (1,'原创'),
+    (0,'转载')
 )
 
 type_categorys = (

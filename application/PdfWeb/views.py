@@ -214,12 +214,13 @@ def blog_article(request,article_id):
         result['comment_form'] = forms.CommentForm()
         return render(request,'blogbase.html',result)
     
-def blog_articles(request,author_id):
+def blog_articles(request):
     if not request.session.get('is_login',None):
         content="你还没有权限访问任何画面！请登录"
         return render(request,'index.html',locals())
     else:
         # ----
+        author_id = request.session['user_id']
         result = services.get_blog_article_info(author_id)
         result['action'] = 'detaillist'
         return render(request,'blogbase.html',result)
