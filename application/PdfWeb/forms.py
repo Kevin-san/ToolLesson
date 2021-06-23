@@ -61,7 +61,7 @@ class Tagform(forms.Form):
     """tag搜索表单"""
     t = forms.CharField(max_length=20)
 
-class EditUserForm(forms.ModelForm):
+class EditUserForm(forms.Form):
     Id= fields.IntegerField(widget=forms.widgets.HiddenInput)
     Name = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
     Email = forms.EmailField(label="邮箱地址", widget=forms.EmailInput(attrs={'class': 'form-control'}))
