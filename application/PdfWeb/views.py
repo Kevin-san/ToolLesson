@@ -57,8 +57,8 @@ def userprofile(request):
         user_id = request.session['user_id']
         user = services.get_user_by_id(user_id)
         edit_form = forms.EditUserForm(initial={'Id':user.Id,'Name':user.Name,'Email':user.Email,'Sex':user.Sex,'Logo':user.Logo,'Detail':user.Detail})
-        request.session['org_user'] = user
-        return render(request,'userprofile.html',locals())
+        result = {'edit_form':edit_form}
+        return render(request,'userprofile.html',result)
 
 def useredit(request):
     if not request.session.get('is_login',None):
@@ -67,6 +67,7 @@ def useredit(request):
     else:
         edited_form=forms.EditUserForm(request.POST)
         if edited_form.is_valid():  # 获取数据
+            user_id = request.session['user_id']
             username = edited_form.cleaned_data['Name']
             email = edited_form.cleaned_data['Email']
             sex = edited_form.cleaned_data['Sex']
@@ -74,26 +75,25 @@ def useredit(request):
             detail = edited_form.cleaned_data['Detail']
             same_name_user = services.get_user_by_name(username)
             same_email_user = services.get_user_by_email(email)
-            if same_name_user.Id != request.session['user_id']:  # 用户名唯一
+            if same_name_user.Id != user_id:  # 用户名唯一
                 message = '用户已经存在，请重新选择用户名！'
                 return redirect('/userprofile')
-            if same_email_user.Id != request.session['user_id']:  # 邮箱地址唯一
+            if same_email_user.Id != user_id:  # 邮箱地址唯一
                 message = '该邮箱地址已被注册，请使用别的邮箱！'
                 return redirect('/userprofile')
-            org_user = request.session['org_user']
+            org_user = services.get_user_by_id(user_id)
             if email != org_user.Email or username != org_user.Name or sex != org_user.Sex or logo != org_user.Logo or detail != org_user.Detail:
                 services.update_user(org_user.Id,username,email,sex,detail,logo)
                 user = services.get_user_by_name(org_user.Id)
                 request.session['is_login'] = True
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name
-                request.session['user_logo'] = user.Logo.url
-        return render(request, 'login.html', locals())
+                request.session['user_logo'] = user.Logo
+        return redirect('/userprofile')
 
 def login(request):
     if request.session.get('is_login',None):
         return redirect('/index')
-
     if request.method == "POST":
         login_form = forms.UserForm(request.POST)
         message = "请检查填写的内容！"
