@@ -68,10 +68,14 @@ def useredit(request):
         edited_form=forms.EditUserForm(request.POST)
         if edited_form.is_valid():  # 获取数据
             user_id = request.session['user_id']
+            org_user = services.get_user_by_id(user_id)
             username = edited_form.cleaned_data['Name']
             email = edited_form.cleaned_data['Email']
             sex = edited_form.cleaned_data['Sex']
-            logo = edited_form.cleaned_data['Logo']
+            if edited_form.cleaned_data['Logo']:
+                logo = edited_form.cleaned_data['Logo']
+            else:
+                logo = org_user.Logo
             detail = edited_form.cleaned_data['Detail']
             same_name_user = services.get_user_by_name(username)
             same_email_user = services.get_user_by_email(email)
@@ -81,10 +85,10 @@ def useredit(request):
             if same_email_user.Id != user_id:  # 邮箱地址唯一
                 message = '该邮箱地址已被注册，请使用别的邮箱！'
                 return redirect('/userprofile')
-            org_user = services.get_user_by_id(user_id)
+            
             if email != org_user.Email or username != org_user.Name or sex != org_user.Sex or logo != org_user.Logo or detail != org_user.Detail:
                 services.update_user(org_user.Id,username,email,sex,detail,logo)
-                user = services.get_user_by_name(org_user.Id)
+                user = services.get_user_by_id(org_user.Id)
                 request.session['is_login'] = True
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name

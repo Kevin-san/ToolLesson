@@ -66,7 +66,7 @@ class EditUserForm(forms.Form):
     Name = forms.CharField(label="用户名", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
     Email = forms.EmailField(label="邮箱地址", widget=forms.EmailInput(attrs={'class': 'form-control'}))
     Sex = forms.ChoiceField(label='性别', choices=gender)
-    Logo = forms.ImageField(label='个人头像')
+    Logo = forms.ImageField(label='个人头像',required=False)
     Detail = forms.CharField(label="个人简介",max_length=1000,widget=forms.TextInput(attrs={'class': 'form-control'}))
     
 
