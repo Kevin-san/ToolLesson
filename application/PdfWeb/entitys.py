@@ -6,7 +6,6 @@ Created on 2019/12/28
 '''
 import tools.common_tools as common
 import os
-from PdfWeb.models import Article
 
 def get_val_max(num_list):
     max_val = max(num_list)

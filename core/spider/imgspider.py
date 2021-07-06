@@ -8,7 +8,7 @@ from tools import common_filer,common_threadpools
 from spider import common_spider
 from concurrent.futures.thread import ThreadPoolExecutor
 import time
-from PdfWeb.entitys import SpiderContentItem,SpiderImgItem
+from spider import SpiderContentItem,SpiderImgItem
 from spider.common_spider import current_log
 
 class ImgSpider():

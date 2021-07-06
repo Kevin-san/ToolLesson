@@ -9,8 +9,6 @@ from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,Us
 from PdfWeb.entitys import HomeInfoItem
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
-import mistune
-from tools import common_converter
 
 def get_articles_by_type(article_type='2'):
     return Article.objects.filter(Type=article_type,DeleteFlag=0).order_by('CreateTime')

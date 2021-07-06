@@ -6,7 +6,7 @@ Created on 2019/6/10
 '''
 from tools import common_filer, common_threadpools
 from spider import common_spider
-from PdfWeb.entitys import SpiderContentItem, SpiderNovelItem
+from spider import SpiderContentItem, SpiderNovelItem
 from concurrent.futures.thread import ThreadPoolExecutor
 import time
 from spider.common_spider import current_log
