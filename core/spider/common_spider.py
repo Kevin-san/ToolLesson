@@ -39,6 +39,8 @@ def get_spider_content_items(file_path):
 def get_response_text(artifact_url,user,password,seconds,referer_url=''):
     res=get_response_by_seconds(artifact_url, user, password,seconds,referer_url)
     coding=res.encoding.lower()
+    if res.apparent_encoding is not None and res.apparent_encoding != res.encoding:
+        return get_utf8_response_text_with_diff_coding(res,coding,res.apparent_encoding.lower())
     return get_utf8_response_text(res, coding)
 
 def get_response_text_with_no_encoding(artifact_url,user,password,seconds,referer_url=''):
@@ -96,8 +98,8 @@ def get_response(artifact_url,user,password,referer_url='',proxies=''):
             response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=10,verify=False,auth=(user,password),stream=True)
         if response is not None and response.status_code == 200:
             return response
-    except requests.exceptions.RequestException as e:
-        current_log.info(e)
+    except Exception as e:
+        current_log.error(e)
         return get_response(artifact_url, user, password, referer_url, proxies)
 
 def check_valid_ip(ip):
@@ -108,11 +110,7 @@ def check_valid_ip(ip):
         return True
     return False
     
-def get_correct_href(url,a_item):
-    href=a_item.get('href')
-    if href[0] == '/':
-        href=href[1:]
-    return get_url(url,href)
+
 
 def get_html_coding(url):
     html=requests.get(url)
@@ -122,8 +120,27 @@ def get_novel_response(url):
     response=get_response(url, '', '')
     return get_utf8_response_text(response,response.encoding)
 
+def get_utf8_response_text_with_diff_coding(response,en_coding,de_coding):
+    if en_coding == "gbk" or en_coding == "gb2312":
+        encode_byte=response.text.encode("gbk")
+    else:
+        encode_byte=response.text.encode(en_coding)
+    try:
+        if de_coding == "gbk" or de_coding == "gb2312":
+            return encode_byte.decode("gbk")
+        else:
+            return encode_byte.decode(de_coding)
+    except:
+        return encode_byte.decode("utf-8")
+    
+
 def get_utf8_response_text(response,coding):
     encode_byte=response.text.encode(coding)
+    if coding == "gbk" or coding == "gb2312":
+        try:
+            return encode_byte.decode("gbk")
+        except:
+            return encode_byte.decode("utf-8")
     if coding == "iso-8859-1":
         try:
             return encode_byte.decode("gbk")
@@ -176,13 +193,16 @@ def get_javascript_index_m3u8(script_text):
         return common_tools.find_vals_from_dict_by_keystr(index_m3u8_dict, "/index.m3u8", [])
     return js_val
 
+def get_correct_href(url,a_item):
+    href=a_item.get('href')
+    return get_real_url(url,href)
+
 def get_real_url(home_url,href_url):
-    if common.is_http_url(href_url):
-        return href_url
-    home_url = '/'.join(home_url.split('/')[0:3])
     if href_url[0] == '/':
+        parent_url = '/'.join(home_url.split('/')[0:3])
         href_url = href_url[1:]
-    return home_url+'/'+href_url
+        return get_url(parent_url,href_url)
+    return get_url(home_url,href_url)
 
 def get_url(parent_url,href_url):
     if href_url is None:

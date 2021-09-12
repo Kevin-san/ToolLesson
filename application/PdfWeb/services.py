@@ -27,7 +27,7 @@ font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
 learn_menu_list = db.get_book_lesson_type_info()
 tool_menu_list = db.get_common_tool_type_info()
 blog_category_list= db.get_blog_category_type_info()
-
+novel_source_list = db.get_novel_source()
 def get_pages(begin_no,end_no,category_id):
     pages = []
     for i in range(begin_no, end_no):
@@ -150,6 +150,47 @@ def strtool(method,inputval):
     func = getattr(common_converter,method)
     return func(inputval)
 
+def get_novel_sources():
+    return db.get_novel_source()
+
+def get_novel_home_index():
+    return get_novel_home_list(1, 1)
+
+def get_novel_home_list(source_id,page_no):
+    keys = ['novel_source_list','contacts','pages']
+    novel_info_list = db.get_novel_items_by_source_id(source_id)
+    current_log.info(novel_source_list)
+    paginator = Paginator(novel_info_list, 20)
+    try:
+        contacts = paginator.page(page_no)
+    except PageNotAnInteger:  # 若不是整数则跳到第一页
+        contacts = paginator.page(1)
+    except EmptyPage:  # 若超过了则最后一页
+        contacts = paginator.page(paginator.num_pages)
+    current_log.info(contacts)
+    pages = pages_help(page_no, paginator.num_pages, source_id, 6)
+    vals=[novel_source_list,contacts,pages]
+    return common_tools.create_map(keys, vals)
+
+def get_novel_menu_info(item_id):
+    keys = ['novel_source_list','novel_menu_info']
+    novel_info = db.get_novel_contents_by_item_id(item_id)
+    vals= [novel_source_list,novel_info]
+    return common_tools.create_map(keys, vals)
+
+def get_novel_content_info(prop_id,last_upd_content_ord_id):
+    keys = ['novel_source_list','novel_content_info','last_upd_content_ord_id']
+    content_info=db.get_novel_content_include_prev_next_page(prop_id, last_upd_content_ord_id)
+    vals=[novel_source_list,content_info,last_upd_content_ord_id]
+    return common_tools.create_map(keys, vals)
+
+def get_novel_infos_by_author(item_id):
+    novel_info = db.get_novel_contents_by_item_id(item_id)
+    author_name=novel_info.novel_info.author
+    keys = ['novel_source_list','item_id','author_name','novel_info_list']
+    novel_info_list = db.get_novel_infos_by_author(author_name)
+    vals = [novel_source_list,item_id,author_name,novel_info_list]
+    return common_tools.create_map(keys, vals)
 
 
 def get_blog_home_index():

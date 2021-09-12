@@ -278,9 +278,6 @@ class SiteInfo(models.Model):
     DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
     submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
     submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
-#     site_footer = models.TextField(verbose_name=u'站点底部代码', default='')
-#     site_changyan = models.TextField(verbose_name='文章底部广告代码', default='')
-    
 
     class Meta:
         db_table='SiteInfo'
@@ -288,4 +285,67 @@ class SiteInfo(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.site_name
+        return self.Name
+    
+class SpiderSource(models.Model):
+    """爬虫源"""
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    Name = models.CharField(max_length=50, verbose_name=u'名字', default='')
+    Section = models.CharField(max_length=50, verbose_name=u'分类', default='')
+    Url = models.TextField(verbose_name=u'网址',default='')
+    Attr = models.TextField(verbose_name=u'属性',default='')
+    DeleteFlag=models.IntegerField(default=1,verbose_name='删除状态')
+    CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
+    UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+
+    class Meta:
+        db_table='SpiderSource'
+        verbose_name = u'爬虫源'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.Section
+    
+class SpiderItem(models.Model):
+    """爬虫个体"""
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    SourceId=models.IntegerField(verbose_name='SourceId')
+    Url = models.TextField(verbose_name=u'网址',default='')
+    Name = models.TextField(verbose_name=u'名字', default='')
+    DeleteFlag=models.IntegerField(default=1,verbose_name='删除状态')
+    CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
+    UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+
+    class Meta:
+        db_table='SpiderItem'
+        verbose_name = u'爬虫个体'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.Name
+
+class SpiderProperty(models.Model):
+    """爬虫属性"""
+    Id=models.IntegerField(primary_key=True,verbose_name='Id')
+    ItemId=models.IntegerField(verbose_name='ItemId')
+    OrderId=models.IntegerField(verbose_name='OrderId')
+    PropertyKey = models.TextField(verbose_name=u'PropertyKey',default='')
+    PropertyValue = models.TextField(verbose_name=u'PropertyValue',default='')
+    PropertyBigVal = models.TextField(verbose_name=u'PropertyBigVal',default='')
+    DeleteFlag=models.IntegerField(default=1,verbose_name='删除状态')
+    CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
+    UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+
+    class Meta:
+        db_table='SpiderProperty'
+        verbose_name = u'爬虫属性'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.PropertyValue

@@ -176,8 +176,11 @@ class VideoSpider():
     
 if __name__=="__main__":
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/jinxinsiyu/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),"K:/Spider/video/","TV","锦心似玉")
-    videospider=VideoSpider("https://www.qmdy5.com/guochanju/damingwangchao1566/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"K:/Spider/video/","TV","大明王朝1566")
-    videospider=VideoSpider("https://www.qmdy5.com/guochanju/pannizhe/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"K:/Spider/video/","TV","叛逆者")
-#     videospider=VideoSpider("https://www.qmdy5.com/guochanju/chenqingling/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"K:/Spider/video/","TV","陈情令")
-#     videospider=VideoSpider("http://www.qsptv.net/show-88092.html",{"class":"playlist"},{"id":"zanpiancms_player"},"F:/Python3/video/","TV","山海情")
+#     videospider=VideoSpider("https://www.qmdy5.com/guochanju/damingwangchao1566/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"K:/Spider/video/","TV","大明王朝1566")
+#     videospider=VideoSpider("https://www.qmdy5.com/guochanju/dazhangfu2014/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","大丈夫")
+#     videospider.download_all_videos()
+    videospider=VideoSpider("https://www.qmdy5.com/guochanju/xiaozhangfu/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","小丈夫")
     videospider.download_all_videos()
+#     videospider=VideoSpider("https://www.qmdy5.com/guochanju/pannizhe/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","叛逆者")
+#     videospider.download_all_videos()
+#     videospider=VideoSpider("http://www.qsptv.net/show-88092.html",{"class":"playlist"},{"id":"zanpiancms_player"},"F:/Python3/video/","TV","山海情")

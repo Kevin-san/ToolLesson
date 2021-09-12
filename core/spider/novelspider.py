@@ -11,9 +11,9 @@ from concurrent.futures.thread import ThreadPoolExecutor
 import time
 from spider.common_spider import current_log
 from bs4.element import Tag
-
+#https://www.23qb.net/
 class NovelSpider():
-    def __init__(self, url, index_attrs, content_attrs, home_path, category, name):
+    def __init__(self, url,intro_attrs,author_attrs,image_attrs, index_attrs, content_attrs, home_path, category, name):
         url_items = url.split('/')
         self.home_url = '/'.join(url_items[0:3])
         self.novel_url = url
@@ -21,6 +21,12 @@ class NovelSpider():
         self.index_tag = index_attrs.tag
         self.content_attrs = content_attrs.dict_attrs
         self.content_tag = content_attrs.tag
+        self.intro_tag = intro_attrs.tag
+        self.intro_attrs = intro_attrs.dict_attrs
+        self.author_tag = author_attrs.tag
+        self.author_attrs = author_attrs.dict_attrs
+        self.image_tag = image_attrs.tag
+        self.image_attrs = image_attrs.dict_attrs
         self.name = name
         if name=='':
             self.name=url_items[-1]
@@ -111,6 +117,27 @@ class NovelSpider():
         novels.append(SpiderContentItem('',self.name,self.novel_url))
         return novels
     
+    def get_page_novel_author(self):
+        html = common_spider.get_response_text(self.novel_url, '','',5)
+        author_div = common_spider.get_beautifulsoup_from_html(html, self.author_tag, attrs=self.author_attrs)
+        a_list = common_spider.get_beautifulsoup_from_html(str(author_div[0]), "a")
+        a_item = a_list[0]
+        return a_item.text
+
+    def get_page_novel_intro(self):
+        html = common_spider.get_response_text(self.novel_url, '','',5)
+        intro_div = common_spider.get_beautifulsoup_from_html(html, self.intro_tag, attrs=self.intro_attrs)
+        p_list = common_spider.get_beautifulsoup_from_html(str(intro_div[0]), "p")
+        p_item = p_list[0]
+        return p_item.text
+
+    def get_page_novel_image(self):
+        html = common_spider.get_response_text(self.novel_url, '','',5)
+        image_div = common_spider.get_beautifulsoup_from_html(html, self.image_tag, attrs=self.image_attrs)
+        img_list = common_spider.get_beautifulsoup_from_html(str(image_div[0]), "img")
+        img_item = img_list[0]
+        return img_item.get('src')
+        
     def download_all_titles(self):
         novel_item_list=[]
         if self.novel_dict:

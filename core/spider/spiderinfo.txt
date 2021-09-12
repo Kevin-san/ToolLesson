@@ -1,0 +1,326 @@
+父级爬虫:
+	所有简介(目录，简介，作者，图片，最新更新 都在一个目录里)
+	目录名为 简介 ( 目录，简介，作者，图片，最新更新 )
+
+{"block_tag":"ul","block_class":"stui-vodlist clearfix","block_id":"","item_tag":"h4","item_class":"title text-overflow","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"a.text","page_tag":"ul","page_class":"stui-page text-center clearfix","page_id":""}
+父级网站:
+言情女生 https://www.23qb.net/yanqing/
+玄幻奇幻 https://www.23qb.net/xuanhuan/
+都市青春 https://www.23qb.net/dushi/
+武侠仙侠 https://www.23qb.net/wuxia/
+唯美纯爱 https://www.23qb.net/danmei/
+科幻灵异 https://www.23qb.net/kehuan/
+轻小说   https://www.23qb.net/lightnovel/
+历史军事 https://www.23qb.net/lishi/
+小说分页:div id=pagelink class=pagelink
+小说列表:div id=sitebox
+
+电影 https://www.qmdy5.com/dianying/
+连续剧 https://www.qmdy5.com/lianxuju/
+综艺 https://www.qmdy5.com/zongyi/
+动漫 https://www.qmdy5.com/dongman/
+纪录片 https://www.qmdy5.com/jilupian/
+视频分页:ul class=stui-page text-center clearfix
+视频列表:div class=stui-vodlist__detail
+
+"http://www.mm288.com/meinv/",
+"http://www.mm288.com/meinv/xgcm/",
+"http://www.mm288.com/meinv/mnxh/",
+"http://www.mm288.com/meinv/mnmt/",
+"http://www.mm288.com/meinv/jpmn/",
+"http://www.mm288.com/meinv/mnzp/",
+"http://www.mm288.com/meinv/rtys/",
+"http://www.mm288.com/meinv/gzmn/",
+"http://www.mm288.com/meinv/wgmn/",
+"http://www.mm288.com/meinv/hgmn/",
+"http://www.mm288.com/meinv/rbmn/",
+"http://www.mm288.com/meinv/ommn/",
+"http://www.mm288.com/meinv/zfyh/",
+"http://www.mm288.com/mvtp/zgmn/",
+"http://www.mm288.com/mvtp/rhmn/",
+"http://www.mm288.com/mvtp/ommn/",
+"http://www.mm288.com/mvtp/dlmn/",
+"http://www.mm288.com/mvtp/rbmn/",
+"http://www.mm288.com/mvtp/hgmn/",
+"http://www.mm288.com/mvtp/twmn/",
+"http://www.mm288.com/xgmn/",
+"http://www.mm288.com/qcmn/",
+"http://www.mm288.com/mnxz/",
+"http://www.mm288.com/swmt/",
+"http://www.mm288.com/mxmn/",
+"http://www.mm288.com/mnbz/",
+"http://www.mm288.com/dmmn/",
+"http://www.mm288.com/dmmn/cosplay/",
+"http://www.mm4000.com/meinv/",
+"https://www.ku66.net/r/1/index.html",
+"https://www.mzitu.com/"
+
+存储链接信息(图片视频可以，小说需要下载)
+实际内容 图片视频后台下载
+
+表
+数据源:
+id
+网站
+类别(小说，图片，视频)
+分类
+分页属性
+列表属性
+
+Name,Section,Url,PageAttr,IndexAttr
+
+
+爬虫信息:
+	
+
+存储信息:
+
+
+url, 小说网址
+index_attrs, 章节目录
+content_attrs, 章节内容
+home_path, 父级目录 (I:/小说)
+category, 分类 ()
+name 视频/小说/图片组 名字
+
+
+小说(名字已知)https://www.23qb.net:
+	
+	小说简介:div id=bookintro  p1
+	小说作者:div id=count li1
+	小说图片:div id=bookimg img
+	小说分类:已知
+	小说名字:已知
+	最新:
+
+言情女生 https://www.23qb.net/yanqing/
+玄幻奇幻 https://www.23qb.net/xuanhuan/
+都市青春 https://www.23qb.net/dushi/
+武侠仙侠 https://www.23qb.net/wuxia/
+唯美纯爱 https://www.23qb.net/danmei/
+科幻灵异 https://www.23qb.net/kehuan/
+轻小说   https://www.23qb.net/lightnovel/
+历史军事 https://www.23qb.net/lishi/
+
+{"block_tag":"div","block_class":"","block_id":"sitebox","item_tag":"h3","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"a.text","page_tag":"div","page_class":"pagelink","page_id":"pagelink"}
+
+小说分页:div id=pagelink class=pagelink
+小说列表:div id=sitebox
+小说名字:h3 -> a -> text
+小说简介:div id=bookintro class=hm-scroll -> p1
+小说作者:div id=count li1
+小说图片:div id=bookimg->img
+小说最新: dl -> dd class=book_other [2] 最新章节
+章节目录:id=chapterList class=chaw_c index_attrs
+章节内容:id=TextContent class=read-content content_attrs
+
+视频(名字已知):
+	集数目录:
+	视频简介:
+	视频导演:
+	视频图片:
+	视频分类:已知
+	视频名字:已知
+	最新:
+
+电影 https://www.qmdy5.com/dianying/
+连续剧 https://www.qmdy5.com/lianxuju/
+综艺 https://www.qmdy5.com/zongyi/
+动漫 https://www.qmdy5.com/dongman/
+纪录片 https://www.qmdy5.com/jilupian/
+
+{"block_tag":"div","block_class":"stui-vodlist__detail","block_id":"","item_tag":"h4","item_class":"title text-overflow","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"a.text","page_tag":"ul","page_class":"stui-page text-center clearfix","page_id":""}
+
+
+视频分页:ul class=stui-page text-center clearfix
+视频列表:div class=stui-vodlist__detail
+视频名字:h4 class=title text-overflow
+视频简介:p class=col-pd detail
+视频导演:div class=stui-content__detail -> p class=data 2 -> text
+视频图片:a class=stui-vodlist__thumb picture v-thumb -> img
+集数目录:ul class=stui-content__playlist clearfix
+集数内容:div class=stui-player__video clearfix
+
+图片
+美女
+"http://www.mm288.com/meinv/",
+"http://www.mm288.com/meinv/xgcm/",
+"http://www.mm288.com/meinv/mnxh/",
+"http://www.mm288.com/meinv/mnmt/",
+"http://www.mm288.com/meinv/jpmn/",
+"http://www.mm288.com/meinv/mnzp/",
+"http://www.mm288.com/meinv/rtys/",
+"http://www.mm288.com/meinv/gzmn/",
+"http://www.mm288.com/meinv/wgmn/",
+"http://www.mm288.com/meinv/hgmn/",
+"http://www.mm288.com/meinv/rbmn/",
+"http://www.mm288.com/meinv/ommn/",
+"http://www.mm288.com/meinv/zfyh/",
+"http://www.mm288.com/mvtp/zgmn/",
+"http://www.mm288.com/mvtp/rhmn/",
+"http://www.mm288.com/mvtp/ommn/",
+"http://www.mm288.com/mvtp/dlmn/",
+"http://www.mm288.com/mvtp/rbmn/",
+"http://www.mm288.com/mvtp/hgmn/",
+"http://www.mm288.com/mvtp/twmn/",
+"http://www.mm288.com/xgmn/",
+"http://www.mm288.com/qcmn/",
+"http://www.mm288.com/mnxz/",
+"http://www.mm288.com/swmt/",
+"http://www.mm288.com/mxmn/",
+"http://www.mm288.com/mnbz/",
+"http://www.mm288.com/dmmn/",
+"http://www.mm288.com/dmmn/cosplay/",
+"http://www.mm4000.com/meinv/",
+"https://www.ku66.net/r/1/index.html",
+"https://www.mzitu.com/"
+
+爬虫站点表
+Id
+homeUrl
+IntroAttr
+AuthorAttr
+ImageAttr
+IndexAttr
+ContentAttr
+
+
+爬虫
+爬虫信息表
+Id
+SourceId
+url
+name
+Attr
+
+
+
+书籍--小说，国学，名著。。。
+图片--美景，美女，萌宠。。。
+视频--电视剧，电影，动漫，综艺，纪录片
+		地区
+音频--歌曲，音乐，听书
+
+
+
+
+音频(名字已知):
+	音频简介:
+	音频内容:
+	音频作者:
+	音频分类:
+	音频名字:
+
+图片(名字已知):
+	图片目录:
+	图片简介:空
+	图片内容:
+	图片作者:空
+	图片分类:已知
+	图片名字:已知
+	
+
+
+
+	
+	
+
+class NovelSpider():
+    def __init__(self, url, index_attrs, content_attrs, home_path, category, name):
+        url_items = url.split('/')
+        self.home_url = '/'.join(url_items[0:3])
+        self.novel_url = url
+        self.index_attrs = index_attrs.dict_attrs
+        self.index_tag = index_attrs.tag
+        self.content_attrs = content_attrs.dict_attrs
+        self.content_tag = content_attrs.tag
+        self.name = name
+        if name=='':
+            self.name=url_items[-1]
+        self.folder = common_filer.create_category_dir(home_path, category, name)
+        self.thread_pool=ThreadPoolExecutor(1)
+        self.thread_task_list=[]
+        self.novel_dict=self.get_novel_dict_from_index_file()
+        self.need_dl_dict=self.get_need_dl_dict()
+		
+class VideoSpider():
+    def __init__(self,url,index_attrs,content_attrs,home_path,category,name):
+        url_items=url.split('/')
+        self.home_url='/'.join(url_items[0:3])+"/"
+        self.video_url=url
+        self.index_attrs = index_attrs.dict_attrs
+        self.index_tag = index_attrs.tag
+        self.content_attrs = content_attrs.dict_attrs
+        self.content_tag = content_attrs.tag
+        self.name=name
+        self.index_m3u8_list=[]
+        self.folder=common_filer.create_category_dir(home_path, category, name)
+        self.summary_file=self.folder+'/'+self.name+'.txt'
+        self.thread_pool=ThreadPoolExecutor(10)
+        self.thread_task_list=[]
+		
+class ImgSpider():
+    def __init__(self,url,index_attrs,content_attrs,home_path,category,name):
+        url_items=url.split('/')
+        url_vals=url_items[2].split('.')
+        self.home_url='/'.join(url_items[0:3])
+        self.group_url='/'.join(url_items[0:-1])
+        self.img_url=url
+        self.index_attrs=index_attrs.dict_attrs
+        self.index_tag=index_attrs.tag
+        self.content_attrs=content_attrs.dict_attrs
+        self.content_tag=content_attrs.tag
+        self.name=name
+        self.is_refered=True
+        if index_attrs.index == 0:
+            self.is_refered = False
+        self.thread_pool=ThreadPoolExecutor(20)
+        self.thread_task_list=[]
+        if name=='':
+            self.name=url_items[-1]
+        self.folder=home_path+'/'+category+'/'+url_vals[1]+'/'+self.name
+        common_filer.make_dirs(self.folder)
+        self.img_dict=self.get_img_dict_from_map_dict()
+        self.need_dl_dict=self.get_need_dl_dict()
+		
+		
+		
+		
+		
+SELECT ss.Section,si.Name,sp.PropertyKey,sp.PropertyValue FROM spideritem si, spiderproperty sp, spidersource ss WHERE ss.Name = '小说' and ss.Id = si.SourceId and si.Id = sp.ItemId AND sp.OrderId = -1
+SELECT si.Id,ss.Section,si.Name FROM spidersource ss, spideritem si WHERE ss.Name = '小说' and ss.Id = si.SourceId AND si.DeleteFlag = 1
+
+[================================================================================================]
+
+言情女生|....|....|....|
+
+小说名 / 作者 / 最新章节 : 
+______   ____   ________
+
+
+分页 首页 上一页 1 2 3 4 5 6 下一页 尾页
+
+
+[================================================================================================]
+
+小说图片  小说名字 			小说作者
+		  小说简介
+------------------------------------------------------------------------------------------------------------
+章节目录 
+
+第一					第二				第三
+。。。。。。。。。。。。。。。。。。。。。。。。。
+
+
+end
+
+
+
+
+[================================================================================================]
+						章节名
+< (上一章)				内容						> (下一章)
+						目录
+
+
+SELECT ss.Section,ss.Id SourceId ,si.Id ItemId,si.Name,sp.Id,sp.PropertyKey,sp.PropertyValue FROM spideritem si,spidersource ss,spiderproperty sp where ss.Name = '小说' and ss.Id = si.SourceId and si.Id = sp.ItemId and sp.OrderId = -2

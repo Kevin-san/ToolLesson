@@ -6,9 +6,139 @@ Created on 2019/12/28
 '''
 
 from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment
-from PdfWeb.entitys import HomeInfoItem
+from PdfWeb.entitys import HomeInfoItem, NovelInfoItem, NovelIndexItem,\
+    NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
+from django.db import connection
+cursor = connection.cursor()
+
+def select_spider_source(select_sql):
+    current_log.info(select_sql)
+    cursor.execute(select_sql)
+    result_list=[]
+    for row in cursor.fetchall():
+        spider_source = SpiderSourceEntity(row[0],row[1],row[2],row[3],row[4],row[5])
+        result_list.append(spider_source)
+    return result_list
+
+def select_spider_item(select_sql):
+    current_log.info(select_sql)
+    cursor.execute(select_sql)
+    result_list=[]
+    for row in cursor.fetchall():
+        spider_item = SpiderItemEntity(row[0],row[1],row[2],row[3],row[4])
+        result_list.append(spider_item)
+    return result_list
+
+def select_spider_props(select_sql):
+    current_log.info(select_sql)
+    cursor.execute(select_sql)
+    result_list=[]
+    for row in cursor.fetchall():
+        spider_prop = SpiderPropertyEntity(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+        result_list.append(spider_prop)
+    return result_list
+
+def select_spider_prop_max_order_map():
+    select_sql = "SELECT ItemId,max(OrderId) FROM spiderproperty WHERE PropertyKey = '章节' group by ItemId"
+    current_log.info(select_sql)
+    cursor.execute(select_sql)
+    result_map=dict()
+    for row in cursor.fetchall():
+        result_map[row[0]]=row[1]
+    return result_map
+
+def select_novel_infos(select_sql):
+    current_log.info(select_sql)
+    cursor.execute(select_sql)
+    result_list=[]
+    for row in cursor.fetchall():
+        novel_info = NovelInfoItem(row[0], row[1], row[2], row[3],row[4],row[5])
+        result_list.append(novel_info)
+    return result_list
+
+def get_spider_source(source_name):
+    select_sql="select * from spidersource where Name= '%s' and DeleteFlag = %s order by Id" %(source_name,1)
+    return select_spider_source(select_sql)
+
+def get_spider_item_by_id(item_id):
+    select_sql="select * from spideritem where Id= %s order by Id" %(item_id)
+    return select_spider_item(select_sql)[0]
+
+def get_spider_item_property(source_id):
+    select_sql="select * from spideritem where SourceId= %s and DeleteFlag !=0 order by Id" %(source_id)
+    return select_spider_item(select_sql)
+
+def get_spider_property(item_id):
+    select_sql="select * from spiderproperty where ItemId= %s order by Id" %(item_id)
+    return select_spider_props(select_sql)
+
+def get_spider_property_by_property_id(property_id):
+    select_sql="select * from spiderproperty where Id= %s order by Id" %(property_id)
+    return select_spider_props(select_sql)[0]
+
+def get_spider_property_by_order_id(item_id,order_id):
+    if order_id is None:
+        return None
+    select_sql="select * from spiderproperty where ItemId= %s and OrderId = %s order by Id" %(item_id,order_id)
+    return select_spider_props(select_sql)[0]
+
+def get_spider_property_with_prop_key(item_id,prop_key):
+    select_sql="select * from spiderproperty where ItemId= %s and PropertyKey = '%s' order by Id" %(item_id,prop_key)
+    return select_spider_props(select_sql)
+
+def get_spider_property_with_max_order_id(item_id,prop_key):
+    select_sql="select * from spiderproperty where ItemId= %s and PropertyKey = '%s' order by OrderId desc" %(item_id,prop_key)
+    return select_spider_props(select_sql)
+
+def get_spider_property_by_author_name(author_name):
+    select_sql="select si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 where sp1.PropertyValue= '%s' and sp1.PropertyKey = '%s' and sp1.ItemId = si.Id AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新'" %(author_name,'作者')
+    return select_novel_infos(select_sql)
+
+def get_novel_source():
+    return get_spider_source('小说')
+
+def get_novel_info_item(item_id):
+    select_sql = "SELECT si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.Id = %s AND si.DeleteFlag !=0 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新'" %(item_id)
+    return select_novel_infos(select_sql)[0]
+
+def get_novel_infos_by_author(author_name):
+    return get_spider_property_by_author_name(author_name)
+
+def get_novel_items_by_source_id(source_id):
+    select_sql = "SELECT si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.SourceId = %s AND si.DeleteFlag !=0 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新'" %(source_id)
+    return select_novel_infos(select_sql)
+        
+def get_novel_contents_by_item_id(item_id):
+    novel_info = get_novel_info_item(item_id)
+    novel_contents = get_spider_property_with_prop_key(item_id, '章节')
+    return NovelIndexItem(novel_info,novel_contents)
+
+def get_novel_content_include_prev_next_page(property_id,last_upd_content_order_id):
+    novel_chapter = get_spider_property_by_property_id(property_id)
+    novel_item_id = novel_chapter.ItemId
+    novel_order_id = novel_chapter.OrderId
+    prev_order_id = get_prev_order_id(novel_order_id)
+    next_order_id = get_next_order_id(novel_order_id, last_upd_content_order_id)
+    prev_chapter = get_spider_property_by_order_id(novel_item_id, prev_order_id)
+    next_chapter = get_spider_property_by_order_id(novel_item_id, next_order_id)
+    return NovelContentItem(novel_item_id,novel_chapter,get_novel_spider_id(prev_chapter),get_novel_spider_id(next_chapter))
+
+def get_novel_spider_id(novel_spider_property):
+    if novel_spider_property is None:
+        return None
+    return novel_spider_property.Id
+
+def get_prev_order_id(order_id):
+    if order_id > 0:
+        return order_id -1
+    return None
+
+def get_next_order_id(order_id,max_order_id):
+    if order_id < int(max_order_id):
+        return order_id +1
+    return None
 
 def get_articles_by_type(article_type='2'):
     return Article.objects.filter(Type=article_type,DeleteFlag=0).order_by('CreateTime')

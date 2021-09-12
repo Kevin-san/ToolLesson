@@ -14,6 +14,10 @@ from spider.novelspider import NovelSpider
 from spider.videospider import VideoSpider
 import random
 import time
+import pymysql
+from spider.parentspider import ParentSpider
+db = pymysql.connect("localhost","root","xc19901109","alvin")
+cursor = db.cursor()
 
 def get_group_attributes(list_attrs):
     group_attr_dicts=dict()
@@ -208,7 +212,7 @@ dict_attrs={
 # block_tag=ul,block_id=pins,item_tag=li,item_class=,children_tag=a,children_index=1,children_href=a.href,children_text=img.alt,page_tag=a,page_class=next page-numbers,page_key=下一页
 
 class GroupItemSpider(object):
-    def __init__(self,group_url,group_attribute,home_path):
+    def __init__(self,group_url,group_attribute,home_path,source_id):
         url_items=group_url.split('/')
         self.home_url='/'.join(url_items[0:3])
         self.group_url='/'.join(url_items[0:-1])
@@ -225,19 +229,23 @@ class GroupItemSpider(object):
         self.page_tag=group_attribute.page_tag
         self.page_attrs=group_attribute.page_attrs
         self.home_path=home_path+"/"+url_items[2].split('.')[1]
+        self.source_id =source_id
         common_filer.make_dirs(self.home_path)
         self.href_list=[]
         if common_filer.exists(self.home_path+"/href_dict.txt"):
             self.href_list=common_filer.get_file_details(self.home_path+"/href_dict.txt")
         self.summary_file_w=open(self.home_path+"/href_dict.txt","a+",encoding="utf8")
+        self.is_stop=0
     
     def parse_page_index(self,url,html):
         page_index=common_spider.get_beautifulsoup_from_html(html,self.page_tag,attrs=self.page_attrs)
-        if self.page_tag =="div":
+        if self.page_tag =="div" or self.page_tag =="ul":
             page_bs4=common_spider.get_beautifulsoup_from_html(str(page_index[0]),'a')
             for a_item in page_bs4:
                 if str(a_item).find('下一页') !=-1 or str(a_item).find('下一张')!=-1 or str(a_item).find(">>")!=-1:
                     href_url=common_spider.get_correct_href(self.group_url, a_item)
+                    if url == href_url:
+                        return ""
                     return href_url
             return ""
         else:
@@ -245,16 +253,15 @@ class GroupItemSpider(object):
                 a_item=page_index[0]
                 return common_spider.get_correct_href(self.group_url, a_item)
             return ""
-            
     
     def get_page_hrefs(self,url,href_dict):
         html=common_spider.get_response_text(url, '', '',3)
         href_url=self.parse_page_index(url,html)
-        item_href_list=self.get_block_content(url, html)
+        item_href_list=self.get_block_content(html)
         href_dict[url]=item_href_list
         return href_url,href_dict
         
-    def get_block_content(self,url,html):
+    def get_block_content(self,html):
         item_href_list=[]
         block_contents=common_spider.get_beautifulsoup_from_html(html,self.block_tag,attrs=self.block_attrs)
         for block_content in block_contents:
@@ -276,14 +283,19 @@ class GroupItemSpider(object):
                 a_text_val = a_text_val.strip()
                 if F"{a_text_val}    {a_href_url}" not in self.href_list:
                     self.summary_file_w.write(F"{a_text_val}    {a_href_url}\n")
+                    if self.source_id !=0:
+                        cursor.execute("insert into SpiderItem(SourceId,Url,Name) values(%s,'%s','%s')" %(self.source_id,a_href_url,a_text_val.replace("'","").replace("\\","")))
+                        db.commit()
                     print(F"{a_text_val}    {a_href_url}\n")
                 item_list=[a_text_val,a_href_url]
                 item_href_list.append(item_list)
         return item_href_list
 
     def get_pages(self,href_url,href_dict):
-        while href_url:
-            href_url,href_dict=self.get_page_hrefs(href_url, href_dict)
+        while href_url != "":
+            href_url,href_dict=self.get_page_hrefs(href_url, href_dict) 
+        cursor.execute("update spidersource set DeleteFlag = 1 where Id = %s " %(self.source_id))
+        db.commit()
         self.summary_file_w.close()
         return href_dict
     
@@ -291,7 +303,7 @@ def get_group_hrefs(group_map_attr,group_attr,group_key,home_path):
     for url_key,url_attrs in group_map_attr.items():
         for group_url in group_attr[group_key]:
             if group_url.find(url_key) !=-1:
-                group_spider=GroupItemSpider(group_url,url_attrs,home_path+"/"+group_key)
+                group_spider=GroupItemSpider(group_url,url_attrs,home_path+"/"+group_key,0)
                 group_spider.get_pages(group_url, dict())
 
 def download_by_key(home_path,key_category,detail_maps):
@@ -381,16 +393,186 @@ def download_all_spiders_one_by_random_one(home_path,detail_maps):
             time.sleep(120)
             continue
   
+def load_group_urls():
+    cursor.execute("select * from SpiderSource where DeleteFlag = 0")
+    results = cursor.fetchall()
+    for row in results:
+        source_id = row[0]
+        name = row[1]
+        section = row[2]
+        url = row[3]
+        attr = eval(row[4])
+        home_path = "I:/"+name+"/"+section
+        block_spider_attr=GroupAttribute.get_block_spider_attribute(attr)
+        item_spider_attr=GroupAttribute.get_item_spider_attribute(attr)
+        children_spider_attr=GroupAttribute.get_children_spider_attribute(attr)
+        page_spider_attr=GroupAttribute.get_page_spider_attribute(attr)
+        url_attrs = GroupAttribute(block_spider_attr,item_spider_attr,children_spider_attr,page_spider_attr)
+        group_spider=GroupItemSpider(url,url_attrs,home_path,source_id)
+        current_log.info(url)
+        group_spider.get_pages(url, dict())
+
+def init_spider_rules():
+    cursor.execute("select * from SpiderRule where DeleteFlag = 0 order by Id desc")
+    rule_results = cursor.fetchall()
+    map_rules = dict()
+    for row in rule_results:
+        map_rule_detail = dict()
+        if row[2]:
+            map_rule_detail['intro_attr'] = eval(row[2])
+        if row[3]:
+            map_rule_detail['author_attr']= eval(row[3])
+        if row[4]:
+            map_rule_detail['image_attr']=eval(row[4])
+        map_rule_detail['index_attr'] = eval(row[5])
+        map_rule_detail['content_attr'] = eval(row[6])
+        map_rules[row[1]] = map_rule_detail
+    current_log.info(map_rules)
+    return map_rules
+
+def insert_spider_property(item_id,order_id,property_key,property_val,property_b_val):
+    cursor.execute("select count(*) from SpiderProperty where ItemId = %s and OrderId = %s" %(item_id,order_id))
+    result = cursor.fetchall()
+    rowcount = result[0][0]
+    if rowcount == 0:
+        insert_spider_property_entity(item_id, order_id, property_key, property_val, property_b_val)
+    else:
+        update_spider_property_entity(item_id, order_id, property_key, property_val, property_b_val)
+
+def insert_spider_property_entity(item_id,order_id,property_key,property_val,property_b_val):
+    property_b_val=str(property_b_val).replace("'","")
+    property_val=str(property_val).replace("'","")
+    cursor.execute("insert SpiderProperty(ItemId,OrderId,PropertyKey,PropertyValue,PropertyBigVal) values(%s,%s,'%s','%s','%s')" %(item_id,order_id,property_key,property_val,property_b_val))
+    db.commit()
+    
+def update_spider_property_entity(item_id,order_id,property_key,property_val,property_b_val):
+    property_b_val=str(property_b_val).replace("'","")
+    property_val=str(property_val).replace("'","")
+    cursor.execute("update SpiderProperty set PropertyValue = '%s' , PropertyBigVal = '%s' where ItemId = %s and PropertyKey = '%s' and OrderId =%s" %(property_val,property_b_val,item_id,property_key,order_id))
+    db.commit()
+
+def get_need_spider_property(item_id,property_key,property_list):
+    cursor.execute("select count(*) from SpiderProperty where ItemId = %s and PropertyKey = '%s'" %(item_id,property_key))
+    result = cursor.fetchall()
+    rowcount = result[0][0]
+    return rowcount,property_list[rowcount:]
+
+def get_max_novel_spider_property_order_id(item_id):
+    cursor.execute("select max(OrderId) from SpiderProperty where ItemId = %s and PropertyKey = '章节'" %(item_id))
+    result = cursor.fetchall()
+    max_order_id = result[0][0]
+    return max_order_id
+
+
+def insert_novel_spider_property(item_id, spider):
+    author = spider.get_page_author()
+    insert_spider_property(item_id, -2, "作者", author, "")
+    rowcount, titles = get_need_spider_property(item_id, '章节', spider.get_page_titles())
+    last_novel_text=''
+    for title in titles:
+        novel_text = spider.get_page_novel_detail(title.spider_val)
+        insert_spider_property_entity(item_id, rowcount + title.a_href, '章节', title.a_text, novel_text)
+        last_novel_text=title.a_text
+    max_order_id = get_max_novel_spider_property_order_id(item_id)
+    insert_spider_property(item_id,-5,"最新",max_order_id,last_novel_text)
+
+
+def insert_video_spider_property(item_id, spider):
+    director = spider.get_page_director()
+    insert_spider_property(item_id, -2, "导演", director, "")
+    rowcount, titles = get_need_spider_property(item_id, '集数', spider.get_page_titles())
+    for title in titles:
+        viedo_src = spider.get_video_real_index_m3u8(title.spider_val, title.a_href)
+        insert_spider_property_entity(item_id, rowcount + title.a_href, '集数', title.a_text, viedo_src)
+
+
+def insert_image_spider_property(item_id, spider):
+    rowcount, img_list = get_need_spider_property(item_id, '序号', spider.get_page_img_indexs())
+    for img_index, img_item in enumerate(img_list):
+        insert_spider_property_entity(item_id, rowcount + img_index, '序号', img_index, img_item.spider_val)
+
+def insert_spider_properties(count):
+    map_rules = init_spider_rules()
+    for url,url_dict in map_rules.items():
+        current_log.info(url)
+        cursor.execute("select * from SpiderItem where DeleteFlag = 0 and instr(Url,'%s') = 1 limit 1" %(url))
+        results = cursor.fetchall()
+        current_log.info(results)
+        if results:
+            row = results[0]
+            target_url = row[2]
+            item_id = row[0]
+            source_id = row[1]
+            index_attr=GroupAttribute.get_block_spider_attribute(url_dict['index_attr'])
+            content_attr=GroupAttribute.get_block_spider_attribute(url_dict['content_attr'])
+            if source_id >13:
+                spider = ParentSpider(target_url, index_attrs=index_attr, content_attrs=content_attr)
+                insert_image_spider_property(item_id,spider)
+            else:
+                intro_attr=GroupAttribute.get_block_spider_attribute(url_dict['intro_attr'])
+                author_attr=GroupAttribute.get_block_spider_attribute(url_dict['author_attr'])
+                image_attr=GroupAttribute.get_block_spider_attribute(url_dict['image_attr'])
+                spider=ParentSpider(target_url,index_attr,content_attr,intro_attr,author_attr,image_attr)
+                intro = spider.get_page_intro()
+                image = spider.get_page_image()
+                insert_spider_property(item_id, -1, "简介", intro, "")
+                insert_spider_property(item_id, 0, "图片", image, "")
+                try:
+                    if source_id < 9:
+                        insert_novel_spider_property(item_id, spider)
+                    else:
+                        insert_video_spider_property(item_id, spider)
+                except Exception as e:
+                    current_log.error(e)
+                    cursor.execute("update SpiderItem set DeleteFlag = 1 where Id = %s" %(item_id))
+                    db.commit()
+                    count +=1
+                    continue
+            cursor.execute("update SpiderItem set DeleteFlag = 2 where Id = %s" %(item_id))
+            db.commit()
+            count +=1
+        else:
+            continue
+    return count
+        
+def remove_duplicate_item_and_properties():
+    select_duplicate_sql = 'select Url from spideritem group by Url having count(Id) > 1'
+    cursor.execute(select_duplicate_sql)
+    duplicate_results= cursor.fetchall()
+    for row in duplicate_results:
+        current_log.info(row)
+        url = row[0]
+        select_item_id_sql = "select Id from spideritem where Url = '%s'" %(url)
+        cursor.execute(select_item_id_sql)
+        id_results = cursor.fetchall()
+        for id_index,id_row in enumerate(id_results):
+            if id_index == 0:
+                continue
+            item_id = id_row[0]
+            current_log.info(item_id)
+            delete_item_sql = "delete from spideritem where Id = %s" %(item_id)
+            cursor.execute(delete_item_sql)
+            db.commit()
+            delete_property_sql = "delete from spiderproperty where ItemId = %s" %(item_id)
+            cursor.execute(delete_property_sql)
+            db.commit()
+            
+        
 
 if __name__ == "__main__":
+#     remove_duplicate_item_and_properties()
+#     load_group_urls()
+    count =0
+    while count < 343042:
+        count=insert_spider_properties(count)
 #     get_group_hrefs(group_map_attrs, dict_attrs, "video", "F:/Python3")
 #     res=common_spider.get_response('http://icanhazip.com', '', '')
 #     print(res.text)
 #     download_videos("K:/Spider", detail_attrs)
 #     common_threadpools.run_with_limited_second(download_pictures, ["K:/Spider", detail_attrs], {}, 7200)
 #     download_pictures("K:/Spider", detail_attrs)
-    download_novels("K:/Spider", detail_attrs)
-#     download_all_spiders_one_by_random_one("K:/Spider", detail_attrs)
+#     download_novels("I:/Spider", detail_attrs)
+#     download_all_spiders_one_by_random_one("I:/Spider", detail_attrs)
 #     res=common_spider.get_response_by_seconds('http://pic3.085p.com/upload13/227899/2019/01-29/20190129134018_6126eljeqtmd_small.jpg', '', '', 3, '')
 #     print(len(res.content))
 

@@ -169,3 +169,51 @@ class PageInfoItem():
     def __init__(self,page_no,page_url):
         self.page_no=page_no
         self.page_url=page_url
+        
+class SpiderSourceEntity():
+    def __init__(self,Id,Name,Section,Url,Attr,DeleteFlag):
+        self.Id=Id
+        self.Name=Name
+        self.Section=Section
+        self.Url=Url
+        self.Attr=Attr
+        self.DeleteFlag=DeleteFlag
+    
+class SpiderItemEntity():
+    def __init__(self,Id,SourceId,Url,Name,DeleteFlag):
+        self.Id=Id
+        self.SourceId=SourceId
+        self.Url=Url
+        self.Name=Name
+        self.DeleteFlag=DeleteFlag
+
+class SpiderPropertyEntity():
+    def __init__(self,Id,ItemId,OrderId,PropertyKey,PropertyValue,PropertyBigVal,DeleteFlag):
+        self.Id=Id
+        self.ItemId=ItemId
+        self.OrderId=OrderId
+        self.PropertyKey=PropertyKey
+        self.PropertyValue=PropertyValue
+        self.PropertyBigVal=PropertyBigVal
+        self.DeleteFlag=DeleteFlag
+
+class NovelInfoItem():
+    def __init__(self,item_id,novel_name,author,intro,last_upd_content_id,last_upd_content_title):
+        self.item_id = item_id
+        self.novel_name=novel_name
+        self.author=author
+        self.intro=intro
+        self.last_upd_content_id = last_upd_content_id
+        self.last_upd_content_title = last_upd_content_title
+
+class NovelIndexItem():
+    def __init__(self,novel_info,novel_contents):
+        self.novel_info = novel_info
+        self.novel_contents = novel_contents
+        
+class NovelContentItem():
+    def __init__(self,parent_item_id,cur_content,prev_content_id=None,next_content_id=None):
+        self.parent_item_id = parent_item_id
+        self.cur_content= cur_content
+        self.prev_content_id=prev_content_id
+        self.next_content_id=next_content_id

@@ -171,6 +171,18 @@ def get_dict_from_file(file_path):
     file_r.close()
     return dict_result
 
+def get_file_details_by_encoding(file_path,encoding):
+    try:
+        if encoding.lower() == "gb2312":
+            encoding = "gbk"
+        file_h = open(file_path,'r',encoding=encoding)
+        text_lines = file_h.read().splitlines()
+        file_h.close()
+        return text_lines
+    except IOError as error:
+        current_log.error(F'Read input file Error:{error}')
+        sys.exit()
+
 def get_file_details(file_path):
     try:
         file_h = open(file_path,'r',encoding="utf-8")

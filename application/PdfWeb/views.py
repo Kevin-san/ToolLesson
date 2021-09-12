@@ -22,6 +22,7 @@ lang_menus=services.get_menus(17)
 linux_restfuls = services.get_restful(1, "linux")
 bash_restfuls = services.get_restful(2, "bash")
 regex_restfuls = services.get_restful(3, "regex")
+
 blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
 tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
 def create_dict_from_keys_form(keys_list,int_keys,form_data):
@@ -291,6 +292,44 @@ def blog_upd_submit(request):
         return blog_article(request, article.Id)
     return blog_upd(request, article.Id)
 
+def novel_index(request):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_novel_home_index()
+        return render(request,'novelindex.html',result)
+
+def novel_list(request,novel_source_id,page_no):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_novel_home_list(novel_source_id, page_no)
+        return render(request,'novelindex.html',result)
+    
+def novel_menu(request,novel_item_id):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_novel_menu_info(novel_item_id)
+        return render(request,'novelmenu.html',result)
+
+def novel_content(request,novel_property_id,last_upd_content_ord_id):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_novel_content_info(novel_property_id, last_upd_content_ord_id)
+        return render(request,'novelcontent.html',result)
+def novel_author(request,novel_item_id):
+    if not request.session.get('is_login',None):
+        content="你还没有权限访问任何画面！请登录"
+        return render(request,'index.html',locals())
+    else:
+        result = services.get_novel_infos_by_author(novel_item_id)
+        return render(request,'novelauthor.html',result)
 def tool_index(request):
     if not request.session.get('is_login',None):
         content="你还没有权限访问任何画面！请登录"

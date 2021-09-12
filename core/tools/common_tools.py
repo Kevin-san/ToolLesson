@@ -13,8 +13,6 @@ from const.filesuffixs import FileSuffix
 from tools import common_filer, common_converter
 import time
 import re
-from fitz.__main__ import get_list
-from bokeh.plotting.tests.test_figure import source
 
 filesuffix=FileSuffix()
 
@@ -84,7 +82,7 @@ def is_int(obj_val):
     try:
         obj_val = int(obj_val)
     except Exception:
-        pass
+        return False
     return check_obj_type(obj_val, int)
 
 def is_bool(obj_val):
@@ -104,7 +102,7 @@ def is_time(obj_val):
             else:
                 time.strptime(obj_val,"%Y-%m-%d")
             return True
-        except Exception as e:
+        except Exception:
             return False
     return False
 
