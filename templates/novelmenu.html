@@ -1,38 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-<title>小说</title>
-
-<link href="/static/css/bootstrap.min.css" rel="stylesheet">
-<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-<link href="/static/css/colorpicker.min.css" rel="stylesheet">
-<link href="/static/css/bootstrap-dialog.min.css" rel="stylesheet">
-<link href="/static/css/dashboard.css" rel="stylesheet">
-<link href="/static/css/prettify.min.css" rel="stylesheet">
-{% load static %}
-<link href="{% static 'mdeditor/css/editormd.css' %}" rel="stylesheet">
-<link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet">
-<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-<script type="text/javascript" src="/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/static/js/moment-with-locales.js"></script>
-<script type="text/javascript" src="/static/js/JsBarcode.all.min.js"></script>
-<script type="text/javascript" src="/static/js/qrcode.min.js"></script>
-<script type="text/javascript" src="/static/js/colorpicker.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap-dialog.min.js"></script>
-<script type="text/javascript" src="/static/js/holder.min.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="/static/js/run_prettify.min.js"></script>
-<script type="text/javascript" src="/static/js/speaker.js"></script>
-
-<script type="text/javascript" src="{% static 'mdeditor/js/editormd.js' %}"></script>
-
-</head>
-<body data-spy="scroll" data-target="#myScrollspy">
+{% extends 'base.html' %}
+{% block title %}小说{% endblock %}
+{% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			{% include "common/alvin_header.html" %}
@@ -45,7 +13,6 @@
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->
 	</nav>
-{% block content %}
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
@@ -86,7 +53,3 @@
 		</div>
 	</div>
 {% endblock %}
-	<script type="text/javascript" src="/static/js/load.js"></script>
-	<script type="text/javascript" src="/static/js/tool.js"></script>
-</body>
-</html>

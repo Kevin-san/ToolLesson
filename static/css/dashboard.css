@@ -107,7 +107,7 @@ body {
 @-o-viewport      { width: device-width; }
 @viewport         { width: device-width; }
 body {
-	background: url('../img/bg.jpg');
+	background-image: url('../img/bg.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
