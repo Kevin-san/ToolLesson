@@ -3,7 +3,7 @@ drop table IF EXISTS `Comment`;
 create table IF NOT EXISTS `Comment`( -- 博客评论表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
 	`ArticleId` INT NOT NULL , -- 日志Id
-	`Content` TEXT NOT NULL DEFAULT '', --评论内容
+	`Content` VARCHAR(3000) NOT NULL DEFAULT '', --评论内容
 	`AuthorId` INT UNSIGNED NOT NULL, 
 	`AuthorName` VARCHAR(200) NOT NULL,
 	`DeleteFlag` TINYINT NOT NULL DEFAULT 0, -- 删除状态

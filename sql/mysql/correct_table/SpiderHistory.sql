@@ -12,7 +12,7 @@ create table IF NOT EXISTS `SpiderHistory`( -- 爬虫履历表
 	`ValContentAttrs` VARCHAR(100) NOT NULL, -- 对应内容属性(默认class)
 	`Directory` VARCHAR(100) NOT NULL, -- 目录名
 	`FileName` VARCHAR(100) NOT NULL, -- 文件名
-	`SpiderVal` VARCHAR(100000) NOT NULL, -- img src, novel val, music src,
+	`SpiderVal` VARCHAR(10000) NOT NULL, -- img src, novel val, music src,
 	`DeleteFlag` TINYINT NOT NULL DEFAULT 0, -- 删除状态
 	`submission_user` VARCHAR(30), -- 上传人
 	`submission_date` DATE, -- 上传时间

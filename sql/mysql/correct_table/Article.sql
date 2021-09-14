@@ -3,14 +3,14 @@ drop table IF EXISTS `Article`;
 create table IF NOT EXISTS `Article`( -- 博客文章表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
 	`Title` CHAR(50) NOT NULL DEFAULT '', -- 日志标题
-	`Synopsis` TEXT NOT NULL DEFAULT '', --日志简介
+	`Synopsis` VARCHAR(1000) NOT NULL DEFAULT '', --日志简介
 	`AuthorId` INT UNSIGNED NOT NULL, 
 	`AuthorName` VARCHAR(200) NOT NULL,
 	`CategoryId` INT UNSIGNED NOT NULL, -- 分类
 	`CategoryName` VARCHAR(200) NOT NULL,
 	`TagId` INT UNSIGNED NOT NULL, --
 	`TagName` VARCHAR(200) NOT NULL, -- 标签
-	`Content` TEXT NOT NULL DEFAULT '', --正文
+	`Content` VARCHAR(10000) NOT NULL DEFAULT '', --正文
 	`Type` INT NOT NULL DEFAULT 0, -- 文章类别 choices=(("0",u"草稿"),("1","正常"))
 	`Original` INT NOT NULL DEFAULT 1, -- 是否原创 choices=(("1", "原创"), ("0", "转载"))
 	`Click` INT DEFAULT 0, --点击量
