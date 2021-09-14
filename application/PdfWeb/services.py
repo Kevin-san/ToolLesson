@@ -158,18 +158,15 @@ def get_novel_home_index():
 
 def get_novel_home_list(source_id,page_no):
     keys = ['novel_source_list','contacts','pages']
-    novel_info_list = db.get_novel_items_by_source_id(source_id)
+    novel_info_list = db.get_novel_items_by_source_id(source_id,page_no,20)
+    novel_cnt = db.get_novel_item_count_by_source_id(source_id)
     current_log.info(novel_source_list)
-    paginator = Paginator(novel_info_list, 20)
-    try:
-        contacts = paginator.page(page_no)
-    except PageNotAnInteger:  # 若不是整数则跳到第一页
-        contacts = paginator.page(1)
-    except EmptyPage:  # 若超过了则最后一页
-        contacts = paginator.page(paginator.num_pages)
-    current_log.info(contacts)
-    pages = pages_help(page_no, paginator.num_pages, source_id, 6)
-    vals=[novel_source_list,contacts,pages]
+    current_log.info(novel_cnt)
+    max_page = novel_cnt//20
+    if novel_cnt % 20 != 0:
+        max_page = max_page+1
+    pages = pages_help(page_no, max_page, source_id, 6)
+    vals=[novel_source_list,novel_info_list,pages]
     return common_tools.create_map(keys, vals)
 
 def get_novel_menu_info(item_id):

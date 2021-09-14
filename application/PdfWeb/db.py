@@ -13,6 +13,11 @@ from PdfWeb import current_log
 from django.db import connection
 cursor = connection.cursor()
 
+def select_cnt(select_sql):
+    current_log.info(select_sql)
+    cursor.execute(select_sql)
+    row = cursor.fetchall()[0]
+    return int(row[0])
 def select_spider_source(select_sql):
     current_log.info(select_sql)
     cursor.execute(select_sql)
@@ -106,10 +111,18 @@ def get_novel_info_item(item_id):
 def get_novel_infos_by_author(author_name):
     return get_spider_property_by_author_name(author_name)
 
-def get_novel_items_by_source_id(source_id):
-    select_sql = "SELECT si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.SourceId = %s AND si.DeleteFlag !=0 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新'" %(source_id)
+def get_novel_items_by_source_id(source_id,page_no,count):
+    if page_no == 1:
+        begin_no = 0
+    else:
+        begin_no = (int(page_no)-1) * count
+    select_sql = "SELECT si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.SourceId = %s AND si.DeleteFlag !=0 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新' limit %s,%s" %(source_id,begin_no,count)
     return select_novel_infos(select_sql)
-        
+
+def get_novel_item_count_by_source_id(source_id):
+    select_sql = "SELECT count(*) FROM spideritem WHERE SourceId = %s AND DeleteFlag !=0 " %(source_id)
+    return select_cnt(select_sql)
+    
 def get_novel_contents_by_item_id(item_id):
     novel_info = get_novel_info_item(item_id)
     novel_contents = get_spider_property_with_prop_key(item_id, '章节')
