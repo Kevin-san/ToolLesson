@@ -330,6 +330,7 @@ def novel_author(request,novel_item_id):
     else:
         result = services.get_novel_infos_by_author(novel_item_id)
         return render(request,'novelauthor.html',result)
+
 def tool_index(request):
     if not request.session.get('is_login',None):
         content="你还没有权限访问任何画面！请登录"

@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^novel/menu/(\d+)/$',views.novel_menu,name='novel_menu'),
     url(r'^novel/content/(\d+)/(\d+)/$',views.novel_content,name='novel_content'),
     url(r'^novel/author/(\d+)/$',views.novel_author,name='novel_author'),
+#     url(r'^novel/download/(\d+)/$',views.novel_download,name='novel_download'),
     url(r'^tool/funcs',views.tool_funcs,name='tool_funcs'),
     url(r'^learn/linux/([a-z]+)/$',views.learn_linux,name='learn_linux'),
     url(r'^learn/bash/([a-z]+)/$',views.learn_bash,name='learn_bash'),

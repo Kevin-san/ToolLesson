@@ -11,15 +11,17 @@ from PdfWeb.entitys import HomeInfoItem, NovelInfoItem, NovelIndexItem,\
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
 from django.db import connection
-cursor = connection.cursor()
+
 
 def select_cnt(select_sql):
     current_log.info(select_sql)
+    cursor = connection.cursor()
     cursor.execute(select_sql)
     row = cursor.fetchall()[0]
     return int(row[0])
 def select_spider_source(select_sql):
     current_log.info(select_sql)
+    cursor = connection.cursor()
     cursor.execute(select_sql)
     result_list=[]
     for row in cursor.fetchall():
@@ -29,6 +31,7 @@ def select_spider_source(select_sql):
 
 def select_spider_item(select_sql):
     current_log.info(select_sql)
+    cursor = connection.cursor()
     cursor.execute(select_sql)
     result_list=[]
     for row in cursor.fetchall():
@@ -38,6 +41,7 @@ def select_spider_item(select_sql):
 
 def select_spider_props(select_sql):
     current_log.info(select_sql)
+    cursor = connection.cursor()
     cursor.execute(select_sql)
     result_list=[]
     for row in cursor.fetchall():
@@ -48,6 +52,7 @@ def select_spider_props(select_sql):
 def select_spider_prop_max_order_map():
     select_sql = "SELECT ItemId,max(OrderId) FROM spiderproperty WHERE PropertyKey = '章节' group by ItemId"
     current_log.info(select_sql)
+    cursor = connection.cursor()
     cursor.execute(select_sql)
     result_map=dict()
     for row in cursor.fetchall():
@@ -56,6 +61,7 @@ def select_spider_prop_max_order_map():
 
 def select_novel_infos(select_sql):
     current_log.info(select_sql)
+    cursor = connection.cursor()
     cursor.execute(select_sql)
     result_list=[]
     for row in cursor.fetchall():

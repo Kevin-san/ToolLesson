@@ -324,3 +324,31 @@ end
 
 
 SELECT ss.Section,ss.Id SourceId ,si.Id ItemId,si.Name,sp.Id,sp.PropertyKey,sp.PropertyValue FROM spideritem si,spidersource ss,spiderproperty sp where ss.Name = '小说' and ss.Id = si.SourceId and si.Id = sp.ItemId and sp.OrderId = -2
+
+
+搜索功能
+https://blog.csdn.net/makesomethings/article/details/100061591
+下载功能
+自动跳转下一页
+
+图片网站
+pending
+
+权限管理
+
+音乐网站
+pending
+
+视频网站
+pending
+
+自动批处理爬虫功能
+pending
+
+打包
+pending
+安装到服务器
+
+数据库迁移
+pending
+

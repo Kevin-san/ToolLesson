@@ -11,6 +11,7 @@ from tools import common_tools, common_converter, common_formater, common_coder,
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
+from django.http.response import StreamingHttpResponse, FileResponse
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
@@ -187,8 +188,7 @@ def get_novel_infos_by_author(item_id):
     keys = ['novel_source_list','item_id','author_name','novel_info_list']
     novel_info_list = db.get_novel_infos_by_author(author_name)
     vals = [novel_source_list,item_id,author_name,novel_info_list]
-    return common_tools.create_map(keys, vals)
-
+    return common_tools.create_map(keys, vals)    
 
 def get_blog_home_index():
     return get_blog_home_list(0, 1)
