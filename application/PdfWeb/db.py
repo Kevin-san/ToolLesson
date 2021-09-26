@@ -19,6 +19,7 @@ def select_cnt(select_sql):
     cursor.execute(select_sql)
     row = cursor.fetchall()[0]
     return int(row[0])
+
 def select_spider_source(select_sql):
     current_log.info(select_sql)
     cursor = connection.cursor()
@@ -81,6 +82,14 @@ def get_spider_item_property(source_id):
     select_sql="select * from spideritem where SourceId= %s and DeleteFlag !=0 order by Id" %(source_id)
     return select_spider_item(select_sql)
 
+def get_spider_item_by_page_no(source_id,page_no,count):
+    if page_no == 1:
+        begin_no = 0
+    else:
+        begin_no = (int(page_no)-1) * count
+    select_sql="select * from spideritem where SourceId= %s and DeleteFlag !=0 order by Id limit %s,%s" %(source_id,begin_no,count)
+    return select_spider_item(select_sql)
+
 def get_spider_property(item_id):
     select_sql="select * from spiderproperty where ItemId= %s order by Id" %(item_id)
     return select_spider_props(select_sql)
@@ -106,6 +115,10 @@ def get_spider_property_with_max_order_id(item_id,prop_key):
 def get_spider_property_by_author_name(author_name):
     select_sql="select si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 where sp1.PropertyValue= '%s' and sp1.PropertyKey = '%s' and sp1.ItemId = si.Id AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新'" %(author_name,'作者')
     return select_novel_infos(select_sql)
+
+def get_image_item_count_by_source_id(source_id):
+    select_sql = "SELECT count(*) FROM spideritem WHERE SourceId = %s AND DeleteFlag =2 " %(source_id)
+    return select_cnt(select_sql)
 
 def get_novel_source():
     return get_spider_source('小说')
@@ -301,6 +314,20 @@ def get_common_tool_type_info():
 def get_blog_category_type_info():
     category=Category.objects.get(CategoryName='blog',DeleteFlag=0)
     return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+
+def get_novel_category_type_info():
+    category=Category.objects.get(CategoryName='novel',DeleteFlag=0)
+    category_list = Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    for category in category_list:
+        category.CategoryId = category.CategoryId - 100
+    return category_list
+
+def get_image_category_type_info():
+    category=Category.objects.get(CategoryName='image',DeleteFlag=0)
+    category_list = Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    for category in category_list:
+        category.CategoryId = category.CategoryId - 200
+    return category_list
 
 def get_blog_tag_category_type_info():
     category=Category.objects.get(CategoryName='blogtag',DeleteFlag=0)

@@ -9,3 +9,4 @@ insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/novel/index',0,'alvin',curdate());
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/music/index',0,'alvin',curdate());
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/video/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/image/index',0,'alvin',curdate());

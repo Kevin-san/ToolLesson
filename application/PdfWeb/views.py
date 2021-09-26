@@ -6,6 +6,7 @@ Created on 2019/12/28
 '''
 from django.shortcuts import render,redirect
 from PdfWeb import services,forms,settings,db,current_log
+import PdfWeb.constant as const
 import datetime
 from django.contrib.auth.hashers import check_password
 from django.http.response import HttpResponse
@@ -25,6 +26,7 @@ regex_restfuls = services.get_restful(3, "regex")
 
 blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
 tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
+
 def create_dict_from_keys_form(keys_list,int_keys,form_data):
     dict_result={}
     for dict_key in keys_list:
@@ -46,25 +48,23 @@ def get_template_detail(book_lesson_id,api_key,menus):
 
 def index(request):
     content=services.get_home_index()
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-    return render(request,'index.html',locals())
+    if is_not_login(request):
+        content=const.NO_ACCESS
+    return render(request,const.INDEX_HTML,locals())
 
 def userprofile(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         user_id = request.session['user_id']
         user = services.get_user_by_id(user_id)
         edit_form = forms.EditUserForm(initial={'Id':user.Id,'Name':user.Name,'Email':user.Email,'Sex':user.Sex,'Logo':user.Logo,'Detail':user.Detail})
         result = {'edit_form':edit_form}
-        return render(request,'userprofile.html',result)
+        return render(request,const.USER_PROFILE_HTML,result)
 
 def useredit(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         edited_form=forms.EditUserForm(request.POST)
         if edited_form.is_valid():  # 获取数据
@@ -73,71 +73,69 @@ def useredit(request):
             username = edited_form.cleaned_data['Name']
             email = edited_form.cleaned_data['Email']
             sex = edited_form.cleaned_data['Sex']
+            logo = org_user.Logo
             if edited_form.cleaned_data['Logo']:
                 logo = edited_form.cleaned_data['Logo']
-            else:
-                logo = org_user.Logo
             detail = edited_form.cleaned_data['Detail']
             same_name_user = services.get_user_by_name(username)
             same_email_user = services.get_user_by_email(email)
             if same_name_user.Id != user_id:  # 用户名唯一
-                message = '用户已经存在，请重新选择用户名！'
-                return redirect('/userprofile')
+                message = const.EXIST_USER
+                return redirect(const.USER_PROFILE_URL)
             if same_email_user.Id != user_id:  # 邮箱地址唯一
-                message = '该邮箱地址已被注册，请使用别的邮箱！'
-                return redirect('/userprofile')
-            
+                message = const.EXIST_EMAIL
+                return redirect(const.USER_PROFILE_URL)
             if email != org_user.Email or username != org_user.Name or sex != org_user.Sex or logo != org_user.Logo or detail != org_user.Detail:
                 services.update_user(org_user.Id,username,email,sex,detail,logo)
                 user = services.get_user_by_id(org_user.Id)
-                request.session['is_login'] = True
+                request.session[const.IS_LOGIN_KEY] = True
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name
                 request.session['user_logo'] = user.Logo
-        return redirect('/userprofile')
+        return redirect(const.USER_PROFILE_URL)
 
 def login(request):
-    if request.session.get('is_login',None):
-        return redirect('/index')
-    if request.method == "POST":
+    if request.session.get(const.IS_LOGIN_KEY,None):
+        return redirect(const.INDEX_URL)
+    if request.method == const.METHOD_POST:
         login_form = forms.UserForm(request.POST)
-        message = "请检查填写的内容！"
+        message = const.CHECK_VALUE
         if login_form.is_valid():
             username = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
             user = services.get_user_by_name(username)
             if user is None:
-                message = "用户不存在！"
-                return render(request, 'login.html', locals())
+                message = const.NO_USER
+                return render(request, const.LOGIN_HTML, locals())
             if user.DeleteFlag ==1:
-                message = "该用户还未通过邮件确认！"
-                return render(request, 'login.html', locals())
+                message = const.NO_CONFIRM
+                return render(request, const.LOGIN_HTML, locals())
             if check_password(password,user.Password):
-                request.session['is_login'] = True
+                request.session[const.IS_LOGIN_KEY] = True
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name
                 request.session['user_logo'] = user.Logo.url
-                return redirect('/index')
+                return redirect(const.INDEX_URL)
             else:
-                message = "密码不正确！"
-        return render(request, 'login.html', locals())
+                message = const.WRONG_PWD
+        return render(request, const.LOGIN_HTML, locals())
     login_form = forms.UserForm()
-    return render(request, 'login.html', locals())
+    return render(request, const.LOGIN_HTML, locals())
 
 def logout(request):
-    if not request.session.get('is_login', None):
+    if is_not_login(request):
         # 如果本来就未登录，也就没有登出一说
-        return redirect("/index")
+        return redirect(const.INDEX_URL)
     request.session.flush()
-    return redirect("/index")
+    return redirect(const.INDEX_URL)
 
 def register(request):
-    if request.session.get('is_login', None):
+    if not is_not_login(request):
         # 登录状态不允许注册。你可以修改这条原则！
-        return redirect("/index/")
-    if request.method == "POST":
+        return redirect(const.INDEX_URL)
+    if request.method == const.METHOD_POST:
         register_form = forms.RegisterForm(request.POST,request.FILES)
-        message = "请检查填写的内容！"
+        message = const.CHECK_VALUE
         if register_form.is_valid():  # 获取数据
             username = register_form.cleaned_data['username']
             password1 = register_form.cleaned_data['password1']
@@ -150,19 +148,19 @@ def register(request):
             same_name_user = services.get_user_by_name(username)
             same_email_user = services.get_user_by_email(email)
             if password1 != password2:  # 判断两次密码是否相同
-                message = "两次输入的密码不同！"
-                return render(request, 'register.html', locals())
+                message = const.DIFF_PWD
+                return render(request, const.REG_HTML, locals())
             if same_name_user:  # 用户名唯一
-                message = '用户已经存在，请重新选择用户名！'
-                return render(request, 'register.html', locals())
+                message = const.EXIST_USER
+                return render(request, const.REG_HTML, locals())
             if same_email_user:  # 邮箱地址唯一
-                message = '该邮箱地址已被注册，请使用别的邮箱！'
-                return render(request, 'register.html', locals())
+                message = const.EXIST_EMAIL
+                return render(request, const.REG_HTML, locals())
             new_user=services.new_user(username, password1, email, sex,detail,logo, permission)
             send_email(email,services.make_confirm_string(new_user))
-            return redirect('/login')  # 自动跳转到登录页面
+            return redirect(const.LOGIN_URL)  # 自动跳转到登录页面
     register_form = forms.RegisterForm()
-    return render(request, 'register.html', locals())
+    return render(request, const.REG_HTML, locals())
 
 def send_email(email, code):
     from django.core.mail import EmailMultiAlternatives
@@ -178,89 +176,81 @@ def user_confirm(request):
     message = ''
     confirm = services.get_confirm(code)
     if confirm is None:
-        message = '无效的确认请求!'
-        return render(request, 'confirm.html', locals())
+        message = const.INVALID_MSG
+        return render(request, const.CONFIRM_HTML, locals())
     c_time = confirm.c_time
     now = datetime.datetime.utcnow()
     confirm_time = c_time + datetime.timedelta(settings.CONFIRM_DAYS)
     if now > confirm_time:
         services.delete_by_confirm(confirm)
-        message = '您的邮件已经过期！请重新注册!'
-        return render(request, 'confirm.html', locals())
+        message = const.OLD_EMAIL
+        return render(request, const.CONFIRM_HTML, locals())
     else:
         services.update_user_by_confirm(confirm)
-        message = '感谢确认，请使用账户登录！'
-        return render(request, 'confirm.html', locals())
+        message = const.CONFIRM_LOGIN
+        return render(request, const.CONFIRM_HTML, locals())
 
 def blog_index(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_blog_home_index()
-        return render(request,'blogindex.html',result)
+        return render(request,const.BLOG_INDEX_HTML,result)
 
 def blog_list(request,category_id,page_no):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_blog_home_list(category_id,page_no)
-        return render(request,'blogindex.html',result)
+        return render(request,const.BLOG_INDEX_HTML,result)
     
 def blog_article(request,article_id):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         current_log.info(article_id)
         result = services.get_blog_article(article_id)
-        result['action'] = 'detail'
+        result['action'] = const.DETAIL_ACTION
         result['comment_form'] = forms.CommentForm()
-        return render(request,'blogbase.html',result)
+        return render(request,const.BLOG_BASE_HTML,result)
     
 def blog_articles(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
-        # ----
         author_id = request.session['user_id']
         result = services.get_blog_article_info(author_id)
-        result['action'] = 'detaillist'
-        return render(request,'blogbase.html',result)
+        result['action'] = const.DETAIL_LIST_ACTION
+        return render(request,const.BLOG_BASE_HTML,result)
 
 def blog_add(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         author_id = request.session['user_id']
         result=services.get_blog_article_info(author_id)
-        result['action'] = 'add'
+        result['action'] = const.ADD_ACTION
         result['form'] = forms.ArticleForm()
-        return render(request,'blogbase.html',result)
+        return render(request,const.BLOG_BASE_HTML,result)
 
 def blog_del(request,article_id):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         author_id = request.session['user_id']
         services.del_blog_article_by_id(article_id)
         return redirect('/blog/articles/'+author_id)
 
 def blog_upd(request,article_id):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result=services.get_blog_article(article_id)
         article  = result['article']
         article_form = forms.ArticleForm(initial={'Id':article.Id,'AuthorId':article.AuthorId,'Title':article.Title,'Synopsis':article.Synopsis,'CategoryId':article.CategoryId,'TagId':article.TagId,'Type':article.Type,'Original':article.Original,'Content':article.Content})
-        result['action'] = 'upd'
+        result['action'] = const.UPD_ACTION
         result['form']=article_form
-        return render(request,'blogbase.html',result)
+        return render(request,const.BLOG_BASE_HTML,result)
 
 def blog_add_submit(request):
     article_form = forms.ArticleForm(request.POST,request.FILES)
@@ -293,97 +283,115 @@ def blog_upd_submit(request):
     return blog_upd(request, article.Id)
 
 def novel_index(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_novel_home_index()
-        return render(request,'novelindex.html',result)
+        return render(request,const.NOVEL_INDEX_HTML,result)
 
 def novel_list(request,novel_source_id,page_no):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_novel_home_list(novel_source_id, page_no)
-        return render(request,'novelindex.html',result)
+        return render(request,const.NOVEL_INDEX_HTML,result)
     
 def novel_menu(request,novel_item_id):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_novel_menu_info(novel_item_id)
-        return render(request,'novelmenu.html',result)
+        return render(request,const.NOVEL_BASE_HTML,result)
 
 def novel_content(request,novel_property_id,last_upd_content_ord_id):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_novel_content_info(novel_property_id, last_upd_content_ord_id)
-        return render(request,'novelcontent.html',result)
+        return render(request,const.NOVEL_BASE_HTML,result)
+
 def novel_author(request,novel_item_id):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_novel_infos_by_author(novel_item_id)
-        return render(request,'novelauthor.html',result)
+        return render(request,const.NOVEL_BASE_HTML,result)
+
+def image_index(request):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_image_home_index()
+        return render(request,const.IMAGE_INDEX_HTML,result)
+
+def image_list(request,image_source_id,page_no):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_image_home_list(image_source_id, page_no)
+        return render(request,const.IMAGE_INDEX_HTML,result)
+
+def image_content(request,image_property_id,last_upd_content_ord_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_image_content_info(image_property_id, last_upd_content_ord_id)
+        return render(request,const.IMAGE_BASE_HTML,result)
 
 def tool_index(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_tool_home_index()
-        return render(request,'toolindex.html',result)
+        return render(request,const.TOOL_INDEX_HTML,result)
 
 def tool_funcs(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result_str = services.get_tool_func(request.POST.get('tool'),request.POST.get('method'),request.POST.get('inputarea'),request.POST.get('passkey'));
         result_dict = {'outputarea':result_str};
         return HttpResponse(json.dumps(result_dict))
 
 def learn_index(request):
-    if not request.session.get('is_login',None):
-        content="你还没有权限访问任何画面！请登录"
-        return render(request,'index.html',locals())
+    if is_not_login(request):
+        return render_no_access(request)
     else:
         result = services.get_learn_home_index()
-        return render(request,'learnindex.html',result)
+        return render(request,const.LEARN_INDEX_HTML,result)
     
 
 def learn_linux(request,api_key):
     if api_key in linux_restfuls:
-        if not request.session.get('is_login',None):
-            content="你还没有权限访问任何画面！请登录"
-            return render(request,'index.html',locals())
+        if is_not_login(request):
+            return render_no_access(request)
         else:
             result_dict=get_template_detail(1,api_key,linux_menus)
-            return render(request,'learnbase.html',result_dict)
-    return render(request, '404.html')
+            return render(request,const.LEARN_BASE_HTML,result_dict)
+    return render(request, const.ERROR_HTML)
 
 def learn_bash(request,api_key):
     if api_key in bash_restfuls:
-        if not request.session.get('is_login',None):
-            content="你还没有权限访问任何画面！请登录"
-            return render(request,'index.html',locals())
+        if is_not_login(request):
+            return render_no_access(request)
         else:
             result_dict=get_template_detail(2,api_key,linux_menus)
-            return render(request,'learnbase.html',result_dict)
-    return render(request, '404.html')
+            return render(request,const.LEARN_BASE_HTML,result_dict)
+    return render(request, const.ERROR_HTML)
 
 def learn_regex(request,api_key):
     if api_key in regex_restfuls:
-        if not request.session.get('is_login',None):
-            content="你还没有权限访问任何画面！请登录"
-            return render(request,'index.html',locals())
+        if is_not_login(request):
+            return render_no_access(request)
         else:
             result_dict=get_template_detail(3,api_key,linux_menus)
-            return render(request,'learnbase.html',result_dict)
-    return render(request, '404.html')
+            return render(request,const.LEARN_BASE_HTML,result_dict)
+    return render(request, const.ERROR_HTML)
+
+def is_not_login(request):
+    return not request.session.get(const.IS_LOGIN_KEY, None)
+
+def render_no_access(request):
+    content=const.NO_ACCESS
+    return render(request,const.INDEX_HTML,locals())
 

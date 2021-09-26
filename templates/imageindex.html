@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}小说{% endblock %}
+{% block title %}图片{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -8,14 +8,14 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				{% if novel_source_list %}
+				{% if image_source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							分类<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu menu-top">
-						{% for novel_source in novel_source_list %}
-							<li><a href="/novel/{{ novel_source.CategoryId }}/1" >{{ novel_source.CategoryName }}</a></li>
+						{% for image_source in image_source_list %}
+							<li><a href="/image/{{ image_source.CategoryId }}/1" >{{ image_source.CategoryName }}</a></li>
 						{% endfor %}
 						</ul>
 					</li>
@@ -28,33 +28,34 @@
 	</nav>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12 col-sm-offset-3 col-md-12 col-md-offset-2">
+			<div class="col-md-12">
 				{% if contacts %} 
-				{% for novel_info in contacts %}
 				<div class="row clearfix">
+				{% for image_info in contacts %}
+					{% if forloop.counter0|divisibleby:6 %}
+					</div>
+					<div class="row clearfix">
+					{% endif %}
 					<div class="col-md-2">
-						<h4><a href="/novel/menu/{{ novel_info.item_id }}">{{ novel_info.novel_name }}</a></h4>
+						<a href="/image/{{ image_info.Id }}/1">
+						<img width="200" src="/img/美女/{{ image_info.Name }}/{{ image_info.Name }}_0.jpg" alt="{{image_info.Name}}"/>
+						</a>
+						<h5>{{image_info.Name}}</h5>
 					</div>
-					<div class="col-md-2">
-						<h4>作者：<span><a href="/novel/author/{{ novel_info.item_id }}">{{ novel_info.author }}</a></span></h4>
-					</div>
-					<div class="col-md-8">
-						<h4><a href="/novel/content/{{ novel_info.last_upd_content_id }}/{{ novel_info.last_upd_content_id }}">{{ novel_info.last_upd_content_title }}</a></h4>
-					</div>
+				{% endfor %}
 				</div>
-				{% endfor %} 
 				{% endif %}
-				<div class="row clearfix">
-					{% if pages %}
+			</div>
+			<div class="col-md-12">
+				{% if pages %}
 					<ul class="pagination pagination-lg">
 						{% for page in pages %}
 						<li>
-							 <a href="/novel/{{ page.page_url }}">{{ page.page_no }}</a>
+							 <a href="/image/{{ page.page_url }}">{{ page.page_no }}</a>
 						</li>
 						{% endfor %}
 					</ul>
-					{% endif %}
-				</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>

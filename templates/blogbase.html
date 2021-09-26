@@ -7,7 +7,21 @@
 			
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				{% include "common/blog_menu.html" %}
+				<ul class="nav navbar-nav">
+					<li><a href="/blog/index">博客主页</a></li>
+					{% if blog_category_list %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							分类<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu menu-top">
+						{% for category in blog_category_list %}
+							<li><a href="/blog/{{ category.CategoryId }}/1" >{{ category.CategoryName }}</a></li>
+						{% endfor %}
+						</ul>
+					</li>
+					{% endif %}
+				</ul>
 				{% include "common/search_form.html" %}
 				{% include "common/login_register.html" %}
 			</div><!-- /.navbar-collapse -->
@@ -15,19 +29,6 @@
 	</nav>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-12">
-				{% if blog_category_list %} 
-				<div class="btn-group btn-group-justified" role="group" aria-label="Category">
-				{% for category in blog_category_list %}
-					{% if forloop.counter == 13 %}
-					</div>
-					<div class="btn-group btn-group-justified" role="group" aria-label="Category">
-					{% endif %}
-					<a class="btn btn-default" href="/blog/{{ category.CategoryId }}/1" role="button">{{ category.CategoryName }}</a>
-				{% endfor %}
-				</div>
-				{% endif %}
-			</div>
 			<div class="col-md-1"></div>
 			<div class="col-md-9" style="text-align:left" id="myScrollspy">
 				{% if action == 'detail' %}

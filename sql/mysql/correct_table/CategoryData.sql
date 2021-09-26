@@ -7,11 +7,13 @@ insert into Category values(5,'musics','e','','',1,0,'alvin',curdate());
 insert into Category values(6,'videos','f','','',1,0,'alvin',curdate());
 insert into Category values(7,'novels','g','','',1,0,'alvin',curdate());
 insert into Category values(8,'hiders','h','','',1,0,'alvin',curdate());
+insert into Category values(9,'images','i','','',1,0,'alvin',curdate());
 insert into Category values(1001,'learn','','','',2,0,'alvin',curdate());
 insert into Category values(1002,'tool','','','',3,0,'alvin',curdate());
 insert into Category values(1003,'blog','','','',4,0,'alvin',curdate());
 insert into Category values(1004,'blogtag','','','',4,0,'alvin',curdate());
 insert into Category values(1007,'novel','','','',7,0,'alvin',curdate());
+insert into Category values(1009,'image','','','',9,0,'alvin',curdate());
 insert into Category values(11,'服务端','#linux','','',1001,0,'alvin',curdate());
 insert into Category values(12,'数据库端','#database','','',1001,0,'alvin',curdate());
 insert into Category values(13,'网页端','#webpage','','',1001,0,'alvin',curdate());
@@ -89,25 +91,19 @@ insert into Category VALUES(90,'前沿技术','front','','',1004,0,'alvin',curda
 insert into Category VALUES(91,'语言学习','learn','','',1004,0,'alvin',curdate());
 insert into Category VALUES(92,'休闲娱乐','relaxation','','',1004,0,'alvin',curdate());
 
-insert into Category values(93,'玄幻','xuanhuan','','',1007,0,'alvin',curdate());
-insert into Category values(94,'科幻','kehuan','','',1007,0,'alvin',curdate());
-insert into Category values(95,'仙幻','xianhuan','','',1007,0,'alvin',curdate());
-insert into Category values(96,'武侠','wuxia','','',1007,0,'alvin',curdate());
-insert into Category values(97,'穿越','chuanyue','','',1007,0,'alvin',curdate());
-insert into Category values(98,'同人','tongren','','',1007,0,'alvin',curdate());
-insert into Category values(99,'耽美','danmei','','',1007,0,'alvin',curdate());
-insert into Category values(100,'百合','baihe','','',1007,0,'alvin',curdate());
-insert into Category values(101,'都市','dushi','','',1007,0,'alvin',curdate());
-insert into Category values(102,'历史','lishi','','',1007,0,'alvin',curdate());
-insert into Category values(103,'网游','wangyou','','',1007,0,'alvin',curdate());
-insert into Category values(104,'恐怖','kongbu','','',1007,0,'alvin',CURDATE());
-insert into Category values(105,'唐诗','tangshi','','',1007,0,'alvin',curdate());
-insert into Category values(106,'宋词','songci','','',1007,0,'alvin',curdate());
-insert into Category values(107,'名著','mingzhu','','',1007,0,'alvin',curdate());
-insert into Category values(108,'玄学','xuanxue','','',1007,0,'alvin',curdate());
-insert into Category values(109,'国学','guoxue','','',1007,0,'alvin',curdate());
-insert into Category values(110,'科学','kexue','','',1007,0,'alvin',curdate());
+insert into Category values(101,'言情女生','yqxs','','',1007,0,'alvin',curdate());
+insert into Category values(102,'玄幻奇幻','xhqh','','',1007,0,'alvin',curdate());
+insert into Category values(103,'都市青春','dsqc','','',1007,0,'alvin',curdate());
+insert into Category values(104,'武侠仙侠','wxxx','','',1007,0,'alvin',curdate());
+insert into Category values(105,'唯美纯爱','wmca','','',1007,0,'alvin',curdate());
+insert into Category values(106,'科幻灵异','khly','','',1007,0,'alvin',curdate());
+insert into Category values(107,'轻小说','qxs','','',1007,0,'alvin',curdate());
+insert into Category values(108,'历史军事','lsjs','','',1007,0,'alvin',curdate());
 
+insert into Category values(215,'性感车模','xgcm','','',1009,0,'alvin',curdate());
+insert into Category values(242,'美丽女性','mlnx','','',1009,0,'alvin',curdate());
+insert into Category values(243,'写真美女','xzmn','','',1009,0,'alvin',curdate());
+insert into Category values(244,'诱惑美女','yhmn','','',1009,0,'alvin',curdate());
 
 --insert into Category values(28,'常用工具','#datetool','','',10,0,'alvin',curdate());
 

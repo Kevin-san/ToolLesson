@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}小说{% endblock %}
+{% block content %}
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			{% include "common/alvin_header.html" %}
+			
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="/novel/index">小说主页</a></li>
+					{% if novel_source_list %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							分类<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu menu-top">
+						{% for novel_source in novel_source_list %}
+							<li><a href="/novel/{{ novel_source.CategoryId }}/1" >{{ novel_source.CategoryName }}</a></li>
+						{% endfor %}
+						</ul>
+					</li>
+					{% endif %}
+				</ul>
+				{% include "common/search_form.html" %}
+				{% include "common/login_register.html" %}
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+		{% if action == 'content' %}
+			<div id="content">
+				<div class="row clearfix">
+					<h2 class="text-center">{{ novel_content_info.cur_content.PropertyValue }}</h2>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-2">
+						{% if novel_content_info.prev_content_id %}
+							<a href="/novel/content/{{novel_content_info.prev_content_id}}/{{ last_upd_content_ord_id }}">上一章</a>
+						{% endif %}
+					</div>
+					<div class="col-md-8 text-center">
+						<a href="/novel/menu/{{ novel_content_info.parent_item_id }}">目录</a>
+					</div>
+					<div class="col-md-2">
+						{% if novel_content_info.next_content_id %}
+							<a href="/novel/content/{{novel_content_info.next_content_id}}/{{ last_upd_content_ord_id }}">下一章</a>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<p>{{ novel_content_info.cur_content.PropertyBigVal  |linebreaks}}</p>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-2">
+						{% if novel_content_info.prev_content_id %}
+							<a href="/novel/content/{{novel_content_info.prev_content_id}}/{{ last_upd_content_ord_id }}">上一章</a>
+						{% endif %}
+					</div>
+					<div class="col-md-8 text-center">
+						<a href="/novel/menu/{{ novel_content_info.parent_item_id }}">目录</a>
+					</div>
+					<div class="col-md-2">
+						{% if novel_content_info.next_content_id %}
+							<a href="/novel/content/{{novel_content_info.next_content_id}}/{{ last_upd_content_ord_id }}">下一章</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		{% if action == 'menu' %}
+			<div class="col-md-12">
+				<h2>{{ novel_menu_info.novel_info.novel_name }}</h2>
+				<h4>作者:<a href="/novel/author/{{ novel_menu_info.novel_info.item_id }}">{{novel_menu_info.novel_info.author}}</a></h4>
+				<p>最新章节:<a href="/novel/content/{{novel_menu_info.novel_info.last_upd_content_id}}">{{novel_menu_info.novel_info.last_upd_content_title}}</a></p>
+				<p>简介:</p>
+				<p>{{ novel_menu_info.novel_info.intro}}</p>
+				<p><a href="/novel/download/{{novel_menu_info.novel_info.item_id}}">下载本书</a></p>
+			</div>
+			<div class="col-md-12">
+				{% if novel_menu_info.novel_contents %}
+				<div class="row clearfix">
+				{% for novel_content in novel_menu_info.novel_contents %}
+					{% if forloop.counter0|divisibleby:3  %}
+					</div>
+					<div class="row clearfix">
+					{% endif %}
+						<div class="col-md-4">
+							<a href="/novel/content/{{ novel_content.Id }}/{{ novel_menu_info.novel_info.last_upd_content_id }}">{{ novel_content.PropertyValue }}</a>
+						</div>
+				{% endfor %}
+				</div>
+				{% endif %}
+			</div>
+		{% endif %}
+		{% if action == 'author' %}
+			<div class="row clearfix">
+				<h2 class="text-center">作者：<span><a href="/novel/author/{{ item_id }}">{{ author_name }}</a></span></h2>
+			</div>
+			<div class="col-md-12">
+				{% if novel_info_list %} 
+				{% for novel_info in novel_info_list %}
+				<div class="row clearfix">
+					<div class="col-md-6">
+						<h3><a href="/novel/menu/{{ novel_info.item_id }}">{{ novel_info.novel_name }}</a></h3>
+					</div>
+					<div class="col-md-6">
+						<p>最新:<a href="/novel/content/{{ novel_info.last_upd_content_id }}">{{ novel_info.last_upd_content_title }}</a></p>
+					</div>
+				</div>
+				{% endfor %}
+				{% endif %}
+			</div>
+		{% endif %}
+		</div>
+	</div>
+{% endblock %}

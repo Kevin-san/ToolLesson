@@ -6,12 +6,10 @@ Created on 2019/12/28
 '''
 from PdfWeb import db,entitys,current_log
 from PdfWeb.entitys import HomeIndexItem, PageInfoItem
-from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,\
-    common_executer
+from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,common_executer
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
-from django.http.response import StreamingHttpResponse, FileResponse
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
@@ -28,13 +26,17 @@ font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
 learn_menu_list = db.get_book_lesson_type_info()
 tool_menu_list = db.get_common_tool_type_info()
 blog_category_list= db.get_blog_category_type_info()
-novel_source_list = db.get_novel_source()
-def get_pages(begin_no,end_no,category_id):
+novel_source_list = db.get_novel_category_type_info()
+image_source_list = db.get_image_category_type_info()
+
+def get_pages(begin_no,end_no,category_id,num_pages):
     pages = []
+    pages.append(PageInfoItem("首页",F'{category_id}/1'))
     for i in range(begin_no, end_no):
         page_no=i+1
         page=PageInfoItem(page_no,F'{category_id}/{page_no}')
         pages.append(page)
+    pages.append(PageInfoItem("末页",F'{category_id}/{num_pages}'))
     return pages
 
 def pages_help(page,num_pages,category_id,maxpage):
@@ -58,21 +60,21 @@ def pages_help(page,num_pages,category_id,maxpage):
         #假设100页 100-98=2,页尾处理
         # 结果小于规定数但是当前页大于规定页数
         # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(num_pages - maxpage, num_pages)])
-        return get_pages(num_pages - maxpage, num_pages,category_id)
+        return get_pages(num_pages - maxpage, num_pages,category_id,num_pages)
     elif num_pages > maxpage and offset >= maxpage and p <= maxpage:
         #假设100页 100-2=98，页头
         # 结果小于规定数但是当前页大于规定页数
         # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(maxpage)])
-        return get_pages(0, maxpage,category_id)
+        return get_pages(0, maxpage,category_id,num_pages)
     elif num_pages <= maxpage:
         #假设3页  3<6，总页数很少，少于规定页数
         # 当前页码数小于规定数
         # print("当前页码数小于规定数",[i + 1 for i in range(num_pages)])
-        return get_pages(0, num_pages,category_id)
+        return get_pages(0, num_pages,category_id,num_pages)
     else:
         # 正常页数分配
         # print("正常页数分配",[i + 1 for i in range(p - int(maxpage / 2), p + int(maxpage / 2))])
-        return get_pages(p - int(maxpage / 2), p + int(maxpage / 2),category_id)
+        return get_pages(p - int(maxpage / 2), p + int(maxpage / 2),category_id,num_pages)
 
 def content_infos_to_text(content_infos):
     text_list=[]
@@ -154,6 +156,28 @@ def strtool(method,inputval):
 def get_novel_sources():
     return db.get_novel_source()
 
+def get_image_home_index():
+    return get_image_home_list(15,1)
+
+def get_image_home_list(source_id,page_no):
+    keys = ['image_source_list','contacts','pages']
+    image_info_list = db.get_spider_item_by_page_no(source_id,page_no,30)
+    image_cnt = db.get_image_item_count_by_source_id(source_id)
+    current_log.info(image_source_list)
+    current_log.info(image_cnt)
+    max_page = image_cnt//30
+    if image_cnt % 30 != 0:
+        max_page = max_page+1
+    pages = pages_help(page_no, max_page, source_id, 6)
+    vals=[image_source_list,image_info_list,pages]
+    return common_tools.create_map(keys, vals)
+
+def get_image_content_info(prop_id,last_upd_content_ord_id):
+    keys = ['image_source_list','image_content_info','last_upd_content_ord_id']
+    content_info=db.get_novel_content_include_prev_next_page(prop_id, last_upd_content_ord_id)
+    vals=[image_source_list,content_info,last_upd_content_ord_id,'content']
+    return common_tools.create_map(keys, vals)
+
 def get_novel_home_index():
     return get_novel_home_list(1, 1)
 
@@ -171,23 +195,23 @@ def get_novel_home_list(source_id,page_no):
     return common_tools.create_map(keys, vals)
 
 def get_novel_menu_info(item_id):
-    keys = ['novel_source_list','novel_menu_info']
+    keys = ['novel_source_list','novel_menu_info','action']
     novel_info = db.get_novel_contents_by_item_id(item_id)
-    vals= [novel_source_list,novel_info]
+    vals= [novel_source_list,novel_info,'menu']
     return common_tools.create_map(keys, vals)
 
 def get_novel_content_info(prop_id,last_upd_content_ord_id):
-    keys = ['novel_source_list','novel_content_info','last_upd_content_ord_id']
+    keys = ['novel_source_list','novel_content_info','last_upd_content_ord_id','action']
     content_info=db.get_novel_content_include_prev_next_page(prop_id, last_upd_content_ord_id)
-    vals=[novel_source_list,content_info,last_upd_content_ord_id]
+    vals=[novel_source_list,content_info,last_upd_content_ord_id,'content']
     return common_tools.create_map(keys, vals)
 
 def get_novel_infos_by_author(item_id):
     novel_info = db.get_novel_contents_by_item_id(item_id)
     author_name=novel_info.novel_info.author
-    keys = ['novel_source_list','item_id','author_name','novel_info_list']
+    keys = ['novel_source_list','item_id','author_name','novel_info_list','action']
     novel_info_list = db.get_novel_infos_by_author(author_name)
-    vals = [novel_source_list,item_id,author_name,novel_info_list]
+    vals = [novel_source_list,item_id,author_name,novel_info_list,'author']
     return common_tools.create_map(keys, vals)    
 
 def get_blog_home_index():

@@ -109,3 +109,9 @@ n.名词 v.动词 pron.代词 adj.形容词adv.副词 num.数词 art.冠词prep.
 　　虚词：不表示实在意义而表示语法意义的词,有：介词、连词、助词、叹词.
 
 insert into LanguageDictionary(LangValue,LanguageType,ItemType,PartSpeech,ChineseTranslation,ExampleSentence,ExampleSentence2,ExampleSentence3,ExampleSentence4,ExampleSentence5,SamplePattern6,SamplePattern7,SamplePattern8,SamplePattern9,SamplePattern10,submission_date) values
+
+
+cmd
+H:
+cd git\CorePdfPage\static\img
+mklink /D 美女 "I:\图片\美女"
