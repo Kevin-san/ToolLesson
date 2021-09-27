@@ -206,6 +206,16 @@ class NovelInfoItem():
         self.last_upd_content_id = last_upd_content_id
         self.last_upd_content_title = last_upd_content_title
 
+class ImageInfoItem():
+    def __init__(self,item_id,image_name,spider_props):
+        self.item_id=item_id
+        self.image_name=image_name
+        for spider_prop in spider_props:
+            order_id_str=str(spider_prop.OrderId)
+            prefix = spider_prop.PropertyBigVal.split(".")[-1]
+            spider_prop.PropertyBigVal = image_name + "_"+order_id_str+"."+prefix
+        self.spider_props = spider_props
+
 class NovelIndexItem():
     def __init__(self,novel_info,novel_contents):
         self.novel_info = novel_info

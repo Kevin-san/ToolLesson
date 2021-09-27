@@ -331,11 +331,11 @@ def image_list(request,image_source_id,page_no):
         result = services.get_image_home_list(image_source_id, page_no)
         return render(request,const.IMAGE_INDEX_HTML,result)
 
-def image_content(request,image_property_id,last_upd_content_ord_id):
+def image_content(request,item_id):
     if is_not_login(request):
         return render_no_access(request)
     else:
-        result = services.get_image_content_info(image_property_id, last_upd_content_ord_id)
+        result = services.get_image_content_info(item_id)
         return render(request,const.IMAGE_BASE_HTML,result)
 
 def tool_index(request):

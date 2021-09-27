@@ -6,7 +6,7 @@ Created on 2019/12/28
 '''
 
 from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment
-from PdfWeb.entitys import HomeInfoItem, NovelInfoItem, NovelIndexItem,\
+from PdfWeb.entitys import HomeInfoItem, NovelInfoItem,ImageInfoItem, NovelIndexItem,\
     NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
@@ -328,6 +328,11 @@ def get_image_category_type_info():
     for category in category_list:
         category.CategoryId = category.CategoryId - 200
     return category_list
+
+def get_image_content_info(item_id):
+    spider_item = get_spider_item_by_id(item_id)
+    spider_props = get_spider_property(item_id)
+    return ImageInfoItem(item_id,spider_item.Name,spider_props)
 
 def get_blog_tag_category_type_info():
     category=Category.objects.get(CategoryName='blogtag',DeleteFlag=0)

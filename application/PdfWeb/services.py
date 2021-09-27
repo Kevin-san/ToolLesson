@@ -172,10 +172,10 @@ def get_image_home_list(source_id,page_no):
     vals=[image_source_list,image_info_list,pages]
     return common_tools.create_map(keys, vals)
 
-def get_image_content_info(prop_id,last_upd_content_ord_id):
-    keys = ['image_source_list','image_content_info','last_upd_content_ord_id']
-    content_info=db.get_novel_content_include_prev_next_page(prop_id, last_upd_content_ord_id)
-    vals=[image_source_list,content_info,last_upd_content_ord_id,'content']
+def get_image_content_info(item_id):
+    keys = ['image_source_list','image_content_info']
+    content_info=db.get_image_content_info(item_id)
+    vals=[image_source_list,content_info]
     return common_tools.create_map(keys, vals)
 
 def get_novel_home_index():
