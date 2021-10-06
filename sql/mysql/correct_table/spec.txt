@@ -114,4 +114,31 @@ insert into LanguageDictionary(LangValue,LanguageType,ItemType,PartSpeech,Chines
 cmd
 H:
 cd git\CorePdfPage\static\img
-mklink /D 美女 "I:\图片\美女"
+mklink /D img "I:\图片"
+rmdir d:\美女
+
+centos 7.9 系统搭建
+jenkins
+mariadb
+python3
+django2
+
+
+上传功能 post
+下载功能 get
+收藏功能
+评论功能
+大功能差 音乐和视频
+核心差 上传，下载，收藏，评论(可以套用博客 界面),编辑(可以套用博客界面), pdf 分析 (写了一些，卡住了)
+课程、小说、博客 使用markdown 编辑 ， 支持下载，上传 ， 设定好权限，（课程原有脑洞保留)
+音乐、图片、视频、音频 支持下载，上传 权限不同
+工具 无改动 。。。可能有追加功能
+
+爬虫 改为 batch 每天定时跑 ， 小说，图片源自爬虫，音频爬虫还未完成，视频爬虫速度太慢，暂时先缓缓
+博客，课程自己写，课程支持生成pdf, 上传也使用pdf ,需要写pdf分析功能   博客自己的
+现有的表的数量过多，适当删减 合并
+
+安装服务器系统命令
+
+
+

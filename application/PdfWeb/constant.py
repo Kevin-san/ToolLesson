@@ -36,6 +36,9 @@ USER_PROFILE_HTML='userprofile.html'
 BLOG_BASE_HTML='blogbase.html'
 BLOG_INDEX_HTML='blogindex.html'
 
+BOOK_INDEX_HTML='bookindex.html'
+BOOK_BASE_HTML='bookbase.html'
+
 NOVEL_INDEX_HTML='novelindex.html'
 NOVEL_BASE_HTML='novelbase.html'
 

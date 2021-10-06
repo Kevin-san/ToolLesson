@@ -332,7 +332,7 @@ https://blog.csdn.net/makesomethings/article/details/100061591
 自动跳转下一页
 
 图片网站
-pending
+done
 
 权限管理
 
@@ -351,4 +351,61 @@ pending
 
 数据库迁移
 pending
+
+SELECT DISTINCT si.Id,si.Name,sp2.PropertyValue,sp1.PropertyValue, case when sp3.PropertyValue = '' then '/img/novel_bg.jpg' else sp3.PropertyValue end,101,'言情女生',0,'alvin',CURDATE() FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.DeleteFlag in(1,2) AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' and si.Id = sp3.ItemId and sp3.PropertyKey = '图片' AND si.SourceId = 1
+SELECT DISTINCT si.Id,si.Name,sp2.PropertyValue,sp1.PropertyValue, case when sp3.PropertyValue = '' then '/img/novel_bg.jpg' else sp3.PropertyValue end,101,'言情女生',0,'alvin',CURDATE() FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.DeleteFlag =1 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' and si.Id = sp3.ItemId and sp3.PropertyKey = '图片' AND si.SourceId = 1
+
+
+SELECT cp.Id,cp.BookLesson_Id,cp.ChapterNo,0,cp.ChapterName,case 
+when ct.ElementTag = 'h1' then CONCAT('# ',ct.Text)
+when ct.ElementTag = 'h2' then CONCAT('## ',ct.Text)
+when ct.ElementTag = 'h3' then CONCAT('### ',ct.Text)
+when ct.ElementTag = 'h4' then CONCAT('#### ',ct.Text)
+when ct.ElementTag = 'h5' then CONCAT('##### ',ct.Text)
+when ct.ElementTag = 'image' then CONCAT('![](',replace(ct.Text,'/static','') ,')')
+when ct.ElementTag = 'em' then CONCAT('***',ct.Text,'***')
+when ct.ElementTag = 'i' then CONCAT('*',ct.Text,'*')
+when ct.ElementTag = 'line' then '---'
+when ct.ElementTag = 'ol' then replace(ct.Text,'\r\n','\r\n- ')
+when ct.ElementTag = 'ul' then replace(ct.Text,'\r\n','\r\n- ')
+when ct.ElementTag = 'p' then ct.Text
+when ct.ElementTag = 'pre' then CONCAT('```',ct.Text,'```')
+when ct.ElementTag = 'strong' then CONCAT('**',ct.Text,'**')
+when ct.ElementTag = 'table' then replace(ct.Text,'	','|') ELSE '' END,
+0,'alvin',CURDATE()
+  FROM content ct, chapter cp WHERE ct.Chapter_Id = cp.Id 
+
+SELECT * FROM content WHERE ElementTag = 'a'
+
+查询
+下载功能
+上传
+编辑
+新增
+删除
+评论功能 ：多来源，需要加一个字段 ,functionName,FromId
+收藏功能 ：分类 (图片，【音频，视频】，【小说，教程】，博客)
+自定义歌单/书单/视频单/图片单
+CustomSheet
+	Title
+	Description
+	Source
+	IdList
+	author
+	
+
+AudioVideo
+	名字
+	类型
+	作者
+	图片
+	内容
+AvSection
+	名字
+	序列号
+	后缀
+	时长
+	大小
+
+Image
 

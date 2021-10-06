@@ -27,6 +27,11 @@ regex_restfuls = services.get_restful(3, "regex")
 blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
 tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
 
+def create_dict_base_on_keys_form(keys_list,form_data):
+    dict_result={}
+    for dict_key in keys_list:
+        dict_result[dict_key] = form_data.cleaned_data[dict_key]
+    return dict_result
 def create_dict_from_keys_form(keys_list,int_keys,form_data):
     dict_result={}
     for dict_key in keys_list:
@@ -281,6 +286,160 @@ def blog_upd_submit(request):
         services.upd_blog_article(article)
         return blog_article(request, article.Id)
     return blog_upd(request, article.Id)
+
+def book_index(request,book_type):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_book_home_index(book_type)
+        return render(request,const.BOOK_INDEX_HTML,result)
+
+def book_list(request,book_type,category_id,page_no):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_book_list(book_type,category_id,page_no)
+        return render(request,const.BOOK_INDEX_HTML,result)
+
+def book_menu(request,book_type,book_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_book_menu_info(book_type,book_id)
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def book_section(request,book_type,section_order_no,max_section_order_no):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_book_section_info(book_type,section_order_no,max_section_order_no)
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def book_author(request,book_type,book_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_book_infos_by_author(book_type,book_id)
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def book_menuadd(request,book_type):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=dict()
+        result['action'] = const.ADD_ACTION
+        result['item']='book'
+        result['book_type']=book_type
+        result['form'] = forms.LearnForm()
+        if book_type =='novel':
+            result['form'] = forms.NovelForm()
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def book_menudel(request,book_type,book_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=services.del_book_by_id(book_type,book_id)
+        return render(request,const.BOOK_INDEX_HTML,result)
+
+def book_menuupd(request,book_type,book_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_book_info(book_type,book_id)
+        book=result['book']
+        result['form']=forms.LearnForm(initital={'Id':book.Id,'BookName':book.BookName,'Description':book.Description,'Author':book.author,'ImageContent':book.ImageContent,'CategoryId':book.CategoryId})
+        if book_type=='novel':
+            result['form']=forms.NovelForm(initital={'Id':book.Id,'BookName':book.BookName,'Description':book.Description,'Author':book.author,'ImageContent':book.ImageContent,'CategoryId':book.CategoryId})
+        result['action']=const.UPD_ACTION
+        result['item']='book'
+        return render(request, const.BOOK_BASE_HTML, result)
+
+def book_add_submit(request,book_type):
+    book_form = forms.BookForm(request.POST,request.FILES)
+    book_keys = ['BookName','Description','Author','ImageContent','CategoryId']
+    if book_form.is_valid():
+        book_dict = create_dict_base_on_keys_form(book_keys,book_form)
+        book=services.ins_book(book_dict)
+        return book_menu(request, book_type,book.Id)
+    return book_menuadd(request,book_type)
+
+def book_upd_submit(request,book_type):
+    book_form = forms.BookForm(request.POST,request.FILES)
+    if book_form.is_valid():
+        result = services.get_book_info(book_type, int(book_form.cleaned_data['Id']))
+        book = result['book']
+        book.BookName = book_form.cleaned_data['BookName']
+        book.Description = book_form.cleaned_data['Description']
+        book.Author = book_form.cleaned_data['Author']
+        book.ImageContent = book_form.cleaned_data['ImageContent']
+        book.CategoryId = book_form.cleaned_data['CategoryId']
+        book.UpdateUser=request.session['user_name']
+        services.upd_book(book)
+        return book_menu(request, book.Id)
+    return book_menuupd(request,book_type,book.Id)
+
+def book_sectionadd(request,book_type,book_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=services.get_book_info(book_type, book_id)
+        result['action'] = const.ADD_ACTION
+        result['item']='section'
+        result['form'] = forms.SectionForm(initial={'BookId':book_id})
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def book_sectiondel(request,book_type,section_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=services.del_section_by_id(book_type,section_id)
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def book_sectionupd(request,book_type,section_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=services.get_section_info(book_type,section_id)
+        section=result['section']
+        result['action'] = const.UPD_ACTION
+        result['item']='section'
+        result['form'] = forms.SectionForm(inital={'Id':section.Id,'BookId':section.BookId,'OrderNo':section.OrderNo,'SectionNo':section.SectionNo,'ChapterName':section.ChapterName,'Content':section.Content})
+        return render(request,const.BOOK_BASE_HTML,result)
+
+def section_add_submit(request,book_type):
+    section_form = forms.SectionForm(request.POST,request.FILES)
+    book_id=section_form.cleaned_data['BookId']
+    section_keys = ['BookId','OrderNo','SectionNo','ChapterName','Content']
+    if section_form.is_valid():
+        section_dict = create_dict_base_on_keys_form(section_keys,section_form)
+        section=services.ins_section(section_dict)
+        book=services.get_book_info(book_type, book_id)['book']
+        book.MaxSectionId=section.OrderNo
+        book.MaxSectionName=section.ChapterName
+        services.upd_book(book)
+        max_section_order_no=services.get_max_book_section_order_no(book_id)
+        return book_section(request, book_type, section.Id, max_section_order_no)
+    return book_sectionadd(request,book_type,book_id)
+
+def section_upd_submit(request,book_type):
+    section_form = forms.SectionForm(request.POST,request.FILES)
+    if section_form.is_valid():
+        section = services.get_book_section(int(section_form.cleaned_data['Id']))
+        section.OrderNo = int(section_form.cleaned_data['OrderNo'])
+        section.SectionNo = int(section_form.cleaned_data['SectionNo'])
+        section.ChapterName = section_form.cleaned_data['ChapterName']
+        section.Content = section_form.cleaned_data['Content']
+        services.upd_section(section)
+        book_id=section.BookId
+        max_section_order_no=services.get_max_book_section_order_no(section.BookId)
+        max_section = services.get_book_section_by_order_no(book_id,max_section_order_no)
+        book=services.get_book_info(book_type, book_id)['book']
+        book.MaxSectionId=max_section.OrderNo
+        book.MaxSectionName=max_section.ChapterName
+        services.upd_book(book)
+        return book_menu(request, book_type, book_id)
+    return book_sectionupd(request, book_type, section_form.cleaned_data['Id'])
 
 def novel_index(request):
     if is_not_login(request):

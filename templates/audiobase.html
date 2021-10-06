@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}图片{% endblock %}
+{% block content %}
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			{% include "common/alvin_header.html" %}
+			
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				{% if image_source_list %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							分类<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu menu-top">
+						{% for image_source in image_source_list %}
+							<li><a href="/image/{{ image_source.CategoryId }}/1" >{{ image_source.CategoryName }}</a></li>
+						{% endfor %}
+						</ul>
+					</li>
+				{% endif %}
+			</ul>
+			{% include "common/search_form.html" %}
+			{% include "common/login_register.html" %}
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				{% if image_content_info %}
+				<div class="row clearfix text-center">
+					<h1>{{ image_content_info.image_name }}</h1>
+					<p><a href="/image/download/{{image_content_info.item_id}}">下载组图</a></p>
+				</div>
+				<div class="container">
+					<div class="col-md-12 column">
+						<div class="carousel slide" id="carousel-alvin">
+							<ol class="carousel-indicators">
+							{% for image_info in image_content_info.spider_props %}
+								{% if forloop.counter0 == 0 %}
+								<li class="active" data-slide-to="{{image_info.OrderId}}" data-target="#carousel-alvin"></li>
+								{% else %}
+								<li data-slide-to="{{image_info.OrderId}}" data-target="#carousel-alvin"></li>
+								{% endif %}
+							{% endfor %}
+							</ol>
+							<div class="carousel-inner">
+							{% for image_info in image_content_info.spider_props %}
+								{% if forloop.counter0 == 0 %}
+								<div class="item active">
+									<img class="center-block" alt="{{image_content_info.image_name}}" src="/img/美女/{{image_content_info.image_name}}/{{image_info.PropertyBigVal}}"/>
+								</div>
+								{% else %}
+								<div class="item">
+									<img class="center-block" alt="{{image_content_info.image_name}}" src="/img/美女/{{image_content_info.image_name}}/{{image_info.PropertyBigVal}}"/>
+								</div>
+								{% endif %}
+							{% endfor %}
+							</div>
+							<a class="left carousel-control" href="#carousel-alvin" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+							<a class="right carousel-control" href="#carousel-alvin" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

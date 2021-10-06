@@ -10,6 +10,7 @@ from tools import common_tools, common_converter, common_formater, common_coder,
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
+from PdfWeb.db import get_prev_order_id
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
@@ -23,11 +24,15 @@ html_children_tags=entitys.convert_common_rules_to_tag_dict(html_children_rules)
 html_dirty_tags=entitys.convert_common_rules_to_tag_dict(html_dirty_rules)
 font_rules=db.get_common_rules_by_type('font')
 font_tags=entitys.convert_common_rules_to_tag_dict(font_rules)
-learn_menu_list = db.get_book_lesson_type_info()
+category_map={
+    "learn":db.get_learn_category_type_info(),
+    "novel":db.get_novel_category_type_info(),
+    "image":db.get_image_category_type_info(),
+    "audio":db.get_image_category_type_info(),
+    }
+
 tool_menu_list = db.get_common_tool_type_info()
 blog_category_list= db.get_blog_category_type_info()
-novel_source_list = db.get_novel_category_type_info()
-image_source_list = db.get_image_category_type_info()
 
 def get_pages(begin_no,end_no,category_id,num_pages):
     pages = []
@@ -99,6 +104,90 @@ def get_home_index():
         content_list.append(temp_str)
     return "".join(content_list)
 
+def get_book_home_index(book_type):
+    return get_book_list(book_type,category_map[book_type][0].CategoryId,1)
+    
+def get_book_list(book_type,category_id,page_no):
+    keys = ['book_type','source_list','contacts','pages']
+    contacts = db.get_book_by_category_id(category_id, page_no, 20)
+    total_count = db.get_book_count_by_category_id(category_id)
+    max_page = total_count//20
+    if total_count % 20 != 0:
+        max_page = max_page+1
+    pages = pages_help(page_no, max_page, category_id, 6)
+    vals=[book_type,category_map[book_type],contacts,pages]
+    return common_tools.create_map(keys, vals)
+
+def get_book_info(book_type,book_id):
+    keys=['book_type','source_list','book']
+    book=db.get_book_by_id(book_id)
+    vals=[book_type,category_map[book_type],book]
+    return common_tools.create_map(keys, vals)
+
+def get_book_menu_info(book_type,book_id):
+    keys = ['book_type','source_list','book_menu_info','action']
+    book_menu_info = db.get_booksections_by_id(book_id)
+    vals= [book_type,category_map[book_type],book_menu_info,'menu']
+    return common_tools.create_map(keys, vals)
+
+def get_book_section(section_id):
+    return db.get_book_section_by_id(section_id)
+
+def get_max_book_section_order_no(book_id):
+    return db.get_booksections_by_id(book_id)[-1].OrderNo
+
+def get_book_section_info(book_type,section_order_no,max_section_order_no):
+    keys = ['book_type','source_list','book_content_info','max_section_order_no','action']
+    book_content_info=db.get_book_content_include_prev_next_page(section_order_no, max_section_order_no)
+    vals=[book_type,category_map[book_type],book_content_info,max_section_order_no,'section']
+    return common_tools.create_map(keys, vals)
+
+def get_book_infos_by_author(book_type,book_id):
+    book = db.get_book_by_id(book_id)
+    author_name=book.Author
+    keys = ['book_type','source_list','book_id','author_name','book_info_list','action']
+    book_info_list = db.get_book_infos_by_author(author_name)
+    vals = [book_type,category_map[book_type],book_id,author_name,book_info_list,'author']
+    return common_tools.create_map(keys, vals)
+
+def get_section_info(book_type,section_id):
+    keys = ['book_type','source_list','section']
+    section=db.get_book_section_by_id(section_id)
+    vals=[book_type,category_map[book_type],section]
+    return common_tools.create_map(keys, vals)
+
+def get_book_section_by_order_no(book_id,order_no):
+    return db.get_book_section_by_order_no(book_id,order_no)
+
+def del_book_by_id(book_type,book_id):
+    category_id=db.del_book_by_id(book_id)
+    return get_book_list(book_type, category_id, 1)
+
+def ins_book(book_dict):
+    return db.ins_book(book_dict)
+
+def upd_book(book):
+    db.upd_book(book)
+    return book
+
+def del_section_by_id(book_type,section_id):
+    section=db.get_book_section_by_id(section_id)
+    prev_order_no=db.get_prev_order_no(section.OrderNo)
+    prev_section = db.get_book_section_by_order_no(section.BookId, prev_order_no)
+    book_id=db.del_section_by_id(section_id)
+    book=db.get_book_by_id(book_id)
+    book.MaxSectionId=prev_order_no
+    book.MaxSectionName=prev_section.ChapterName
+    db.upd_book(book)
+    return get_book_menu_info(book_type, book_id)
+
+def ins_section(section_dict):
+    return db.ins_section(section_dict)
+
+def upd_section(section):
+    db.upd_section(section)
+    return section
+
 def get_tool_val_list():
     tool_val_list = []
     for common_tool_type in tool_menu_list:
@@ -163,19 +252,18 @@ def get_image_home_list(source_id,page_no):
     keys = ['image_source_list','contacts','pages']
     image_info_list = db.get_spider_item_by_page_no(source_id,page_no,30)
     image_cnt = db.get_image_item_count_by_source_id(source_id)
-    current_log.info(image_source_list)
     current_log.info(image_cnt)
     max_page = image_cnt//30
     if image_cnt % 30 != 0:
         max_page = max_page+1
     pages = pages_help(page_no, max_page, source_id, 6)
-    vals=[image_source_list,image_info_list,pages]
+    vals=[category_map['image'],image_info_list,pages]
     return common_tools.create_map(keys, vals)
 
 def get_image_content_info(item_id):
     keys = ['image_source_list','image_content_info']
     content_info=db.get_image_content_info(item_id)
-    vals=[image_source_list,content_info]
+    vals=[category_map['image'],content_info]
     return common_tools.create_map(keys, vals)
 
 def get_novel_home_index():
@@ -185,25 +273,25 @@ def get_novel_home_list(source_id,page_no):
     keys = ['novel_source_list','contacts','pages']
     novel_info_list = db.get_novel_items_by_source_id(source_id,page_no,20)
     novel_cnt = db.get_novel_item_count_by_source_id(source_id)
-    current_log.info(novel_source_list)
+    current_log.info(category_map['novel'])
     current_log.info(novel_cnt)
     max_page = novel_cnt//20
     if novel_cnt % 20 != 0:
         max_page = max_page+1
     pages = pages_help(page_no, max_page, source_id, 6)
-    vals=[novel_source_list,novel_info_list,pages]
+    vals=[category_map['novel'],novel_info_list,pages]
     return common_tools.create_map(keys, vals)
 
 def get_novel_menu_info(item_id):
     keys = ['novel_source_list','novel_menu_info','action']
     novel_info = db.get_novel_contents_by_item_id(item_id)
-    vals= [novel_source_list,novel_info,'menu']
+    vals= [category_map['novel'],novel_info,'menu']
     return common_tools.create_map(keys, vals)
 
 def get_novel_content_info(prop_id,last_upd_content_ord_id):
     keys = ['novel_source_list','novel_content_info','last_upd_content_ord_id','action']
     content_info=db.get_novel_content_include_prev_next_page(prop_id, last_upd_content_ord_id)
-    vals=[novel_source_list,content_info,last_upd_content_ord_id,'content']
+    vals=[category_map['novel'],content_info,last_upd_content_ord_id,'content']
     return common_tools.create_map(keys, vals)
 
 def get_novel_infos_by_author(item_id):
@@ -211,7 +299,7 @@ def get_novel_infos_by_author(item_id):
     author_name=novel_info.novel_info.author
     keys = ['novel_source_list','item_id','author_name','novel_info_list','action']
     novel_info_list = db.get_novel_infos_by_author(author_name)
-    vals = [novel_source_list,item_id,author_name,novel_info_list,'author']
+    vals = [category_map['novel'],item_id,author_name,novel_info_list,'author']
     return common_tools.create_map(keys, vals)    
 
 def get_blog_home_index():
@@ -265,7 +353,7 @@ def get_blog_article_info(author_id):
 
 def get_learn_val_list():
     learn_val_list = []
-    for book_lesson_type in learn_menu_list:
+    for book_lesson_type in category_map['learn']:
         index_list = db.get_book_lesson_image_info(book_lesson_type.CategoryId)
         id_name = book_lesson_type.CategoryValue1.replace('#','')
         item = HomeIndexItem(id_name,book_lesson_type.CategoryName,index_list)
@@ -274,7 +362,7 @@ def get_learn_val_list():
 
 def get_learn_home_index():
     keys = ['menu_list','val_list']
-    vals = [learn_menu_list,get_learn_val_list()]
+    vals = [category_map['learn'],get_learn_val_list()]
     return common_tools.create_map(keys,vals)
 
 def get_menus(book_type_id):

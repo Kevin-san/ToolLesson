@@ -216,6 +216,18 @@ class ImageInfoItem():
             spider_prop.PropertyBigVal = image_name + "_"+order_id_str+"."+prefix
         self.spider_props = spider_props
 
+class BookIndexItem():
+    def __init__(self,book,sections):
+        self.book = book
+        self.sections = sections
+
+class BookContentItem():
+    def __init__(self,parent_item_id,cur_content,prev_content_id=None,next_content_id=None):
+        self.parent_item_id = parent_item_id
+        self.cur_content= cur_content
+        self.prev_content_id=prev_content_id
+        self.next_content_id=next_content_id
+
 class NovelIndexItem():
     def __init__(self,novel_info,novel_contents):
         self.novel_info = novel_info

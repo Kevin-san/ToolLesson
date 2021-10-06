@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}{book_type}{% endblock %}
+{% block content %}
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			{% include "common/alvin_header.html" %}
+			
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				{% if source_list %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							分类<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu menu-top">
+						{% for source in source_list %}
+							<li><a href="/{book_type}/book/{{ source.CategoryId }}/1" >{{ source.CategoryName }}</a></li>
+						{% endfor %}
+						</ul>
+					</li>
+				{% endif %}
+			</ul>
+			{% include "common/search_form.html" %}
+			{% include "common/login_register.html" %}
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-sm-offset-3 col-md-12 col-md-offset-2">
+				<div class="row clearfix">
+					<div class="col-md-6">
+						<a href="/{book_type}/book/menuadd">新增书籍</a>
+					</div>
+					<div class="col-md-6">
+						<a href="/{book_type}/book/upload">上传书籍</a>
+					</div>
+				</div>
+				{% if contacts %} 
+				{% for book_info in contacts %}
+				<div class="row clearfix">
+					<div class="col-md-2">
+						<a href="/{book_type}/book/menu/{{ book_info.Id }}">
+							<img src="{{ book_info.ImageContent }}" width="10" class="img-responsive" alt="{{ book_info.BookName }}">
+							<h4>{{ book_info.BookName }}</h4>
+						</a>
+					</div>
+					<div class="col-md-2">
+						<h4>作者：<span><a href="/{book_type}/book/author/{{ book_info.Id }}">{{ book_info.Author }}</a></span></h4>
+					</div>
+					<div class="col-md-4">
+						<h4><a href="/{book_type}/book/section/{{ book_info.MaxSectionId }}/{{ novel_info.MaxSectionId }}">{{ novel_info.MaxSectionName }}</a></h4>
+					</div>
+					<div class="col-md-2">
+						<h4><a href="/{book_type}/book/menuupd/{{ book_info.Id }}">修改</a></h4>
+					</div>
+					<div class="col-md-2">
+						<h4><a href="/{book_type}/book/menudel/{{ book_info.Id }}">删除</a></h4>
+					</div>
+				</div>
+				{% endfor %} 
+				{% endif %}
+				<div class="row clearfix">
+					{% if pages %}
+					<ul class="pagination pagination-lg">
+						{% for page in pages %}
+						<li>
+							 <a href="/{book_type}/book/{{ page.page_url }}">{{ page.page_no }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -8,7 +8,7 @@ Created on 2019/6/30
 from os.path import getsize,join
 import tools.common_logger as log
 import tools.common_tools as common
-import os
+import os,subprocess,json
 import time
 import chardet
 import sys
@@ -16,6 +16,9 @@ import shutil
 from natsort.natsort import natsorted
 from retrying import retry
 from Crypto.Cipher import AES
+from pydub import AudioSegment
+from moviepy.editor import VideoFileClip
+from writecreater.fileswriter import SimpleFileWriter
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
 
@@ -137,6 +140,14 @@ def to_mp4_files(ts_file):
     os.system(cmd)
     return mp4_path
 
+def get_file_total_time(file_path,file_type):
+    if file_type == 'audio':
+        audio_type = file_path.split(".")[-1]
+        sound = AudioSegment.from_file(file_path,audio_type)
+        return sound.duration_seconds
+    else:
+        clip = VideoFileClip(file_path)
+        return clip.duration
 def remove_files(file_list):
     for file in file_list:
         os.remove(file)
@@ -212,3 +223,28 @@ def get_file_infos_service(local_xenv_home,local_home):
     for index,dir_name in enumerate(dir_list):
         arti_f.write(F'{dir_name}={file_list[index]}\n')
     current_log.info('end time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
+
+
+if __name__ =='__main__':
+    parent_path = "I:/音频/歌曲"
+    output_sql = SimpleFileWriter("I:/音频/歌曲/AudioVideoData.sql")
+    output2_sql = SimpleFileWriter("I:/音频/歌曲/AvSectionData.sql")
+    list_dirs = get_file_details(parent_path+"/directory.txt")
+    index=0
+    for ord_id,directory in enumerate(list_dirs):
+        cateogry_path = parent_path+"/"+directory
+        list_files = get_child_files(cateogry_path)
+        for file in list_files:
+            real_file = file.replace("'","\\'")
+            print(real_file)
+            file_type = file.split(".")[-1]
+            file_path = cateogry_path+"/"+file
+            index=index+1
+            try:
+                seconds = str(get_file_total_time(file_path,'audio')).split(".")[0]
+            except Exception:
+                seconds = "0"
+            file_size = str(get_file_size(file_path))
+            output_sql.append_new_line("insert into AudioVideo values("+str(index)+",'"+real_file+"',"+"'/audio/歌曲','','','/img/novel_bg.jpg',"+str(ord_id+301)+","+seconds+","+file_size+",0,'alvin',curdate());")
+            output2_sql.append_new_line("insert into AvSection values("+str(index)+","+str(index)+",0,0,'"+file_type+"',"+seconds+","+file_size+",0,'alvin',curdate());")
+    

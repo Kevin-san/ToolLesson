@@ -11,6 +11,98 @@ def user_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
     return 'article/{0}/{1}'.format(childdir,filename)
 
+def book_directory_path(instance,filename):
+    childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
+    return 'book/{0}/{1}'.format(childdir,filename)
+
+def avdeo_directory_path(instance,filename):
+    childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
+    return 'avdeo/{0}/{1}'.format(childdir,filename)
+
+class AudioVideo(models.Model):
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
+    AvName = models.CharField(max_length=100, unique=True,verbose_name='音视频名')
+    ParentDir = models.CharField(max_length=100,verbose_name='父目录')
+    Content = models.CharField(max_length=3000,verbose_name='内容')
+    Authors = models.CharField(max_length=300,default='',verbose_name='作者')
+    ImageContent = models.ImageField(upload_to=avdeo_directory_path,max_length=100,default='',verbose_name='图片',null=True,blank=True)
+    CategoryId= models.IntegerField(verbose_name='分类Id')
+    TotalTime = models.IntegerField(verbose_name='总时长')
+    TotalSize = models.IntegerField(verbose_name='总大小')
+    UpdateTime=models.DateTimeField(auto_now_add=True,verbose_name="更新时间")
+    UpdateUser=models.CharField(max_length=100,verbose_name='更新者')
+    DeleteFlag=models.BooleanField(default=0,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='AudioVideo'
+        verbose_name = "音视频"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.AvName
+
+class AvSection(models.Model):
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
+    AvId = models.IntegerField(verbose_name='AvId')
+    OrderNo = models.IntegerField(default=0,verbose_name='章号')
+    SectionNo = models.IntegerField(default=0,verbose_name='节号')
+    Preffix = models.CharField(max_length=10,verbose_name='后缀')
+    Time = models.IntegerField(verbose_name='时长')
+    Size = models.BigIntegerField(verbose_name='大小')
+    UpdateTime=models.DateTimeField(auto_now_add=True,verbose_name="更新时间")
+    UpdateUser=models.CharField(max_length=100,verbose_name='更新者')
+    DeleteFlag=models.BooleanField(default=0,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='AvSection'
+        verbose_name = "音视频集"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.OrderNo+"."+self.Preffix
+
+class Book(models.Model):
+    Id=models.AutoField(primary_key=True,verbose_name='书课Id')
+    BookName=models.CharField(max_length=100,verbose_name='书名')
+    Description=models.CharField(max_length=100,verbose_name='大略介绍')
+    Author=models.CharField(max_length=100,verbose_name='作者')
+    ImageContent=models.ImageField(upload_to=book_directory_path,max_length=300,verbose_name='图片',null=True,blank=True)
+    CategoryId= models.IntegerField(verbose_name='分类Id')
+    MaxSectionId= models.IntegerField(verbose_name='最新Id')
+    MaxSectionName=models.CharField(max_length=300,verbose_name='最新标题')
+    UpdateTime=models.DateTimeField(auto_now_add=True,verbose_name="更新时间")
+    UpdateUser=models.CharField(default='alvin',max_length=100,verbose_name='更新者')
+    DeleteFlag=models.BooleanField(default=0,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='Book'
+        verbose_name='书'
+        verbose_name_plural=verbose_name
+    def __str__(self):
+        return self.Description
+
+class Section(models.Model):
+    Id=models.AutoField(primary_key=True,verbose_name='章节Id')
+    BookId=models.IntegerField(verbose_name='书本Id')
+    OrderNo=models.IntegerField(verbose_name='章号')
+    SectionNo=models.IntegerField(verbose_name='节号')
+    ChapterName=models.CharField(max_length=100,verbose_name='章节名')
+    Content=models.TextField(verbose_name='内容')
+    UpdateTime=models.DateTimeField(auto_now_add=True,verbose_name="更新时间")
+    UpdateUser=models.CharField(default='alvin',max_length=100,verbose_name='更新者')
+    DeleteFlag=models.BooleanField(default=0,verbose_name='删除状态')
+    submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='Section'
+        verbose_name='章节'
+        verbose_name_plural=verbose_name
+    def __str__(self):
+        return self.ChapterName
+
 class AcImage(models.Model):
     '''相册'''
     image_title = models.CharField(max_length=20, verbose_name=u'图片标题', default='')

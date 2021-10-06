@@ -14,6 +14,8 @@ insert into Category values(1003,'blog','','','',4,0,'alvin',curdate());
 insert into Category values(1004,'blogtag','','','',4,0,'alvin',curdate());
 insert into Category values(1007,'novel','','','',7,0,'alvin',curdate());
 insert into Category values(1009,'image','','','',9,0,'alvin',curdate());
+insert into Category values(1005,'music','','','',5,0,'alvin',curdate());
+
 insert into Category values(11,'服务端','#linux','','',1001,0,'alvin',curdate());
 insert into Category values(12,'数据库端','#database','','',1001,0,'alvin',curdate());
 insert into Category values(13,'网页端','#webpage','','',1001,0,'alvin',curdate());
@@ -21,14 +23,13 @@ insert into Category values(14,'移动端','#telphone','','',1001,0,'alvin',curd
 insert into Category values(15,'数学端','#math','','',1001,0,'alvin',curdate());
 insert into Category values(16,'前沿端','#frontkill','','',1001,0,'alvin',curdate());
 insert into Category values(17,'语言端','#foreignlang','','',1001,0,'alvin',curdate());
+
 insert into Category values(18,'Json工具','#jsontool','','',1002,0,'alvin',curdate());
 insert into Category values(19,'密码工具','#codetool','','',1002,0,'alvin',curdate());
 insert into Category values(20,'编码工具','#codingtool','','',1002,0,'alvin',curdate());
 insert into Category values(21,'压缩工具','#ziptool','','',1002,0,'alvin',curdate());
-
 insert into Category values(23,'转换工具','#converttool','','',1002,0,'alvin',curdate());
 insert into Category values(24,'换算工具','#calctool','','',1002,0,'alvin',curdate());
-
 insert into Category values(26,'运行工具','#runtool','','',1002,0,'alvin',curdate());
 insert into Category values(27,'字符工具','#strtool','','',1002,0,'alvin',curdate());
 
@@ -104,6 +105,59 @@ insert into Category values(215,'性感车模','xgcm','','',1009,0,'alvin',curda
 insert into Category values(242,'美丽女性','mlnx','','',1009,0,'alvin',curdate());
 insert into Category values(243,'写真美女','xzmn','','',1009,0,'alvin',curdate());
 insert into Category values(244,'诱惑美女','yhmn','','',1009,0,'alvin',curdate());
+
+insert into Category values(301,'工体MIX','','','',1005,0,'alvin',curdate());
+insert into Category values(302,'DJ','','','',1005,0,'alvin',curdate());
+insert into Category values(303,'3D环绕DJ专区','','','',1005,0,'alvin',curdate());
+insert into Category values(304,'4D嗨曲DJ专区','','','',1005,0,'alvin',curdate());
+insert into Category values(305,'5D舞曲DJ专区','','','',1005,0,'alvin',curdate());
+insert into Category values(306,'2018新歌排行榜','','','',1005,0,'alvin',curdate());
+insert into Category values(307,'2018热歌500排行榜','','','',1005,0,'alvin',curdate());
+insert into Category values(308,'2018新歌100排行榜','','','',1005,0,'alvin',curdate());
+insert into Category values(309,'2018最火抖音歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(310,'热门流行歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(311,'林俊杰专辑106首','','','',1005,0,'alvin',curdate());
+insert into Category values(312,'周杰轮专辑101首','','','',1005,0,'alvin',curdate());
+insert into Category values(313,'陈奕迅专辑100首','','','',1005,0,'alvin',curdate());
+insert into Category values(314,'薛之谦专辑77首','','','',1005,0,'alvin',curdate());
+insert into Category values(315,'五月天专辑89首','','','',1005,0,'alvin',curdate());
+insert into Category values(316,'谭咏麟专辑95首','','','',1005,0,'alvin',curdate());
+insert into Category values(317,'张学友专辑82首','','','',1005,0,'alvin',curdate());
+insert into Category values(318,'张国荣专辑67首','','','',1005,0,'alvin',curdate());
+insert into Category values(319,'我是歌手MP3','','','',1005,0,'alvin',curdate());
+insert into Category values(320,'中国好声音MP3','','','',1005,0,'alvin',curdate());
+insert into Category values(321,'热门经典歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(322,'韩国流行歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(323,'金典流行音乐','','','',1005,0,'alvin',curdate());
+insert into Category values(324,'流行歌曲专区','','','',1005,0,'alvin',curdate());
+insert into Category values(325,'伤感网络情歌','','','',1005,0,'alvin',curdate());
+insert into Category values(326,'草原风格歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(327,'经典摇滚歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(328,'热歌榜合辑','','','',1005,0,'alvin',curdate());
+insert into Category values(329,'2017流行歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(330,'精选新老曲 500','','','',1005,0,'alvin',curdate());
+insert into Category values(331,'酷狗TOP500','','','',1005,0,'alvin',curdate());
+insert into Category values(332,'快手热门歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(333,'酷狗DJ热歌','','','',1005,0,'alvin',curdate());
+insert into Category values(334,'英文歌曲','','','',1005,0,'alvin',curdate());
+insert into Category values(335,'民歌系列','','','',1005,0,'alvin',curdate());
+insert into Category values(336,'丽江小调','','','',1005,0,'alvin',curdate());
+insert into Category values(337,'经典古风','','','',1005,0,'alvin',curdate());
+insert into Category values(338,'纯音轻音乐','','','',1005,0,'alvin',curdate());
+insert into Category values(339,'钢琴曲和轻音乐','','','',1005,0,'alvin',curdate());
+insert into Category values(340,'纯音乐','','','',1005,0,'alvin',curdate());
+insert into Category values(341,'中文舞曲DJ（300首）','','','',1005,0,'alvin',curdate());
+insert into Category values(342,'发烧女生+蒙面歌王','','','',1005,0,'alvin',curdate());
+insert into Category values(343,'抖音热门精选','','','',1005,0,'alvin',curdate());
+insert into Category values(344,'DJ嗨曲','','','',1005,0,'alvin',curdate());
+insert into Category values(345,'四大天王·永恒经典','','','',1005,0,'alvin',curdate());
+insert into Category values(346,'粤语经典','','','',1005,0,'alvin',curdate());
+insert into Category values(347,'粤语新歌','','','',1005,0,'alvin',curdate());
+insert into Category values(348,'网络红歌榜1','','','',1005,0,'alvin',curdate());
+insert into Category values(349,'网络红歌榜2','','','',1005,0,'alvin',curdate());
+insert into Category values(350,'工体音乐','','','',1005,0,'alvin',curdate());
+insert into Category values(351,'最喜欢','','','',1005,0,'alvin',curdate());
+
 
 --insert into Category values(28,'常用工具','#datetool','','',10,0,'alvin',curdate());
 

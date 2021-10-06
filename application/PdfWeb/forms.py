@@ -15,6 +15,8 @@ gender = (
 )
 blog_categorys = db.get_blog_category_type_info().values_list('CategoryId','CategoryName')
 tag_categorys = db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName')
+novel_categorys = db.get_novel_category_type_info().values_list('CategoryId','CategoryName')
+learn_categorys = db.get_learn_category_type_info().values_list('CategoryId','CategoryName')
 original_categorys = (
     (1,'原创'),
     (0,'转载')
@@ -44,6 +46,27 @@ class Searchform(forms.Form):
 class CommentForm(forms.Form):
     """博客评论"""
     Content = fields.CharField(label="评论内容",min_length=10,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"评论内容最短10位"})
+
+class BookForm(forms.Form):
+    Id= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
+    BookName = fields.CharField(label="名字",error_messages={"required":"不能为空"})
+    Description = fields.CharField(label="简介",error_messages={"required":"不能为空"})
+    Author = fields.CharField(label="作者",error_messages={"required":"不能为空"})
+    ImageContent=forms.ImageField(label='图片',required=True)
+
+class SectionForm(forms.Form):
+    Id= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
+    BookId= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
+    OrderNo= fields.IntegerField(initial=0)
+    SectionNo= fields.IntegerField(initial=0)
+    ChapterName = fields.CharField(label="章节名",error_messages={"required":"不能为空"})
+    Content = MDTextFormField(label="内容",error_messages={"required":"不能为空"})
+
+class NovelForm(BookForm):
+    CategoryId = fields.ChoiceField(label="所属分类",choices=novel_categorys,initial=101,widget=forms.widgets.Select)
+
+class LearnForm(BookForm):
+    CategoryId = fields.ChoiceField(label="所属分类",choices=learn_categorys,initial=11,widget=forms.widgets.Select)
 
 class ArticleForm(forms.Form):
     """博客内容  form 需要修改优化,views services 同步修改"""

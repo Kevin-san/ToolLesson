@@ -5,9 +5,10 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment
+from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,AudioVideo,AvSection,Book,Section
 from PdfWeb.entitys import HomeInfoItem, NovelInfoItem,ImageInfoItem, NovelIndexItem,\
-    NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity
+    NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity,\
+    BookIndexItem,BookContentItem
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
 from django.db import connection
@@ -167,6 +168,12 @@ def get_prev_order_id(order_id):
         return order_id -1
     return None
 
+def get_prev_order_no(order_no):
+    if order_no > 0:
+        return order_no -1
+    return 0
+
+
 def get_next_order_id(order_id,max_order_id):
     if order_id < int(max_order_id):
         return order_id +1
@@ -303,28 +310,28 @@ def get_image_content_by_id(image_id):
 def get_chapter_by_href(href):
     return Chapter.objects.filter(Href=href,DeleteFlag=0).order_by('ChapterNo')
 
-def get_book_lesson_type_info():
-    category=Category.objects.get(CategoryName='learn',DeleteFlag=0)
-    return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+def get_learn_category_type_info():
+    return get_category_by_key('learn')
+
+def get_audio_category_type_info():
+    return get_category_by_key('music')
 
 def get_common_tool_type_info():
-    category=Category.objects.get(CategoryName='tool',DeleteFlag=0)
-    return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    return get_category_by_key('tool')
 
 def get_blog_category_type_info():
-    category=Category.objects.get(CategoryName='blog',DeleteFlag=0)
-    return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    return get_category_by_key('blog')
 
 def get_novel_category_type_info():
     category=Category.objects.get(CategoryName='novel',DeleteFlag=0)
-    category_list = Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    category_list = get_category_by_father(DeleteFlag=0,CategoryFather=category.CategoryId)
     for category in category_list:
         category.CategoryId = category.CategoryId - 100
     return category_list
 
 def get_image_category_type_info():
     category=Category.objects.get(CategoryName='image',DeleteFlag=0)
-    category_list = Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    category_list = get_category_by_father(DeleteFlag=0,CategoryFather=category.CategoryId)
     for category in category_list:
         category.CategoryId = category.CategoryId - 200
     return category_list
@@ -335,11 +342,87 @@ def get_image_content_info(item_id):
     return ImageInfoItem(item_id,spider_item.Name,spider_props)
 
 def get_blog_tag_category_type_info():
-    category=Category.objects.get(CategoryName='blogtag',DeleteFlag=0)
-    return Category.objects.filter(DeleteFlag=0,CategoryFather=category.CategoryId)
+    return get_category_by_key('blogtag')
 
 def get_category_by_id(category_id):
     return Category.objects.filter(DeleteFlag=0,CategoryId=category_id)
+
+def get_category_by_father(category_id):
+    return Category.objects.filter(DeleteFlag=0,CategoryFather=category_id)
+
+def get_category_by_key(category_key):
+    category=Category.objects.get(CategoryName=category_key,DeleteFlag=0)
+    return get_category_by_father(category.CategoryId)
+
+def del_section_by_id(section_id):
+    section = Section.objects.filter(Id=section_id)
+    section.DeleteFlag = 1
+    section.save(update_fields=['DeleteFlag'])
+    return section.BookId
+
+def upd_section(section):
+    section.save()
+
+def ins_section(section_dict):
+    return Section.objects.create(**section_dict)
+
+def del_book_by_id(book_id):
+    book = Book.objects.filter(Id=book_id)
+    book.DeleteFlag = 1
+    book.save(update_fields=['DeleteFlag'])
+    return book.CategoryId
+
+def upd_book(book):
+    book.save()
+
+def ins_book(book_dict):
+    return Book.objects.create(**book_dict)
+
+def get_book_count_by_category_id(category_id):
+    return Book.objects.filter(DeleteFlag=0,CategoryId=category_id).count()
+
+def get_book_by_id(book_id):
+    return Book.objects.filter(DeleteFlag=0,Id=book_id)
+
+def get_book_infos_by_author(author_name):
+    return Book.objects.filter(DeleteFlag=0,Author=author_name)
+
+def get_book_by_category_id(category_id,page_no,page_count):
+    start_row=page_no*page_count-page_count
+    end_row=page_no*page_count
+    total_count=get_book_count_by_category_id(category_id)
+    if end_row > total_count:
+        end_row=total_count
+    return Book.objects.filter(DeleteFlag=0,CategoryId=category_id)[start_row:end_row]
+
+def get_book_sections_by_book_id(book_id):
+    return Section.objects.filter(DeleteFlag=0,BookId=book_id).order_by("OrderNo").values_list("Id","ChapterName")
+
+def get_book_section_by_id(section_id):
+    return Section.objects.filter(DeleteFlag=0,Id=section_id)
+
+def get_book_section_by_order_no(book_id,order_no):
+    return Section.objects.filter(DeleteFlag=0,BookId=book_id,OrderNo=order_no)
+
+def get_booksections_by_id(book_id):
+    book=get_book_by_id(book_id)
+    sections=get_book_sections_by_book_id(book_id)
+    return BookIndexItem(book,sections)
+
+def get_book_content_include_prev_next_page(section_order_no, max_section_order_no):
+    section = get_book_section_by_order_no(section_order_no)
+    book_id = section.BookId
+    order_no = section.OrderNo
+    prev_order_id = get_prev_order_id(order_no)
+    next_order_id = get_next_order_id(order_no, max_section_order_no)
+    prev_section = get_book_section_by_order_no(book_id, prev_order_id)
+    next_section = get_book_section_by_order_no(book_id, next_order_id)
+    return BookContentItem(book_id,section,get_book_distinct_id(prev_section),get_book_distinct_id(next_section))
+
+def get_book_distinct_id(section):
+    if section is None:
+        return None
+    return section.Id
 
 def get_book_lesson_info(book_lesson_type_id):
     return BookLesson.objects.filter(BookLessonType_Id=book_lesson_type_id,DeleteFlag=0)
@@ -361,6 +444,12 @@ def get_book_lesson_image_info(book_lesson_type_id):
         home_info_item=HomeInfoItem(book_lesson,image_content[0])
         book_lesson_image_list.append(home_info_item)
     return book_lesson_image_list
+
+def get_audiovideo_by_category_id(category_id):
+    return AudioVideo.objects.filter(DeleteFlag=0,CategoryId=category_id)
+
+def get_avsection_by_av_id(av_id):
+    return AvSection.objects.filter(DeleteFlag=0,AvId=av_id)
 
 def get_common_sub_func_info(common_tool_type_id):
     tool_items = get_common_sub_func_by_id(common_tool_type_id)
