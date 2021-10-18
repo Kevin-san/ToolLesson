@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{book_type}{% endblock %}
+{% block title %}{{ book_type }}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -15,7 +15,7 @@
 						</a>
 						<ul class="dropdown-menu menu-top">
 						{% for source in source_list %}
-							<li><a href="/{book_type}/book/{{ source.CategoryId }}/1" >{{ source.CategoryName }}</a></li>
+							<li><a href="/{{ book_type }}/book/{{ source.CategoryId }}/1" >{{ source.CategoryName }}</a></li>
 						{% endfor %}
 						</ul>
 					</li>
@@ -27,36 +27,50 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 	<div class="container-fluid">
-		<div class="row">
+		<div id="content" class="row">
 			<div class="col-sm-12 col-sm-offset-3 col-md-12 col-md-offset-2">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<a href="/{book_type}/book/menuadd">新增书籍</a>
+						<a href="/{{ book_type }}/book/menuadd">新增书籍</a>
 					</div>
 					<div class="col-md-6">
-						<a href="/{book_type}/book/upload">上传书籍</a>
+						<a href="/{{ book_type }}/book/upload">上传书籍</a>
 					</div>
 				</div>
 				{% if contacts %} 
 				{% for book_info in contacts %}
 				<div class="row clearfix">
 					<div class="col-md-2">
-						<a href="/{book_type}/book/menu/{{ book_info.Id }}">
-							<img src="{{ book_info.ImageContent }}" width="10" class="img-responsive" alt="{{ book_info.BookName }}">
-							<h4>{{ book_info.BookName }}</h4>
+						<a href="/{{ book_type }}/book/menu/{{ book_info.Id }}">
+							<div class="col-md-6">
+								<h4>{{ book_info.BookName }}</h4>
+							</div>
+							<div class="col-md-6">
+								{% if book_info.ImageContent|truncatechars:4 == 'http' %}
+								<img src="{{ book_info.ImageContent }}" width="100" class="img-responsive" alt="{{ book_info.BookName }}">
+								{% else %}
+								<img src="/img/{{ book_info.ImageContent }}" width="100" class="img-responsive" alt="{{ book_info.BookName }}">
+								{% endif %}
+							</div>
 						</a>
 					</div>
 					<div class="col-md-2">
-						<h4>作者：<span><a href="/{book_type}/book/author/{{ book_info.Id }}">{{ book_info.Author }}</a></span></h4>
-					</div>
-					<div class="col-md-4">
-						<h4><a href="/{book_type}/book/section/{{ book_info.MaxSectionId }}/{{ novel_info.MaxSectionId }}">{{ novel_info.MaxSectionName }}</a></h4>
+						<h4>作者：<span><a href="/{{ book_type }}/book/author/{{ book_info.Id }}">{{ book_info.Author }}</a></span></h4>
 					</div>
 					<div class="col-md-2">
-						<h4><a href="/{book_type}/book/menuupd/{{ book_info.Id }}">修改</a></h4>
+						<h4>
+						{% if book_info.MaxSectionId >= 0 %}
+						<a href="/{{ book_type }}/book/section/{{ book_info.Id }}/{{ book_info.MaxSectionId }}/{{ book_info.MaxSectionId }}">{{ book_info.MaxSectionName }}</a>
+						{% else %}
+						无
+						{% endif %}
+						</h4>
 					</div>
 					<div class="col-md-2">
-						<h4><a href="/{book_type}/book/menudel/{{ book_info.Id }}">删除</a></h4>
+						<h4><a href="/{{ book_type }}/book/menuupd/{{ book_info.Id }}">修改</a></h4>
+					</div>
+					<div class="col-md-2">
+						<h4><a href="/{{ book_type }}/book/menudel/{{ book_info.Id }}">删除</a></h4>
 					</div>
 				</div>
 				{% endfor %} 
@@ -66,7 +80,7 @@
 					<ul class="pagination pagination-lg">
 						{% for page in pages %}
 						<li>
-							 <a href="/{book_type}/book/{{ page.page_url }}">{{ page.page_no }}</a>
+							 <a href="/{{ book_type }}/book/{{ page.page_url }}">{{ page.page_no }}</a>
 						</li>
 						{% endfor %}
 					</ul>

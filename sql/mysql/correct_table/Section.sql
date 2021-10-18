@@ -27,20 +27,17 @@ when ct.ElementTag = 'line' then '---'
 when ct.ElementTag = 'ol' then replace(ct.Text,'\r\n','\r\n- ')
 when ct.ElementTag = 'ul' then replace(ct.Text,'\r\n','\r\n- ')
 when ct.ElementTag = 'p' then concat(ct.Text,'\r\n')
-when ct.ElementTag = 'pre' then CONCAT('```',ct.Text,'```')
+when ct.ElementTag = 'pre' then CONCAT('    ',replace(ct.Text,'\r\n','\r\n    '),'    ')
 when ct.ElementTag = 'strong' then CONCAT('**',ct.Text,'**')
 when ct.ElementTag = 'table' then replace(ct.Text,'	','|') ELSE '' END SEPARATOR '\r\n'),now(),'alvin',
 0,'alvin',CURDATE()
   FROM content ct, Chapter cp WHERE ct.Chapter_Id = cp.Id GROUP BY  cp.Id, cp.ChapterNo,cp.ChapterName,cp.BookLesson_Id;
-update Section set BookId = BookId +512810;
+update Section set BookId = BookId +512810,OrderNo = OrderNo -1;
 
 update Section set Content = replace(Content,'BOLD[','**');
 update Section set Content = replace(Content,']BOLD','**');
 update Section set Content = replace(Content,'BLUE_BG[','***');
 update Section set Content = replace(Content,']BLUE_BG','***');
-
-insert into Section(BookId,OrderNo,SectionNo,ChapterName,Content,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT sp.Id,si.Id,sp.OrderId,0,sp.PropertyValue,sp.PropertyBigVal,now(),'alvin',0,'alvin',CURDATE() FROM spiderproperty sp,spideritem si WHERE si.Id = sp.ItemId AND sp.PropertyKey = '章节' AND si.DeleteFlag IN ( 1,2) and si.SourceId=1
-update Section set Content = replace(Content,'\n\n','')
-update Section set Content = replace(Content,'\n','\r\n\r\n')
-update Section set Content = replace(Content,'铅笔小说','')
-update Section set Content = replace(Content,'a1bm();','')
+ALTER TABLE section ADD INDEX  `section_index`(`BookId`,`OrderNo`);
+insert into Section(BookId,OrderNo,SectionNo,ChapterName,Content,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT si.Id,sp.OrderId,0,sp.PropertyValue,sp.PropertyBigVal,now(),'alvin',0,'alvin',CURDATE() FROM spiderproperty sp,spideritem si WHERE si.Id = sp.ItemId AND sp.PropertyKey = '章节' AND si.DeleteFlag = -2 and si.SourceId=1;
+update spiderproperty set DeleteFlag  = -2 where DeleteFlag = 2 and PropertyKey = '章节';

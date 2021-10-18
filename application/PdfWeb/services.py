@@ -10,7 +10,7 @@ from tools import common_tools, common_converter, common_formater, common_coder,
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
-from PdfWeb.db import get_prev_order_id
+
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')
@@ -134,11 +134,12 @@ def get_book_section(section_id):
     return db.get_book_section_by_id(section_id)
 
 def get_max_book_section_order_no(book_id):
-    return db.get_booksections_by_id(book_id)[-1].OrderNo
+    return db.get_max_book_section_order_no(book_id)
 
-def get_book_section_info(book_type,section_order_no,max_section_order_no):
+def get_book_section_info(book_type,book_id,section_order_no,max_section_order_no):
     keys = ['book_type','source_list','book_content_info','max_section_order_no','action']
-    book_content_info=db.get_book_content_include_prev_next_page(section_order_no, max_section_order_no)
+    book_content_info=db.get_book_content_include_prev_next_page(book_id,section_order_no, max_section_order_no)
+    current_log.info(book_content_info.prev_content_id)
     vals=[book_type,category_map[book_type],book_content_info,max_section_order_no,'section']
     return common_tools.create_map(keys, vals)
 
@@ -164,6 +165,7 @@ def del_book_by_id(book_type,book_id):
     return get_book_list(book_type, category_id, 1)
 
 def ins_book(book_dict):
+    book_dict['MaxSectionId']=0
     return db.ins_book(book_dict)
 
 def upd_book(book):
@@ -171,15 +173,21 @@ def upd_book(book):
     return book
 
 def del_section_by_id(book_type,section_id):
-    section=db.get_book_section_by_id(section_id)
-    prev_order_no=db.get_prev_order_no(section.OrderNo)
-    prev_section = db.get_book_section_by_order_no(section.BookId, prev_order_no)
     book_id=db.del_section_by_id(section_id)
+    max_order_no=db.get_max_book_section_order_no(book_id)
+    max_section = db.get_book_section_by_order_no(book_id, max_order_no)
     book=db.get_book_by_id(book_id)
-    book.MaxSectionId=prev_order_no
-    book.MaxSectionName=prev_section.ChapterName
+    book.MaxSectionId=max_order_no
+    book.MaxSectionName=get_maxsection_name(max_section)
     db.upd_book(book)
     return get_book_menu_info(book_type, book_id)
+
+def get_maxsection_name(section):
+    if section is not None:
+        if section == '':
+            return section
+        return section.ChapterName
+    return ''
 
 def ins_section(section_dict):
     return db.ins_section(section_dict)

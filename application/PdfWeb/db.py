@@ -12,7 +12,7 @@ from PdfWeb.entitys import HomeInfoItem, NovelInfoItem,ImageInfoItem, NovelIndex
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
 from django.db import connection
-
+from django.db.models import Max
 
 def select_cnt(select_sql):
     current_log.info(select_sql)
@@ -323,18 +323,18 @@ def get_blog_category_type_info():
     return get_category_by_key('blog')
 
 def get_novel_category_type_info():
-    category=Category.objects.get(CategoryName='novel',DeleteFlag=0)
-    category_list = get_category_by_father(DeleteFlag=0,CategoryFather=category.CategoryId)
-    for category in category_list:
-        category.CategoryId = category.CategoryId - 100
-    return category_list
+    return get_category_by_key('novel')
+#     category_list = get_category_by_key('novel')
+#     for category in category_list:
+#         category.CategoryId = category.CategoryId - 100
+#     return category_list
 
 def get_image_category_type_info():
-    category=Category.objects.get(CategoryName='image',DeleteFlag=0)
-    category_list = get_category_by_father(DeleteFlag=0,CategoryFather=category.CategoryId)
-    for category in category_list:
-        category.CategoryId = category.CategoryId - 200
-    return category_list
+    return get_category_by_key('image')
+#     category_list = get_category_by_key('image')
+#     for category in category_list:
+#         category.CategoryId = category.CategoryId - 200
+#     return category_list
 
 def get_image_content_info(item_id):
     spider_item = get_spider_item_by_id(item_id)
@@ -355,7 +355,7 @@ def get_category_by_key(category_key):
     return get_category_by_father(category.CategoryId)
 
 def del_section_by_id(section_id):
-    section = Section.objects.filter(Id=section_id)
+    section = Section.objects.filter(Id=section_id)[0]
     section.DeleteFlag = 1
     section.save(update_fields=['DeleteFlag'])
     return section.BookId
@@ -367,7 +367,7 @@ def ins_section(section_dict):
     return Section.objects.create(**section_dict)
 
 def del_book_by_id(book_id):
-    book = Book.objects.filter(Id=book_id)
+    book = Book.objects.filter(Id=book_id)[0]
     book.DeleteFlag = 1
     book.save(update_fields=['DeleteFlag'])
     return book.CategoryId
@@ -382,12 +382,13 @@ def get_book_count_by_category_id(category_id):
     return Book.objects.filter(DeleteFlag=0,CategoryId=category_id).count()
 
 def get_book_by_id(book_id):
-    return Book.objects.filter(DeleteFlag=0,Id=book_id)
+    return Book.objects.filter(DeleteFlag=0,Id=book_id)[0]
 
 def get_book_infos_by_author(author_name):
     return Book.objects.filter(DeleteFlag=0,Author=author_name)
 
 def get_book_by_category_id(category_id,page_no,page_count):
+    page_no = int(page_no)
     start_row=page_no*page_count-page_count
     end_row=page_no*page_count
     total_count=get_book_count_by_category_id(category_id)
@@ -396,33 +397,41 @@ def get_book_by_category_id(category_id,page_no,page_count):
     return Book.objects.filter(DeleteFlag=0,CategoryId=category_id)[start_row:end_row]
 
 def get_book_sections_by_book_id(book_id):
-    return Section.objects.filter(DeleteFlag=0,BookId=book_id).order_by("OrderNo").values_list("Id","ChapterName")
+    return Section.objects.filter(DeleteFlag=0,BookId=book_id).order_by("OrderNo")
+
+def get_max_book_section_order_no(book_id):
+    res=list(get_book_sections_by_book_id(book_id))
+    if res:
+        return res[-1].OrderNo
+    return -1
 
 def get_book_section_by_id(section_id):
-    return Section.objects.filter(DeleteFlag=0,Id=section_id)
+    return Section.objects.filter(DeleteFlag=0,Id=section_id)[0]
 
 def get_book_section_by_order_no(book_id,order_no):
-    return Section.objects.filter(DeleteFlag=0,BookId=book_id,OrderNo=order_no)
+    if order_no is None:
+        return None
+    if order_no < 0:
+        return ''
+    return Section.objects.filter(DeleteFlag=0,BookId=book_id,OrderNo=order_no)[0]
 
 def get_booksections_by_id(book_id):
     book=get_book_by_id(book_id)
     sections=get_book_sections_by_book_id(book_id)
     return BookIndexItem(book,sections)
 
-def get_book_content_include_prev_next_page(section_order_no, max_section_order_no):
-    section = get_book_section_by_order_no(section_order_no)
-    book_id = section.BookId
-    order_no = section.OrderNo
-    prev_order_id = get_prev_order_id(order_no)
-    next_order_id = get_next_order_id(order_no, max_section_order_no)
-    prev_section = get_book_section_by_order_no(book_id, prev_order_id)
-    next_section = get_book_section_by_order_no(book_id, next_order_id)
-    return BookContentItem(book_id,section,get_book_distinct_id(prev_section),get_book_distinct_id(next_section))
+def get_book_content_include_prev_next_page(book_id,section_order_no, max_section_order_no):
+    max_section_order_no = int(max_section_order_no)
+    section_order_no=int(section_order_no)
+    section = get_book_section_by_order_no(book_id,section_order_no)
+    prev_order_id = get_prev_order_id(section_order_no)
+    next_order_id = get_next_order_id(section_order_no, max_section_order_no)
+    return BookContentItem(book_id,section,prev_order_id,next_order_id)
 
 def get_book_distinct_id(section):
     if section is None:
         return None
-    return section.Id
+    return section.OrderNo
 
 def get_book_lesson_info(book_lesson_type_id):
     return BookLesson.objects.filter(BookLessonType_Id=book_lesson_type_id,DeleteFlag=0)

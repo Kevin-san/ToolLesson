@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{book_type}{% endblock %}
+{% block title %}{{ book_type }}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -8,7 +8,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="/{book_type}/book/index">{book_type}主页</a></li>
+					<li><a href="/{{ book_type }}/book/index">{{ book_type }}主页</a></li>
 					{% if source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -16,7 +16,7 @@
 						</a>
 						<ul class="dropdown-menu menu-top">
 						{% for source in source_list %}
-							<li><a href="/{book_type}/book/{{ source.CategoryId }}/1" >{{ source.CategoryName }}</a></li>
+							<li><a href="/{{ book_type }}/book/{{ source.CategoryId }}/1" >{{ source.CategoryName }}</a></li>
 						{% endfor %}
 						</ul>
 					</li>
@@ -28,33 +28,33 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 	<div class="container-fluid">
-		<div class="row">
+		<div id="content" class="row">
 		{% if action == 'section' %}
 			<div class="row clearfix">
-				<h2 class="text-center">{{ book_content_info.cur_content.PropertyValue }}</h2>
+				<h2 class="text-center">{{ book_content_info.cur_content.ChapterName }}</h2>
 			</div>
 			<div class="row clearfix">
-				<div class="col-md-2">
-					<a href="/{book_type}/book/sectiondel/{{book_content_info.cur_content.Id}}">删除</a>
+				<div class="col-md-4 text-left">
+					<a href="/{{ book_type }}/book/sectiondel/{{book_content_info.cur_content.Id}}">删除</a>
 				</div>
-				<div class="col-md-8 text-center">
+				<div class="col-md-4 text-center">
 				</div>
-				<div class="col-md-2">
-					<a href="/{book_type}/book/sectionupd/{{book_content_info.cur_content.Id}}">修改</a>
+				<div class="col-md-4 text-right">
+					<a href="/{{ book_type }}/book/sectionupd/{{book_content_info.cur_content.Id}}">修改</a>
 				</div>
 			</div>
 			<div class="row clearfix">
-				<div class="col-md-2">
-					{% if book_content_info.prev_content_id %}
-						<a href="/{book_type}/book/section/{{book_content_info.prev_content_id}}/{{ max_section_order_no }}">上一章</a>
+				<div class="col-md-4 text-left">
+					{% if book_content_info.prev_content_id is not None %}
+						<a href="/{{ book_type }}/book/section/{{ book_content_info.parent_item_id }}/{{book_content_info.prev_content_id}}/{{ max_section_order_no }}">上一章</a>
 					{% endif %}
 				</div>
-				<div class="col-md-8 text-center">
-					<a href="/{book_type}/book/menu/{{ book_content_info.parent_item_id }}">目录</a>
+				<div class="col-md-4 text-center">
+					<a href="/{{ book_type }}/book/menu/{{ book_content_info.parent_item_id }}">目录</a>
 				</div>
-				<div class="col-md-2">
-					{% if book_content_info.next_content_id %}
-						<a href="/{book_type}/book/section/{{book_content_info.next_content_id}}/{{ max_section_order_no }}">下一章</a>
+				<div class="col-md-4 text-right">
+					{% if book_content_info.next_content_id is not None %}
+						<a href="/{{ book_type }}/book/section/{{ book_content_info.parent_item_id }}/{{book_content_info.next_content_id}}/{{ max_section_order_no }}">下一章</a>
 					{% endif %}
 				</div>
 			</div>
@@ -89,45 +89,54 @@
 			</div>
 			<div class="row clearfix">
 				<div class="col-md-2">
-					{% if book_content_info.prev_content_id %}
-						<a href="/{book_type}/book/section/{{book_content_info.prev_content_id}}/{{ max_section_order_no }}">上一章</a>
+					{% if book_content_info.prev_content_id is not None %}
+						<a href="/{{ book_type }}/book/section/{{ book_content_info.parent_item_id }}/{{book_content_info.prev_content_id}}/{{ max_section_order_no }}">上一章</a>
 					{% endif %}
 				</div>
 				<div class="col-md-8 text-center">
-					<a href="/{book_type}/book/menu/{{ book_content_info.parent_item_id }}">目录</a>
+					<a href="/{{ book_type }}/book/menu/{{ book_content_info.parent_item_id }}">目录</a>
 				</div>
 				<div class="col-md-2">
-					{% if book_content_info.next_content_id %}
-						<a href="/{book_type}/book/section/{{book_content_info.next_content_id}}/{{ max_section_order_no }}">下一章</a>
+					{% if book_content_info.next_content_id is not None %}
+						<a href="/{{ book_type }}/book/section/{{ book_content_info.parent_item_id }}/{{book_content_info.next_content_id}}/{{ max_section_order_no }}">下一章</a>
 					{% endif %}
 				</div>
 			</div>
 		{% endif %}
 		{% if action == 'menu' %}
 			<div class="col-md-12">
-				<div class="col-md-4">
-					<img src="{{ book_info.ImageContent }}" width="100" class="img-responsive" alt="{{ book_info.BookName }}">
+				<div class="col-md-2">
+					{% if book_menu_info.book.ImageContent|truncatechars:4 == 'http' %}
+						<img src="{{ book_menu_info.book.ImageContent }}" width="400" class="img-responsive" alt="{{ book_menu_info.book.BookName }}">
+					{% else %}
+						<img src="/img/{{ book_menu_info.book.ImageContent }}" width="400" class="img-responsive" alt="{{ book_menu_info.book.BookName }}">
+					{% endif %}
 				</div>
 				<div class="col-md-8">
 					<h2>{{ book_menu_info.book.BookName }}</h2>
-					<h4>作者:<a href="/{book_type}/book/author/{{ book_menu_info.book.Id }}">{{book_menu_info.book.Author}}</a></h4>
-					<p>最新章节:<a href="/{book_type}/book/section/{{book_menu_info.book.MaxSectionId}}/{{book_menu_info.book.MaxSectionId}}">{{book_menu_info.book.MaxSectionName}}</a></p>
+					<h4>作者:<a href="/{{ book_type }}/book/author/{{ book_menu_info.book.Id }}">{{book_menu_info.book.Author}}</a></h4>
+					<p>最新章节:
+						{% if book_menu_info.book.MaxSectionId >= 0 %}
+						<a href="/{{ book_type }}/book/section/{{book_menu_info.book.MaxSectionId}}/{{book_menu_info.book.MaxSectionId}}">{{book_menu_info.book.MaxSectionName}}</a></p>
+						{% else %}
+						无
+						{% endif %}
 					<p>简介:</p>
 					<p>{{ book_menu_info.book.Description}}</p>
-					<p><a href="/{book_type}/book/download/{{book_menu_info.book.Id}}">下载本书</a></p>
-					<p><a href="/{book_type}/book/sectionadd/{{book_menu_info.book.Id}}">新增章节</a></p>
+					<p><a href="/{{ book_type }}/book/download/{{book_menu_info.book.Id}}">下载本书</a></p>
+					<p><a href="/{{ book_type }}/book/sectionadd/{{book_menu_info.book.Id}}">新增章节</a></p>
 				</div>
 			</div>
 			<div class="col-md-12">
 				{% if book_menu_info.sections %}
 				<div class="row clearfix">
-				{% for section in novel_menu_info.sections %}
+				{% for section in book_menu_info.sections %}
 					{% if forloop.counter0|divisibleby:3  %}
 					</div>
 					<div class="row clearfix">
 					{% endif %}
 						<div class="col-md-4">
-							<a href="/{book_type}/book/section/{{ section.OrderNo }}/{{ book_menu_info.book.MaxSectionId }}">{{ section.ChapterName }}</a>
+							<a href="/{{ book_type }}/book/section/{{ book_menu_info.book.Id}}/{{ section.OrderNo }}/{{ book_menu_info.book.MaxSectionId }}">{{ section.ChapterName }}</a>
 						</div>
 				{% endfor %}
 				</div>
@@ -136,17 +145,17 @@
 		{% endif %}
 		{% if action == 'author' %}
 			<div class="row clearfix">
-				<h2 class="text-center">作者：<span><a href="/{book_type}/book/author/{{ book_id }}">{{ author_name }}</a></span></h2>
+				<h2 class="text-center">作者：<span><a href="/{{ book_type }}/book/author/{{ book_id }}">{{ author_name }}</a></span></h2>
 			</div>
 			<div class="col-md-12">
 				{% if book_info_list %} 
 				{% for book_info in book_info_list %}
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<h3><a href="/{book_type}/book/menu/{{ book_info.Id }}">{{ book_info.BookName }}</a></h3>
+						<h3><a href="/{{ book_type }}/book/menu/{{ book_info.Id }}">{{ book_info.BookName }}</a></h3>
 					</div>
 					<div class="col-md-6">
-						<p>最新:<a href="/{book_type}/book/section/{{ book_info.MaxSectionId }}">{{ book_info.MaxSectionName }}</a></p>
+						<p>最新:<a href="/{{ book_type }}/book/section/{{ book_info.Id }}/{{ book_info.MaxSectionId }}/{{ book_info.MaxSectionId }}">{{ book_info.MaxSectionName }}</a></p>
 					</div>
 				</div>
 				{% endfor %}
@@ -156,7 +165,7 @@
 		{% if item == 'book' %}
 			{% if action == 'add' or action == 'upd' %}
 				<div class="row">
-					<form enctype="multipart/form-data" class='form-register' action="/{book_type}/book/menu{{action}}/submit/" method="post">
+					<form enctype="multipart/form-data" class='form-register' action="/{{ book_type }}/book/menu{{action}}/{{ book_id }}/submit/" method="post">
 			
 					{% csrf_token %}
 					<h2 class="text-center">欢迎使用</h2>
@@ -164,27 +173,54 @@
 						{{ form.Id }}
 					</div>
 					<div class="form-group">
-						{{ form.BookName.label_tag }}
-						{{ form.BookName}}
+						<div class="col-md-4 text-right">
+							{{ form.BookName.label_tag }}
+						</div>
+						<div class="col-md-8">
+							{{ form.BookName}}
+						</div>
 					</div>
 					<div class="form-group">
-						{{ form.Description.label_tag }}
-						{{ form.Description}}
+						<div class="col-md-4 text-right">
+							{{ form.Description.label_tag }}
+						</div>
+						<div class="col-md-8">
+							{{ form.Description}}
+						</div>
 					</div>
 					<div class="form-group">
-						{{ form.Author.label_tag }}
-						{{ form.Author}}
+						<div class="col-md-4 text-right">
+							{{ form.Author.label_tag }}
+						</div>
+						<div class="col-md-8">
+							{{ form.Author}}
+						</div>
 					</div>
 					<div class="form-group">
-						{{ form.ImageContent.label_tag }}
-						{{ form.ImageContent}}
+						<div class="col-md-4 text-right">
+							{{ form.ImageContent.label_tag }}
+						</div>
+						<div class="col-md-8">
+							{{ form.ImageContent}}
+						</div>
 					</div>
 					<div class="form-group">
-						{{ form.CategoryId.label_tag }}
-						{{ form.CategoryId}}
+						
+						<div class="col-md-4 text-right">
+							{{ form.CategoryId.label_tag }}
+						</div>
+						<div class="col-md-8">
+							{{ form.CategoryId}}
+						</div>
 					</div>
-					<button type="reset" class="btn btn-default pull-left">重置</button>
-					<button type="submit" class="btn btn-primary pull-right">提交</button>
+					<div class="row-clearfix">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<button type="reset" class="btn btn-default pull-left">重置</button>
+							<button type="submit" class="btn btn-primary pull-right">提交</button>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
 					</form>
 				</div>
 			{% endif %}
@@ -192,32 +228,44 @@
 		{% if item == 'section' %}
 			{% if action == 'add' or action == 'upd' %}
 				<div class="row">
-					<form enctype="multipart/form-data" class='form-register' action="/{book_type}/book/section{{action}}/submit/" method="post">
+					<form enctype="multipart/form-data" class='form-register' action="/{{ book_type }}/book/section{{action}}/{{booksec_id}}/submit/" method="post">
 			
 					{% csrf_token %}
 					<h2 class="text-center">欢迎使用</h2>
 					<div class="form-group">
 						{{ form.Id }}
 						{{ form.BookId}}
-					</div>
-					<div class="form-group">
-						{{ form.OrderNo.label_tag }}
 						{{ form.OrderNo}}
-					</div>
-					<div class="form-group">
-						{{ form.SectionNo.label_tag }}
 						{{ form.SectionNo}}
 					</div>
 					<div class="form-group">
-						{{ form.ChapterName.label_tag }}
-						{{ form.ChapterName}}
+						<div class="row clearfix">
+							<div class="col-md-2 text-right">
+								{{ form.ChapterName.label_tag }}
+							</div>
+							<div class="col-md-10">
+								{{ form.ChapterName}}
+							</div>
+						</div>
 					</div>
 					<div class="form-group">
-						{{ form.Content.label_tag }}
-						{{ form.Content}}
+						<div class="row clearfix">
+							<div class="col-md-2 text-right">
+								{{ form.Content.label_tag }}
+							</div>
+							<div class="col-md-10">
+								{{ form.Content}}
+							</div>
+						</div>
 					</div>
-					<button type="reset" class="btn btn-default pull-left">重置</button>
-					<button type="submit" class="btn btn-primary pull-right">提交</button>
+					<div class="row-clearfix">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<button type="reset" class="btn btn-default pull-left">重置</button>
+							<button type="submit" class="btn btn-primary pull-right">提交</button>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
 					</form>
 				</div>
 			{% endif %}

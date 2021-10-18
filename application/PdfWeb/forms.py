@@ -49,16 +49,16 @@ class CommentForm(forms.Form):
 
 class BookForm(forms.Form):
     Id= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
-    BookName = fields.CharField(label="名字",error_messages={"required":"不能为空"})
-    Description = fields.CharField(label="简介",error_messages={"required":"不能为空"})
-    Author = fields.CharField(label="作者",error_messages={"required":"不能为空"})
-    ImageContent=forms.ImageField(label='图片',required=True)
+    BookName = fields.CharField(label="名字",error_messages={"required":"书名不能为空"})
+    Description = fields.CharField(label="简介",widget=forms.Textarea,error_messages={"required":"简介不能为空"})
+    Author = fields.CharField(label="作者",error_messages={"required":"作者不能为空"})
+    ImageContent=forms.ImageField(label='图片',error_messages={"required":"图片不能为空"})
 
 class SectionForm(forms.Form):
     Id= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
     BookId= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
-    OrderNo= fields.IntegerField(initial=0)
-    SectionNo= fields.IntegerField(initial=0)
+    OrderNo= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
+    SectionNo= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)
     ChapterName = fields.CharField(label="章节名",error_messages={"required":"不能为空"})
     Content = MDTextFormField(label="内容",error_messages={"required":"不能为空"})
 

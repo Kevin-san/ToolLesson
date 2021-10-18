@@ -223,28 +223,47 @@ def get_file_infos_service(local_xenv_home,local_home):
     for index,dir_name in enumerate(dir_list):
         arti_f.write(F'{dir_name}={file_list[index]}\n')
     current_log.info('end time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
-
-
+import pymysql
+db = pymysql.connect("localhost","root","xc19901109","alvin")
+cursor = db.cursor()
 if __name__ =='__main__':
-    parent_path = "I:/音频/歌曲"
-    output_sql = SimpleFileWriter("I:/音频/歌曲/AudioVideoData.sql")
-    output2_sql = SimpleFileWriter("I:/音频/歌曲/AvSectionData.sql")
-    list_dirs = get_file_details(parent_path+"/directory.txt")
-    index=0
-    for ord_id,directory in enumerate(list_dirs):
-        cateogry_path = parent_path+"/"+directory
-        list_files = get_child_files(cateogry_path)
-        for file in list_files:
-            real_file = file.replace("'","\\'")
-            print(real_file)
-            file_type = file.split(".")[-1]
-            file_path = cateogry_path+"/"+file
-            index=index+1
-            try:
-                seconds = str(get_file_total_time(file_path,'audio')).split(".")[0]
-            except Exception:
-                seconds = "0"
-            file_size = str(get_file_size(file_path))
-            output_sql.append_new_line("insert into AudioVideo values("+str(index)+",'"+real_file+"',"+"'/audio/歌曲','','','/img/novel_bg.jpg',"+str(ord_id+301)+","+seconds+","+file_size+",0,'alvin',curdate());")
-            output2_sql.append_new_line("insert into AvSection values("+str(index)+","+str(index)+",0,0,'"+file_type+"',"+seconds+","+file_size+",0,'alvin',curdate());")
+    dir_map=dict()
+    select_sql="select distinct Name,Id from spideritem where SourceId >=15"
+    cursor.execute(select_sql)
+    for row in cursor.fetchall():
+        dir_map[row[0]]=row[1]
+    parent_path = "I:/图片/美女"
+    list_dirs = get_child_files(parent_path)
+    count=0
+    for directory in list_dirs:
+        real_dir=directory.replace(" ","")
+        if real_dir in dir_map and real_dir != directory:
+            update_sql="update spideritem set Name='%s' where Id=%s" %(directory,dir_map[real_dir])
+            current_log.info(update_sql)
+            cursor.execute(update_sql)
+            db.commit()
+            count=count+1
+    current_log.info(count)
+        
     
+#     output_sql = SimpleFileWriter("I:/音频/歌曲/AudioVideoData.sql")
+#     output2_sql = SimpleFileWriter("I:/音频/歌曲/AvSectionData.sql")
+#     list_dirs = get_file_details(parent_path+"/directory.txt")
+#     index=0
+#     for ord_id,directory in enumerate(list_dirs):
+#         cateogry_path = parent_path+"/"+directory
+#         list_files = get_child_files(cateogry_path)
+#         for file in list_files:
+#             real_file = file.replace("'","\\'")
+#             print(real_file)
+#             file_type = file.split(".")[-1]
+#             file_path = cateogry_path+"/"+file
+#             index=index+1
+#             try:
+#                 seconds = str(get_file_total_time(file_path,'audio')).split(".")[0]
+#             except Exception:
+#                 seconds = "0"
+#             file_size = str(get_file_size(file_path))
+#             output_sql.append_new_line("insert into AudioVideo values("+str(index)+",'"+real_file+"',"+"'/audio/歌曲','','','/img/novel_bg.jpg',"+str(ord_id+301)+","+seconds+","+file_size+",0,'alvin',curdate());")
+#             output2_sql.append_new_line("insert into AvSection values("+str(index)+","+str(index)+",0,0,'"+file_type+"',"+seconds+","+file_size+",0,'alvin',curdate());")
+#     
