@@ -142,3 +142,11 @@ django2
 
 
 
+add upd/add/del function to novel/learn done
+merge novel/learn into one table. done
+
+will do
+merge image/music/video into one table.
+add comment for each function , one table.
+authority management.
+file upload/download
