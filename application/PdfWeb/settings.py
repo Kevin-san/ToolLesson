@@ -125,9 +125,9 @@ STATICFILES_DIRS = (
     os.path.join(PARENT_DIR,'static'),
 )
 # 图片储存根路径
-MEDIA_ROOT = os.path.join(PARENT_DIR,'static/img')
+MEDIA_ROOT = os.path.join(PARENT_DIR,'media')
 # 图片访问url
-MEDIA_URL = '/img/'
+MEDIA_URL = '/media/'
 
 MDEDITOR_CONFIGS = {
 'default':{

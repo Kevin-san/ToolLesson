@@ -113,8 +113,9 @@ insert into LanguageDictionary(LangValue,LanguageType,ItemType,PartSpeech,Chines
 
 cmd
 H:
-cd git\CorePdfPage\static\img
+cd git\CorePdfPage\media
 mklink /D img "I:\图片"
+mklink /D audio "I:\音频"
 rmdir d:\美女
 
 centos 7.9 系统搭建

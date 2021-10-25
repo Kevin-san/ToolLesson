@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}图片{% endblock %}
+{% block title %}{{ media_type }}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -8,14 +8,14 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				{% if image_source_list %}
+				{% if media_source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							分类<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu menu-top">
-						{% for image_source in image_source_list %}
-							<li><a href="/image/{{ image_source.CategoryId }}/1" >{{ image_source.CategoryName }}</a></li>
+						{% for media_source in media_source_list %}
+							<li><a href="/{{ media_type }}/media/{{ media_source.CategoryId }}/1" >{{ media_source.CategoryName }}</a></li>
 						{% endfor %}
 						</ul>
 					</li>
@@ -29,18 +29,18 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				{% if contacts %} 
+				{% if media_contacts %} 
 				<div class="row clearfix">
-				{% for image_info in contacts %}
+				{% for media_info in media_contacts %}
 					{% if forloop.counter0|divisibleby:6 %}
 					</div>
 					<div class="row clearfix">
 					{% endif %}
 					<div class="col-md-2">
-						<a href="/image/content/{{ image_info.Id }}">
-						<img width="200" src="/img/美女/{{ image_info.Name }}/{{ image_info.Name }}_0.jpg" alt="{{image_info.Name}}"/>
+						<a href="/{{ media_type }}/media/content/{{ media_info.Id }}">
+						<img width="200" src="/media/{{ media_info.ImageContent }}" alt="{{image_info.Name}}"/>
 						</a>
-						<h5>{{image_info.Name}}</h5>
+						<h5>{{media_info.Name}}</h5>
 					</div>
 				{% endfor %}
 				</div>
@@ -51,7 +51,7 @@
 					<ul class="pagination pagination-lg">
 						{% for page in pages %}
 						<li>
-							 <a href="/image/{{ page.page_url }}">{{ page.page_no }}</a>
+							 <a href="/{{ media_type }}/media/{{ page.page_url }}">{{ page.page_no }}</a>
 						</li>
 						{% endfor %}
 					</ul>

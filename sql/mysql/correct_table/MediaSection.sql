@@ -1,8 +1,8 @@
 use alvin;
-drop table IF EXISTS `AvSection`;
-create table IF NOT EXISTS `AvSection`( -- 音视频的大章节表
+drop table IF EXISTS `MediaSection`;
+create table IF NOT EXISTS `MediaSection`( -- 音视频的大章节表
 	`Id` INT AUTO_INCREMENT,
-	`AvId` INT NOT NULL, -- Av id
+	`MediaId` INT NOT NULL, -- Media id
 	`OrderNo` INT NOT NULL DEFAULT 0, -- 第几章
 	`SectionNo` INT NOT NULL DEFAULT 0, -- 第几节
 	`Preffix` VARCHAR(10) NOT NULL, -- 后缀
@@ -15,3 +15,4 @@ create table IF NOT EXISTS `AvSection`( -- 音视频的大章节表
 	`submission_date` DATE, -- 上传时间
 	PRIMARY KEY ( `Id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT ItemId,OrderId,0,'jpg',0,0,now(),'alvin',0,'alvin',curdate() FROM spiderproperty WHERE PropertyKey = '序号';

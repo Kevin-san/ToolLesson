@@ -5,14 +5,13 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,AudioVideo,AvSection,Book,Section
+from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,Media,MediaSection,Book,Section
 from PdfWeb.entitys import HomeInfoItem, NovelInfoItem,ImageInfoItem, NovelIndexItem,\
     NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity,\
     BookIndexItem,BookContentItem
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
 from django.db import connection
-from django.db.models import Max
 
 def select_cnt(select_sql):
     current_log.info(select_sql)
@@ -454,11 +453,11 @@ def get_book_lesson_image_info(book_lesson_type_id):
         book_lesson_image_list.append(home_info_item)
     return book_lesson_image_list
 
-def get_audiovideo_by_category_id(category_id):
-    return AudioVideo.objects.filter(DeleteFlag=0,CategoryId=category_id)
+def get_media_by_category_id(category_id):
+    return Media.objects.filter(DeleteFlag=0,CategoryId=category_id)
 
-def get_avsection_by_av_id(av_id):
-    return AvSection.objects.filter(DeleteFlag=0,AvId=av_id)
+def get_media_section_by_av_id(av_id):
+    return MediaSection.objects.filter(DeleteFlag=0,AvId=av_id)
 
 def get_common_sub_func_info(common_tool_type_id):
     tool_items = get_common_sub_func_by_id(common_tool_type_id)

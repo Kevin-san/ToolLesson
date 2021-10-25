@@ -1,8 +1,8 @@
 use alvin;
-drop table IF EXISTS `AudioVideo`;
-create table IF NOT EXISTS `AudioVideo`( -- 音视频的信息表
+drop table IF EXISTS `Media`;
+create table IF NOT EXISTS `Media`( -- 音视频的信息表
 	`Id` INT AUTO_INCREMENT,
-	`AvName` VARCHAR(100) NOT NULL, -- 名字
+	`MediaName` VARCHAR(1000) NOT NULL, -- 名字
 	`ParentDir` VARCHAR(100) NOT NULL,-- 父目录
 	`Content` VARCHAR(3000) NOT NULL, -- 内容
 	`Authors` VARCHAR(300) NOT NULL, -- 作者
@@ -17,3 +17,5 @@ create table IF NOT EXISTS `AudioVideo`( -- 音视频的信息表
 	`submission_date` DATE, -- 上传时间
 	PRIMARY KEY ( `Id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into Media SELECT Id,Name,CONCAT('/img/美女/',Name,''),'','',CONCAT('/img/美女/',Name,CONCAT('/',Name,'_0.jpg')),SourceId+200,0,0,now(),'alvin',0,'alvin',curdate() FROM spideritem WHERE SourceId >=15 AND DeleteFlag = 2;

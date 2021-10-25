@@ -9,19 +9,19 @@ import time
 
 def user_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
-    return 'article/{0}/{1}'.format(childdir,filename)
+    return 'img/article/{0}/{1}'.format(childdir,filename)
 
 def book_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
-    return 'book/{0}/{1}'.format(childdir,filename)
+    return 'img/book/{0}/{1}'.format(childdir,filename)
 
 def avdeo_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
-    return 'avdeo/{0}/{1}'.format(childdir,filename)
+    return 'img/avdeo/{0}/{1}'.format(childdir,filename)
 
-class AudioVideo(models.Model):
+class Media(models.Model):
     Id=models.AutoField(primary_key=True,verbose_name='Id')
-    AvName = models.CharField(max_length=100, unique=True,verbose_name='音视频名')
+    MediaName = models.CharField(max_length=100, unique=True,verbose_name='音视频名')
     ParentDir = models.CharField(max_length=100,verbose_name='父目录')
     Content = models.CharField(max_length=3000,verbose_name='内容')
     Authors = models.CharField(max_length=300,default='',verbose_name='作者')
@@ -35,16 +35,16 @@ class AudioVideo(models.Model):
     submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
     submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
     class Meta:
-        db_table='AudioVideo'
+        db_table='Media'
         verbose_name = "音视频"
         verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.AvName
 
-class AvSection(models.Model):
+class MediaSection(models.Model):
     Id=models.AutoField(primary_key=True,verbose_name='Id')
-    AvId = models.IntegerField(verbose_name='AvId')
+    MediaId = models.IntegerField(verbose_name='MediaId')
     OrderNo = models.IntegerField(default=0,verbose_name='章号')
     SectionNo = models.IntegerField(default=0,verbose_name='节号')
     Preffix = models.CharField(max_length=10,verbose_name='后缀')
@@ -56,7 +56,7 @@ class AvSection(models.Model):
     submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
     submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
     class Meta:
-        db_table='AvSection'
+        db_table='MediaSection'
         verbose_name = "音视频集"
         verbose_name_plural = verbose_name
 

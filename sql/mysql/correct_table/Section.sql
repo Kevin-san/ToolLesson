@@ -39,5 +39,5 @@ update Section set Content = replace(Content,']BOLD','**');
 update Section set Content = replace(Content,'BLUE_BG[','***');
 update Section set Content = replace(Content,']BLUE_BG','***');
 ALTER TABLE section ADD INDEX  `section_index`(`BookId`,`OrderNo`);
-insert into Section(BookId,OrderNo,SectionNo,ChapterName,Content,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT si.Id,sp.OrderId,0,sp.PropertyValue,sp.PropertyBigVal,now(),'alvin',0,'alvin',CURDATE() FROM spiderproperty sp,spideritem si WHERE si.Id = sp.ItemId AND sp.PropertyKey = '章节' AND si.DeleteFlag = -2 and si.SourceId=1;
-update spiderproperty set DeleteFlag  = -2 where DeleteFlag = 2 and PropertyKey = '章节';
+insert into Section(BookId,OrderNo,SectionNo,ChapterName,Content,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT si.Id,sp.OrderId,0,sp.PropertyValue,sp.PropertyBigVal,now(),'alvin',0,'alvin',CURDATE() FROM spiderproperty sp,spideritem si WHERE si.Id = sp.ItemId AND sp.PropertyKey = '章节' AND sp.DeleteFlag = 0 and si.SourceId=1;
+update spiderproperty set DeleteFlag  = -2 where DeleteFlag = 0 and PropertyKey = '章节';

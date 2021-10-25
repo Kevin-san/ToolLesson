@@ -49,7 +49,7 @@
 								{% if book_info.ImageContent|truncatechars:4 == 'http' %}
 								<img src="{{ book_info.ImageContent }}" width="100" class="img-responsive" alt="{{ book_info.BookName }}">
 								{% else %}
-								<img src="/img/{{ book_info.ImageContent }}" width="100" class="img-responsive" alt="{{ book_info.BookName }}">
+								<img src="/media/img/{{ book_info.ImageContent }}" width="100" class="img-responsive" alt="{{ book_info.BookName }}">
 								{% endif %}
 							</div>
 						</a>
