@@ -39,6 +39,9 @@ BLOG_INDEX_HTML='blogindex.html'
 BOOK_INDEX_HTML='bookindex.html'
 BOOK_BASE_HTML='bookbase.html'
 
+MEDIA_INDEX_HTML='mediaindex.html'
+MEDIA_BASE_HTML='mediabase.html'
+
 NOVEL_INDEX_HTML='novelindex.html'
 NOVEL_BASE_HTML='novelbase.html'
 

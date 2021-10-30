@@ -19,3 +19,4 @@ create table IF NOT EXISTS `Media`( -- 音视频的信息表
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 insert into Media SELECT Id,Name,CONCAT('/img/美女/',Name,''),'','',CONCAT('/img/美女/',Name,CONCAT('/',Name,'_0.jpg')),SourceId+200,0,0,now(),'alvin',0,'alvin',curdate() FROM spideritem WHERE SourceId >=15 AND DeleteFlag = 2;
+update spideritem set DeleteFlag = -2 where SourceId >=15 AND DeleteFlag = 2;

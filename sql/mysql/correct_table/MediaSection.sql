@@ -15,4 +15,6 @@ create table IF NOT EXISTS `MediaSection`( -- 音视频的大章节表
 	`submission_date` DATE, -- 上传时间
 	PRIMARY KEY ( `Id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT ItemId,OrderId,0,'jpg',0,0,now(),'alvin',0,'alvin',curdate() FROM spiderproperty WHERE PropertyKey = '序号';
+ALTER TABLE MediaSection ADD INDEX  `media_section_index`(`MediaId`,`OrderNo`);
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) SELECT ItemId,OrderId,0,'jpg',0,0,now(),'alvin',0,'alvin',curdate() FROM spiderproperty WHERE PropertyKey = '序号' and DeleteFlag = 2;
+update spiderproperty set DeleteFlag  = -2 where DeleteFlag = 2 and PropertyKey = '序号';

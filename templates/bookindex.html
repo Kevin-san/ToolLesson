@@ -11,9 +11,9 @@
 				{% if source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							分类<b class="caret"></b>
+							分类[{{ CategoryName }}]<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu menu-top">
+						<ul class="dropdown-menu menu-top" style="height:100px;overflow:scroll">
 						{% for source in source_list %}
 							<li><a href="/{{ book_type }}/book/{{ source.CategoryId }}/1" >{{ source.CategoryName }}</a></li>
 						{% endfor %}
@@ -31,10 +31,10 @@
 			<div class="col-sm-12 col-sm-offset-3 col-md-12 col-md-offset-2">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<a href="/{{ book_type }}/book/menuadd">新增书籍</a>
+						<h1><a href="/{{ book_type }}/book/menuadd">新增书籍</a></h1>
 					</div>
 					<div class="col-md-6">
-						<a href="/{{ book_type }}/book/upload">上传书籍</a>
+						<h1><a href="/{{ book_type }}/book/upload">上传书籍</a></h1>
 					</div>
 				</div>
 				{% if contacts %} 
@@ -76,6 +76,7 @@
 				{% endfor %} 
 				{% endif %}
 				<div class="row clearfix">
+					{{page_no}}
 					{% if pages %}
 					<ul class="pagination pagination-lg">
 						{% for page in pages %}

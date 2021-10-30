@@ -19776,3 +19776,5 @@ insert into MediaSection values(19774,19774,0,0,'mp3',271,4341739,now(),'alvin',
 insert into MediaSection values(19775,19775,0,0,'mp3',232,3714154,now(),'alvin',0,'alvin',curdate());
 insert into MediaSection values(19776,19776,0,0,'mp3',234,3758750,now(),'alvin',0,'alvin',curdate());
 insert into MediaSection values(19777,19777,0,0,'mp3',226,3625915,now(),'alvin',0,'alvin',curdate());
+
+UPDATE mediasection SET Preffix = 'mp3' WHERE Preffix IN ('flac','mp4','avi');

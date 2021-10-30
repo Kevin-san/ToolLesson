@@ -51,6 +51,13 @@ def get_template_detail(book_lesson_id,api_key,menus):
     main_name=menus[book_lesson_id-1]
     return services.get_chapters(book_lesson_id, F'learn/{main_name}/{api_key}')
 
+def is_not_login(request):
+    return not request.session.get(const.IS_LOGIN_KEY, None)
+
+def render_no_access(request):
+    content=const.NO_ACCESS
+    return render(request,const.INDEX_HTML,locals())
+
 def index(request):
     content=services.get_home_index()
     if is_not_login(request):
@@ -453,6 +460,44 @@ def section_upd_submit(request,book_type,section_id):
         return book_section(request, book_type, book_id,section.OrderNo,max_section_order_no)
     return book_sectionupd(request, book_type, section_id)
 
+def media_index(request,media_type):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_media_home_index(media_type)
+        return render(request,const.MEDIA_INDEX_HTML,result)
+
+def media_list(request,media_type,category_id,page_no):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_media_list(media_type,category_id,page_no)
+        return render(request,const.MEDIA_INDEX_HTML,result)
+
+def media_content(request,media_type,media_id,order_no):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_media_content(media_type,media_id,order_no)
+        return render(request,const.MEDIA_BASE_HTML,result)
+
+def tool_index(request):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result = services.get_tool_home_index()
+        return render(request,const.TOOL_INDEX_HTML,result)
+
+def tool_funcs(request):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result_str = services.get_tool_func(request.POST.get('tool'),request.POST.get('method'),request.POST.get('inputarea'),request.POST.get('passkey'));
+        result_dict = {'outputarea':result_str};
+        return HttpResponse(json.dumps(result_dict))
+
+
+
 def novel_index(request):
     if is_not_login(request):
         return render_no_access(request)
@@ -509,21 +554,6 @@ def image_content(request,item_id):
         result = services.get_image_content_info(item_id)
         return render(request,const.IMAGE_BASE_HTML,result)
 
-def tool_index(request):
-    if is_not_login(request):
-        return render_no_access(request)
-    else:
-        result = services.get_tool_home_index()
-        return render(request,const.TOOL_INDEX_HTML,result)
-
-def tool_funcs(request):
-    if is_not_login(request):
-        return render_no_access(request)
-    else:
-        result_str = services.get_tool_func(request.POST.get('tool'),request.POST.get('method'),request.POST.get('inputarea'),request.POST.get('passkey'));
-        result_dict = {'outputarea':result_str};
-        return HttpResponse(json.dumps(result_dict))
-
 def learn_index(request):
     if is_not_login(request):
         return render_no_access(request)
@@ -559,10 +589,5 @@ def learn_regex(request,api_key):
             return render(request,const.LEARN_BASE_HTML,result_dict)
     return render(request, const.ERROR_HTML)
 
-def is_not_login(request):
-    return not request.session.get(const.IS_LOGIN_KEY, None)
 
-def render_no_access(request):
-    content=const.NO_ACCESS
-    return render(request,const.INDEX_HTML,locals())
 

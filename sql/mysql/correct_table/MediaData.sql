@@ -19779,3 +19779,7 @@ insert into Media values(19777,'다비치(Davichi) - 이 사랑 (这份爱).mp3'
 
 UPDATE media SET imagecontent = CONCAT('/img/',imagecontent);
 UPDATE media m INNER JOIN category c ON c.CategoryId = m.CategoryId SET m.ParentDir = CONCAT(m.ParentDir,'/',c.CategoryName);
+UPDATE media SET MediaName = REPLACE(MediaName,'.mp3','') WHERE MediaName LIKE '%.mp3';
+UPDATE media SET MediaName = REPLACE(MediaName,'.flac','') WHERE MediaName LIKE '%.flac';
+UPDATE media SET MediaName = REPLACE(MediaName,'.avi','') WHERE MediaName LIKE '%.avi';
+UPDATE media SET MediaName = REPLACE(MediaName,'.mp4','') WHERE MediaName LIKE '%.mp4';

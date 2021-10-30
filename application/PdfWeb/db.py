@@ -157,6 +157,12 @@ def get_novel_content_include_prev_next_page(property_id,last_upd_content_order_
     next_chapter = get_spider_property_by_order_id(novel_item_id, next_order_id)
     return NovelContentItem(novel_item_id,novel_chapter,get_novel_spider_id(prev_chapter),get_novel_spider_id(next_chapter))
 
+def get_image_content_info(item_id):
+    spider_item = get_spider_item_by_id(item_id)
+    spider_props = get_spider_property(item_id)
+    return ImageInfoItem(item_id,spider_item.Name,spider_props)
+
+
 def get_novel_spider_id(novel_spider_property):
     if novel_spider_property is None:
         return None
@@ -172,6 +178,8 @@ def get_prev_order_no(order_no):
         return order_no -1
     return 0
 
+def get_category_name_by_category_id(category_id):
+    return get_category_by_id(category_id)[0].CategoryName
 
 def get_next_order_id(order_id,max_order_id):
     if order_id < int(max_order_id):
@@ -253,7 +261,7 @@ def get_page_articles_by_id(article_id):
                 p_article=articles[pre_id]   
             if next_id < len(articles):
                 n_article=articles[next_id]
-    return dict({'p_article':p_article,'article':article,'n_article':n_article},**detail_info)
+    return dict({'p_article':p_article,'article':article,'n_article':n_article,'CategoryName':article.CategoryName},**detail_info)
 
 def get_comments_by_article_id(article_id):
     return Comment.objects.filter(ArticleId=article_id,DeleteFlag = 0)
@@ -335,10 +343,7 @@ def get_image_category_type_info():
 #         category.CategoryId = category.CategoryId - 200
 #     return category_list
 
-def get_image_content_info(item_id):
-    spider_item = get_spider_item_by_id(item_id)
-    spider_props = get_spider_property(item_id)
-    return ImageInfoItem(item_id,spider_item.Name,spider_props)
+
 
 def get_blog_tag_category_type_info():
     return get_category_by_key('blogtag')
@@ -432,32 +437,26 @@ def get_book_distinct_id(section):
         return None
     return section.OrderNo
 
-def get_book_lesson_info(book_lesson_type_id):
-    return BookLesson.objects.filter(BookLessonType_Id=book_lesson_type_id,DeleteFlag=0)
+def get_media_by_category_id(category_id,page_no,page_count):
+    page_no = int(page_no)
+    start_row=page_no*page_count-page_count
+    end_row=page_no*page_count
+    total_count=get_media_count_by_category_id(category_id)
+    if end_row > total_count:
+        end_row=total_count
+    return Media.objects.filter(DeleteFlag=0,CategoryId=category_id)[start_row:end_row]
 
-def get_chapter_infos(book_lesson_id):
-    return Chapter.objects.filter(BookLesson_Id=book_lesson_id,DeleteFlag=0).order_by('ChapterNo')
+def get_media_count_by_category_id(category_id):
+    return Media.objects.filter(DeleteFlag=0,CategoryId=category_id).count()
 
-def get_content_infos(chapter_id):
-    return Content.objects.filter(Chapter_Id=chapter_id,DeleteFlag=0).order_by('OrderIndex')
-    
-def get_image_content_infos(image_id):
-    return ImageContent.objects.filter(Id=image_id,DeleteFlag=0)
+def get_media_by_id(media_id):
+    return Media.objects.get(DeleteFlag=0,Id=media_id)
 
-def get_book_lesson_image_info(book_lesson_type_id):
-    book_lessons=get_book_lesson_info(book_lesson_type_id)
-    book_lesson_image_list=[]
-    for book_lesson in book_lessons:
-        image_content = get_image_content_infos(book_lesson.ImageContent_Id)
-        home_info_item=HomeInfoItem(book_lesson,image_content[0])
-        book_lesson_image_list.append(home_info_item)
-    return book_lesson_image_list
+def get_media_section_by_media_id_order_no(media_id,order_no):
+    return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id,OrderNo=order_no)[0]
 
-def get_media_by_category_id(category_id):
-    return Media.objects.filter(DeleteFlag=0,CategoryId=category_id)
-
-def get_media_section_by_av_id(av_id):
-    return MediaSection.objects.filter(DeleteFlag=0,AvId=av_id)
+def get_media_section_count_by_media_id(media_id):
+    return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id).count()
 
 def get_common_sub_func_info(common_tool_type_id):
     tool_items = get_common_sub_func_by_id(common_tool_type_id)
@@ -480,3 +479,24 @@ def get_unit_dictionary_by_conversion_type(conversion_type):
 
 def get_unit_dictionary():
     return UnitDictionary.objects.filter(DeleteFlag=0)
+
+def get_book_lesson_info(book_lesson_type_id):
+    return BookLesson.objects.filter(BookLessonType_Id=book_lesson_type_id,DeleteFlag=0)
+
+def get_chapter_infos(book_lesson_id):
+    return Chapter.objects.filter(BookLesson_Id=book_lesson_id,DeleteFlag=0).order_by('ChapterNo')
+
+def get_content_infos(chapter_id):
+    return Content.objects.filter(Chapter_Id=chapter_id,DeleteFlag=0).order_by('OrderIndex')
+    
+def get_image_content_infos(image_id):
+    return ImageContent.objects.filter(Id=image_id,DeleteFlag=0)
+
+def get_book_lesson_image_info(book_lesson_type_id):
+    book_lessons=get_book_lesson_info(book_lesson_type_id)
+    book_lesson_image_list=[]
+    for book_lesson in book_lessons:
+        image_content = get_image_content_infos(book_lesson.ImageContent_Id)
+        home_info_item=HomeInfoItem(book_lesson,image_content[0])
+        book_lesson_image_list.append(home_info_item)
+    return book_lesson_image_list

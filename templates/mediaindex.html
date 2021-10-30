@@ -8,13 +8,13 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				{% if media_source_list %}
+				{% if source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							分类<b class="caret"></b>
+							分类[{{ CategoryName }}]<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu menu-top">
-						{% for media_source in media_source_list %}
+						<ul class="dropdown-menu menu-top" style="height:100px;overflow:scroll">
+						{% for media_source in source_list %}
 							<li><a href="/{{ media_type }}/media/{{ media_source.CategoryId }}/1" >{{ media_source.CategoryName }}</a></li>
 						{% endfor %}
 						</ul>
@@ -29,18 +29,25 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				{% if media_contacts %} 
 				<div class="row clearfix">
-				{% for media_info in media_contacts %}
+					<div class="col-md-6">
+						<h1><a href="/{{ media_type }}/media/upload">上传</a></h1>
+					</div>
+				</div>
+				{% if contacts %} 
+				<div class="row clearfix">
+				{% for media_info in contacts %}
 					{% if forloop.counter0|divisibleby:6 %}
 					</div>
 					<div class="row clearfix">
 					{% endif %}
 					<div class="col-md-2">
-						<a href="/{{ media_type }}/media/content/{{ media_info.Id }}">
+						<a href="/{{ media_type }}/media/content/{{ media_info.Id }}/0">
 						<img width="200" src="/media/{{ media_info.ImageContent }}" alt="{{image_info.Name}}"/>
 						</a>
-						<h5>{{media_info.Name}}</h5>
+						<h5>{{media_info.MediaName}}</h5>
+						<h5>总时长 : {% widthratio media_info.TotalTime 60 1%} min </h5>
+						<h5>总大小 : {% widthratio media_info.TotalSize 1048576 1%} M</h5>
 					</div>
 				{% endfor %}
 				</div>

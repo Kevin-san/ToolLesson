@@ -344,4 +344,30 @@
 		</div>
 	</div>
 </body>
+
+<div class="carousel slide" id="carousel-alvin">
+							<ol class="carousel-indicators">
+							{% for image_info in image_content_info.spider_props %}
+								{% if forloop.counter0 == 0 %}
+								<li class="active" data-slide-to="{{image_info.OrderId}}" data-target="#carousel-alvin"></li>
+								{% else %}
+								<li data-slide-to="{{image_info.OrderId}}" data-target="#carousel-alvin"></li>
+								{% endif %}
+							{% endfor %}
+							</ol>
+							<div class="carousel-inner">
+							{% for image_info in image_content_info.spider_props %}
+								{% if forloop.counter0 == 0 %}
+								<div class="item active">
+									<img class="center-block" alt="{{image_content_info.image_name}}" src="/img/美女/{{image_content_info.image_name}}/{{image_info.PropertyBigVal}}"/>
+								</div>
+								{% else %}
+								<div class="item">
+									<img class="center-block" alt="{{image_content_info.image_name}}" src="/img/美女/{{image_content_info.image_name}}/{{image_info.PropertyBigVal}}"/>
+								</div>
+								{% endif %}
+							{% endfor %}
+							</div>
+							<a class="left carousel-control" href="#carousel-alvin" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+							<a class="right carousel-control" href="#carousel-alvin" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </html>

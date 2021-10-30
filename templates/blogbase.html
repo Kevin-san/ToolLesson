@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}博客{% endblock %}
+{% block title %}blog{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -8,13 +8,13 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="/blog/index">博客主页</a></li>
+					<li><a href="/blog/index">blog主页</a></li>
 					{% if blog_category_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							分类<b class="caret"></b>
+							分类[{{ CategoryName }}]<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu menu-top">
+						<ul class="dropdown-menu menu-top" style="height:100px;overflow:scroll">
 						{% for category in blog_category_list %}
 							<li><a href="/blog/{{ category.CategoryId }}/1" >{{ category.CategoryName }}</a></li>
 						{% endfor %}

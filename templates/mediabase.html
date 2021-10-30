@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}图片{% endblock %}
+{% block title %}{{media_type}}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -8,18 +8,19 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				{% if image_source_list %}
+					<li><a href="/{{ media_type }}/media/index">{{ media_type }}主页</a></li>
+					{% if source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							分类<b class="caret"></b>
+							分类[{{ CategoryName }}]<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu menu-top">
-						{% for image_source in image_source_list %}
-							<li><a href="/image/{{ image_source.CategoryId }}/1" >{{ image_source.CategoryName }}</a></li>
-						{% endfor %}
+						<ul class="dropdown-menu menu-top" style="height:100px;overflow:scroll">
+							{% for media_source in source_list %}
+							<li><a href="/{{ media_type }}/media/{{ media_source.CategoryId }}/1" >{{ media_source.CategoryName }}</a></li>
+							{% endfor %}
 						</ul>
 					</li>
-				{% endif %}
+					{% endif %}
 			</ul>
 			{% include "common/search_form.html" %}
 			{% include "common/login_register.html" %}
@@ -29,42 +30,59 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				{% if image_content_info %}
+				{% if media %}
 				<div class="row clearfix text-center">
-					<h1>{{ image_content_info.image_name }}</h1>
-					<p><a href="/image/download/{{image_content_info.item_id}}">下载组图</a></p>
+					<h1>{{ media.MediaName }}</h1>
+					<p><a href="/{{media_type}}/media/download/{{ media.Id }}">下载</a></p>
+					<p>介绍:{{media.Content}}</p>
+					<p>作者:{{media.Authors}}</p>
 				</div>
 				<div class="container">
-					<div class="col-md-12 column">
-						<div class="carousel slide" id="carousel-alvin">
-							<ol class="carousel-indicators">
-							{% for image_info in image_content_info.spider_props %}
-								{% if forloop.counter0 == 0 %}
-								<li class="active" data-slide-to="{{image_info.OrderId}}" data-target="#carousel-alvin"></li>
-								{% else %}
-								<li data-slide-to="{{image_info.OrderId}}" data-target="#carousel-alvin"></li>
-								{% endif %}
-							{% endfor %}
-							</ol>
-							<div class="carousel-inner">
-							{% for image_info in image_content_info.spider_props %}
-								{% if forloop.counter0 == 0 %}
-								<div class="item active">
-									<img class="center-block" alt="{{image_content_info.image_name}}" src="/img/美女/{{image_content_info.image_name}}/{{image_info.PropertyBigVal}}"/>
-								</div>
-								{% else %}
-								<div class="item">
-									<img class="center-block" alt="{{image_content_info.image_name}}" src="/img/美女/{{image_content_info.image_name}}/{{image_info.PropertyBigVal}}"/>
-								</div>
-								{% endif %}
-							{% endfor %}
-							</div>
-							<a class="left carousel-control" href="#carousel-alvin" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-							<a class="right carousel-control" href="#carousel-alvin" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-						</div>
+					<div class="col-md-12 column text-center">
+					{% if media_type == 'image' %}
+						<img width="800" alt="{{media.MediaName}}_{{media_section.OrderNo}}" src="/media/{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}"/>
+					{% elif media_type == 'audio' %}
+						{% if total_count == 1 %}
+						<audio controls>
+							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" type="audio/mpeg"/>
+						</audio>
+						{% else %}
+						<audio controls>
+							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" type="audio/mpeg"/>
+						</audio>
+						{% endif %}
+					{% elif media_type == 'video' %}
+						{% if total_count == 1 %}
+						<video width="800" height="600" controls>
+							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" type="video/mp4"/>
+						</video >
+						{% else %}
+						<video width="800" height="600"  controls>
+							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" type="video/mp4"/>
+						</video >
+						{% endif %}
+					{% endif %}
 					</div>
 				</div>
 				{% endif %}
+				<div class="col-md-12 text-center">
+				{% if total_count %}
+					<div class="row clearfix">
+						<ul class="pagination pagination-lg">
+						{% for i in "x"|ljust:total_count %}
+						{% if forloop.counter0|divisibleby:10 %}
+						</ul>
+						</div>
+						<div class="row clearfix">
+						<ul class="pagination pagination-lg">
+						{% endif %}
+						<li>
+							 <a href="/{{ media_type }}/media/content/{{media.Id}}/{{forloop.counter0}}">{{ forloop.counter }}</a>
+						</li>
+						{% endfor %}
+					</div>
+				{% endif %}
+				</div>
 			</div>
 		</div>
 	</div>
