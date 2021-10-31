@@ -42,16 +42,18 @@ BOOK_BASE_HTML='bookbase.html'
 MEDIA_INDEX_HTML='mediaindex.html'
 MEDIA_BASE_HTML='mediabase.html'
 
+TOOL_INDEX_HTML='toolindex.html'
+
+# start not in use 
 NOVEL_INDEX_HTML='novelindex.html'
 NOVEL_BASE_HTML='novelbase.html'
 
 IMAGE_INDEX_HTML='imageindex.html'
 IMAGE_BASE_HTML='imagebase.html'
 
-TOOL_INDEX_HTML='toolindex.html'
-
 LEARN_INDEX_HTML='learnindex.html'
 LEARN_BASE_HTML='learnbase.html'
+# end not in use
 
 INDEX_URL='/index'
 LOGIN_URL='/login'

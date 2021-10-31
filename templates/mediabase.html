@@ -83,6 +83,28 @@
 					</div>
 				{% endif %}
 				</div>
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-11">
+						<p>评论 <small>共{{ comments|length }}条评论</small></p>
+						<form action="/{{media_type}}/comment/ins/{{ media_section.Id }}" method="post">
+						{% csrf_token %}
+						<!-- {{ form.media }} -->
+						<div class="form-group">
+                  			{{ comment_form.Content.label_tag }}
+                  			{{ comment_form.Content}}
+              			</div>
+						<input type="submit" name="提交">
+						</form>
+						{% for comment_item in comments %}
+						{% if request.session.user_name == comment_item.AuthorName %}
+							<p class="comment"><strong>{{ comment_item.AuthorName }}</strong>: {{ comment_item.Content }} &nbsp;&nbsp; <em>{{ comment_item.UpdateTime }}</em>&nbsp;&nbsp;<a href="/{{media_type}}/comment/del/{{ comment_item.Id }}">删除</a></p>
+						{% else %}
+							<p class="comment"><strong>{{ comment_item.AuthorName }}</strong>: {{ comment_item.Content }} &nbsp;&nbsp; <em>{{ comment_item.UpdateTime }}</em></p>
+						{% endif %}
+						{% endfor %}
+					</div>
+             	</div>
 			</div>
 		</div>
 	</div>

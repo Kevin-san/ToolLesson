@@ -12,18 +12,6 @@ from django.contrib.auth.hashers import check_password
 from django.http.response import HttpResponse
 import json
 
-linux_menus=services.get_menus(11)
-database_menus=services.get_menus(12)
-webpage_menus=services.get_menus(13)
-telphone_menus=services.get_menus(14)
-math_menus=services.get_menus(15)
-frontkill_menus=services.get_menus(16)
-lang_menus=services.get_menus(17)
-
-linux_restfuls = services.get_restful(1, "linux")
-bash_restfuls = services.get_restful(2, "bash")
-regex_restfuls = services.get_restful(3, "regex")
-
 blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
 tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
 
@@ -220,7 +208,6 @@ def blog_article(request,article_id):
     if is_not_login(request):
         return render_no_access(request)
     else:
-        current_log.info(article_id)
         result = services.get_blog_article(article_id)
         result['action'] = const.DETAIL_ACTION
         result['comment_form'] = forms.CommentForm()
@@ -320,6 +307,7 @@ def book_section(request,book_type,book_id,section_order_no,max_section_order_no
         return render_no_access(request)
     else:
         result = services.get_book_section_info(book_type,book_id,section_order_no,max_section_order_no)
+        result['comment_form'] = forms.CommentForm()
         return render(request,const.BOOK_BASE_HTML,result)
 
 def book_author(request,book_type,book_id):
@@ -479,7 +467,14 @@ def media_content(request,media_type,media_id,order_no):
         return render_no_access(request)
     else:
         result = services.get_media_content(media_type,media_id,order_no)
+        result['comment_form'] = forms.CommentForm()
         return render(request,const.MEDIA_BASE_HTML,result)
+
+def comment_add_submit(request,category_key,item_id):
+    pass
+
+def comment_del(request,category_key,comment_id):
+    pass
 
 def tool_index(request):
     if is_not_login(request):
@@ -496,7 +491,7 @@ def tool_funcs(request):
         result_dict = {'outputarea':result_str};
         return HttpResponse(json.dumps(result_dict))
 
-
+# start not in use
 
 def novel_index(request):
     if is_not_login(request):
@@ -554,6 +549,18 @@ def image_content(request,item_id):
         result = services.get_image_content_info(item_id)
         return render(request,const.IMAGE_BASE_HTML,result)
 
+linux_menus=services.get_menus(11)
+database_menus=services.get_menus(12)
+webpage_menus=services.get_menus(13)
+telphone_menus=services.get_menus(14)
+math_menus=services.get_menus(15)
+frontkill_menus=services.get_menus(16)
+lang_menus=services.get_menus(17)
+ 
+linux_restfuls = services.get_restful(1, "linux")
+bash_restfuls = services.get_restful(2, "bash")
+regex_restfuls = services.get_restful(3, "regex")
+
 def learn_index(request):
     if is_not_login(request):
         return render_no_access(request)
@@ -589,5 +596,5 @@ def learn_regex(request,api_key):
             return render(request,const.LEARN_BASE_HTML,result_dict)
     return render(request, const.ERROR_HTML)
 
-
+# end not in use
 

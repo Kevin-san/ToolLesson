@@ -2,7 +2,8 @@ use alvin;
 drop table IF EXISTS `Comment`;
 create table IF NOT EXISTS `Comment`( -- 博客评论表
 	`Id` INT UNSIGNED AUTO_INCREMENT,
-	`ArticleId` INT NOT NULL , -- 日志Id
+	`CategoryId` INT NOT NULL, -- 分类Id
+	`ItemId` INT NOT NULL , -- 日志Id
 	`Content` VARCHAR(3000) NOT NULL DEFAULT '', --评论内容
 	`AuthorId` INT UNSIGNED NOT NULL, 
 	`AuthorName` VARCHAR(200) NOT NULL,
@@ -13,3 +14,5 @@ create table IF NOT EXISTS `Comment`( -- 博客评论表
 	`submission_date` DATE, -- 上传时间
 	PRIMARY KEY ( `Id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE Comment ADD INDEX  `comment_index`(`CategoryId`,`ItemId`);

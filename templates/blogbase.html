@@ -80,9 +80,9 @@
   						</ul>
 					</nav>
 				</div>
-				<div class="row">
+				<div class="row text-left">
 					<p>评论 <small>共{{ comments|length }}条评论</small></p>
-					<form action="/blog/comment/{{ article.Id }}" method="post">
+					<form action="/blog/comment/ins/{{ article.Id }}" method="post">
 						{% csrf_token %}
 						<!-- {{ form.media }} -->
 						<div class="form-group">
@@ -92,7 +92,11 @@
 						<input type="submit" name="提交">
 					</form>
 					{% for comment_item in comments %}
-					<p class="comment"><strong>{{ comment_item.AuthorName }}</strong>: {{ comment_item.Content }} &nbsp;&nbsp; <em>{{ comment_item.UpdateTime }}</em></p>
+						{% if request.session.user_name == comment_item.AuthorName %}
+							<p class="comment"><strong>{{ comment_item.AuthorName }}</strong>: {{ comment_item.Content }} &nbsp;&nbsp; <em>{{ comment_item.UpdateTime }}</em>&nbsp;&nbsp;<a href="/blog/comment/del/{{ comment_item.Id }}">删除</a></p>
+						{% else %}
+							<p class="comment"><strong>{{ comment_item.AuthorName }}</strong>: {{ comment_item.Content }} &nbsp;&nbsp; <em>{{ comment_item.UpdateTime }}</em></p>
+						{% endif %}
 					{% endfor %}
               	</div>
               	{% endif %}
