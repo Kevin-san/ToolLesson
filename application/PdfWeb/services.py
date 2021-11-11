@@ -6,10 +6,16 @@ Created on 2019/12/28
 '''
 from PdfWeb import db,entitys,current_log
 from PdfWeb.entitys import HomeIndexItem, PageInfoItem
-from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,common_executer
+from django.conf import settings
+from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,common_executer,\
+    common_filer
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
+import os
+from PdfWeb.settings import MEDIA_ROOT
+from writecreater.fileswriter import SimpleFileWriter
+
 
 
 category_map={
@@ -21,6 +27,7 @@ category_map={
 
 tool_menu_list = db.get_common_tool_type_info()
 blog_category_list= db.get_blog_category_type_info()
+link_map = db.get_link_directory_map()
 
 def get_pages(begin_no,end_no,category_id,num_pages):
     pages = []
@@ -70,8 +77,6 @@ def pages_help(page,num_pages,category_id,maxpage):
         return get_pages(p - int(maxpage / 2), p + int(maxpage / 2),category_id,num_pages)
 
 
-
-
 def get_home_index():
     user_funcs = db.get_user_function('a', 1)
     content_list=[]
@@ -86,6 +91,31 @@ def get_home_index():
             temp_str=F'{temp_str}</div>'
         content_list.append(temp_str)
     return "".join(content_list)
+
+def get_media_download_infos_by_media_id(media_type,media_id):
+    media=db.get_media_by_id(media_id)
+    sections = db.get_media_sections_by_media_id(media_id)
+    section_count = db.get_media_section_count_by_media_id(media_id)
+    
+    parent_dir = MEDIA_ROOT+media.ParentDir
+    for link_key,link_val in link_map.items():
+        if link_key in media.ParentDir:
+            parent_dir = media.ParentDir.replace(link_key,link_val)
+    file_path_list=[]
+    zip_file_path=parent_dir+'/'+media.MediaName+'.zip'
+    current_log.info(zip_file_path)
+    if common_filer.exists(zip_file_path) and common_filer.get_file_size(zip_file_path) > 0:
+        return zip_file_path
+    else:
+        for section in sections:
+            real_file_path=parent_dir+'/'+media.MediaName+'_'+str(section.OrderNo)+'.'+section.Preffix
+            if section_count == 1:
+                real_file_path=parent_dir+'/'+media.MediaName+'.'+section.Preffix
+            current_log.info(real_file_path)
+            file_path_list.append(real_file_path)
+        common_filer.add_files_into_zip(file_path_list, zip_file_path)
+    return zip_file_path
+    
 
 def get_media_home_index(meida_type):
     return get_media_list(meida_type,category_map[meida_type][0].CategoryId,1)
@@ -111,6 +141,35 @@ def get_media_content(media_type,media_id,order_no):
     keys = ['media_type','source_list','media','media_section','total_count','CategoryName','comments']
     vals=[media_type,category_map[media_type],media,media_section,total_count,category_name,comments]
     return common_tools.create_map(keys, vals)
+
+def get_book_download_infos_by_book_id(book_type,book_id):
+    book = db.get_book_by_id(book_id)
+    book_name = book.BookName
+    category = db.get_category_by_id(book.CategoryId)[0]
+    book_sections=db.get_book_sections_by_book_id(book_id)
+    link_dir = "/"+book_type+"/"
+    parent_dir = MEDIA_ROOT+link_dir
+    for link_key,link_val in link_map.items():
+        if link_key == link_dir:
+            parent_dir = link_val
+    current_dir = parent_dir+category.CategoryName+"/"
+    if not common_filer.exists(current_dir):
+        common_filer.make_dirs(current_dir)
+    if book_type == "novel":
+        file_path = current_dir+book_name+".txt"
+        if common_filer.exists(file_path) and common_filer.get_file_size(file_path)>0:
+            return file_path
+        file_w=SimpleFileWriter(current_dir+book_name+".txt")
+        file_w.append_new_line(book_name)
+        file_w.append_new_line(book.Author)
+        file_w.append_new_line(book.Description)
+        for book_section in book_sections:
+            file_w.append_new_line(book_section.ChapterName)
+            file_w.append_new_line(book_section.Content)
+        file_w.close()
+        return file_path
+    else:
+        pass
 
 def get_book_home_index(book_type):
     return get_book_list(book_type,category_map[book_type][0].CategoryId,1)

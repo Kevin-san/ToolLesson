@@ -8,7 +8,7 @@ Created on 2019/6/30
 from os.path import getsize,join
 import tools.common_logger as log
 import tools.common_tools as common
-import os,subprocess,json
+import os
 import time
 import chardet
 import sys
@@ -18,7 +18,7 @@ from retrying import retry
 from Crypto.Cipher import AES
 from pydub import AudioSegment
 from moviepy.editor import VideoFileClip
-from writecreater.fileswriter import SimpleFileWriter
+import zipfile
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
 
@@ -68,6 +68,21 @@ def make_dirs(directory):
     if os.path.isdir(directory):
         return True
     return os.makedirs(directory)
+
+def add_files_into_zip(absolute_file_path_list,zip_path):
+    zip_file = zipfile.ZipFile(zip_path,'w')
+    for file_path in absolute_file_path_list:
+        zip_file.write(file_path,file_path,zipfile.ZIP_DEFLATED)
+    zip_file.close()
+
+def file_iterator(file_name, chunk_size=2048):
+    f=open(file_name,'rb')
+    while True:
+        c = f.read(chunk_size)
+        if c:
+            yield c
+        else:
+            break
 
 def get_file_size(file_path):
     return getsize(file_path)

@@ -5,7 +5,8 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,Media,MediaSection,Book,Section
+from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,Media,MediaSection,Book,Section,\
+    CommonCodeMap
 from PdfWeb.entitys import HomeInfoItem, NovelInfoItem,ImageInfoItem, NovelIndexItem,\
     NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity,\
     BookIndexItem,BookContentItem
@@ -416,8 +417,21 @@ def get_media_by_id(media_id):
 def get_media_section_by_media_id_order_no(media_id,order_no):
     return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id,OrderNo=order_no)[0]
 
+def get_media_sections_by_media_id(media_id):
+    return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id)
+
 def get_media_section_count_by_media_id(media_id):
     return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id).count()
+
+def get_common_code_type(code_type):
+    return CommonCodeMap.objects.filter(DeleteFlag=0,CodeType=code_type)
+
+def get_link_directory_map():
+    common_codes= get_common_code_type("LinkDirectory")
+    link_map=dict()
+    for common_code in common_codes:
+        link_map[common_code.TypeKey]=common_code.TypeVal
+    return link_map
 
 def get_common_sub_func_info(common_tool_type_id):
     tool_items = get_common_sub_func_by_id(common_tool_type_id)

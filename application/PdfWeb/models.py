@@ -103,6 +103,24 @@ class Section(models.Model):
     def __str__(self):
         return self.ChapterName
 
+class CommonCodeMap(models.Model):
+    Id=models.AutoField(primary_key=True,verbose_name='Id')
+    CodeType=models.CharField(max_length=100,verbose_name='类型键')
+    TypeKey=models.CharField(max_length=100,verbose_name='类型键')
+    TypeVal=models.CharField(max_length=100,verbose_name='类型值')
+    Description1=models.CharField(max_length=100,verbose_name='规则')
+    Description2=models.CharField(max_length=1000,verbose_name='规则细节')
+    DescriptionText=models.CharField(max_length=1000,verbose_name='规则内容')
+    DeleteFlag=models.BooleanField(default=False,blank=False,verbose_name='删除状态')
+    submission_user=models.CharField(max_length=30,verbose_name="上传用户")
+    submission_date=models.DateField(auto_now_add=True,verbose_name="上传时间")
+    class Meta:
+        db_table='CommonCodeMap'
+        verbose_name='常用映射'
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.TypeVal
+
 class CommonRules(models.Model):
     Id=models.AutoField(primary_key=True,verbose_name='Id')
     TypeKey=models.CharField(max_length=100,verbose_name='类型键')

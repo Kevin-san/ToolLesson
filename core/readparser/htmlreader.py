@@ -10,6 +10,10 @@ from entitys.htmlitems import SimpleHtmlItem
 from tools import common_filer,common_converter,common_tools
 from writecreater.fileswriter import SimpleFileWriter
 import os
+import re
+import base64
+import quopri
+from PdfWeb import current_log
 
 class SimpleHtmlReader():
     
@@ -170,17 +174,149 @@ def parse_htm_list_to_sql(htm_dict,chapter_sql,content_sql):
                 content_sql_wrter.append_new_line(content_data_sql)
                 content_id=content_id+1
             index_no=index_no+1
+
+def convert_mht_to_list(boundary, html_content):
+    return str(html_content).split(boundary)
+
+def get_boundary(html_lines):
+    for line in html_lines:
+        if "".join(line.split()).startswith("boundary="):
+            boundary="--"+str(line).split('boundary=')[-1].replace('"',"")
+            current_log.info(boundary)
+            return boundary
+
+def save_image_file(image_content, folder, file_name):
+    try:
+        file_path = os.path.join(folder, file_name)
+        current_log.info(folder)
+        common_filer.make_dirs(folder)
+        f= open(file_path, 'wb')
+        f.write(image_content)
+        current_log.info('%s 保存图片成功' %(file_path))
+        return file_path
+    except Exception as e:
+        # print(e)
+        current_log.info('%s 保存图片失败: ' %( str(e)))
+        return None
+
+def get_content_val(content_key,content_line):
+    current_log.info(content_key)
+    content_val =content_line.split(content_key+":")[1].strip()
+    return content_val
+
+def get_content_val_from_sub_content(content_key,sub_content):
+    content_val = 'unknown'
+    for sub_line in sub_content:
+        if content_key in sub_line:
+            return get_content_val(content_key, sub_line)
+    return content_val
+
+def get_content_type(sub_content):
+    return get_content_val_from_sub_content('Content-Type',sub_content)
+
+def get_content_location(sub_content):
+    return get_content_val_from_sub_content('Content-Location',sub_content)
+
+def get_content_encoding(sub_content):
+    return get_content_val_from_sub_content('Content-Transfer-Encoding',sub_content)
+
+def get_img_content(sub_content):
+    begin_index = 0
+    content_keys = ['Content-Type','Content-Transfer-Encoding','Content-Location']
+    for sub_index,sub_line in enumerate(sub_content):
+        for content_key in content_keys:
+            if content_key in sub_line:
+                begin_index = sub_index+1
+    return ''.join(sub_content[begin_index:])
+
+def get_content_type_and_content(line, sub_path_name, file_name):
+    line = str(line)
+    sub_content = line.split('\n')
+    if 'Content-Location' in line:
+        content_type = get_content_type(sub_content)
+        content_encoding= get_content_encoding(sub_content)
+        content = get_img_content(sub_content)
+        if 'image' in content_type:
+            current_log.info('正在保存图片文件:%s ' % (file_name))
+            decoded_body = None
+            if content_encoding.lower() == 'quoted-printable':
+                decoded_body = quopri.decodestring(content)
+            if content_encoding.lower() == 'base64':
+                try:
+                    decoded_body = base64.b64decode(content)
+                except Exception as e:
+                    current_log.info('%s 图片解码失败，无法保存' %(file_name))
+                    return
+            if decoded_body:
+                save_image_file(decoded_body, sub_path_name, file_name)
+        else:
+            current_log.info('%s 图片解码失败，无法保存')
+
+def save_mht_all_images(input_path):
+    parent_folder = common_filer.get_parent_dir(input_path)
+    file_name_full = common_filer.get_file_name(input_path)
+    file_key = file_name_full.replace(".mht","")
+    current_log.info(file_key)
+    sub_path_name = os.path.join(parent_folder, file_key)
+    file_reader= SimpleFileReader(input_path)
+    all_lines = file_reader.read_lines()
+    file_reader2=SimpleFileReader(input_path)
+    body_content = file_reader2.read()
+    boundary = get_boundary(all_lines)
+    content_list = convert_mht_to_list(boundary, html_content=body_content)
+    index = 1
+    for content_l in content_list:
+        sub_content = content_l.split('\n')
+        content_type = get_content_type(sub_content)
+        if "image" in content_type:
+            file_name = file_key+"_"+str(index)+".jpg"
+            get_content_type_and_content(content_l, sub_path_name, file_name)
+            index += 1
+        else:
+            continue
+    file_reader.close()
+    
+def save_mhts_all_images(input_path_map,parent_dir):
+    for input_key, vals in input_path_map.items():
+        sub_path_name = os.path.join(parent_dir, input_key)
+        index = 1
+        for input_val in vals:
+            current_log.info(input_val)
+            input_path = parent_dir + input_val
+            file_reader= SimpleFileReader(input_path)
+            all_lines = file_reader.read_lines()
+            file_reader2=SimpleFileReader(input_path)
+            body_content = file_reader2.read()
+            boundary = get_boundary(all_lines)
+            content_list = convert_mht_to_list(boundary, html_content=body_content)
+            for content_l in content_list:
+                sub_content = content_l.split('\n')
+                content_type = get_content_type(sub_content)
+                current_log.info(content_type)
+                if "image" in content_type:
+                    file_name = input_key+"_"+str(index)+".jpg"
+                    get_content_type_and_content(content_l, sub_path_name, file_name)
+                    index += 1
+                else:
+                    continue
+            file_reader.close()
+            file_reader2.close()
+
 if __name__ == "__main__":
-    directory="C:/Users/xcKev/git/CorePdfPage/templates"
-    sql_dir="C:/Users/xcKev/git/CorePdfPage/sql/mysql/correct_table"
-    chapter_sql_file=F"{sql_dir}/ChapterData1.sql"
-    content_sql_file=F"{sql_dir}/ContentData1.sql"
-    dirs=["linux","bash"]
-    replace_strs_dict={}
-    for corr_dir in dirs:
-        clear_htm_files(F"{directory}/{corr_dir}")
-        rpl_strs=get_rpl_strs(corr_dir)
-        replace_strs=get_replace_strs(rpl_strs)
-        replace_strs_dict[corr_dir]=replace_strs
-    htm_dict=remove_django_pattern_parse_htm(directory, dirs, 'htm', replace_strs_dict)
-    parse_htm_list_to_sql(htm_dict,chapter_sql_file,content_sql_file)
+    parent_path = "I:/图片/Hider/"
+    input_path_map={}
+    save_mhts_all_images(input_path_map, parent_path)
+    #save_mht_all_images(file_path)
+#     directory="C:/Users/xcKev/git/CorePdfPage/templates"
+#     sql_dir="C:/Users/xcKev/git/CorePdfPage/sql/mysql/correct_table"
+#     chapter_sql_file=F"{sql_dir}/ChapterData1.sql"
+#     content_sql_file=F"{sql_dir}/ContentData1.sql"
+#     dirs=["linux","bash"]
+#     replace_strs_dict={}
+#     for corr_dir in dirs:
+#         clear_htm_files(F"{directory}/{corr_dir}")
+#         rpl_strs=get_rpl_strs(corr_dir)
+#         replace_strs=get_replace_strs(rpl_strs)
+#         replace_strs_dict[corr_dir]=replace_strs
+#     htm_dict=remove_django_pattern_parse_htm(directory, dirs, 'htm', replace_strs_dict)
+#     parse_htm_list_to_sql(htm_dict,chapter_sql_file,content_sql_file)

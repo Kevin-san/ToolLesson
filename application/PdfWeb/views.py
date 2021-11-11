@@ -5,12 +5,14 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.shortcuts import render,redirect
-from PdfWeb import services,forms,settings,db,current_log
+from PdfWeb import services,forms,settings,db, current_log
 import PdfWeb.constant as const
 import datetime
 from django.contrib.auth.hashers import check_password
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, StreamingHttpResponse
 import json
+from tools import common_filer
+from django.utils.http import urlquote
 
 blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
 tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
@@ -281,6 +283,20 @@ def blog_upd_submit(request):
         return blog_article(request, article.Id)
     return blog_upd(request, article.Id)
 
+def book_download(request,book_type,book_id):
+    try:
+        book_file_path = services.get_book_download_infos_by_book_id(book_type, book_id)
+        book_file_name = common_filer.get_file_name(book_file_path)
+        current_log.info(book_file_name)
+        response = StreamingHttpResponse(common_filer.file_iterator(book_file_path))
+        response['Content-Type']='application/octet-stream'
+        response['Content-Disposition']='attachment;filename="%s"'%(urlquote(book_file_name))
+    except Exception as e:
+        print(e)
+        return HttpResponse("Sorry but not found the file")
+    return response
+
+
 def book_index(request,book_type):
     if is_not_login(request):
         return render_no_access(request)
@@ -447,6 +463,19 @@ def section_upd_submit(request,book_type,section_id):
         services.upd_book(book)
         return book_section(request, book_type, book_id,section.OrderNo,max_section_order_no)
     return book_sectionupd(request, book_type, section_id)
+
+def media_download(request,media_type,media_id):
+    try:
+        zip_file_path=services.get_media_download_infos_by_media_id(media_type, media_id)
+        zip_file_name = common_filer.get_file_name(zip_file_path)
+        current_log.info(zip_file_name)
+        response = StreamingHttpResponse(common_filer.file_iterator(zip_file_path))
+        response['Content-Type']='application/octet-stream'
+        response['Content-Disposition']='attachment;filename="%s"'%(urlquote(zip_file_name))
+    except Exception as e:
+        print(e)
+        return HttpResponse("Sorry but not found the file")
+    return response
 
 def media_index(request,media_type):
     if is_not_login(request):

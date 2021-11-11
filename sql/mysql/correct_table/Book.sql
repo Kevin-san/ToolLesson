@@ -65,5 +65,5 @@ insert into `Book` values(512853,'Unity3D','游戏制作引擎','Unity3D','Unity
 insert into Book select Id,Name,'','','',SourceId + 100,0,'',now(),'alvin',DeleteFlag,submission_user,submission_date FROM spideritem WHERE SourceId <=8;
 update book b INNER JOIN spiderproperty sp ON b.Id=sp.ItemId AND sp.PropertyKey='作者' set b.Author = sp.PropertyValue;
 update book b INNER JOIN spiderproperty sp ON b.Id=sp.ItemId AND sp.PropertyKey='简介' set b.Description = sp.PropertyValue;
-update book b INNER JOIN spiderproperty sp ON b.Id=sp.ItemId AND sp.PropertyKey='图片' set b.ImageContent = case when sp.PropertyValue = '' then 'novel_bg.jpg' else sp.PropertyValue end;
+update book b INNER JOIN spiderproperty sp ON b.Id=sp.ItemId AND sp.PropertyKey='图片' set b.ImageContent = case when sp.PropertyValue = '' then '/img/novel_bg.jpg' else sp.PropertyValue end;
 update book b INNER JOIN spiderproperty sp ON b.Id=sp.ItemId AND sp.PropertyKey='最新' set b.MaxSectionId = sp.PropertyValue , b.MaxSectionName = sp.PropertyBigVal;
