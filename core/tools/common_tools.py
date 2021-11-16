@@ -20,6 +20,21 @@ java_cons=javatmps.JavaConst()
 suffix_names=filesuffix.file_suffix_names + filesuffix.compiled_suffix_names+filesuffix.config_suffix_names+filesuffix.html_suffix_names+filesuffix.img_suffix_names+filesuffix.video_suffix_names+filesuffix.msc_suffix_names+filesuffix.package_suffix_names+filesuffix.run_suffix_names
 current_log=log.get_log('tools', '/temp', 'tools')
 
+def get_correct_vals_by_cols_num(cols_num,text_val):
+    text_val=text_val.replace("\r\n","")
+    text_length = len(text_val)
+    correct_vals = []
+    line_cnt = int(text_length / cols_num)
+    if text_length % cols_num != 0:
+        line_cnt=line_cnt+1
+    for index in range(0,line_cnt):
+        begin_index= index*cols_num
+        end_index=(index+1)*cols_num
+        if end_index >= text_length:
+            end_index = text_length
+        correct_vals.append(text_val[begin_index:end_index])
+    return correct_vals
+
 def obj_to_string(cls, obj):
     """
           简单地实现类似对象打印的方法

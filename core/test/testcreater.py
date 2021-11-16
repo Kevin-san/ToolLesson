@@ -5,7 +5,7 @@ Created on 2020/5/3
 @author: xcKev
 '''
 from writecreater import excelwriter,fileswriter,pdfwriter
-from entitys import excelstyles
+from entities import excelstyles
 import time
 import os
 from openpyxl.styles import colors,Side

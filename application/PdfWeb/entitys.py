@@ -15,6 +15,17 @@ def get_val_max(num_list):
         return 10
     return 100
 
+def get_max_length(cols):
+    max_length_col = max(cols)
+    return len(max_length_col)
+
+def get_max_length_col_from_table(table_list):
+    reverse_tables=[[row[i] for row in table_list] for i in range(len(table_list[0]))]
+    max_cols_list = []
+    for cols in reverse_tables:
+        max_cols_list.append(cols)
+    return get_max_length(max_cols_list)
+
 def convert_common_rules_to_tag_dict(rule_list):
     tag_dict=dict()
     for common_rule in rule_list:
@@ -42,94 +53,10 @@ class PdfInitParams():
             self.imgdir=F"{parentdir}/{pdfname}_images"
         if not os.path.exists(self.imgdir):
             os.makedirs(self.imgdir)
-class Position():
-    def __init__(self,x=0,y=0,width=0,height=0):
-        self.x=x
-        self.y=y
-        self.width=width
-        self.height=height
-        
-class Chart():
-    def __init__(self,val_max_x=100,val_max_y=80,val_step=10):
-        self.val_max_x=val_max_x
-        self.val_max_y=val_max_y
-        self.val_step=val_step
-    
-class PdfItem():
-    def __init__(self,position=None,chart=None,item_dicts={},item_type='',style=None):
-        self.xinch=position.x
-        self.yinch=position.y
-        self.width=position.width
-        self.height=position.height
-        self.val_max_x=chart.val_max_x
-        self.val_max_y=chart.val_max_y
-        self.val_step=chart.val_step
-        self.itemdicts=item_dicts
-        self.itemstyle=style
-        self.itemtype=item_type
-    
-    @classmethod
-    def table(cls,width,height,table_style,dist_list):
-        item_dicts={'data':dist_list}
-        position=Position(width=width,height=height)
-        return cls(position=position,item_type='table',item_dicts=item_dicts,style=table_style)
-    
-    @classmethod
-    def paragraph(cls,text_str,text_style):
-        item_dicts={'text':text_str}
-        return cls(item_dicts=item_dicts,item_type='paragraph',style=text_style)
-    
-    @classmethod
-    def image(cls,img_path,width,height):
-        item_dicts={'img_path':img_path}
-        position=Position(width=width,height=height)
-        return cls(position=position,item_type='image',item_dicts=item_dicts)
-    
-    @classmethod
-    def spacer(cls,height):
-        position=Position(height=height)
-        return cls(position=position,item_type='spacer')
-    
-    @classmethod
-    def circle(cls,x,y,width):
-        position=Position(x=x,y=y,width=width)
-        return cls(position=position,item_type='circle')
-    
-    @classmethod
-    def rect(cls,x,y,width,height):
-        position=Position(x=x,y=y,height=height,width=width)
-        return cls(position=position,item_type='rect')
-    
-    @classmethod
-    def bar(cls,x,y,width,height,data_list,ax_names,val_step):
-        item_dicts={'data':data_list,'ax_names':ax_names}
-        position=Position(x=x,y=y,height=height,width=width)
-        x_list=[]
-        for tuple_item in data_list:
-            for num in tuple_item:
-                x_list.append(num)
-        val_max_x=get_val_max(x_list)
-        chart=Chart(val_max_x=val_max_x,val_step=val_step)
-        return cls(position=position,chart=chart,item_dicts=item_dicts,item_type='bar')
 
-    @classmethod
-    def pie(cls,x,y,width,data_list,labels,colors):
-        item_dicts={'data':data_list,'labels':labels,'colors':colors}
-        position=Position(x=x,y=y,width=width)
-        return cls(position=position,item_dicts=item_dicts,item_type='pie')
-    
-    @classmethod
-    def lineplot(cls,x,y,width,height,data_list,attrs):
-        item_dicts={'data':data_list,'attrs':attrs}
-        position=Position(x=x,y=y,height=height,width=width)
-        x_list=[]
-        y_list=[]
-        for item_list in data_list:
-            for item_tuple in item_list:
-                x_list.append(item_tuple[0])
-                y_list.append(item_tuple[1])
-        val_max_x=get_val_max(x_list)
-        val_max_y=get_val_max(y_list)
+
+
+
 class Property():
     def __init__(self,property_type,property_name):
         self.property_type=property_type

@@ -1,5 +1,5 @@
-var speaker = new window.SpeechSynthesisUtterance();
-const synth = window.speechSynthesis;
+var speaker = new SpeechSynthesisUtterance();
+const synth = speechSynthesis;
 console.log(speaker);
 var speakTimer, stopTimer;
 var play = false;

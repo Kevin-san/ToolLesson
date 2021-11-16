@@ -1,10 +1,12 @@
+# -*- encoding:UTF-8 -*-
 '''
-Created on 2020年5月3日
+Created on 2020/5/3
 
 @author: xcKev
 '''
+from PdfWeb.entitys import get_max_length_col_from_table
 from PyPDF2.pdf import PdfFileReader, PdfFileWriter
-from reportlab.lib.units import inch
+from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, Paragraph, SimpleDocTemplate, Spacer, Image, TableStyle, PageBreak
@@ -19,8 +21,10 @@ from reportlab.lib.colors import HexColor
 from reportlab.graphics.widgets.markers import makeMarker
 from reportlab.graphics.charts.legends import Legend
 from pdf2image import convert_from_path
-from tools import common_filer
+from tools import common_filer, common_tools
 import os
+from entities.pdfitems import PdfItem
+from reportlab.platypus.flowables import ListFlowable
 
 def pdf2images(pdf_path):
     output_file_dir = common_filer.get_file_name(pdf_path)
@@ -42,20 +46,35 @@ class SimplePdfWriter(object):
         style = getSampleStyleSheet()
         self.stylesheet = {}
         self.stylesheet['Title'] = style['Title']
+        self.stylesheet['Title'].fontName = 'STSONG'
         self.stylesheet['Normal'] = style['Normal']
+        self.stylesheet['Normal'].fontName = 'STSONG'
         self.stylesheet['Heading1'] = style['Heading1']
+        self.stylesheet['Heading1'].fontName = 'STSONG'
         self.stylesheet['Heading2'] = style['Heading2']
+        self.stylesheet['Heading2'].fontName = 'STSONG'
         self.stylesheet['Heading3'] = style['Heading3']
+        self.stylesheet['Heading3'].fontName = 'STSONG'
         self.stylesheet['Heading4'] = style['Heading4']
+        self.stylesheet['Heading4'].fontName = 'STSONG'
         self.stylesheet['Heading5'] = style['Heading5']
+        self.stylesheet['Heading5'].fontName = 'STSONG'
         self.stylesheet['Heading6'] = style['Heading6']
+        self.stylesheet['Heading6'].fontName = 'STSONG'
+        self.stylesheet['Code'] = style['Code']
+        self.stylesheet['Code'].fontName = 'STSONG'
+        self.stylesheet['UnorderedList'] = style['UnorderedList']
+        self.stylesheet['UnorderedList'].fontName = 'STSONG'
+        self.stylesheet['OrderedList'] = style['OrderedList']
+        self.stylesheet['OrderedList'].fontName = 'STSONG'
         self.stylesheet['BodyText'] = style['BodyText']
+        self.stylesheet['BodyText'].fontName = 'STSONG'
         self.stylesheet['BodyText'].wordWrap = 'CJK'
         self.stylesheet['BodyText'].firstLineIndent = 32
         self.stylesheet['BodyText'].leading = 30
         self.stylesheet['Table'] = TableStyle(
-            [('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
-             ('FONTSIZE', (0, 0), (-1, 0), 15),
+            [('FONTNAME', (0, 0), (-1, -1), 'STSONG'),
+             ('FONTSIZE', (0, 0), (-1, 0), 8),
              ('BACKGROUND', (0, 0), (-1, 0), HexColor('#d5dae6')),
              ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
              ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
@@ -70,24 +89,31 @@ class SimplePdfWriter(object):
         dist_list = pdf_item.itemdicts['data']
         col_width = pdf_item.width
         col_height = pdf_item.height
-        table_style = pdf_item.style
-        table_obj = Table(dist_list, len(dist_list[0]) * col_width * inch, len(dist_list) * col_height * inch)
+        table_style = pdf_item.itemstyle
+        table_obj = Table(dist_list, len(dist_list[0]) * col_width * mm, len(dist_list) * col_height * mm)
+        table_obj.setStyle(table_style)
+        return table_obj
+    
+    def get_single_table(self,pdf_item):
+        dist_list = pdf_item.itemdicts['data']
+        table_style = pdf_item.itemstyle
+        table_obj = Table(dist_list)
         table_obj.setStyle(table_style)
         return table_obj
     
     def get_paragraph(self, pdf_item):
         text = pdf_item.itemdicts['text']
-        text_style = pdf_item.style
+        text_style = pdf_item.itemstyle
         return Paragraph(text, text_style)
     
     def get_image(self, pdf_item):
-        img = Image(pdf_item.item['img_path'])
-        img.drawWidth = pdf_item.width * inch
-        img.drawHeight = pdf_item.height * inch
+        img = Image(pdf_item.itemdicts['img_path'])
+        img.drawWidth = pdf_item.width * mm
+        img.drawHeight = pdf_item.height * mm
         return img
     
     def get_spacer(self, pdf_item):
-        return Spacer(1, pdf_item.height * inch)
+        return Spacer(1, pdf_item.height * mm)
     
     def get_circle(self, pdf_item):
         return Circle(pdf_item.xinch, pdf_item.yinch, pdf_item.width, fillColor=None)
@@ -232,8 +258,96 @@ def merge_pdf(in_list, out_file):
             page_obj = pdf_reader.getPage(index)
             pdf_writer.addPage(page_obj)
         pdf_writer.write(open(out_file, 'wb'))
+
+
+def proceed_check_page_cnt(pdf_outputs,pages,cnt,calc_cnt,output_count,items):
+    cnt = cnt+calc_cnt
+    if cnt< output_count:
+        for item in items:
+            pdf_outputs.append(item)
+    else:
+        pages.append(pdf_outputs)
+        pdf_outputs=items
+        cnt=0+calc_cnt
+    return cnt,pages,pdf_outputs
+
+def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
+    pdf_outputs = []
+    pages = []
+    cnt = 0
+    output_count = 64
+    pdf_writer = SimplePdfWriter(output_pdf)
+    pdf_writer.register_font('STSONG', "STSONG.TTF")
+    for markdown_item in markdown_items:
+        markdown_type=markdown_item['markdown_key']
+        markdown_val=markdown_item['markdown_val']
+        print(markdown_type)
+        print(markdown_val)
+        if markdown_type == 'Image':
+            image_path = markdown_val.replace(replace_folder,image_folder)
+            pdf_item=PdfItem.image(image_path,120,80)
+            pdf_image=pdf_writer.get_image(pdf_item)
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,30,output_count,[pdf_image])
+        elif markdown_type in ('Heading1','Heading2','Heading3','Heading4','Heading5','Heading6'):
+            pdf_item=PdfItem.paragraph(markdown_val, pdf_writer.stylesheet[markdown_type])
+            pdf_paragraph = pdf_writer.get_paragraph(pdf_item)
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_paragraph])
+        elif markdown_type == 'hr':
+            pdf_spacer_item = pdf_writer.get_spacer(PdfItem.spacer(1))
+            proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_spacer_item])
+        elif markdown_type == 'Code':
+            md_list = markdown_val.split("\n")
+            for md_val in md_list:
+                pdf_item = PdfItem.paragraph(md_val, pdf_writer.stylesheet[markdown_type])
+                pdf_paragraph = pdf_writer.get_paragraph(pdf_item)
+                cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_paragraph])
+        elif markdown_type == 'Table':
+            pdf_table=PdfItem.single_table(pdf_writer.stylesheet[markdown_type], markdown_val)
+            tab_cnt = len(markdown_val)
+            pdf_tab=pdf_writer.get_single_table(pdf_table)
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,tab_cnt,output_count,[pdf_tab])
+        elif markdown_type == 'UnorderedList':
+            ul_list=[]
+            for md_val in markdown_val:
+                print(md_val)
+                item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
+                ul_list.append(item)
+            tab_cnt = len(ul_list)
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,tab_cnt,output_count,[ListFlowable(ul_list,bulletType='bullet',start='square')])
+        elif markdown_type == 'OrderedList':
+            ol_list=[]
+            for md_val in markdown_val:
+                item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
+                ol_list.append(item)
+            tab_cnt = len(ol_list)
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,tab_cnt,output_count,[ListFlowable(ol_list,bulletType='i')])
+        elif markdown_type== 'Paragraph':
+            if markdown_val == "":
+                continue
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_writer.get_paragraph(PdfItem.paragraph(markdown_val, pdf_writer.stylesheet['BodyText']))])
+        elif markdown_type == 'Link':
+            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_writer.get_paragraph(PdfItem.paragraph(markdown_val, pdf_writer.stylesheet['BodyText']))])
+    pages.append(pdf_outputs)
+    pdf_writer.write_pages(pages)
+
+
+
+
 if __name__=='__main__':
-    pdf2images('E:/lib/books/[精通正则表达式(第三版)].（美）佛瑞德.扫描版.pdf')
+    pass
+#     pdf2images('E:/lib/books/[精通正则表达式(第三版)].（美）佛瑞德.扫描版.pdf')
+#     from reportlab.lib.pagesizes import A4
+#     print(A4)
+#     test_pdf="E:/lib/books/test.pdf"
+#     image_path="I:/图片/linux/linux_install7_img_008.png"
+#     
+#     pdfwriter=SimplePdfWriter(test_pdf)
+#     
+#     page_item=PdfItem.image(image_path,120,120)
+#     page_text=PdfItem.paragraph("Hello World!", text_style=pdfwriter.stylesheet['Normal'])
+#     print(type(pdfwriter.get_image(page_item)))
+#     stories = [[pdfwriter.get_paragraph(page_text),pdfwriter.get_image(page_item)]]
+#     pdfwriter.write_pages(stories)
 #    sheet_names=['test1','sheet1','value1']
 #    excel_writer=ExcelWriter('C:/Users/xcKev/eclipse-workspace/KToolApps/test/test.xlsx',sheet_names=sheet_names)
 #    excel_writer.set_current_sheet('value1')

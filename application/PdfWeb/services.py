@@ -6,16 +6,15 @@ Created on 2019/12/28
 '''
 from PdfWeb import db,entitys,current_log
 from PdfWeb.entitys import HomeIndexItem, PageInfoItem
-from django.conf import settings
 from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,common_executer,\
     common_filer
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
-import os
 from PdfWeb.settings import MEDIA_ROOT
+from writecreater import pdfwriter
 from writecreater.fileswriter import SimpleFileWriter
-
+from readparser.markdownreader import MarkDownReader
 
 
 category_map={
@@ -159,7 +158,7 @@ def get_book_download_infos_by_book_id(book_type,book_id):
         file_path = current_dir+book_name+".txt"
         if common_filer.exists(file_path) and common_filer.get_file_size(file_path)>0:
             return file_path
-        file_w=SimpleFileWriter(current_dir+book_name+".txt")
+        file_w=SimpleFileWriter(file_path)
         file_w.append_new_line(book_name)
         file_w.append_new_line(book.Author)
         file_w.append_new_line(book.Description)
@@ -169,7 +168,20 @@ def get_book_download_infos_by_book_id(book_type,book_id):
         file_w.close()
         return file_path
     else:
-        pass
+        file_path = current_dir + book_name + ".pdf"
+        if common_filer.exists(file_path) and common_filer.get_file_size(file_path)>0:
+            return file_path
+        markdown_outputs = []
+        for book_section in book_sections:
+            try:
+                markdown_reader = MarkDownReader(book_section.Content.replace("\r\n","\n"))
+                markdown_tokens = markdown_reader.read_markdown()
+                markdown_outputs=markdown_outputs+markdown_tokens
+            except Exception as e:
+                print(book_section.ChapterName)
+        image_foler=link_map.get("/img/")
+        pdfwriter.markdown_to_pdf(markdown_outputs,image_foler,"/media/img/",file_path)
+        return file_path
 
 def get_book_home_index(book_type):
     return get_book_list(book_type,category_map[book_type][0].CategoryId,1)

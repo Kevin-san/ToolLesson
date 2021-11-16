@@ -6,7 +6,7 @@ Created on 2020/5/3
 '''
 from readparser.filesreader import SimpleFileReader
 from bs4 import BeautifulSoup
-from entitys.htmlitems import SimpleHtmlItem
+from entities.htmlitems import SimpleHtmlItem
 from tools import common_filer,common_converter,common_tools
 from writecreater.fileswriter import SimpleFileWriter
 import os

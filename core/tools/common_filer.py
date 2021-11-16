@@ -19,6 +19,7 @@ from Crypto.Cipher import AES
 from pydub import AudioSegment
 from moviepy.editor import VideoFileClip
 import zipfile
+from Crypto.Util import Counter
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
 
@@ -137,7 +138,7 @@ def merge_ts_files(ts_dir,key_map,ts_path):
         tmp_file=open(file,'rb+')
         if key_map:
             key = key_map['key']
-            cryptor = AES.new(key, AES.MODE_CBC,key)
+            cryptor = AES.new(key, AES.MODE_CBC)
             ts_path_h.write(cryptor.decrypt(tmp_file.read()))
         else:
             ts_path_h.write(tmp_file.read())

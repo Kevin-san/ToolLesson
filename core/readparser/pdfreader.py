@@ -8,7 +8,7 @@ import fitz
 import time
 from writecreater.fileswriter import SimpleFileWriter
 from tools import common_filer, common_tools, common_logger
-from entitys.pdfitems import PdfImage, PdfImg, PdfText, PdfLink, PdfTable, PdfSpan
+from entities.pdfitems import PdfImage, PdfImg, PdfText, PdfLink, PdfTable, PdfSpan
 from aip import AipOcr
 APP_ID='22838451'
 API_KEY='bmz77GlmsKDlLsHd1zDGsMlx'
