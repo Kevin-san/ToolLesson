@@ -4,7 +4,7 @@ Created on 2020/5/3
 
 @author: xcKev
 '''
-from PdfWeb.entitys import get_max_length_col_from_table
+
 from PyPDF2.pdf import PdfFileReader, PdfFileWriter
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
@@ -21,10 +21,11 @@ from reportlab.lib.colors import HexColor
 from reportlab.graphics.widgets.markers import makeMarker
 from reportlab.graphics.charts.legends import Legend
 from pdf2image import convert_from_path
-from tools import common_filer, common_tools
+from tools import common_filer
 import os
 from entities.pdfitems import PdfItem
 from reportlab.platypus.flowables import ListFlowable
+from tools.common_filer import current_log
 
 def pdf2images(pdf_path):
     output_file_dir = common_filer.get_file_name(pdf_path)
@@ -281,8 +282,7 @@ def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
     for markdown_item in markdown_items:
         markdown_type=markdown_item['markdown_key']
         markdown_val=markdown_item['markdown_val']
-        print(markdown_type)
-        print(markdown_val)
+        current_log.info(markdown_val)
         if markdown_type == 'Image':
             image_path = markdown_val.replace(replace_folder,image_folder)
             pdf_item=PdfItem.image(image_path,120,80)
@@ -298,6 +298,7 @@ def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
         elif markdown_type == 'Code':
             md_list = markdown_val.split("\n")
             for md_val in md_list:
+                current_log.info(md_val)
                 pdf_item = PdfItem.paragraph(md_val, pdf_writer.stylesheet[markdown_type])
                 pdf_paragraph = pdf_writer.get_paragraph(pdf_item)
                 cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_paragraph])
@@ -309,7 +310,7 @@ def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
         elif markdown_type == 'UnorderedList':
             ul_list=[]
             for md_val in markdown_val:
-                print(md_val)
+                current_log.info(md_val)
                 item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
                 ul_list.append(item)
             tab_cnt = len(ul_list)
@@ -317,6 +318,7 @@ def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
         elif markdown_type == 'OrderedList':
             ol_list=[]
             for md_val in markdown_val:
+                current_log.info(md_val)
                 item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
                 ol_list.append(item)
             tab_cnt = len(ol_list)
