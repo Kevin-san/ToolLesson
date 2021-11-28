@@ -9,6 +9,7 @@ from captcha.fields import CaptchaField
 from PdfWeb import db
 from django.forms import fields
 from mdeditor.fields import MDTextFormField
+from django.core import validators
 gender = (
         ('1', "男"),
         ('0', "女"),
@@ -17,6 +18,8 @@ blog_categorys = db.get_blog_category_type_info().values_list('CategoryId','Cate
 tag_categorys = db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName')
 novel_categorys = db.get_novel_category_type_info().values_list('CategoryId','CategoryName')
 learn_categorys = db.get_learn_category_type_info().values_list('CategoryId','CategoryName')
+image_categorys = db.get_image_category_type_info().values_list('CategoryId','CategoryName')
+audio_categorys = db.get_audio_category_type_info().values_list('CategoryId','CategoryName')
 original_categorys = (
     (1,'原创'),
     (0,'转载')
@@ -46,6 +49,46 @@ class Searchform(forms.Form):
 class CommentForm(forms.Form):
     """博客评论"""
     Content = fields.CharField(label="评论内容",min_length=10,error_messages={"required":"不能为空","invalid":"格式错误","min_length":"评论内容最短10位"})
+
+class TxtUploadForm(forms.Form):
+    """文本上传页面"""
+    title=forms.CharField(label="标题",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
+    CategoryId = fields.ChoiceField(label="所属分类",choices=novel_categorys,initial=101,widget=forms.widgets.Select)
+    description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
+    file=forms.FileField(label="小说",validators=[validators.FileExtensionValidator(['txt'],message='小说必须是txt文件')])
+    action="/novel/book/upload"
+
+class PdfUploadForm(forms.Form):
+    """Pdf上传页面"""
+    title=forms.CharField(label="标题",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
+    CategoryId = fields.ChoiceField(label="所属分类",choices=learn_categorys,initial=11,widget=forms.widgets.Select)
+    description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
+    file=forms.FileField(label="教程",validators=[validators.FileExtensionValidator(['pdf'],message='教程必须是pdf文件')])
+    action="/learn/book/upload"
+
+class Mp3UploadForm(forms.Form):
+    """音频上传页面"""
+    title=forms.CharField(label="标题",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
+    CategoryId = fields.ChoiceField(label="所属分类",choices=audio_categorys,initial=301,widget=forms.widgets.Select)
+    description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
+    file=forms.FileField(label="音频",validators=[validators.FileExtensionValidator(['mp3'],message='音频必须是mp3文件')])
+    action="/audio/media/upload"
+
+class JpgUploadForm(forms.Form):
+    """图片上传界面"""
+    title=forms.CharField(label="标题",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
+    CategoryId = fields.ChoiceField(label="所属分类",choices=image_categorys,initial=215,widget=forms.widgets.Select)
+    description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
+    file=forms.ImageField(label="图片",validators=[validators.FileExtensionValidator(['jpg'],message='图片必须是jpg文件')])
+    action="/image/media/upload"
+
+class Mp4UploadForm(forms.Form):
+    """视频上传界面"""
+    title=forms.CharField(label="标题",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
+    CategoryId = fields.ChoiceField(label="所属分类",choices=audio_categorys,initial=301,widget=forms.widgets.Select)
+    description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
+    file=forms.FileField(label="视频",validators=[validators.FileExtensionValidator(['mp4'],message='视频必须是mp4文件')])
+    action="/video/media/upload"
 
 class BookForm(forms.Form):
     Id= fields.IntegerField(initial=0,widget=forms.widgets.HiddenInput)

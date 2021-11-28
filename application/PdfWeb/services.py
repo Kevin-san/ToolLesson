@@ -60,11 +60,6 @@ def pages_help(page,num_pages,category_id,maxpage):
         # 结果小于规定数但是当前页大于规定页数
         # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(num_pages - maxpage, num_pages)])
         return get_pages(num_pages - maxpage, num_pages,category_id,num_pages)
-    elif num_pages > maxpage and offset >= maxpage and p <= maxpage:
-        #假设100页 100-2=98，页头
-        # 结果小于规定数但是当前页大于规定页数
-        # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(maxpage)])
-        return get_pages(0, maxpage,category_id,num_pages)
     elif num_pages <= maxpage:
         #假设3页  3<6，总页数很少，少于规定页数
         # 当前页码数小于规定数
@@ -73,7 +68,7 @@ def pages_help(page,num_pages,category_id,maxpage):
     else:
         # 正常页数分配
         # print("正常页数分配",[i + 1 for i in range(p - int(maxpage / 2), p + int(maxpage / 2))])
-        return get_pages(p - int(maxpage / 2), p + int(maxpage / 2),category_id,num_pages)
+        return get_pages(p-1, p + maxpage-1 ,category_id,num_pages)
 
 
 def get_home_index():
@@ -141,12 +136,7 @@ def get_media_content(media_type,media_id,order_no):
     vals=[media_type,category_map[media_type],media,media_section,total_count,category_name,comments]
     return common_tools.create_map(keys, vals)
 
-def get_book_download_infos_by_book_id(book_type,book_id):
-    book = db.get_book_by_id(book_id)
-    book_name = book.BookName
-    category = db.get_category_by_id(book.CategoryId)[0]
-    book_sections=db.get_book_sections_by_book_id(book_id)
-    link_dir = "/"+book_type+"/"
+def init_common_book_info(link_dir,category):
     parent_dir = MEDIA_ROOT+link_dir
     for link_key,link_val in link_map.items():
         if link_key == link_dir:
@@ -154,6 +144,36 @@ def get_book_download_infos_by_book_id(book_type,book_id):
     current_dir = parent_dir+category.CategoryName+"/"
     if not common_filer.exists(current_dir):
         common_filer.make_dirs(current_dir)
+    return current_dir
+
+def get_blog_download_infos_by_article_id(article_id):
+    article= db.get_article_by_id(article_id)
+    article_name = article.Title
+    category = db.get_category_by_id(article.CategoryId)[0]
+    link_dir = "/blog/"
+    current_dir=init_common_book_info(link_dir, category)
+    file_path = current_dir + article_name + ".pdf"
+    if common_filer.exists(file_path) and common_filer.get_file_size(file_path)>0:
+        return file_path
+    markdown_outputs = []
+    try:
+        markdown_reader = MarkDownReader(article.Content.replace("\r\n","\n"))
+        markdown_tokens = markdown_reader.read_markdown()
+        markdown_outputs=markdown_outputs+markdown_tokens
+    except Exception as e:
+        current_log.info(article_name)
+        current_log.info(e)
+    image_foler=link_map.get("/img/")
+    pdfwriter.markdown_to_pdf(markdown_outputs,image_foler,"/media/img/",file_path)
+    return file_path
+
+def get_book_download_infos_by_book_id(book_type,book_id):
+    book = db.get_book_by_id(book_id)
+    book_name = book.BookName
+    category = db.get_category_by_id(book.CategoryId)[0]
+    book_sections=db.get_book_sections_by_book_id(book_id)
+    link_dir = "/"+book_type+"/"
+    current_dir=init_common_book_info(link_dir, category)
     if book_type == "novel":
         file_path = current_dir+book_name+".txt"
         if common_filer.exists(file_path) and common_filer.get_file_size(file_path)>0:
@@ -178,7 +198,8 @@ def get_book_download_infos_by_book_id(book_type,book_id):
                 markdown_tokens = markdown_reader.read_markdown()
                 markdown_outputs=markdown_outputs+markdown_tokens
             except Exception as e:
-                print(book_section.ChapterName)
+                current_log.info(book_section.ChapterName)
+                current_log.info(e)
         image_foler=link_map.get("/img/")
         pdfwriter.markdown_to_pdf(markdown_outputs,image_foler,"/media/img/",file_path)
         return file_path

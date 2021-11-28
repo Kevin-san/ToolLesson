@@ -33,6 +33,8 @@ REG_HTML='register.html'
 
 USER_PROFILE_HTML='userprofile.html'
 
+FILE_UPLOAD_HTML='fileupload.html'
+
 BLOG_BASE_HTML='blogbase.html'
 BLOG_INDEX_HTML='blogindex.html'
 

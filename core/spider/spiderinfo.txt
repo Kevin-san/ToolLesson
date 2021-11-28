@@ -467,3 +467,89 @@ mm(2.834)
 属性列表作为一个常量字符串列表传递进子过程相关的代码．它的正确工作方法是高度试验
 
 接下来你需要将下载的Linux系统刻录成光盘或U盘或使用VMware虚拟机安装ISO文件。
+
+
+https://4hqg.com/web/
+
+category:changpian
+html					chinese group--> group
+video-1003.html:亚洲无码-->yazhouwuma
+video-3022.html:欧美无码-->oumeiwuma
+video-5.html:国产主播-->guochanzhubo
+video-134.html:韩国主播-->hanguozhubo
+video-133.html:日本主播-->ribenzhubo
+video-7.html:欧美主播-->oumeizhubo
+video-3025.html:经典三级-->jingdiansanji
+video-3026.html:中文字幕-->zhongwenzimu
+
+category:duanpian
+html					chinese group--> group
+video-duanpian-131.html:网红视频-->wanghongshipin
+video-duanpian-132.html:国产视频-->guochanshipin
+video-duanpian-135.html:韩国视频-->hanguoshipin
+video-duanpian-129.html:日本写真-->ribenxiezhen
+video-duanpian-127.html:日本短片-->ribenduanpian
+video-duanpian-128.html:欧美短片-->oumeiduanpian
+video-duanpian-130.html:动漫卡通-->dongmankatong
+
+
+video:ul:id = videolist
+name: li->div : class=basiclist_title->p : class=textoverflow
+date: li->div : class=date
+
+home_url:https://163.34885.xyz
+category:changpian, duanpian
+m3u8: m3u8
+date:202111,202110,202109
+
+m3u8_parent_url:home_url/category/m3u8/group/date/name/
+m3u8_download_url:m3u8_parent_url/name.m3u8
+ts_download_url:m3u8_parent_url/ts
+
+next_page:
+
+action	"getvideos"
+vtype	"1003"
+pageindex	"1"
+pagesize	"12"
+tags	"全部"
+
+https://4hqg.com/web/abcdefg.ashx
+
+sample:
+欧美女主播MYS880.ts
+https://163.34885.xyz/changpian/m3u8/oumeizhubo/201910/欧美女主播MYS88/欧美女主播MYS88.m3u8
+https://163.34885.xyz/changpian/m3u8/oumeizhubo/201910/欧美女主播MYS88/欧美女主播MYS880.ts
+
+http://88ddbb.com/
+
+post:request_url,params
+tool:
+左边 
+第一行: request_url
+第二行: params->a=b,c=d,
+
+右边返回结果:json :
+
+"rowNum":1,"id":42754,"fimg":"/guochanzhubo/fengmian/202111/耀灵-黑猫_1.jpg",
+"coverimg":"https://fm.34885.xyz/duanpian/guochanzhubo/fengmian/202111/耀灵-黑猫_1.jpg",
+"title":"耀灵-黑猫",
+"vurl":"/guochanzhubo/m3u8/202111/耀灵-黑猫/耀灵-黑猫.m3u8",
+"downvurl":"/guochanzhubo/mp4/202111/耀灵-黑猫.mp4",
+"updatedate":"2021-11-20 00:02:35",
+"vip":null,
+"viewcount":32724,
+"vtype":131
+
+{'rowNum': 1, 'id': 42739, 'fimg': '/fengmian/yazhouwuma/202111/敏感度好身材纤细可爱的人妻和浓厚的口交！番号XXX-AV-23951（口交）_1.jpg', 
+'coverimg': 'https://fm.34885.xyz/changpian/fengmian/yazhouwuma/202111/敏感度好身材纤细可爱的人妻和浓厚的口交！番号XXX-AV-23951（口交）_1.jpg', 
+'title': '敏感度好身材纤细可爱的人妻和浓厚的口交！番号XXX-AV-23951（口交）', 
+'vurl': '/m3u8/yazhouwuma/202111/敏感度好身材纤细可爱的人妻和浓厚的口交！番号XXX-AV-23951（口交）/敏感度好身材纤细可爱的人妻和浓厚的口交！番号XXX-AV-23951（口交）.m3u8', 
+'downvurl': '/mp4/yazhouwuma/202111/敏感度好身材纤细可爱的人妻和浓厚的口交！番号XXX-AV-23951（口交）.mp4', 
+'updatedate': '2021-11-20 00:02:08', 
+'vip': None, 
+'viewcount': 29904, 
+'vtype': 1003}
+
+windows file name
+/\:*?"<>|

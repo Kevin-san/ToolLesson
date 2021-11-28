@@ -4,7 +4,7 @@ Created on 2021/1/4
 
 @author: xcKev
 '''
-from tools import common_filer, common_threadpools
+from tools import common_filer, common_threadpools, common_converter
 from spider import common_spider, novelspider
 from spider import GroupAttribute,SpiderAttribute,SpiderParameters
 from spider.imgspider import ImgSpider
@@ -413,7 +413,7 @@ def load_group_urls():
         group_spider.get_pages(url, dict())
 
 def init_spider_rules():
-    cursor.execute("select * from SpiderRule where DeleteFlag = 0 order by Id desc")
+    cursor.execute("select * from SpiderRule where DeleteFlag = 0 order by Id")
     rule_results = cursor.fetchall()
     map_rules = dict()
     for row in rule_results:
@@ -495,7 +495,7 @@ def insert_spider_properties(count):
     map_rules = init_spider_rules()
     for url,url_dict in map_rules.items():
         current_log.info(url)
-        cursor.execute("select * from SpiderItem where DeleteFlag = 0 and instr(Url,'%s') = 1 limit 1" %(url))
+        cursor.execute("select * from SpiderItem where DeleteFlag = 0 and instr(Url,'%s') = 1 ORDER BY SourceId DESC limit 1" %(url))
         results = cursor.fetchall()
         current_log.info(results)
         if results:
@@ -556,15 +556,107 @@ def remove_duplicate_item_and_properties():
             delete_property_sql = "delete from spiderproperty where ItemId = %s" %(item_id)
             cursor.execute(delete_property_sql)
             db.commit()
-            
+
+def get_spider_trigger_category_info(category_type_id):
+    select_category_sql = 'select CategoryId,CategoryName,CategoryValue1 from category where DeleteFlag=0 and CategoryFather=%s order by CategoryId desc' %(category_type_id)
+    cursor.execute(select_category_sql)
+    results = cursor.fetchall()
+    spider_trigger_category_list=[]
+    for row in results:
+        current_log.info(row)
+        category_info=dict()
+        category_info['CategoryId']=row[0]
+        category_info['CategoryName']=row[1]
+        category_info['CategoryValue1']=row[2]
+        spider_trigger_category_list.append(category_info)
+    return spider_trigger_category_list
+
+def get_spider_trigger_info(category_type_id):
+    select_trigger_sql = 'select Id,Url,RequestUrl,TriggerCategoryId,TriggerParams,TriggerCategoryKey,MapUrl,DownloadFolder from spidertrigger where DeleteFlag = 0 and TriggerCategoryId = %s' %(category_type_id)
+    cursor.execute(select_trigger_sql)
+    trigger_results = cursor.fetchall()
+    spider_trigger_list=[]
+    for row in trigger_results:
+        current_log.info(row)
+        spider_trigger=dict()
+        spider_trigger['Id']=row[0]
+        spider_trigger['Url']=row[1]
+        spider_trigger['RequestUrl']=row[2]
+        spider_trigger['TriggerCategoryId']=row[3]
+        spider_trigger['TriggerParams']=row[4]
+        spider_trigger['TriggerCategoryKey']=row[5]
+        spider_trigger['MapUrl']=row[6]
+        spider_trigger['DownloadFolder']=row[7]
+        spider_trigger_list.append(spider_trigger)
+    return spider_trigger_list
         
+def insert_spider_trigger_result(result_info,map_url,trigger_id,category_father,category_id,download_folder):
+    title = result_info['title'].replace("<","_").replace(":","_").replace("?","_").replace("*","_").replace(">","_").replace("/","_")
+    sub_folder = download_folder+'/'+title
+    vurl = map_url+result_info['vurl']
+    coverimg = result_info['coverimg']
+    insert_sql="insert into spidertriggerresult(TriggerId,CategoryFather,CategoryId,CoverImg,Title,VUrl,DownloadFolder) values(%s,%s,%s,'%s','%s','%s','%s')"%(trigger_id,category_father,category_id,pymysql.escape_string(coverimg),pymysql.escape_string(title),pymysql.escape_string(vurl),pymysql.escape_string(sub_folder))
+    current_log.info(insert_sql)
+    cursor.execute(insert_sql)
+    db.commit()
+
+def run_and_load_spider_trigger(category_type_id):
+    spider_triggers = get_spider_trigger_info(category_type_id)
+    spider_trigger_categorys = get_spider_trigger_category_info(category_type_id)
+    for spider_trigger in spider_triggers:
+        trigger_id = spider_trigger['Id']
+        request_url=spider_trigger['RequestUrl']
+        data_list=spider_trigger['TriggerParams'].split(",")
+        params=common_converter.get_params(data_list)
+        trigger_category_key=spider_trigger['TriggerCategoryKey']
+        download_folder = spider_trigger['DownloadFolder']
+        map_url = spider_trigger['MapUrl']
+        for category_info in spider_trigger_categorys:
+            category_name = category_info['CategoryName']
+            category_id = category_info['CategoryId']
+            sub_folder=download_folder+'/'+category_name
+            common_filer.make_dirs(sub_folder)
+            params[trigger_category_key]=category_info['CategoryValue1']
+            response = common_spider.post_response(request_url, params)
+            res_text=common_spider.get_utf8_response_text(response,'utf-8')
+            result_dict=common_converter.json_to_dict(res_text)
+            result_videos = result_dict['videos']
+            for result_info in result_videos:
+                insert_spider_trigger_result(result_info, map_url, trigger_id, category_type_id, category_id, sub_folder)
+
+def get_spider_trigger_result():
+    select_sql = "select Id,Title,VUrl,DownloadFolder from spidertriggerresult where DeleteFlag =0 limit 1"
+    cursor.execute(select_sql)
+    trigger_results = cursor.fetchall()
+    trigger_result_infos = []
+    for trigger_result in trigger_results:
+        trigger_result_infos.append({'id':trigger_result[0],'title':trigger_result[1],'m3u8':trigger_result[2],'download_folder':trigger_result[3]})
+    return trigger_result_infos
+
+def update_spider_trigger_result(trigger_result_id):
+    upd_sql = "update spidertriggerresult set DeleteFlag = 1 where Id = %s"%(trigger_result_id)
+    cursor.execute(upd_sql)
+    db.commit()
+
+def download_spider_trigger_results():
+    trigger_results = get_spider_trigger_result()
+    for trigger_result in trigger_results:
+        folder =trigger_result['download_folder']
+        key_map,video_srcs=common_spider.get_m3u8_ts_list(folder, trigger_result['m3u8'])
+        for video_src in video_srcs:
+            ts_name = video_src.split("/")[-1]
+            common_spider.download_ts(video_src, folder, ts_name)
+        update_spider_trigger_result(trigger_result['id'])
 
 if __name__ == "__main__":
 #     remove_duplicate_item_and_properties()
 #     load_group_urls()
+    
     count =0
     while count < 343042:
+        download_spider_trigger_results()
         count=insert_spider_properties(count)
+#     run_and_load_spider_trigger(1010)
 #     get_group_hrefs(group_map_attrs, dict_attrs, "video", "F:/Python3")
 #     res=common_spider.get_response('http://icanhazip.com', '', '')
 #     print(res.text)

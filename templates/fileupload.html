@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}文件上传{% endblock %}
+{% block content %}
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			{% include "common/alvin_header.html" %}
+			
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				{% include "common/login_register.html" %}
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4" style="text-align:left">
+              	<div class="row">
+              		<form enctype="multipart/form-data" class='form-upload' action="{{ form.action }}/submit/" method="post">
+
+              		{% csrf_token %}
+              		<h2 class="text-center">欢迎使用</h2>
+              		{{ form.as_p }}
+              		<button type="reset" class="btn btn-default pull-left">重置</button>
+              		<button type="submit" class="btn btn-primary pull-right">提交</button>
+              		</form>
+              	</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

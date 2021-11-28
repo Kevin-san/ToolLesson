@@ -28,6 +28,7 @@ from const.html5tmps import HtmlTypes
 from const.javatmps import JavaConst
 from const.csharptmps import CSharpConst
 from const.langtypes import _const
+from spider import common_spider
 java_const = JavaConst()
 csharp_const=CSharpConst()
 common_const=_const()
@@ -541,7 +542,24 @@ def sort_str_array(input_str):
         result_list=list(input_str)
         result_list.sort()
         return "".join(result_list)
-    
+
+def get_params(data_list):
+    params=dict()
+    for line in data_list:
+        paras = line.split("=")
+        params[paras[0]]=paras[1]
+    return params
+
+def post_interface(input_str):
+    try:
+        data_list=input_str.split("\n")
+        request_url = data_list[0]
+        params=get_params(data_list[1:])
+        response = common_spider.post_response(request_url, params)
+        return common_spider.get_utf8_response_text(response,'utf-8')
+    except Exception:
+        return "Please input valid params"
+
 def prop2dict(prop_str):
     prop_lines=prop_str.split('\n')
     return proplines2dict(prop_lines)

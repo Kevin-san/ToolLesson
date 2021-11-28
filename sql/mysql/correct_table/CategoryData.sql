@@ -15,6 +15,7 @@ insert into Category values(1004,'blogtag','','','',4,0,'alvin',curdate());
 insert into Category values(1007,'novel','','','',7,0,'alvin',curdate());
 insert into Category values(1009,'image','','','',9,0,'alvin',curdate());
 insert into Category values(1005,'music','','','',5,0,'alvin',curdate());
+insert into Category values(1010,'vhider','','','',8,0,'alvin',curdate());
 
 insert into Category values(11,'服务端','#linux','','',1001,0,'alvin',curdate());
 insert into Category values(12,'数据库端','#database','','',1001,0,'alvin',curdate());
@@ -157,6 +158,22 @@ insert into Category values(348,'网络红歌榜1','','','',1005,0,'alvin',curda
 insert into Category values(349,'网络红歌榜2','','','',1005,0,'alvin',curdate());
 insert into Category values(350,'工体音乐','','','',1005,0,'alvin',curdate());
 insert into Category values(351,'最喜欢','','','',1005,0,'alvin',curdate());
+
+insert into Category values(3001,'亚洲无码','1003','yazhouwuma','',1010,0,'alvin',curdate());
+insert into Category values(3002,'欧美无码','3022','oumeiwuma','',1010,0,'alvin',curdate());
+insert into Category values(3003,'国产主播','5','guochanzhubo','',1010,0,'alvin',curdate());
+insert into Category values(3004,'韩国主播','134','hanguozhubo','',1010,0,'alvin',curdate());
+insert into Category values(3005,'日本主播','133','ribenzhubo','',1010,0,'alvin',curdate());
+insert into Category values(3006,'欧美主播','7','oumeizhubo','',1010,0,'alvin',curdate());
+insert into Category values(3007,'经典三级','3025','jingdiansanji','',1010,0,'alvin',curdate());
+insert into Category values(3008,'中文字幕','3026','zhongwenzimu','',1010,0,'alvin',curdate());
+insert into Category values(3009,'网红视频','131','wanghongshipin','',1010,0,'alvin',curdate());
+insert into Category values(3010,'国产视频','132','guochanshipin','',1010,0,'alvin',curdate());
+insert into Category values(3011,'韩国视频','135','hanguoshipin','',1010,0,'alvin',curdate());
+insert into Category values(3012,'日本写真','129','ribenxiezhen','',1010,0,'alvin',curdate());
+insert into Category values(3013,'日本短片','127','ribenduanpian','',1010,0,'alvin',curdate());
+insert into Category values(3014,'欧美短片','128','oumeiduanpian','',1010,0,'alvin',curdate());
+insert into Category values(3015,'动漫卡通','130','dongmankatong','',1010,0,'alvin',curdate());
 
 
 --insert into Category values(28,'常用工具','#datetool','','',10,0,'alvin',curdate());

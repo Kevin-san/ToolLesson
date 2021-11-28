@@ -133,6 +133,8 @@ insert into CommonSubFuncs values(468,'sql去除双引号','sql_rem_dquote','格
 insert into CommonSubFuncs values(469,'sql追加单引号','sql_add_squote','格式如下:<br/>insert into Xxxx values(1,2,3,\'Hah\');',27,0,'alvin',curdate());
 insert into CommonSubFuncs values(470,'sql去除单引号','sql_rem_squote','格式如下:<br/>insert into Xxxx values(1,2,3,\'Hah\');',27,0,'alvin',curdate());
 insert into CommonSubFuncs values(471,'字符串数组排序','sort_str_array','格式如下:<br/>abccccssed->abccccedss <br/>["a","b","d","c"]->["a","b","c","d"]',27,0,'alvin',curdate());
+insert into CommonSubFuncs values(472,'post接口','post_interface','格式如下:<br/>第一行:request_url<br/>之后params每行a=b',27,0,'alvin',curdate());
+
 
 insert into CommonSubFuncs values(499,'数据比对','compareData','',28,0,'alvin',curdate());
 insert into CommonSubFuncs values(500,'日期推算','calcDate','',28,0,'alvin',curdate());
@@ -147,6 +149,7 @@ insert into CommonSubFuncs values(508,'rgb原色转Hex16','rgb2hex16','',28,0,'a
 insert into CommonSubFuncs values(509,'hex16转RGB原色','hex162rgb','',28,0,'alvin',curdate());
 insert into CommonSubFuncs values(510,'生成二维码','toercode','',28,0,'alvin',curdate());
 insert into CommonSubFuncs values(511,'生成一维码','tooncode','',28,0,'alvin',curdate());
+
 
 
 

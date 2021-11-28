@@ -30,7 +30,7 @@ from tools.common_filer import current_log
 def pdf2images(pdf_path):
     output_file_dir = common_filer.get_file_name(pdf_path)
     parent_dir = common_filer.get_parent_dir(pdf_path)
-    output_path=F'{parent_dir}/{output_file_dir}'
+    output_path=parent_dir+"/"+output_file_dir
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     convert_from_path(pdf_path,dpi=100,output_folder=output_path,fmt='jpeg')
@@ -238,18 +238,7 @@ class SimplePdfWriter(object):
             contents.append(page_brk)
         self.doc.build(contents)
         return
-#     _FilledCircle = _doFill
-#     _FilledSquare = _doFill
-#     _FilledDiamond = _doFill
-#     _FilledCross = _doFill
-#     _FilledTriangle = _doFill
-#     _FilledStarSix = _doFill
-#     _FilledPentagon = _doFill
-#     _FilledHexagon = _doFill
-#     _FilledHeptagon = _doFill
-#     _FilledOctagon = _doFill
-#     _FilledStarFive = _doFill
-#     _FilledArrowHead = _doFill    
+
 def merge_pdf(in_list, out_file):
     pdf_writer = PdfFileWriter()
     for in_file in in_list:
@@ -271,6 +260,14 @@ def proceed_check_page_cnt(pdf_outputs,pages,cnt,calc_cnt,output_count,items):
         pdf_outputs=items
         cnt=0+calc_cnt
     return cnt,pages,pdf_outputs
+
+def get_oul_list_pdf_items(markdown_val,pdf_writer):
+    oul_list=[]
+    for md_val in markdown_val:
+        current_log.info(md_val)
+        item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
+        oul_list.append(item)
+    return oul_list
 
 def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
     pdf_outputs = []
@@ -308,26 +305,14 @@ def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
             pdf_tab=pdf_writer.get_single_table(pdf_table)
             cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,tab_cnt,output_count,[pdf_tab])
         elif markdown_type == 'UnorderedList':
-            ul_list=[]
-            for md_val in markdown_val:
-                current_log.info(md_val)
-                item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
-                ul_list.append(item)
+            ul_list=get_oul_list_pdf_items(markdown_val,pdf_writer)
             tab_cnt = len(ul_list)
             cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,tab_cnt,output_count,[ListFlowable(ul_list,bulletType='bullet',start='square')])
         elif markdown_type == 'OrderedList':
-            ol_list=[]
-            for md_val in markdown_val:
-                current_log.info(md_val)
-                item=pdf_writer.get_paragraph(PdfItem.paragraph(md_val, pdf_writer.stylesheet['BodyText']))
-                ol_list.append(item)
+            ol_list=get_oul_list_pdf_items(markdown_val,pdf_writer)
             tab_cnt = len(ol_list)
             cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,tab_cnt,output_count,[ListFlowable(ol_list,bulletType='i')])
-        elif markdown_type== 'Paragraph':
-            if markdown_val == "":
-                continue
-            cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_writer.get_paragraph(PdfItem.paragraph(markdown_val, pdf_writer.stylesheet['BodyText']))])
-        elif markdown_type == 'Link':
+        elif markdown_type in ('Paragraph','Link'):
             cnt,pages,pdf_outputs=proceed_check_page_cnt(pdf_outputs,pages,cnt,1,output_count,[pdf_writer.get_paragraph(PdfItem.paragraph(markdown_val, pdf_writer.stylesheet['BodyText']))])
     pages.append(pdf_outputs)
     pdf_writer.write_pages(pages)
@@ -337,34 +322,6 @@ def markdown_to_pdf(markdown_items,image_folder,replace_folder,output_pdf):
 
 if __name__=='__main__':
     pass
-#     pdf2images('E:/lib/books/[精通正则表达式(第三版)].（美）佛瑞德.扫描版.pdf')
-#     from reportlab.lib.pagesizes import A4
-#     print(A4)
-#     test_pdf="E:/lib/books/test.pdf"
-#     image_path="I:/图片/linux/linux_install7_img_008.png"
-#     
-#     pdfwriter=SimplePdfWriter(test_pdf)
-#     
-#     page_item=PdfItem.image(image_path,120,120)
-#     page_text=PdfItem.paragraph("Hello World!", text_style=pdfwriter.stylesheet['Normal'])
-#     print(type(pdfwriter.get_image(page_item)))
-#     stories = [[pdfwriter.get_paragraph(page_text),pdfwriter.get_image(page_item)]]
-#     pdfwriter.write_pages(stories)
-#    sheet_names=['test1','sheet1','value1']
-#    excel_writer=ExcelWriter('C:/Users/xcKev/eclipse-workspace/KToolApps/test/test.xlsx',sheet_names=sheet_names)
-#    excel_writer.set_current_sheet('value1')
-#    excel_style=ExcelStyle()
-#    rows1=['hah','value','mytest']
-#    rows2=[1,2,4,5,39,20]
-#    columns1=[1230,324432,232432,345]
-#    columns2=['hva','cool','clearly']
-#    excel_writer.write_row(1, rows1, excel_style.get_style())
-#    excel_writer.write_row(2, rows2, excel_style.get_style())
-#    excel_writer.write_column(7, columns1, excel_style.get_style())
-#    excel_writer.write_column(9, columns2, excel_style.get_style())
-#    excel_writer.write_cell_with_formula(2, 8, 'F2+G2')
-#    excel_writer.write_hyperlink(3, 8, 'http://www.baidu.com', 'baidu')
-#    excel_writer.save()
 #     sheet_names=['test1','sheet1','value1']
 #     excel_reader=ExcelReader('C:/Users/xcKev/eclipse-workspace/KToolApps/test/test.xls')
 #     excel_reader.set_current_sheet('value1')

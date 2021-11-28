@@ -15,7 +15,9 @@ from urllib3.exceptions import InsecureRequestWarning
 from const.html5tmps import HtmlTypes
 from urllib.parse import urlparse,parse_qs
 from selenium.webdriver.chrome.options import Options
-from tools import common_coder, common_converter, common_tools
+from tools import common_coder, common_converter, common_tools, common_filer
+from writecreater.fileswriter import SimpleFileWriter
+from readparser.filesreader import SimpleFileReader
 urllib3.disable_warnings(InsecureRequestWarning)
 from selenium import webdriver
 import random
@@ -80,6 +82,8 @@ def get_local_ip():
 def get_response_by_seconds(artifact_url,user,password,seconds,referer_url=''):
     if seconds>0:
         real_seconds=random.randint(seconds,10)
+        if seconds >=10:
+            real_seconds=random.randint(seconds,seconds+10)
         current_log.info(real_seconds)
         time.sleep(real_seconds)
     res=get_response(artifact_url, user, password,referer_url)
@@ -93,14 +97,24 @@ def get_response(artifact_url,user,password,referer_url='',proxies=''):
         headers['Referer']=referer_url
     try:
         if user == '' and password == '':
-            response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=10,verify=False,stream=True)
+            response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,stream=True)
         else:
-            response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=10,verify=False,auth=(user,password),stream=True)
+            response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,auth=(user,password),stream=True)
         if response is not None and response.status_code == 200:
             return response
     except Exception as e:
         current_log.error(e)
         return get_response(artifact_url, user, password, referer_url, proxies)
+
+@retry(stop_max_attempt_number=10,wait_fixed=10000)
+def post_response(request_url,params):
+    try:
+        response = requests.post(request_url,params)
+        if response is not None and response.status_code == 200:
+            return response
+    except Exception as e:
+        current_log.error(e)
+        return post_response(request_url, params)
 
 def check_valid_ip(ip):
     proxies={'http':'http://'+ip}
@@ -147,6 +161,66 @@ def get_utf8_response_text(response,coding):
         except:
             return encode_byte.decode("utf-8")
     return encode_byte.decode('utf-8')
+
+def download_m3u8(folder,m3u8_url):
+    index_val=get_response_text_with_no_encoding(m3u8_url, '', '', 0)
+    common_filer.make_dirs(folder)
+    index_m3u8= folder+"/"+"index.m3u8"
+    file_writer = SimpleFileWriter(index_m3u8)
+    file_writer.append_string(index_val)
+    file_writer.close()
+
+def get_m3u8_ts_list_from_file(m3u8_file,parent_url):
+    index_srcs=[]
+    file_r = SimpleFileReader(m3u8_file)
+    index_val = file_r.read()
+    key_map=dict()
+    is_dicon_cnt=0
+    for line in index_val.split('\n'):
+        if "#EXT-X-DISCONTINUITY" in line:
+            is_dicon_cnt+=1
+        if "#EXT-X-KEY" in line:
+            method_pos = line.find("METHOD")
+            comma_pos = line.find(",")
+            method = line[method_pos:comma_pos].split('=')[1]
+            uri_pos = line.find("URI")
+            quotation_mark_pos = line.rfind('"')
+            key_list=line[uri_pos:quotation_mark_pos].split('"')
+            if len(key_list) == 2:
+                key_path = key_list[1]
+                key_url=get_real_url(parent_url, key_path)
+                if not key_map:
+                    res = get_response(key_url, '', '')
+                    key = res.content
+                    key_map['key']=key
+        if line is None or line =='' or line[0] == '#':
+            continue
+        http_url = get_real_url(parent_url, line)
+        if is_dicon_cnt%2 == 0:
+            index_srcs.append(http_url)
+    return key_map,index_srcs
+
+def get_m3u8_ts_list(folder,m3u8_url):
+    parent_url="/".join(m3u8_url.split("/")[:-1])
+    download_m3u8(folder,m3u8_url)
+    return get_m3u8_ts_list_from_file(folder+"/index.m3u8",parent_url)
+
+def download_ts(video_src,folder,ts_name):
+    cur_file=folder+'/'+ts_name
+    if common_filer.is_file(cur_file) and common_filer.get_file_size(cur_file)>0:
+        return
+    file_w=open(cur_file,'wb')
+    current_log.info(video_src)
+    response = get_response(video_src, '', '')
+    try:
+        print(len(response.content))
+        if response.content is not None and len(response.content) > 0:
+            file_w.write(response.content)
+        else:
+            file_w.close()
+    except:
+        file_w.close()
+    file_w.close()
 
 def get_url_params(url):
     parsed=urlparse(url)

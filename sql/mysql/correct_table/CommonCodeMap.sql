@@ -21,3 +21,4 @@ insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/img
 insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/video/','I:/视频/');
 insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/novel/','I:/小说/');
 insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/learn/','I:/学习/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/blog/','I:/博客/');

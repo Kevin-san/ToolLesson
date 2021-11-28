@@ -5,6 +5,8 @@ Created on 2020/5/3
 @author: xcKev
 '''
 from writecreater import excelwriter,fileswriter,pdfwriter
+from writecreater.pdfwriter import pdf2images
+from entities.pdfitems import PdfItem
 from entities import excelstyles
 import time
 import os
@@ -92,7 +94,16 @@ def test_pdf_writer():
     pdf_file1=F"{practices_dir}/test.pdf"
     pdf_writer=pdfwriter.SimplePdfWriter(pdf_file1)
     pdf_writer.register_font("楷体", F"{font_dir}/SIMKAI.TTF")
-    
+    image_path="I:/图片/linux/linux_install7_img_008.png"
+
+    page_item=PdfItem.image(image_path,120,120)
+    page_text=PdfItem.paragraph("Hello World!", text_style=pdf_writer.stylesheet['Normal'])
+    print(type(pdf_writer.get_image(page_item)))
+    stories = [[pdf_writer.get_paragraph(page_text),pdf_writer.get_image(page_item)]]
+    pdf_writer.write_pages(stories)
+
+def test_pdf2images():
+    pdf2images('E:/lib/books/[精通正则表达式(第三版)].（美）佛瑞德.扫描版.pdf')
 
 if __name__=="__main__":
     test_csv_writer()

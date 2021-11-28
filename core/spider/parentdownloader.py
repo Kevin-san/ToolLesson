@@ -27,6 +27,43 @@ class ParentDownloader():
             common_filer.make_dirs(directory)
             self.get_image_spider_items(directory,source_id,url)
     
+    def get_image_spider_source_by_grps(self):
+        sql = "select Name,Id,Section,Url from spidersource where DeleteFlag=1 and Name='图片' order by Id desc"
+        cursor.execute(sql)
+        source_results = cursor.fetchall()
+        source_cnt = len(source_results)
+        
+        while True:
+            total_empty_cnt = 0
+            for row in source_results:
+                name = row[0]
+                source_id = str(row[1])
+                section = row[2]
+                url = row[3]
+                directory = self.folder+'/'+name+"/"+section
+                common_filer.make_dirs(directory)
+                exec_cnt=self.get_first_image_spider_item(directory,source_id,url)
+                if exec_cnt == 0:
+                    total_empty_cnt = total_empty_cnt+1
+            if total_empty_cnt == source_cnt:
+                break
+    
+    def get_first_image_spider_item(self,directory,source_id,url):
+        sql = 'select distinct si.Name,si.Id from spideritem si,spiderproperty sp where sp.ItemId = si.Id and sp.DeleteFlag = 0 and si.DeleteFlag = 2 and si.SourceId =  %s limit 1' %(source_id)
+        current_log.info(sql)
+        cursor.execute(sql)
+        item_results = cursor.fetchall()
+        if len(item_results) == 0:
+            return 0
+        row=item_results[0]
+        current_log.info(row)
+        name = row[0]
+        item_id = row[1]
+        img_directory = directory +'/'+name
+        common_filer.make_dirs(img_directory)
+        self.get_image_spider_properties(name, item_id,img_directory,url)
+        return 1
+    
     def get_novel_spider_source(self):
         sql = "select Name,Id,Section,Url from spidersource where DeleteFlag=1 and Name='小说' order by Id"
         cursor.execute(sql)
@@ -129,4 +166,4 @@ class ParentDownloader():
 
 if __name__=="__main__":
     parent_downloader=ParentDownloader("I:")
-    parent_downloader.get_image_spider_source()
+    parent_downloader.get_image_spider_source_by_grps()

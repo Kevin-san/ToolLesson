@@ -29,7 +29,7 @@ class ParentSpider():
         if image_attrs:
             self.image_tag = image_attrs.tag
             self.image_attrs = image_attrs.dict_attrs
-        self.target_html = common_spider.get_response_text(self.url,'','',5)
+        self.target_html = common_spider.get_response_text(self.url,'','',0)
         self.index_m3u8_list=[]
         self.is_refered=True
         if index_attrs.index == 0:
@@ -46,9 +46,9 @@ class ParentSpider():
     
     def get_html_text(self,current_url):
         if self.is_refered:
-            return common_spider.get_response_text(current_url, '', '',3,self.home_url)
+            return common_spider.get_response_text(current_url, '', '',0,self.home_url)
         else:
-            return common_spider.get_response_text(current_url, '', '',3)
+            return common_spider.get_response_text(current_url, '', '',0)
     
     def get_img_src(self,html):
         img_item=common_spider.get_beautifulsoup_from_html(html, 'img', {})
@@ -124,7 +124,7 @@ class ParentSpider():
         return common_spider.get_real_url(self.home_url, img_item.get('src'))
     
     def get_page_novel_detail(self, url):
-        html = common_spider.get_response_text(url,'','',8)
+        html = common_spider.get_response_text(url,'','',0)
         texts = common_spider.get_beautifulsoup_from_html(html, self.content_tag, attrs=self.content_attrs)
         detail_item = texts[0]
         return self.get_novel_text(detail_item)
@@ -148,7 +148,7 @@ class ParentSpider():
     def get_video_index_srcs(self,index_m3u8):
         index_srcs=[]
         parent_url=index_m3u8.replace('/index.m3u8','',1)
-        index_val=common_spider.get_response_text_with_no_encoding(index_m3u8, '', '', 5)
+        index_val=common_spider.get_response_text_with_no_encoding(index_m3u8, '', '', 0)
         current_log.info(index_val)
         key_map=dict()
         is_dicon_cnt=0
@@ -193,7 +193,7 @@ class ParentSpider():
             return index_m3u8
         
     def get_video_real_index_m3u8(self,href_url,index):
-        html=common_spider.get_response_text(href_url, '', '', 3)
+        html=common_spider.get_response_text(href_url, '', '', 0)
         div=common_spider.get_beautifulsoup_from_html(html, self.content_tag, attrs=self.content_attrs)
         if self.index_m3u8_list and len(self.index_m3u8_list) > index:
             index_m3u8=self.index_m3u8_list[index]

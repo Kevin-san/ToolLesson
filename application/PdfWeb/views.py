@@ -13,6 +13,8 @@ from django.http.response import HttpResponse, StreamingHttpResponse
 import json
 from tools import common_filer
 from django.utils.http import urlquote
+from PdfWeb.forms import TxtUploadForm, PdfUploadForm, JpgUploadForm,\
+    Mp4UploadForm, Mp3UploadForm
 
 blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
 tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
@@ -22,6 +24,7 @@ def create_dict_base_on_keys_form(keys_list,form_data):
     for dict_key in keys_list:
         dict_result[dict_key] = form_data.cleaned_data[dict_key]
     return dict_result
+
 def create_dict_from_keys_form(keys_list,int_keys,form_data):
     dict_result={}
     for dict_key in keys_list:
@@ -36,7 +39,6 @@ def create_dict_from_keys_form(keys_list,int_keys,form_data):
             dict_result['TagName'] = tag_categorys_map[dict_result['TagId']]
     return dict_result
     
-
 def get_template_detail(book_lesson_id,api_key,menus):
     main_name=menus[book_lesson_id-1]
     return services.get_chapters(book_lesson_id, F'learn/{main_name}/{api_key}')
@@ -283,19 +285,56 @@ def blog_upd_submit(request):
         return blog_article(request, article.Id)
     return blog_upd(request, article.Id)
 
-def book_download(request,book_type,book_id):
-    try:
-        book_file_path = services.get_book_download_infos_by_book_id(book_type, book_id)
-        book_file_name = common_filer.get_file_name(book_file_path)
-        current_log.info(book_file_name)
-        response = StreamingHttpResponse(common_filer.file_iterator(book_file_path))
-        response['Content-Type']='application/octet-stream'
-        response['Content-Disposition']='attachment;filename="%s"'%(urlquote(book_file_name))
-    except Exception as e:
-        print(e)
-        return HttpResponse("Sorry but not found the file")
-    return response
+def blog_download(request,article_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        try:
+            book_file_path = services.get_blog_download_infos_by_article_id(article_id)
+            book_file_name = common_filer.get_file_name(book_file_path)
+            current_log.info(book_file_name)
+            response = StreamingHttpResponse(common_filer.file_iterator(book_file_path))
+            response['Content-Type']='application/octet-stream'
+            response['Content-Disposition']='attachment;filename="%s"'%(urlquote(book_file_name))
+        except Exception as e:
+            current_log.info(e)
+            return HttpResponse("Sorry but not found the file")
+        return response
 
+def book_download(request,book_type,book_id):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        try:
+            book_file_path = services.get_book_download_infos_by_book_id(book_type, book_id)
+            book_file_name = common_filer.get_file_name(book_file_path)
+            current_log.info(book_file_name)
+            response = StreamingHttpResponse(common_filer.file_iterator(book_file_path))
+            response['Content-Type']='application/octet-stream'
+            response['Content-Disposition']='attachment;filename="%s"'%(urlquote(book_file_name))
+        except Exception as e:
+            current_log.info(e)
+            return HttpResponse("Sorry but not found the file")
+        return response
+    
+
+def novel_upload(request):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=dict()
+        form = TxtUploadForm()
+        result['form']=form
+        return render(request,const.FILE_UPLOAD_HTML,result)
+    
+def learn_upload(request):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=dict()
+        form = PdfUploadForm()
+        result['form']=form
+        return render(request,const.FILE_UPLOAD_HTML,result)
 
 def book_index(request,book_type):
     if is_not_login(request):
@@ -465,17 +504,48 @@ def section_upd_submit(request,book_type,section_id):
     return book_sectionupd(request, book_type, section_id)
 
 def media_download(request,media_type,media_id):
-    try:
-        zip_file_path=services.get_media_download_infos_by_media_id(media_type, media_id)
-        zip_file_name = common_filer.get_file_name(zip_file_path)
-        current_log.info(zip_file_name)
-        response = StreamingHttpResponse(common_filer.file_iterator(zip_file_path))
-        response['Content-Type']='application/octet-stream'
-        response['Content-Disposition']='attachment;filename="%s"'%(urlquote(zip_file_name))
-    except Exception as e:
-        print(e)
-        return HttpResponse("Sorry but not found the file")
-    return response
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        try:
+            zip_file_path=services.get_media_download_infos_by_media_id(media_type, media_id)
+            zip_file_name = common_filer.get_file_name(zip_file_path)
+            current_log.info(zip_file_name)
+            response = StreamingHttpResponse(common_filer.file_iterator(zip_file_path))
+            response['Content-Type']='application/octet-stream'
+            response['Content-Disposition']='attachment;filename="%s"'%(urlquote(zip_file_name))
+        except Exception as e:
+            print(e)
+            return HttpResponse("Sorry but not found the file")
+        return response
+
+def media_upload(request,media_type):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=dict()
+        form = JpgUploadForm()
+        if media_type == 'video':
+            form = Mp4UploadForm()
+        elif media_type == 'audio':
+            form = Mp3UploadForm()
+        result['form']=form
+        return render(request,const.FILE_UPLOAD_HTML,result)
+
+def media_upload_submit(request,media_type):
+    if is_not_login(request):
+        return render_no_access(request)
+    else:
+        result=dict()
+        form = JpgUploadForm(request.POST,request.FILES)
+        if media_type == 'video':
+            form = Mp4UploadForm(request.POST,request.FILES)
+        elif media_type == 'audio':
+            form = Mp3UploadForm(request.POST,request.FILES)
+        result['form']=form
+        if form.is_valid():
+            return "Cool"
+        return render(request,const.FILE_UPLOAD_HTML,result)
 
 def media_index(request,media_type):
     if is_not_login(request):
