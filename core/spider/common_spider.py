@@ -102,8 +102,8 @@ def get_response(artifact_url,user,password,referer_url='',proxies=''):
             response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,auth=(user,password),stream=True)
         if response is not None and response.status_code == 200:
             return response
-    except Exception as e:
-        current_log.error(e)
+    except Exception:
+        current_log.error(artifact_url)
         return get_response(artifact_url, user, password, referer_url, proxies)
 
 @retry(stop_max_attempt_number=10,wait_fixed=10000)

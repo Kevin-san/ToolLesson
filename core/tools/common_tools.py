@@ -10,7 +10,7 @@ import tools.common_converter as converter
 import tools.common_logger as log
 import const.javatmps as javatmps
 from const.filesuffixs import FileSuffix
-from tools import common_filer, common_converter
+from tools import common_converter
 import time
 import re
 
@@ -19,6 +19,31 @@ filesuffix=FileSuffix()
 java_cons=javatmps.JavaConst()
 suffix_names=filesuffix.file_suffix_names + filesuffix.compiled_suffix_names+filesuffix.config_suffix_names+filesuffix.html_suffix_names+filesuffix.img_suffix_names+filesuffix.video_suffix_names+filesuffix.msc_suffix_names+filesuffix.package_suffix_names+filesuffix.run_suffix_names
 current_log=log.get_log('tools', '/temp', 'tools')
+
+def get_val_max(num_list):
+    max_val = max(num_list)
+    if max_val > 100:
+        return 1000
+    elif max_val <10 and max_val >0:
+        return 10
+    return 100
+
+def get_max_length(cols):
+    max_length_col = max(cols)
+    return len(max_length_col)
+
+def get_max_length_col_from_table(table_list):
+    reverse_tables=[[row[i] for row in table_list] for i in range(len(table_list[0]))]
+    max_cols_list = []
+    for cols in reverse_tables:
+        max_cols_list.append(cols)
+    return get_max_length(max_cols_list)
+
+def convert_common_rules_to_tag_dict(rule_list):
+    tag_dict=dict()
+    for common_rule in rule_list:
+        tag_dict[common_rule.TypeVal]=common_rule
+    return tag_dict
 
 def get_correct_vals_by_cols_num(cols_num,text_val):
     text_val=text_val.replace("\r\n","")
@@ -58,9 +83,6 @@ def obj_to_string(cls, obj):
 
 def create_map(keylist,valuelist):
     return dict(zip(keylist,valuelist))
-
-def html_to_detail_sql(html_file):
-    html_str = common_filer.get_file_details(html_file)
 
 def group_by_list(func,item,group_dicts):
     par_key = func(item)
@@ -259,7 +281,7 @@ def get_list_vals(values,key_str,result_vals):
             get_dict_vals(val, key_str, result_vals)
 
 def get_dict_vals(valdics,key_str,result_vals):
-    for key, val in valdics.items():
+    for val in valdics.values():
         if is_str(val) and val.find(key_str)!=-1:
             result_vals.append(val)
         if is_list(val):

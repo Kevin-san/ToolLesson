@@ -19,8 +19,12 @@
 		<div class="col-md-4 col-md-offset-4">
           <form enctype="multipart/form-data" class='form-register' action="/useredit/" method="post">
 
-              {% if message %}
-                  <div class="alert alert-warning">{{ message }}</div>
+              {% if messages %}
+			  <ul class="messages">
+				{% for message in messages %}
+				<li class="alert alert-warning">{{ message }}</li>
+				{% endfor %}
+              </ul>
               {% endif %}
 
               {% csrf_token %}

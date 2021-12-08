@@ -625,7 +625,7 @@ def run_and_load_spider_trigger(category_type_id):
                 insert_spider_trigger_result(result_info, map_url, trigger_id, category_type_id, category_id, sub_folder)
 
 def get_spider_trigger_result():
-    select_sql = "select Id,Title,VUrl,DownloadFolder from spidertriggerresult where DeleteFlag =0 limit 1"
+    select_sql = "select Id,Title,VUrl,DownloadFolder from spidertriggerresult where DeleteFlag =1 limit 1"
     cursor.execute(select_sql)
     trigger_results = cursor.fetchall()
     trigger_result_infos = []
@@ -655,7 +655,7 @@ if __name__ == "__main__":
     count =0
     while count < 343042:
         download_spider_trigger_results()
-        count=insert_spider_properties(count)
+#         count=insert_spider_properties(count)
 #     run_and_load_spider_trigger(1010)
 #     get_group_hrefs(group_map_attrs, dict_attrs, "video", "F:/Python3")
 #     res=common_spider.get_response('http://icanhazip.com', '', '')

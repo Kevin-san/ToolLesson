@@ -139,7 +139,7 @@
 					<h4>作者:<a href="/{{ book_type }}/book/author/{{ book_menu_info.book.Id }}">{{book_menu_info.book.Author}}</a></h4>
 					<p>最新章节:
 						{% if book_menu_info.book.MaxSectionId >= 0 %}
-						<a href="/{{ book_type }}/book/section/{{book_menu_info.book.MaxSectionId}}/{{book_menu_info.book.MaxSectionId}}">{{book_menu_info.book.MaxSectionName}}</a></p>
+						<a href="/{{ book_type }}/book/section/{{ book_menu_info.book.Id }}/{{book_menu_info.book.MaxSectionId}}/{{book_menu_info.book.MaxSectionId}}">{{book_menu_info.book.MaxSectionName}}</a></p>
 						{% else %}
 						无
 						{% endif %}

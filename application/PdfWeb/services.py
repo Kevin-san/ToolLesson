@@ -31,6 +31,9 @@ link_map = db.get_link_directory_map()
 def get_pages(begin_no,end_no,category_id,num_pages):
     pages = []
     pages.append(PageInfoItem("首页",F'{category_id}/1'))
+    if begin_no >0:
+        prev_page_no = begin_no 
+        pages.append(PageInfoItem("上一页",F'{category_id}/{prev_page_no}'))
     for i in range(begin_no, end_no):
         page_no=i+1
         page=PageInfoItem(page_no,F'{category_id}/{page_no}')
@@ -455,113 +458,6 @@ def get_confirm(code):
     return None
 
 # start not in use
-
-def get_novel_sources():
-    return db.get_novel_source()
-
-def get_image_home_index():
-    return get_image_home_list(15,1)
-
-def get_image_home_list(source_id,page_no):
-    keys = ['image_source_list','contacts','pages']
-    image_info_list = db.get_spider_item_by_page_no(source_id,page_no,30)
-    image_cnt = db.get_image_item_count_by_source_id(source_id)
-    current_log.info(image_cnt)
-    max_page = image_cnt//30
-    if image_cnt % 30 != 0:
-        max_page = max_page+1
-    pages = pages_help(page_no, max_page, source_id, 6)
-    vals=[category_map['image'],image_info_list,pages]
-    return common_tools.create_map(keys, vals)
-
-def get_image_content_info(item_id):
-    keys = ['image_source_list','image_content_info']
-    content_info=db.get_image_content_info(item_id)
-    vals=[category_map['image'],content_info]
-    return common_tools.create_map(keys, vals)
-
-def get_novel_home_index():
-    return get_novel_home_list(1, 1)
-
-def get_novel_home_list(source_id,page_no):
-    keys = ['novel_source_list','contacts','pages']
-    novel_info_list = db.get_novel_items_by_source_id(source_id,page_no,20)
-    novel_cnt = db.get_novel_item_count_by_source_id(source_id)
-    current_log.info(category_map['novel'])
-    current_log.info(novel_cnt)
-    max_page = novel_cnt//20
-    if novel_cnt % 20 != 0:
-        max_page = max_page+1
-    pages = pages_help(page_no, max_page, source_id, 6)
-    vals=[category_map['novel'],novel_info_list,pages]
-    return common_tools.create_map(keys, vals)
-
-def get_novel_menu_info(item_id):
-    keys = ['novel_source_list','novel_menu_info','action']
-    novel_info = db.get_novel_contents_by_item_id(item_id)
-    vals= [category_map['novel'],novel_info,'menu']
-    return common_tools.create_map(keys, vals)
-
-def get_novel_content_info(prop_id,last_upd_content_ord_id):
-    keys = ['novel_source_list','novel_content_info','last_upd_content_ord_id','action']
-    content_info=db.get_novel_content_include_prev_next_page(prop_id, last_upd_content_ord_id)
-    vals=[category_map['novel'],content_info,last_upd_content_ord_id,'content']
-    return common_tools.create_map(keys, vals)
-
-def get_novel_infos_by_author(item_id):
-    novel_info = db.get_novel_contents_by_item_id(item_id)
-    author_name=novel_info.novel_info.author
-    keys = ['novel_source_list','item_id','author_name','novel_info_list','action']
-    novel_info_list = db.get_novel_infos_by_author(author_name)
-    vals = [category_map['novel'],item_id,author_name,novel_info_list,'author']
-    return common_tools.create_map(keys, vals)    
-
-
-def get_learn_val_list():
-    learn_val_list = []
-    for book_lesson_type in category_map['learn']:
-        index_list = db.get_book_lesson_image_info(book_lesson_type.CategoryId)
-        id_name = book_lesson_type.CategoryValue1.replace('#','')
-        item = HomeIndexItem(id_name,book_lesson_type.CategoryName,index_list)
-        learn_val_list.append(item)
-    return learn_val_list
-
-def get_learn_home_index():
-    keys = ['menu_list','val_list']
-    vals = [category_map['learn'],get_learn_val_list()]
-    return common_tools.create_map(keys,vals)
-
-def get_menus(book_type_id):
-    book_lessons= db.get_book_lesson_info(book_type_id)
-    menus = []
-    for book_lesson in book_lessons:
-        menus.append(book_lesson.LessonHref.replace("/learn/","").replace("/index",""))
-    return menus
-
-def get_restful(book_lesson_id,lesson_key):
-    chapters = db.get_chapter_infos(book_lesson_id)
-    restfuls = []
-    for chapter in chapters:
-        single_href=chapter.Href.replace(F"learn/{lesson_key}/","")
-        restfuls.append(single_href)
-    return restfuls
-
-def get_chapter_headers(book_lesson_id):
-    return db.get_chapter_infos(book_lesson_id)
-
-def get_chapter_contents(chapter_id):
-    return db.get_content_infos(chapter_id)
-    
-def get_chapters(book_lesson_id,chapter_href):
-    header_list=get_chapter_headers(book_lesson_id)
-    chapter_infos=db.get_chapter_by_href(chapter_href)
-    chapter_info=chapter_infos[0]
-    detail_list=get_chapter_contents(chapter_info.Id)
-    content_html=convert_details_to_html(detail_list)
-    keys = ['val_list','header_list','content_html']
-    vals = [get_learn_val_list(),header_list,content_html]
-    return common_tools.create_map(keys, vals)
-
 
 html_no_rules=db.get_common_rules_by_type_and_rule('html5', 'no_text')
 html_clean_rules=db.get_common_rules_by_type_and_rule('html5', 'clean_text')

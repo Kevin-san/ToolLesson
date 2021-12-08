@@ -19,7 +19,7 @@ from Crypto.Cipher import AES
 from pydub import AudioSegment
 from moviepy.editor import VideoFileClip
 import zipfile
-from Crypto.Util import Counter
+
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
 

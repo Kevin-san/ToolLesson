@@ -5,11 +5,9 @@ Created on 2019/12/28
 @author: xcKev
 '''
 
-from PdfWeb.models import BookLesson,Chapter,Content,ImageContent,CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,Media,MediaSection,Book,Section,\
+from PdfWeb.models import CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,Media,MediaSection,Book,Section,\
     CommonCodeMap
-from PdfWeb.entitys import HomeInfoItem, NovelInfoItem,ImageInfoItem, NovelIndexItem,\
-    NovelContentItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity,\
-    BookIndexItem,BookContentItem
+from PdfWeb.entitys import NovelInfoItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity,BookIndexItem,BookContentItem
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
 from django.db import connection
@@ -454,91 +452,3 @@ def get_unit_dictionary_by_conversion_type(conversion_type):
 
 def get_unit_dictionary():
     return UnitDictionary.objects.filter(DeleteFlag=0)
-
-
-#start not in use
-def get_novel_source():
-    return get_spider_source('小说')
-
-def get_novel_info_item(item_id):
-    select_sql = "SELECT si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.Id = %s AND si.DeleteFlag !=0 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新'" %(item_id)
-    return select_novel_infos(select_sql)[0]
-
-def get_novel_infos_by_author(author_name):
-    return get_spider_property_by_author_name(author_name)
-
-def get_novel_items_by_source_id(source_id,page_no,count):
-    if page_no == 1:
-        begin_no = 0
-    else:
-        begin_no = (int(page_no)-1) * count
-    select_sql = "SELECT si.Id,si.Name,sp1.PropertyValue,sp2.PropertyValue,sp3.PropertyValue,sp3.PropertyBigVal FROM spideritem si,spiderproperty sp1,spiderproperty sp2,spiderproperty sp3 WHERE si.SourceId = %s AND si.DeleteFlag !=0 AND si.Id = sp1.ItemId AND sp1.PropertyKey = '作者' AND si.Id = sp2.ItemId AND sp2.PropertyKey = '简介' AND si.Id = sp3.ItemId AND sp3.PropertyKey = '最新' limit %s,%s" %(source_id,begin_no,count)
-    return select_novel_infos(select_sql)
-
-def get_novel_item_count_by_source_id(source_id):
-    select_sql = "SELECT count(*) FROM spideritem WHERE SourceId = %s AND DeleteFlag !=0 " %(source_id)
-    return select_cnt(select_sql)
-    
-def get_novel_contents_by_item_id(item_id):
-    novel_info = get_novel_info_item(item_id)
-    novel_contents = get_spider_property_with_prop_key(item_id, '章节')
-    return NovelIndexItem(novel_info,novel_contents)
-
-def get_novel_content_include_prev_next_page(property_id,last_upd_content_order_id):
-    novel_chapter = get_spider_property_by_property_id(property_id)
-    novel_item_id = novel_chapter.ItemId
-    novel_order_id = novel_chapter.OrderId
-    prev_order_id = get_prev_order_id(novel_order_id)
-    next_order_id = get_next_order_id(novel_order_id, last_upd_content_order_id)
-    prev_chapter = get_spider_property_by_order_id(novel_item_id, prev_order_id)
-    next_chapter = get_spider_property_by_order_id(novel_item_id, next_order_id)
-    return NovelContentItem(novel_item_id,novel_chapter,get_novel_spider_id(prev_chapter),get_novel_spider_id(next_chapter))
-
-def get_image_content_info(item_id):
-    spider_item = get_spider_item_by_id(item_id)
-    spider_props = get_spider_property(item_id)
-    return ImageInfoItem(item_id,spider_item.Name,spider_props)
-
-
-def get_novel_spider_id(novel_spider_property):
-    if novel_spider_property is None:
-        return None
-    return novel_spider_property.Id
-
-def get_book_lesson_by_id(book_lesson_id):
-    return BookLesson().objects.get(pk=book_lesson_id,DeleteFlag=0)
-
-def get_content_by_id(content_id):
-    return Content().objects.get(pk=content_id,DeleteFlag=0)
-
-def get_chapter_by_id(chapter_id):
-    return Chapter().objects.get(pk=chapter_id,DeleteFlag=0)
-
-def get_image_content_by_id(image_id):
-    return ImageContent.objects.get(pk=image_id,DeleteFlag=0)
-
-def get_chapter_by_href(href):
-    return Chapter.objects.filter(Href=href,DeleteFlag=0).order_by('ChapterNo')
-
-def get_book_lesson_info(book_lesson_type_id):
-    return BookLesson.objects.filter(BookLessonType_Id=book_lesson_type_id,DeleteFlag=0)
-
-def get_chapter_infos(book_lesson_id):
-    return Chapter.objects.filter(BookLesson_Id=book_lesson_id,DeleteFlag=0).order_by('ChapterNo')
-
-def get_content_infos(chapter_id):
-    return Content.objects.filter(Chapter_Id=chapter_id,DeleteFlag=0).order_by('OrderIndex')
-    
-def get_image_content_infos(image_id):
-    return ImageContent.objects.filter(Id=image_id,DeleteFlag=0)
-
-def get_book_lesson_image_info(book_lesson_type_id):
-    book_lessons=get_book_lesson_info(book_lesson_type_id)
-    book_lesson_image_list=[]
-    for book_lesson in book_lessons:
-        image_content = get_image_content_infos(book_lesson.ImageContent_Id)
-        home_info_item=HomeInfoItem(book_lesson,image_content[0])
-        book_lesson_image_list.append(home_info_item)
-    return book_lesson_image_list
-
-#end not in use

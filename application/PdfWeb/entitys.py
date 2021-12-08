@@ -54,9 +54,6 @@ class PdfInitParams():
         if not os.path.exists(self.imgdir):
             os.makedirs(self.imgdir)
 
-
-
-
 class Property():
     def __init__(self,property_type,property_name):
         self.property_type=property_type
@@ -80,17 +77,7 @@ class HomeIndexItem():
     def __init__(self,id_name,menu_title,menu_infos):
         self.id = id_name
         self.title = menu_title
-        self.infos = menu_infos
-
-class HomeInfoItem():
-    def __init__(self,book_lesson,image_content):
-        self.LessonHref = book_lesson.LessonHref
-        self.LessonName = book_lesson.LessonName
-        self.Description = book_lesson.Description
-        self.ImageName = image_content.ImageName
-        self.Width = image_content.Width
-        self.Height = image_content.Height
-        
+        self.infos = menu_infos     
 
 class PageInfoItem():
     def __init__(self,page_no,page_url):
@@ -133,15 +120,7 @@ class NovelInfoItem():
         self.last_upd_content_id = last_upd_content_id
         self.last_upd_content_title = last_upd_content_title
 
-class ImageInfoItem():
-    def __init__(self,item_id,image_name,spider_props):
-        self.item_id=item_id
-        self.image_name=image_name
-        for spider_prop in spider_props:
-            order_id_str=str(spider_prop.OrderId)
-            prefix = spider_prop.PropertyBigVal.split(".")[-1]
-            spider_prop.PropertyBigVal = image_name + "_"+order_id_str+"."+prefix
-        self.spider_props = spider_props
+
 
 class BookIndexItem():
     def __init__(self,book,sections):
@@ -155,14 +134,3 @@ class BookContentItem():
         self.prev_content_id=prev_content_id
         self.next_content_id=next_content_id
 
-class NovelIndexItem():
-    def __init__(self,novel_info,novel_contents):
-        self.novel_info = novel_info
-        self.novel_contents = novel_contents
-        
-class NovelContentItem():
-    def __init__(self,parent_item_id,cur_content,prev_content_id=None,next_content_id=None):
-        self.parent_item_id = parent_item_id
-        self.cur_content= cur_content
-        self.prev_content_id=prev_content_id
-        self.next_content_id=next_content_id
