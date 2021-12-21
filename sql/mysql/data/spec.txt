@@ -123,7 +123,8 @@ jenkins
 mariadb
 python3
 django2
-
+xckevin
+xc19901109
 
 上传功能 post
 下载功能 get

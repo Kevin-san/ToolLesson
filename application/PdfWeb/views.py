@@ -41,9 +41,9 @@ def create_dict_from_keys_form(keys_list,int_keys,form_data):
             dict_result['TagName'] = tag_categorys_map[dict_result['TagId']]
     return dict_result
     
-def get_template_detail(book_lesson_id,api_key,menus):
-    main_name=menus[book_lesson_id-1]
-    return services.get_chapters(book_lesson_id, F'learn/{main_name}/{api_key}')
+# def get_template_detail(book_lesson_id,api_key,menus):
+#     main_name=menus[book_lesson_id-1]
+#     return services.get_chapters(book_lesson_id, F'learn/{main_name}/{api_key}')
 
 def is_not_login(request):
     return not request.session.get(const.IS_LOGIN_KEY, None)

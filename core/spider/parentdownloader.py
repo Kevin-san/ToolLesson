@@ -5,19 +5,18 @@ Created on 2021/7/24
 @author: xcKev
 '''
 from spider.common_spider import current_log
-from tools import common_filer
+from tools import common_filer,common_db
 from spider import common_spider
-import pymysql
-db = pymysql.connect("localhost","root","xc19901109","alvin")
-cursor = db.cursor()
+import PdfWeb.constant as constant
+
 class ParentDownloader():
-    def __init__(self,folder):
+    def __init__(self,folder,db):
         self.folder = folder
+        self.db = db
     
     def get_image_spider_source(self):
-        sql = "select Name,Id,Section,Url from spidersource where DeleteFlag=1 and Name='图片' order by Id desc"
-        cursor.execute(sql)
-        source_results = cursor.fetchall()
+        sql = constant.SPIDER_SOURCE_SEL_IMAGE_SQL
+        source_results = common_db.execute_sel_results(sql, self.db)
         for row in source_results:
             name = row[0]
             source_id = str(row[1])
@@ -28,11 +27,9 @@ class ParentDownloader():
             self.get_image_spider_items(directory,source_id,url)
     
     def get_image_spider_source_by_grps(self):
-        sql = "select Name,Id,Section,Url from spidersource where DeleteFlag=1 and Name='图片' order by Id desc"
-        cursor.execute(sql)
-        source_results = cursor.fetchall()
+        sql = constant.SPIDER_SOURCE_SEL_IMAGE_SQL
+        source_results = common_db.execute_sel_results(sql, self.db)
         source_cnt = len(source_results)
-        
         while True:
             total_empty_cnt = 0
             for row in source_results:
@@ -49,10 +46,8 @@ class ParentDownloader():
                 break
     
     def get_first_image_spider_item(self,directory,source_id,url):
-        sql = 'select distinct si.Name,si.Id from spideritem si,spiderproperty sp where sp.ItemId = si.Id and sp.DeleteFlag = 0 and si.DeleteFlag = 2 and si.SourceId =  %s limit 1' %(source_id)
-        current_log.info(sql)
-        cursor.execute(sql)
-        item_results = cursor.fetchall()
+        sql = constant.SPIDER_ITEM_SEL_SINGLE_ITEM_BY_SOURCE_SQL_TEMPLATE %(source_id)
+        item_results = common_db.execute_sel_results(sql, self.db)
         if len(item_results) == 0:
             return 0
         row=item_results[0]
@@ -65,9 +60,8 @@ class ParentDownloader():
         return 1
     
     def get_novel_spider_source(self):
-        sql = "select Name,Id,Section,Url from spidersource where DeleteFlag=1 and Name='小说' order by Id"
-        cursor.execute(sql)
-        source_results = cursor.fetchall()
+        sql = constant.SPIDER_SOURCE_SEL_NOVEL_SQL
+        source_results = common_db.execute_sel_results(sql, self.db)
         for row in source_results:
             name = row[0]
             source_id = str(row[1])
@@ -78,10 +72,8 @@ class ParentDownloader():
             self.get_novel_spider_items(directory,source_id,url)
     
     def get_image_spider_items(self,directory,source_id,url):
-        sql = 'select distinct si.Name,si.Id from spideritem si,spiderproperty sp where sp.ItemId = si.Id and sp.DeleteFlag = 0 and si.DeleteFlag = 2 and si.SourceId =  %s ' %(source_id)
-        current_log.info(sql)
-        cursor.execute(sql)
-        item_results = cursor.fetchall()
+        sql = constant.SPIDER_ITEM_SEL_ITEM_BY_SOURCE_SQL_TEMPLATE %(source_id)
+        item_results = common_db.execute_sel_results(sql, self.db)
         for row in item_results:
             current_log.info(row)
             name = row[0]
@@ -91,10 +83,8 @@ class ParentDownloader():
             self.get_image_spider_properties(name, item_id,img_directory,url)
     
     def get_novel_spider_items(self,directory,source_id):
-        sql = 'select distinct si.Name,si.Id from spideritem si,spiderproperty sp where sp.ItemId = si.Id and sp.DeleteFlag = 0 and si.DeleteFlag = 2 and si.SourceId =  %s ' %(source_id)
-        current_log.info(sql)
-        cursor.execute(sql)
-        item_results = cursor.fetchall()
+        sql = constant.SPIDER_ITEM_SEL_ITEM_BY_SOURCE_SQL_TEMPLATE %(source_id)
+        item_results = common_db.execute_sel_results(sql, self.db)
         for row in item_results:
             current_log.info(row)
             name = row[0]
@@ -104,9 +94,8 @@ class ParentDownloader():
             self.get_novel_spider_properties(item_id,img_directory)
     
     def get_image_spider_properties(self,name,item_id,directory,url):
-        sql = "select OrderId,PropertyBigVal,Id from spiderproperty where DeleteFlag = 0 and ItemId = %s" %(item_id)
-        cursor.execute(sql)
-        property_results = cursor.fetchall()
+        sql = constant.SPIDER_PROPERTY_SEL_SQL_TEMPLATE %(item_id)
+        property_results = common_db.execute_sel_results(sql, self.db)
         for property_row in property_results:
             current_log.info(property_row)
             order_id = property_row[0]
@@ -115,9 +104,8 @@ class ParentDownloader():
             self.download_image(name, img_url, order_id,property_id,directory,url)
             
     def get_novel_spider_properties(self,item_id,directory):
-        sql = "select PropertyVal,PropertyBigVal,Id from spiderproperty where DeleteFlag = 0 and ItemId = %s and PropertyKey = '章节'" %(item_id)
-        cursor.execute(sql)
-        property_results = cursor.fetchall()
+        sql = constant.SPIDER_PROPERTY_SEL_SQL_CHAPTER_TEMPLATE %(item_id)
+        property_results = common_db.execute_sel_results(sql, self.db)
         for property_row in property_results:
             current_log.info(property_row)
             novel_title = property_row[0]
@@ -159,11 +147,9 @@ class ParentDownloader():
             self.update_image_spider_property(property_id)
             
     def update_image_spider_property(self,property_id):
-        sql = "update spiderproperty set DeleteFlag = 2 where DeleteFlag = 0 and Id = %s" %(property_id)
-        current_log.info(sql)
-        cursor.execute(sql)
-        db.commit()
+        sql = constant.SPIDER_PROPERTY_UPD_FLG_TWO_SQL_TEMPLATE %(property_id)
+        common_db.execute_ins_upd_del_sql(sql, self.db)
 
 if __name__=="__main__":
-    parent_downloader=ParentDownloader("I:")
+    parent_downloader=ParentDownloader("I:",common_db.get_localhost_db())
     parent_downloader.get_image_spider_source_by_grps()

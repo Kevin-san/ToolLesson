@@ -53,6 +53,13 @@ def get_child_absolute_files(file_path):
         paths.append(file_path+'/'+file)
     return paths
 
+def get_child_absolute_files_exclude_spec_files(file_path,spec_files):
+    paths=[]
+    for file in os.listdir(file_path):
+        if file not in spec_files:
+            paths.append(file_path+'/'+file)
+    return paths
+
 def is_file(file_path):
     return os.path.isfile(file_path)
 
@@ -156,6 +163,32 @@ def to_mp4_files(ts_file):
     os.system(cmd)
     return mp4_path
 
+def merget_ts_files_without_key(ts_dir,ts_path):
+    files=get_child_absolute_files_exclude_spec_files(ts_dir,['index.m3u8'])
+    files = natsorted(files)
+    ts_path_h=open(ts_path,'ab+')
+    for file in files:
+        tmp_file=open(file,'rb+')
+        ts_path_h.write(tmp_file.read())
+        tmp_file.close()
+    ts_path_h.close()
+    mp4_path=to_mp4_files(ts_path)
+    os.remove(ts_path)
+#     remove_dir(ts_dir)
+    return mp4_path
+
+def merge_ts_and_to_mp4(parent_folder):
+    list_children_dirs = get_child_absolute_files(parent_folder)
+    index_path=parent_folder+"/index.txt"
+    index_path_h= open(index_path,'a+')
+    for dir_path in list_children_dirs:
+        if is_dir(dir_path):
+            ts_file = dir_path + ".ts"
+            mp4_file = merget_ts_files_without_key(dir_path, ts_file)
+            index_path_h.write(mp4_file+"\n")
+    index_path_h.close()
+            
+
 def get_file_total_time(file_path,file_type):
     if file_type == 'audio':
         audio_type = file_path.split(".")[-1]
@@ -164,6 +197,7 @@ def get_file_total_time(file_path,file_type):
     else:
         clip = VideoFileClip(file_path)
         return clip.duration
+
 def remove_files(file_list):
     for file in file_list:
         os.remove(file)
@@ -239,6 +273,7 @@ def get_file_infos_service(local_xenv_home,local_home):
     for index,dir_name in enumerate(dir_list):
         arti_f.write(F'{dir_name}={file_list[index]}\n')
     current_log.info('end time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
+
 import pymysql
 db = pymysql.connect("localhost","root","xc19901109","alvin")
 cursor = db.cursor()

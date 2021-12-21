@@ -123,8 +123,6 @@ def check_valid_ip(ip):
         current_log.info(proxies)
         return True
     return False
-    
-
 
 def get_html_coding(url):
     html=requests.get(url)
@@ -146,7 +144,6 @@ def get_utf8_response_text_with_diff_coding(response,en_coding,de_coding):
             return encode_byte.decode(de_coding)
     except:
         return encode_byte.decode("utf-8")
-    
 
 def get_utf8_response_text(response,coding):
     encode_byte=response.text.encode(coding)
@@ -170,19 +167,10 @@ def download_m3u8(folder,m3u8_url):
     file_writer.append_string(index_val)
     file_writer.close()
 
-def get_m3u8_ts_list_from_file(m3u8_file,parent_url):
-    index_srcs=[]
-    file_r = SimpleFileReader(m3u8_file)
-    index_val = file_r.read()
+def parse_byte_key_map_from_m3u8(index_val,parent_url):
     key_map=dict()
-    is_dicon_cnt=0
     for line in index_val.split('\n'):
-        if "#EXT-X-DISCONTINUITY" in line:
-            is_dicon_cnt+=1
         if "#EXT-X-KEY" in line:
-            method_pos = line.find("METHOD")
-            comma_pos = line.find(",")
-            method = line[method_pos:comma_pos].split('=')[1]
             uri_pos = line.find("URI")
             quotation_mark_pos = line.rfind('"')
             key_list=line[uri_pos:quotation_mark_pos].split('"')
@@ -193,11 +181,26 @@ def get_m3u8_ts_list_from_file(m3u8_file,parent_url):
                     res = get_response(key_url, '', '')
                     key = res.content
                     key_map['key']=key
+    return key_map
+
+def parse_ts_list_from_m3u8(index_val,parent_url):
+    index_srcs=[]
+    is_dicon_cnt=0
+    for line in index_val.split('\n'):
+        if "#EXT-X-DISCONTINUITY" in line:
+            is_dicon_cnt+=1
         if line is None or line =='' or line[0] == '#':
             continue
         http_url = get_real_url(parent_url, line)
         if is_dicon_cnt%2 == 0:
             index_srcs.append(http_url)
+    return index_srcs
+
+def get_m3u8_ts_list_from_file(m3u8_file,parent_url):
+    file_r = SimpleFileReader(m3u8_file)
+    index_val = file_r.read()
+    key_map = parse_byte_key_map_from_m3u8(index_val, parent_url)
+    index_srcs=parse_ts_list_from_m3u8(index_val,parent_url)
     return key_map,index_srcs
 
 def get_m3u8_ts_list(folder,m3u8_url):

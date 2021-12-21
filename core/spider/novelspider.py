@@ -13,7 +13,7 @@ from spider.common_spider import current_log
 from bs4.element import Tag
 #https://www.23qb.net/
 class NovelSpider():
-    def __init__(self, url,intro_attrs,author_attrs,image_attrs, index_attrs, content_attrs, home_path, category, name):
+    def __init__(self, url,index_attrs,content_attrs,home_path,category,name,spec_map=None):
         url_items = url.split('/')
         self.home_url = '/'.join(url_items[0:3])
         self.novel_url = url
@@ -21,12 +21,18 @@ class NovelSpider():
         self.index_tag = index_attrs.tag
         self.content_attrs = content_attrs.dict_attrs
         self.content_tag = content_attrs.tag
-        self.intro_tag = intro_attrs.tag
-        self.intro_attrs = intro_attrs.dict_attrs
-        self.author_tag = author_attrs.tag
-        self.author_attrs = author_attrs.dict_attrs
-        self.image_tag = image_attrs.tag
-        self.image_attrs = image_attrs.dict_attrs
+        if spec_map and 'intro_attrs' in spec_map:
+            intro_attrs = spec_map['intro_attrs']
+            self.intro_tag = intro_attrs.tag
+            self.intro_attrs = intro_attrs.dict_attrs
+        if spec_map and 'author_attrs' in spec_map:
+            author_attrs = spec_map['author_attrs']
+            self.author_tag = author_attrs.tag
+            self.author_attrs = author_attrs.dict_attrs
+        if spec_map and 'image_attrs' in spec_map:
+            image_attrs = spec_map['image_attrs']
+            self.image_tag = image_attrs.tag
+            self.image_attrs = image_attrs.dict_attrs
         self.name = name
         if name=='':
             self.name=url_items[-1]

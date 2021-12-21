@@ -5,7 +5,6 @@ Created on 2020/5/3
 @author: xcKev
 '''
 import csv
-import os
 
 class CsvWriter(object):
     def __init__(self, filename, _delimiter=',', _quoting=csv.QUOTE_ALL):

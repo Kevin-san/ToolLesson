@@ -10,7 +10,6 @@ from entities.htmlitems import SimpleHtmlItem
 from tools import common_filer,common_converter,common_tools
 from writecreater.fileswriter import SimpleFileWriter
 import os
-import re
 import base64
 import quopri
 from PdfWeb import current_log
@@ -244,7 +243,7 @@ def get_content_type_and_content(line, sub_path_name, file_name):
             if content_encoding.lower() == 'base64':
                 try:
                     decoded_body = base64.b64decode(content)
-                except Exception as e:
+                except Exception:
                     current_log.info('%s 图片解码失败，无法保存' %(file_name))
                     return
             if decoded_body:

@@ -5,7 +5,6 @@ Created on 2021/2/20
 @author: xcKev
 '''
 
-import time
 from multiprocessing import Process
 
 def execute_thread_pool(thread_pool,task_list,func,*args):

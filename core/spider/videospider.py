@@ -65,14 +65,14 @@ class VideoSpider():
         div=common_spider.get_beautifulsoup_from_html(html, self.content_tag, attrs=self.content_attrs)
         if self.index_m3u8_list and len(self.index_m3u8_list) > index:
             index_m3u8=self.index_m3u8_list[index]
-            key_map, index_srcs = self.get_video_index_srcs(index_m3u8)
+            index_srcs = self.get_video_index_srcs(index_m3u8)
             return index_srcs[0]
         scripts=common_spider.get_beautifulsoup_from_html(str(div[0]), 'script')
         for script in scripts:
             script_text=common_spider.get_javascript_text(self.home_url,script)
             if script_text.find('/index.m3u8')!=-1:
                 index_m3u8=self.get_video_index_m3u8(script_text,index)
-                key_map, index_srcs = self.get_video_index_srcs(index_m3u8)
+                index_srcs = self.get_video_index_srcs(index_m3u8)
                 return index_srcs[0]
         return ''
     
@@ -93,35 +93,14 @@ class VideoSpider():
             return index_m3u8
     
     def get_video_index_srcs(self,index_m3u8):
-        index_srcs=[]
         parent_url=index_m3u8.replace('/index.m3u8','',1)
         index_val=common_spider.get_response_text_with_no_encoding(index_m3u8, '', '', 5)
-        current_log.info(index_val)
-        key_map=dict()
-        is_dicon_cnt=0
-        for line in index_val.split('\n'):
-            if "#EXT-X-DISCONTINUITY" in line:
-                is_dicon_cnt+=1
-            if "#EXT-X-KEY" in line:
-                method_pos = line.find("METHOD")
-                comma_pos = line.find(",")
-                method = line[method_pos:comma_pos].split('=')[1]
-                uri_pos = line.find("URI")
-                quotation_mark_pos = line.rfind('"')
-                key_list=line[uri_pos:quotation_mark_pos].split('"')
-                if len(key_list) == 2:
-                    key_path = key_list[1]
-                    key_url=common_spider.get_real_url(parent_url, key_path)
-                    if not key_map:
-                        res = common_spider.get_response(key_url, '', '')
-                        key = res.content
-                        key_map['key']=key
-            if line is None or line =='' or line[0] == '#':
-                continue
-            http_url = common_spider.get_real_url(parent_url, line)
-            if is_dicon_cnt%2 == 0:
-                index_srcs.append(http_url)
-        return key_map,index_srcs
+        return common_spider.parse_ts_list_from_m3u8(index_val, parent_url) 
+    
+    def get_key_map(self,index_m3u8):
+        parent_url=index_m3u8.replace('/index.m3u8','',1)
+        index_val=common_spider.get_response_text_with_no_encoding(index_m3u8, '', '', 5)
+        return common_spider.parse_byte_key_map_from_m3u8(index_val, parent_url) 
     
     def get_page_video_episode(self,href_url,episode_name,index):
         index_m3u8 = self.get_video_real_index_m3u8(href_url,index)
@@ -137,7 +116,7 @@ class VideoSpider():
         summary_file_h=open(self.summary_file,'w')
         if self.index_attrs:
             div = common_spider.get_beautifulsoup_from_html(html, self.index_tag, self.index_attrs)
-            a_list=common_spider.get_beautifulsoup_from_html(str(div[1]), 'a')
+            a_list=common_spider.get_beautifulsoup_from_html(str(div[0]), 'a')
             for index,a_item in enumerate(a_list):
                 href_url=common_spider.get_correct_href(self.home_url, a_item)
                 episode_nm="第"+str(index+1)+"集"
@@ -165,7 +144,8 @@ class VideoSpider():
             current_log.info(index_m3u8)
             if common_filer.is_file(self.folder+'/'+episode_name+'.mp4'):
                 continue
-            key_map,video_srcs=self.get_video_index_srcs(index_m3u8)
+            video_srcs=self.get_video_index_srcs(index_m3u8)
+            key_map= self.get_key_map(index_m3u8)
             index_file=open(self.folder+'/'+episode_name+'.txt','w')
             for id_key,video_src in enumerate(video_srcs):
                 index_file.write(F"{video_src} {id_key}\n")
@@ -183,7 +163,7 @@ if __name__=="__main__":
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/damingwangchao1566/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"K:/Spider/video/","TV","大明王朝1566")
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/dazhangfu2014/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","大丈夫")
 #     videospider.download_all_videos()
-    videospider=VideoSpider("https://www.qmdy5.com/hanguoju/qinghuida1988/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","请回答1988")
+    videospider=VideoSpider("https://www.qmdy5.com/guochanju/yinmierweida/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","隐秘而伟大")
     videospider.download_all_videos()
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/pannizhe/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","叛逆者")
 #     videospider.download_all_videos()

@@ -4,7 +4,7 @@ Created on 2021/1/4
 
 @author: xcKev
 '''
-from tools import common_filer, common_threadpools, common_converter
+from tools import common_filer, common_converter, common_db
 from spider import common_spider, novelspider
 from spider import GroupAttribute,SpiderAttribute,SpiderParameters
 from spider.imgspider import ImgSpider
@@ -16,8 +16,9 @@ import random
 import time
 import pymysql
 from spider.parentspider import ParentSpider
-db = pymysql.connect("localhost","root","xc19901109","alvin")
-cursor = db.cursor()
+from spider.parentdownloader import ParentDownloader
+import PdfWeb.constant as constant
+db = common_db.get_localhost_db()
 
 def get_group_attributes(list_attrs):
     group_attr_dicts=dict()
@@ -40,10 +41,6 @@ group_attrs={
 }
 detail_attrs={
     "picture":{
-#         "http://www.mm288.com/":{
-#             "index_attrs":SpiderAttribute(tag_name="ul",id_v="mouse_page",class_v="articleV2Page",index=0),
-#             "content_attrs":SpiderAttribute(tag_name="div",id_v="big-pic",class_v="")
-#         },
         "https://www.ku66.net/":{
             "index_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="NewPages"),
             "content_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="content")
@@ -108,35 +105,6 @@ dict_attrs={
 "https://www.qiqidongman.com/vod-search.html"
 ],
 "picture":[
-
-"http://www.mm288.com/meinv/",
-"http://www.mm288.com/meinv/xgcm/",
-"http://www.mm288.com/meinv/mnxh/",
-"http://www.mm288.com/meinv/mnmt/",
-"http://www.mm288.com/meinv/jpmn/",
-"http://www.mm288.com/meinv/mnzp/",
-"http://www.mm288.com/meinv/rtys/",
-"http://www.mm288.com/meinv/gzmn/",
-"http://www.mm288.com/meinv/wgmn/",
-"http://www.mm288.com/meinv/hgmn/",
-"http://www.mm288.com/meinv/rbmn/",
-"http://www.mm288.com/meinv/ommn/",
-"http://www.mm288.com/meinv/zfyh/",
-"http://www.mm288.com/mvtp/zgmn/",
-"http://www.mm288.com/mvtp/rhmn/",
-"http://www.mm288.com/mvtp/ommn/",
-"http://www.mm288.com/mvtp/dlmn/",
-"http://www.mm288.com/mvtp/rbmn/",
-"http://www.mm288.com/mvtp/hgmn/",
-"http://www.mm288.com/mvtp/twmn/",
-"http://www.mm288.com/xgmn/",
-"http://www.mm288.com/qcmn/",
-"http://www.mm288.com/mnxz/",
-"http://www.mm288.com/swmt/",
-"http://www.mm288.com/mxmn/",
-"http://www.mm288.com/mnbz/",
-"http://www.mm288.com/dmmn/",
-"http://www.mm288.com/dmmn/cosplay/",
 "http://www.mm4000.com/meinv/",
 "https://www.ku66.net/r/1/index.html",
 "https://www.mzitu.com/"
@@ -269,6 +237,7 @@ class GroupItemSpider(object):
             for item_content in item_contents:
                 a_child=common_spider.get_beautifulsoup_from_html(str(item_content), self.children_tag)[self.children_index-1]
                 a_href_url=common_spider.get_correct_href(self.home_url, a_child)
+                a_text_val=a_child.text
                 if self.children_text_condition == "img.alt":
                     img_item=common_spider.get_beautifulsoup_from_html(str(a_child), "img", attrs={})[0]
                     a_text_val=img_item.get("alt")
@@ -277,15 +246,13 @@ class GroupItemSpider(object):
                     a_text_val=div_item.text
                 elif self.children_text_condition == "a.title":
                     a_text_val=a_child.get("title")
-                else:
-                    a_text_val=a_child.text
                 a_text_val = a_text_val.replace("/","")
                 a_text_val = a_text_val.strip()
                 if F"{a_text_val}    {a_href_url}" not in self.href_list:
                     self.summary_file_w.write(F"{a_text_val}    {a_href_url}\n")
                     if self.source_id !=0:
-                        cursor.execute("insert into SpiderItem(SourceId,Url,Name) values(%s,'%s','%s')" %(self.source_id,a_href_url,a_text_val.replace("'","").replace("\\","")))
-                        db.commit()
+                        sql_ins_str = constant.SPIDER_ITEM_INS_SQL_TEMPLATE %(self.source_id,a_href_url,a_text_val.replace("'","").replace("\\",""))
+                        common_db.execute_ins_upd_del_sql(sql_ins_str, db)
                     print(F"{a_text_val}    {a_href_url}\n")
                 item_list=[a_text_val,a_href_url]
                 item_href_list.append(item_list)
@@ -293,9 +260,9 @@ class GroupItemSpider(object):
 
     def get_pages(self,href_url,href_dict):
         while href_url != "":
-            href_url,href_dict=self.get_page_hrefs(href_url, href_dict) 
-        cursor.execute("update spidersource set DeleteFlag = 1 where Id = %s " %(self.source_id))
-        db.commit()
+            href_url,href_dict=self.get_page_hrefs(href_url, href_dict)
+        sql_upd_str=constant.SPIDER_SOURCE_UPD_SQL_TEMPLATE %(self.source_id)
+        common_db.execute_ins_upd_del_sql(sql_upd_str, db)
         self.summary_file_w.close()
         return href_dict
     
@@ -394,8 +361,7 @@ def download_all_spiders_one_by_random_one(home_path,detail_maps):
             continue
   
 def load_group_urls():
-    cursor.execute("select * from SpiderSource where DeleteFlag = 0")
-    results = cursor.fetchall()
+    results = common_db.execute_sel_results(constant.SPIDER_SOURCE_SEL_SQL, db)
     for row in results:
         source_id = row[0]
         name = row[1]
@@ -413,8 +379,7 @@ def load_group_urls():
         group_spider.get_pages(url, dict())
 
 def init_spider_rules():
-    cursor.execute("select * from SpiderRule where DeleteFlag = 0 order by Id")
-    rule_results = cursor.fetchall()
+    rule_results = common_db.execute_sel_results(constant.SPIDER_RULE_SEL_SQL, db)
     map_rules = dict()
     for row in rule_results:
         map_rule_detail = dict()
@@ -431,9 +396,8 @@ def init_spider_rules():
     return map_rules
 
 def insert_spider_property(item_id,order_id,property_key,property_val,property_b_val):
-    cursor.execute("select count(*) from SpiderProperty where ItemId = %s and OrderId = %s" %(item_id,order_id))
-    result = cursor.fetchall()
-    rowcount = result[0][0]
+    sel_cnt_str=constant.SPIDER_PROPERTY_CNT_SQL_TEMPLATE %(item_id,order_id)
+    rowcount = common_db.execute_sel_no_result(sel_cnt_str, db)
     if rowcount == 0:
         insert_spider_property_entity(item_id, order_id, property_key, property_val, property_b_val)
     else:
@@ -442,27 +406,30 @@ def insert_spider_property(item_id,order_id,property_key,property_val,property_b
 def insert_spider_property_entity(item_id,order_id,property_key,property_val,property_b_val):
     property_b_val=str(property_b_val).replace("'","")
     property_val=str(property_val).replace("'","")
-    cursor.execute("insert SpiderProperty(ItemId,OrderId,PropertyKey,PropertyValue,PropertyBigVal) values(%s,%s,'%s','%s','%s')" %(item_id,order_id,property_key,property_val,property_b_val))
-    db.commit()
+    sql_ins_str = constant.SPIDER_PROPERTY_INS_SQL_TEMPLATE %(item_id,order_id,property_key,property_val,property_b_val)
+    common_db.execute_ins_upd_del_sql(sql_ins_str, db)
     
 def update_spider_property_entity(item_id,order_id,property_key,property_val,property_b_val):
     property_b_val=str(property_b_val).replace("'","")
     property_val=str(property_val).replace("'","")
-    cursor.execute("update SpiderProperty set PropertyValue = '%s' , PropertyBigVal = '%s' where ItemId = %s and PropertyKey = '%s' and OrderId =%s" %(property_val,property_b_val,item_id,property_key,order_id))
-    db.commit()
+    sql_ins_str = constant.SPIDER_PROPERTY_UPD_SQL_TEMPLATE %(property_val,property_b_val,item_id,property_key,order_id)
+    common_db.execute_ins_upd_del_sql(sql_ins_str, db)
 
 def get_need_spider_property(item_id,property_key,property_list):
-    cursor.execute("select count(*) from SpiderProperty where ItemId = %s and PropertyKey = '%s'" %(item_id,property_key))
-    result = cursor.fetchall()
-    rowcount = result[0][0]
+    sel_cnt_str=constant.SPIDER_PROPERTY_SEL_CNT_SQL_TEMPLATE %(item_id,property_key)
+    rowcount = common_db.execute_sel_no_result(sel_cnt_str, db)
     return rowcount,property_list[rowcount:]
 
 def get_max_novel_spider_property_order_id(item_id):
-    cursor.execute("select max(OrderId) from SpiderProperty where ItemId = %s and PropertyKey = '章节'" %(item_id))
-    result = cursor.fetchall()
-    max_order_id = result[0][0]
+    sel_cnt_str=constant.SPIDER_PROPERTY_SEL_MAX_ORDID_SQL_TEMPLATE %(item_id)
+    max_order_id = common_db.execute_sel_no_result(sel_cnt_str, db)
     return max_order_id
 
+def insert_spider_property_by_source(item_id,spider,source_id):
+    if source_id < 9:
+        insert_novel_spider_property(item_id, spider)
+    else:
+        insert_video_spider_property(item_id, spider)
 
 def insert_novel_spider_property(item_id, spider):
     author = spider.get_page_author()
@@ -495,9 +462,8 @@ def insert_spider_properties(count):
     map_rules = init_spider_rules()
     for url,url_dict in map_rules.items():
         current_log.info(url)
-        cursor.execute("select * from SpiderItem where DeleteFlag = 0 and instr(Url,'%s') = 1 ORDER BY SourceId DESC limit 1" %(url))
-        results = cursor.fetchall()
-        current_log.info(results)
+        sql_sel_str = constant.SPIDER_ITEM_SEL_SQL_TEMPLATE %(url)
+        results = common_db.execute_sel_results(sql_sel_str, db)
         if results:
             row = results[0]
             target_url = row[2]
@@ -518,49 +484,38 @@ def insert_spider_properties(count):
                 insert_spider_property(item_id, -1, "简介", intro, "")
                 insert_spider_property(item_id, 0, "图片", image, "")
                 try:
-                    if source_id < 9:
-                        insert_novel_spider_property(item_id, spider)
-                    else:
-                        insert_video_spider_property(item_id, spider)
+                    insert_spider_property_by_source(item_id,spider,source_id)
                 except Exception as e:
                     current_log.error(e)
-                    cursor.execute("update SpiderItem set DeleteFlag = 1 where Id = %s" %(item_id))
-                    db.commit()
+                    sql_upd_str=constant.SPIDER_ITEM_UPD_FLG_ONE_SQL_TEMPLATE %(item_id)
+                    common_db.execute_ins_upd_del_sql(sql_upd_str, db)
                     count +=1
                     continue
-            cursor.execute("update SpiderItem set DeleteFlag = 2 where Id = %s" %(item_id))
-            db.commit()
+            sql_updd_str=constant.SPIDER_ITEM_UPD_FLG_TWO_SQL_TEMPLATE %(item_id) 
+            common_db.execute_ins_upd_del_sql(sql_updd_str, db)
             count +=1
-        else:
-            continue
     return count
         
 def remove_duplicate_item_and_properties():
-    select_duplicate_sql = 'select Url from spideritem group by Url having count(Id) > 1'
-    cursor.execute(select_duplicate_sql)
-    duplicate_results= cursor.fetchall()
+    duplicate_results= common_db.execute_sel_results(constant.SPIDER_ITEM_SEL_URL_SQL, db)
     for row in duplicate_results:
         current_log.info(row)
         url = row[0]
-        select_item_id_sql = "select Id from spideritem where Url = '%s'" %(url)
-        cursor.execute(select_item_id_sql)
-        id_results = cursor.fetchall()
+        select_item_id_sql = constant.SPIDER_ITEM_SEL_ID_TEMPLATE %(url)
+        id_results = common_db.execute_sel_results(select_item_id_sql, db)
         for id_index,id_row in enumerate(id_results):
             if id_index == 0:
                 continue
             item_id = id_row[0]
             current_log.info(item_id)
-            delete_item_sql = "delete from spideritem where Id = %s" %(item_id)
-            cursor.execute(delete_item_sql)
-            db.commit()
-            delete_property_sql = "delete from spiderproperty where ItemId = %s" %(item_id)
-            cursor.execute(delete_property_sql)
-            db.commit()
+            delete_item_sql = constant.SPIDER_ITEM_DEL_SQL_TEMPLATE %(item_id)
+            common_db.execute_ins_upd_del_sql(delete_item_sql, db)
+            delete_property_sql = constant.SPIDER_PROPERTY_DEL_SQL_TEMPLATE %(item_id)
+            common_db.execute_ins_upd_del_sql(delete_property_sql, db)
 
 def get_spider_trigger_category_info(category_type_id):
-    select_category_sql = 'select CategoryId,CategoryName,CategoryValue1 from category where DeleteFlag=0 and CategoryFather=%s order by CategoryId desc' %(category_type_id)
-    cursor.execute(select_category_sql)
-    results = cursor.fetchall()
+    select_category_sql =constant.SPIDER_CATEGORY_SEL_SQL_TEMPLATE %(category_type_id)
+    results = common_db.execute_sel_results(select_category_sql, db)
     spider_trigger_category_list=[]
     for row in results:
         current_log.info(row)
@@ -572,9 +527,8 @@ def get_spider_trigger_category_info(category_type_id):
     return spider_trigger_category_list
 
 def get_spider_trigger_info(category_type_id):
-    select_trigger_sql = 'select Id,Url,RequestUrl,TriggerCategoryId,TriggerParams,TriggerCategoryKey,MapUrl,DownloadFolder from spidertrigger where DeleteFlag = 0 and TriggerCategoryId = %s' %(category_type_id)
-    cursor.execute(select_trigger_sql)
-    trigger_results = cursor.fetchall()
+    select_trigger_sql = constant.SPIDER_TRIGGER_SEL_SQL_TEMPLATE %(category_type_id)
+    trigger_results = common_db.execute_sel_results(select_trigger_sql, db)
     spider_trigger_list=[]
     for row in trigger_results:
         current_log.info(row)
@@ -595,10 +549,8 @@ def insert_spider_trigger_result(result_info,map_url,trigger_id,category_father,
     sub_folder = download_folder+'/'+title
     vurl = map_url+result_info['vurl']
     coverimg = result_info['coverimg']
-    insert_sql="insert into spidertriggerresult(TriggerId,CategoryFather,CategoryId,CoverImg,Title,VUrl,DownloadFolder) values(%s,%s,%s,'%s','%s','%s','%s')"%(trigger_id,category_father,category_id,pymysql.escape_string(coverimg),pymysql.escape_string(title),pymysql.escape_string(vurl),pymysql.escape_string(sub_folder))
-    current_log.info(insert_sql)
-    cursor.execute(insert_sql)
-    db.commit()
+    insert_sql=constant.SPIDER_TRIGGER_INS_SQL_TEMPLATE %(trigger_id,category_father,category_id,pymysql.escape_string(coverimg),pymysql.escape_string(title),pymysql.escape_string(vurl),pymysql.escape_string(sub_folder))
+    common_db.execute_sel_results(insert_sql,db)
 
 def run_and_load_spider_trigger(category_type_id):
     spider_triggers = get_spider_trigger_info(category_type_id)
@@ -625,18 +577,38 @@ def run_and_load_spider_trigger(category_type_id):
                 insert_spider_trigger_result(result_info, map_url, trigger_id, category_type_id, category_id, sub_folder)
 
 def get_spider_trigger_result():
-    select_sql = "select Id,Title,VUrl,DownloadFolder from spidertriggerresult where DeleteFlag =1 limit 1"
-    cursor.execute(select_sql)
-    trigger_results = cursor.fetchall()
+    select_sql = constant.SPIDER_TRIGGER_SEL_SINGLE_ACTIVE_SQL
+    trigger_results = common_db.execute_sel_results(select_sql, db)
+    trigger_result_infos = []
+    for trigger_result in trigger_results:
+        trigger_result_infos.append({'id':trigger_result[0],'title':trigger_result[1],'m3u8':trigger_result[2],'download_folder':trigger_result[3]})
+    return trigger_result_infos
+
+def get_spider_inactive_trigger_result():
+    select_sql = constant.SPIDER_TRIGGER_SEL_INACTIVE_SQL
+    trigger_results = common_db.execute_sel_results(select_sql, db)
     trigger_result_infos = []
     for trigger_result in trigger_results:
         trigger_result_infos.append({'id':trigger_result[0],'title':trigger_result[1],'m3u8':trigger_result[2],'download_folder':trigger_result[3]})
     return trigger_result_infos
 
 def update_spider_trigger_result(trigger_result_id):
-    upd_sql = "update spidertriggerresult set DeleteFlag = 1 where Id = %s"%(trigger_result_id)
-    cursor.execute(upd_sql)
-    db.commit()
+    upd_sql = constant.SPIDER_TRIGGER_UPD_SQL_TEMPLATE %(trigger_result_id)
+    common_db.execute_ins_upd_del_sql(upd_sql, db)
+    
+def update_spider_inactive_trigger_result(trigger_result_id):
+    upd_sql = constant.SPIDER_TRIGGER_UPD_INACTIVE_SQL_TEMPLATE %(trigger_result_id)
+    common_db.execute_ins_upd_del_sql(upd_sql, db)
+
+def download_spider_missed_trigger_results():
+    trigger_results = get_spider_inactive_trigger_result()
+    for trigger_result in trigger_results:
+        folder =trigger_result['download_folder']
+        key_map,video_srcs=common_spider.get_m3u8_ts_list(folder, trigger_result['m3u8'])
+        for video_src in video_srcs:
+            ts_name = video_src.split("/")[-1]
+            common_spider.download_ts(video_src, folder, ts_name)
+        update_spider_inactive_trigger_result(trigger_result['id'])
 
 def download_spider_trigger_results():
     trigger_results = get_spider_trigger_result()
@@ -649,13 +621,16 @@ def download_spider_trigger_results():
         update_spider_trigger_result(trigger_result['id'])
 
 if __name__ == "__main__":
+    pass
 #     remove_duplicate_item_and_properties()
 #     load_group_urls()
     
-    count =0
-    while count < 343042:
-        download_spider_trigger_results()
+#     count =0
+#     while count < 343042:
+#         download_spider_trigger_results()
 #         count=insert_spider_properties(count)
+#         parent_downloader=ParentDownloader("I:",db)
+#         parent_downloader.get_image_spider_source_by_grps()
 #     run_and_load_spider_trigger(1010)
 #     get_group_hrefs(group_map_attrs, dict_attrs, "video", "F:/Python3")
 #     res=common_spider.get_response('http://icanhazip.com', '', '')
