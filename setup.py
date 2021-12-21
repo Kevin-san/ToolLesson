@@ -2,7 +2,7 @@
 import os
 from setuptools import setup,find_packages
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 requirements=open('requirements.txt').readlines()
 
@@ -20,5 +20,6 @@ setup(
                   'templates':'core_pdf_page/templates'
                   },
     python_requires='>=3.7.0',
+    include_package_data = True,
     install_requires=requirements
 )
