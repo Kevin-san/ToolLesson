@@ -158,7 +158,8 @@ def merge_ts_files(ts_dir,key_map,ts_path):
 
 def to_mp4_files(ts_file):
     mp4_path=ts_file.replace(".ts",".mp4")
-    ffmpeg_path="E:/IDE/ffmpeg-2021-01-05/bin/ffmpeg.exe"
+#     ffmpeg_path="E:/IDE/ffmpeg-2021-01-05/bin/ffmpeg.exe"
+    ffmpeg_path="/usr/bin/ffmpeg"
     cmd = ffmpeg_path + " -i " + ts_file + " -c copy " + mp4_path
     os.system(cmd)
     return mp4_path

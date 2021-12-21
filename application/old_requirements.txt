@@ -1,0 +1,6 @@
+PyMySQL==0.9.3
+Django==2.2.7
+django_mdeditor==0.1.18
+django_recaptcha==2.0.6
+mdeditor==0.3.2
+tools==0.1.9

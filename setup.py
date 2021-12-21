@@ -14,6 +14,7 @@ setup(
     url='https://github.com/Kevin-san/CorePdfPage',
     description='core_pdf_page',
     packages= find_packages(exclude=['sql','practices']),
+    py_modules=["PdfWeb","const","deps","entities","readparser","render","spider","test","tools","writecreater"],
     package_dir= {'application':'core_pdf_page/application',
                   'core':'core_pdf_page/core',
                   'static':'core_pdf_page/static',
