@@ -12,13 +12,19 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
+import platform
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-PROJECT_NAME = os.path.split(PROJECT_ROOT)[-1]
-BASE_DIR = os.path.dirname(PROJECT_ROOT)
-PARENT_DIR= os.path.dirname(BASE_DIR)
-sys.path.insert(0, os.path.join(PROJECT_ROOT, 'applications'))
+if platform.system() == "Linux":
+    PROJECT_ROOT = "/usr/local/core_pdf_page"
+    PROJECT_NAME = "PdfWeb"
+    PARENT_DIR = "/usr/local/core_pdf_page"
+else:
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    PROJECT_NAME = os.path.split(PROJECT_ROOT)[-1]
+    BASE_DIR = os.path.dirname(PROJECT_ROOT)
+    PARENT_DIR= os.path.dirname(BASE_DIR)
+    sys.path.insert(0, os.path.join(PROJECT_ROOT, 'applications'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

@@ -9,6 +9,7 @@ import datetime
 import time
 import calendar
 import re
+from tools import common_tools
 
 DATE_FORMATS={'yyyy-mm-dd':'%Y-%m-%d','yyyy/mm/dd':'%Y/%m/%d',
               'yyyy-mm-dd HH:mm:ss':'%Y-%m-%d %H:%M:%S', 
@@ -17,7 +18,7 @@ DATE_FORMATS={'yyyy-mm-dd':'%Y-%m-%d','yyyy/mm/dd':'%Y/%m/%d',
               'mm/dd/yyyy':'%m/%d/%Y',
               'mm/dd/yy':'%m/%d/%y'}
 WEEKDAY_MAP={1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat',7:'Sun'}
-holiy_file="C:/Users/xcKev/eclipse-workspace/KToolApps/test/holiy_cn.txt"
+holiy_file=common_tools.get_holly_file()
 
 class DateConverter(object):
 
@@ -131,27 +132,3 @@ class DateConverter(object):
     
     def get_month_biz_beg(self,date_str):
         pass
-if __name__=='__main__':
-    dateutil=DateConverter(holiy_file=holiy_file)
-    print(dateutil.str2date('2018-12-13', 'yyyy-mm-dd'))
-    print(dateutil.str2date('2018/12/13', 'yyyy/mm/dd'))
-    print(dateutil.str2date('2018-12-13 23:27:32', 'yyyy-mm-dd HH:mm:ss'))
-    print(dateutil.str2date('2018/12/13 23:27:32', 'yyyy/mm/dd HH:mm:ss'))
-    print(dateutil.str2date('20181213', 'yyyymmdd'))
-    print(dateutil.str2date('12/13/2018', 'mm/dd/yyyy'))
-    print(dateutil.str2date('12/13/18', 'mm/dd/yy'))
-    date_obj=dateutil.str2date('12/20/19', 'mm/dd/yy')
-    print(dateutil.date2str(date_obj, 'yyyymmdd'))
-    print(dateutil.date2time(date_obj))
-    time_obj=dateutil.date2time(date_obj)
-    print(dateutil.time2date(time_obj))
-    print(dateutil.is_leap(2000))
-    print(dateutil.get_week(date_obj,'str'))
-    print(dateutil.is_week_end(date_obj))
-    print(dateutil.date2timeascstr(date_obj))
-    print(dateutil.get_calendar('2018'))
-    print(dateutil.get_calendar('201812'))
-    print(dateutil.get_weeks(date_obj))
-    print(dateutil.get_month_info('201812'))
-    print(dateutil.is_holiday(date_obj))
-    print(dateutil.rol_biz_day(date_obj, 3))

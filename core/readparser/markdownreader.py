@@ -7,7 +7,6 @@ Created on 2021/11/11
 import mistune
 import re
 from tools import common_tools
-from writecreater import pdfwriter
 
 class MarkDownReader(object):
     def __init__(self,markdown_text):
@@ -108,58 +107,3 @@ class MarkDownReader(object):
                 self.markdown_tokens.append(oul_token)
                 oul_token=dict()
         return self.markdown_tokens
-
-
-if __name__=='__main__':
-    markdown_reader=MarkDownReader('''
-# Shell 注释
- 以 ***  `#` *** 开头的行就是注释，会被解释器忽略。
- 通过每一行加一个 ** `#` ** 号设置多行注释，像这样：
- 
-```bash
-#--------------------------------------------
-# 这是一个注释
-# author：菜鸟教程
-# site：www.runoob.com
-# slogan：学的不仅是技术，更是梦想！
-#--------------------------------------------
-##### 用户配置区 开始 #####
-#
-#
-# 这里可以添加脚本描述信息
-# 
-#
-##### 用户配置区 结束  #####
-```
-
-如果在开发过程中，遇到大段的代码需要临时注释起来，过一会儿又取消注释，怎么办呢？
-每一行加个`#`符号太费力了，可以把这一段要注释的代码用一对花括号括起来，定义成一个函数，没有地方调用这个函数，这块代码就不会执行，达到了和注释一样的效果。
-
-### 多行注释
-多行注释还可以使用以下格式：
-
-```bash
-:<< EOF
-注释内容...
-注释内容...
-注释内容...
-EOF
-```
-
-EOF 也可以使用其他符号:
-
-```bash
-:<< '
-注释内容...
-注释内容...
-注释内容...
-'
-:<< !
-注释内容...
-注释内容...
-注释内容...
-!
-```'''
-    )
-    markdown_outputs=markdown_reader.read_markdown()
-    pdfwriter.markdown_to_pdf(markdown_outputs,"I:/图片/","/media/img/","E:/lib/books/test.pdf")

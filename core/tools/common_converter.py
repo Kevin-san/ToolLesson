@@ -908,24 +908,3 @@ def regex2bash(str1):
     fi
     '''
     return bash_code
-
-if __name__ == '__main__':
-    json_str='''
-{
-  "rule":{
-    "namespace":"strategy",
-    "name":"test_exp_1496234234223400",
-    "version":0,
-    "last_modify_time":1434234236819000,
-    "log_rate":1023300,
-    "schema_version":"hello_world!"
-  },
-  "key":"value"
-}
-'''
-    dict_result=json2prop(json_str)
-    print(dict_result)
-    insert_sql_str='''insert into CommonSubFuncs values(470,'sql去除单引号','sql_rem_squote','',27,0,'alvin',curdate());
-'''
-    print(sql_rem_squote(sql_add_squote(insert_sql_str)))
-    

@@ -6,13 +6,17 @@ Created on 2021/4/3
 '''
 import docker
 import re
+from tools import common_tools
 
 
 
 class Executor():
     def __init__(self):
         self.dock_client=docker.from_env()
-        self.exec_client=docker.APIClient(base_url='tcp://localhost:2375')
+        if common_tools.get_system_name() == "Linux":
+            self.exec_client = docker.APIClient(base_url='unix:///var/run/docker.sock')
+        else:
+            self.exec_client=docker.APIClient(base_url='tcp://localhost:2375')
     
     def get_container(self,image_name):
         self.exec_client.start(image_name)
@@ -155,25 +159,4 @@ def run_go(go_cmds):
         if exec_result.output != b'':
             go_result_strs.append(exec_result.output.decode())
     return "\n".join(go_result_strs)
-
-if __name__=='__main__':
-    
-#     golang_cmd=['package main','import "fmt"','func main() {','    fmt.Println("Hello, World!")','}']
-    python_log=run_python(['print("Hello World!")'])
-    print(python_log)
-    perl_log=run_perl(['print "Hello World!";'])
-    print(perl_log)
-#     go_log=common_exec.run_golang(golang_cmd)
-#     print(go_log)
-#     node_log=common_exec.run_node(["console.log('Hello World!');"])
-#     print(node_log)
-#     java_cmd='''
-# public class HelloWorld {
-#     public static void main(String[] args) {
-#        System.out.println("Hello World");
-#     }
-# }
-# '''
-#     java_log=common_exec.run_java([java_cmd])
-#     print(java_log)
     

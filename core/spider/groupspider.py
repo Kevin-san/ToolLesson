@@ -16,8 +16,8 @@ import random
 import time
 import pymysql
 from spider.parentspider import ParentSpider
-from spider.parentdownloader import ParentDownloader
 import PdfWeb.constant as constant
+from tools.common_tools import get_remote_folder
 db = common_db.get_localhost_db()
 
 def get_group_attributes(list_attrs):
@@ -368,7 +368,7 @@ def load_group_urls():
         section = row[2]
         url = row[3]
         attr = eval(row[4])
-        home_path = "I:/"+name+"/"+section
+        home_path = get_remote_folder+"/"+name+"/"+section
         block_spider_attr=GroupAttribute.get_block_spider_attribute(attr)
         item_spider_attr=GroupAttribute.get_item_spider_attribute(attr)
         children_spider_attr=GroupAttribute.get_children_spider_attribute(attr)

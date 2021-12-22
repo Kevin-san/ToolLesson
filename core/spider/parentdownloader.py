@@ -149,7 +149,3 @@ class ParentDownloader():
     def update_image_spider_property(self,property_id):
         sql = constant.SPIDER_PROPERTY_UPD_FLG_TWO_SQL_TEMPLATE %(property_id)
         common_db.execute_ins_upd_del_sql(sql, self.db)
-
-if __name__=="__main__":
-    parent_downloader=ParentDownloader("I:",common_db.get_localhost_db())
-    parent_downloader.get_image_spider_source_by_grps()

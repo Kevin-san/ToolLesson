@@ -24,6 +24,3 @@ class SimpleTextSayer():
         self.engine.save_to_file(self.text_str,self.mp3_file)
         self.engine.runAndWait()
 
-if __name__ =="__main__":
-    sayer = SimpleTextSayer("在这里，我们在参数中使用了“w”字母，它指示写和加号，这意味着如果库中不存在文件，它将创建一个文件。","C://Users//xcKev//git//CorePdfPage//core//readparser//test.mp3")
-    sayer.save_to_file()

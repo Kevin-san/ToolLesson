@@ -470,17 +470,10 @@ def start_text_pdfs_process():
     else:
         time.sleep(10)
 if __name__ == "__main__":
+    pass
 #     start_text_pdfs_process()
 #     start_img_pdfs_process()
-    pdf1 = "F:\EBook\Python修炼之道V1.0.pdf"
-    pdf_out = "F:\EBook\Python修炼之道V1.0_test.txt"
-    file_wrtr1 = SimpleFileWriter(pdf_out)
-    pdfreader1 = SimplePdfReader(pdf1)
-    print(pdfreader1.get_page_structure_dict(6))
-    items = pdfreader1.extract_dict_to_items(5)
-    for item in items:
-        file_wrtr1.append_new_line(item)
-    file_wrtr1.close() 
+
     #'flags': 4, 'font': 'LucidaConsole' pre
     #'flags': 20, 'font': 'MicrosoftYaHei-Bold' p
 #     pdf = "F:\EBook\高级Bash脚本编程指南.3.9.1 (杨春敏 黄毅 译).pdf"

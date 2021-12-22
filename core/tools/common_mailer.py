@@ -49,6 +49,3 @@ def send_mail(sender,receivers,content,subject,text_format,encoding,attachs):
     add_attach(message, attachs, encoding)
     smtp_obj.sendmail(sender, receivers, message.as_string().encoding('ascii'))
     
-if __name__=='__main__':
-    sender=''
-    

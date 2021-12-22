@@ -62,9 +62,6 @@ def recur_split_novels_in_novel_parent_dir(dir_path):
     for file_path in file_list:
         if file_path.endswith(".txt"):
             split_txt_novel_to_chapter(file_path)
-            
-if __name__ == "__main__":
-    recur_split_novels_in_novel_parent_dir("I:/小说/玄幻")
     
             
     

@@ -300,22 +300,3 @@ def save_mhts_all_images(input_path_map,parent_dir):
                     continue
             file_reader.close()
             file_reader2.close()
-
-if __name__ == "__main__":
-    parent_path = "I:/图片/Hider/"
-    input_path_map={}
-    save_mhts_all_images(input_path_map, parent_path)
-    #save_mht_all_images(file_path)
-#     directory="C:/Users/xcKev/git/CorePdfPage/templates"
-#     sql_dir="C:/Users/xcKev/git/CorePdfPage/sql/mysql/correct_table"
-#     chapter_sql_file=F"{sql_dir}/ChapterData1.sql"
-#     content_sql_file=F"{sql_dir}/ContentData1.sql"
-#     dirs=["linux","bash"]
-#     replace_strs_dict={}
-#     for corr_dir in dirs:
-#         clear_htm_files(F"{directory}/{corr_dir}")
-#         rpl_strs=get_rpl_strs(corr_dir)
-#         replace_strs=get_replace_strs(rpl_strs)
-#         replace_strs_dict[corr_dir]=replace_strs
-#     htm_dict=remove_django_pattern_parse_htm(directory, dirs, 'htm', replace_strs_dict)
-#     parse_htm_list_to_sql(htm_dict,chapter_sql_file,content_sql_file)
