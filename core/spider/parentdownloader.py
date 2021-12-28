@@ -7,7 +7,7 @@ Created on 2021/7/24
 from spider.common_spider import current_log
 from tools import common_filer,common_db
 from spider import common_spider
-import PdfWeb.constant as constant
+import const.constants as constant
 
 class ParentDownloader():
     def __init__(self,folder,db):

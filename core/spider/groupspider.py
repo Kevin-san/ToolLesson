@@ -16,7 +16,7 @@ import random
 import time
 import pymysql
 from spider.parentspider import ParentSpider
-import PdfWeb.constant as constant
+import const.constants as constant
 from tools.common_tools import get_remote_folder
 db = common_db.get_localhost_db()
 

@@ -7,7 +7,7 @@ Created on 2021/12/18
 
 import pymysql
 from tools.common_decorator import sql_output
-import PdfWeb.constant as constant
+import const.constants as constant
 
 def connect_mysql_db(host_port,user,pwd,schema):
     return pymysql.connect(host_port,user,pwd,schema)

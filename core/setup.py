@@ -12,7 +12,7 @@ setup(
     url='https://github.com/Kevin-san/CorePdfPage',
     description='PdfWebCore',
     packages= find_packages(),
-    py_modules=['const','deps','entities','readparser','render','spider','test','tools'],
+    py_modules=['const','deps','entities','readparser','render','spider','test','tools','writecreater'],
     python_requires='>=3.7.0',
     include_package_data = True,
     install_requires=requirements
