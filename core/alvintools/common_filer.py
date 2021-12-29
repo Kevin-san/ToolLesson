@@ -160,6 +160,7 @@ def to_mp4_files(ts_file):
     mp4_path=ts_file.replace(".ts",".mp4")
     ffmpeg_path=alvintools.get_ffmpeg_cmd()
     cmd = ffmpeg_path + " -i " + ts_file + " -c copy " + mp4_path
+    current_log.info(cmd)
     os.system(cmd)
     return mp4_path
 
@@ -178,6 +179,7 @@ def merget_ts_files_without_key(ts_dir,ts_path):
     return mp4_path
 
 def merge_ts_and_to_mp4(parent_folder):
+    current_log.info(parent_folder)
     list_children_dirs = get_child_absolute_files(parent_folder)
     index_path=parent_folder+"/index.txt"
     index_path_h= open(index_path,'a+')
