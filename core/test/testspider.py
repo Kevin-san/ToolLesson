@@ -7,6 +7,7 @@ Created on 2020/5/3
 
 from spider import groupspider,parentdownloader
 from tools.common_tools import get_remote_folder
+from tools import common_filer
 
 remote_dir = get_remote_folder()
 
@@ -14,6 +15,8 @@ def test_groupspider_download_spider_results():
     count =0
     while count < 343042:
         groupspider.download_spider_trigger_results()
+        groupspider.download_spider_missed_trigger_results()
+        common_filer.merge_ts_and_to_mp4(remote_dir+"/Hider/Video/亚洲无码")
         count=groupspider.insert_spider_properties(count)
         parent_downloader=parentdownloader.ParentDownloader(remote_dir,groupspider.db)
         parent_downloader.get_image_spider_source_by_grps()
