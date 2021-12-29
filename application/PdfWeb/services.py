@@ -6,15 +6,15 @@ Created on 2019/12/28
 '''
 from PdfWeb import db,entitys,current_log
 from PdfWeb.entitys import HomeIndexItem, PageInfoItem
-from tools import common_tools, common_converter, common_formater, common_coder,common_calculator,common_executer,\
+from alvintools import common_tools, common_converter, common_formater, common_coder,common_calculator,common_executer,\
     common_filer
 import datetime
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 翻页相关模块
 from PdfWeb.settings import MEDIA_ROOT
-from writecreater import pdfwriter
-from writecreater.fileswriter import SimpleFileWriter
-from readparser.markdownreader import MarkDownReader
+from alvinwritecreater import pdfwriter
+from alvinwritecreater.fileswriter import SimpleFileWriter
+from alvinreadparser.markdownreader import MarkDownReader
 
 
 category_map={

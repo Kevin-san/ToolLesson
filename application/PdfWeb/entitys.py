@@ -4,7 +4,7 @@ Created on 2019/12/28
 
 @author: xcKev
 '''
-import tools.common_tools as common
+import alvintools.common_tools as common
 import os
 
 def get_val_max(num_list):

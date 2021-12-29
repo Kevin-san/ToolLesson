@@ -1,6 +1,6 @@
 from setuptools import setup,find_packages
 
-__version__ = '1.5'
+__version__ = '2.0'
 
 requirements=open('requirements.txt').readlines()
 
@@ -12,7 +12,7 @@ setup(
     url='https://github.com/Kevin-san/CorePdfPage',
     description='PdfWebCore',
     packages= find_packages(),
-    py_modules=['const','deps','entities','readparser','render','spider','test','tools','writecreater'],
+    py_modules=['alvinconst','alvindeps','alvinentities','alvinreadparser','alvinrender','alvinspider','alvintest','alvintools','alvinwritecreater'],
     python_requires='>=3.7.0',
     include_package_data = True,
     install_requires=requirements

@@ -1,6 +1,6 @@
 from setuptools import setup,find_packages
 
-__version__ = '1.6'
+__version__ = '2.0'
 
 requirements=open('requirements.txt').readlines()
 

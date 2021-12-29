@@ -144,7 +144,7 @@ MDEDITOR_CONFIGS = {
                 "h1", "h2", "h3", "h5", "h6", "|",
                 "list-ul", "list-ol", "hr", "|",
                 "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime",
-                "emoji", "html-entities", "pagebreak", "goto-line", "|",
+                "emoji", "html-entities", "paalvinentities", "|", "goto-line",
                 "help", "info",
                 "||", "preview", "watch", "fullscreen"],  # 自定义编辑框工具栏
     'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型

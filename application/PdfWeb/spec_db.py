@@ -6,7 +6,7 @@ Created on 2021/12/18
 '''
 
 from PdfWeb.entitys import NovelInfoItem, SpiderSourceEntity, SpiderItemEntity, SpiderPropertyEntity
-from tools import common_db
+from alvintools import common_db
 db = common_db.get_localhost_db()
 
 
