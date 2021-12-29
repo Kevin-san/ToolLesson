@@ -7,7 +7,7 @@ Created on 2019/6/30
 
 from os.path import getsize,join
 import alvintools.common_logger as log
-import alvintools.common_tools as common
+import alvintools
 import os
 import time
 import chardet
@@ -158,7 +158,7 @@ def merge_ts_files(ts_dir,key_map,ts_path):
 
 def to_mp4_files(ts_file):
     mp4_path=ts_file.replace(".ts",".mp4")
-    ffmpeg_path=common.get_ffmpeg_cmd()
+    ffmpeg_path=alvintools.get_ffmpeg_cmd()
     cmd = ffmpeg_path + " -i " + ts_file + " -c copy " + mp4_path
     os.system(cmd)
     return mp4_path

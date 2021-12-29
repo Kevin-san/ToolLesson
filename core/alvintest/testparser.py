@@ -7,7 +7,7 @@ Created on 2020/5/3
 from alvinreadparser import excelreader,filesreader,pdfreader,markdownreader,\
     htmlreader, textreader
 import os
-from alvintools.common_tools import get_remote_folder
+from alvintools import get_remote_folder
 
 def test_csv_reader():
     csv_file1="C:/Users/xcKev/git/CorePdfPage/practices/filedetails.csv"

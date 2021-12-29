@@ -4,8 +4,9 @@ Created on 2020/5/3
 
 @author: xcKev
 '''
-from alvintools import common_filer,common_tools,common_spliter ,common_executer,common_dater,common_converter
-remote_dir = common_tools.get_remote_folder()
+import alvintools
+from alvintools import common_filer,common_spliter ,common_executer,common_dater,common_converter
+remote_dir = alvintools.get_remote_folder()
 
 def test_common_filer_merge_ts_and_to_mp4():
     common_filer.merge_ts_and_to_mp4(remote_dir+"/Hider/Video/亚洲无码")

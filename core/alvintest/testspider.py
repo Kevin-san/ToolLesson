@@ -6,7 +6,7 @@ Created on 2020/5/3
 '''
 
 from alvinspider import groupspider,parentdownloader
-from alvintools.common_tools import get_remote_folder
+from alvintools import get_remote_folder
 from alvintools import common_filer
 
 remote_dir = get_remote_folder()

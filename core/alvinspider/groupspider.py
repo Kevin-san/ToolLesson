@@ -16,8 +16,8 @@ import random
 import time
 import pymysql
 from alvinspider.parentspider import ParentSpider
-import const.constants as constant
-from alvintools.common_tools import get_remote_folder
+import alvinconst.constants as constant
+from alvintools import get_remote_folder
 db = common_db.get_localhost_db()
 
 def get_group_attributes(list_attrs):

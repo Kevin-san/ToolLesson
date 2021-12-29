@@ -6,14 +6,14 @@ Created on 2021/4/3
 '''
 import docker
 import re
-from alvintools import common_tools
+import alvintools
 
 
 
 class Executor():
     def __init__(self):
         self.dock_client=docker.from_env()
-        if common_tools.get_system_name() == "Linux":
+        if alvintools.get_system_name() == "Linux":
             self.exec_client = docker.APIClient(base_url='unix:///var/run/docker.sock')
         else:
             self.exec_client=docker.APIClient(base_url='tcp://localhost:2375')

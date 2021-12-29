@@ -9,7 +9,7 @@ import datetime
 import time
 import calendar
 import re
-from alvintools import common_tools
+import alvintools 
 
 DATE_FORMATS={'yyyy-mm-dd':'%Y-%m-%d','yyyy/mm/dd':'%Y/%m/%d',
               'yyyy-mm-dd HH:mm:ss':'%Y-%m-%d %H:%M:%S', 
@@ -18,7 +18,8 @@ DATE_FORMATS={'yyyy-mm-dd':'%Y-%m-%d','yyyy/mm/dd':'%Y/%m/%d',
               'mm/dd/yyyy':'%m/%d/%Y',
               'mm/dd/yy':'%m/%d/%y'}
 WEEKDAY_MAP={1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat',7:'Sun'}
-holiy_file=common_tools.get_holly_file()
+holiy_file=alvintools.get_holly_file()
+print(holiy_file)
 
 class DateConverter(object):
 
