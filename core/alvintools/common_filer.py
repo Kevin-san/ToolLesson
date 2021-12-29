@@ -19,6 +19,7 @@ from Crypto.Cipher import AES
 from pydub import AudioSegment
 from moviepy.editor import VideoFileClip
 import zipfile
+from alvinspider import artifactspider
 
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
@@ -160,6 +161,8 @@ def to_mp4_files(ts_file):
     mp4_path=ts_file.replace(".ts",".mp4")
     ffmpeg_path=alvintools.get_ffmpeg_cmd()
     cmd = ffmpeg_path + " -i " + ts_file + " -c copy " + mp4_path
+    if alvintools.get_system_name() == "Linux":
+        cmd = ffmpeg_path + " -i " + ts_file + " -acodec copy -vcodec copy -absf aac_adtstoasc " + mp4_path
     current_log.info(cmd)
     os.system(cmd)
     return mp4_path
@@ -270,7 +273,7 @@ def get_file_infos_service(local_xenv_home,local_home):
     path_list=[]
     current_log.info('start time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
     recur_file_infos(local_xenv_home,path_list)
-    dir_list,file_list=common.get_directory_file_list(path_list)
+    dir_list,file_list=artifactspider.get_directory_file_list(path_list)
     arti_f=open(local_home+'/xenv.txt','w+')
     for index,dir_name in enumerate(dir_list):
         arti_f.write(F'{dir_name}={file_list[index]}\n')
