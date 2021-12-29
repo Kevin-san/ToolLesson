@@ -13,7 +13,7 @@ setup(
     description='PdfWeb',
     packages= ["PdfWeb"],
     package_dir={'':'application'},
-    package_data = {'':['*.crt']},
+    package_data = {'PdfWeb':['*.crt']},
     python_requires='>=3.7.0',
     include_package_data = True,
     install_requires=requirements

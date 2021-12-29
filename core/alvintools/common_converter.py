@@ -28,7 +28,7 @@ from alvinconst.html5tmps import HtmlTypes
 from alvinconst.javatmps import JavaConst
 from alvinconst.csharptmps import CSharpConst
 from alvinconst.langtypes import _const
-from spider import common_spider
+from alvinspider import common_spider
 java_const = JavaConst()
 csharp_const=CSharpConst()
 common_const=_const()
