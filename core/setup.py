@@ -12,6 +12,8 @@ setup(
     url='https://github.com/Kevin-san/CorePdfPage',
     description='PdfWebCore',
     packages= ['alvinconst','alvindeps','alvinentities','alvinreadparser','alvinrender','alvinspider','alvintest','alvintools','alvinwritecreater'],
+    package_dir={'':'core'},
+    package_data = {'alvinwritecreater':['*.TTF'],'alvinconst':['*.TTF']},
     python_requires='>=3.7.0',
     include_package_data = True,
     install_requires=requirements
