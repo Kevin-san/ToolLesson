@@ -12,6 +12,8 @@ setup(
     url='https://github.com/Kevin-san/CorePdfPage',
     description='PdfWeb',
     packages= ["PdfWeb"],
+    package_dir={'':'application'},
+    package_data = {'':['*.crt']},
     python_requires='>=3.7.0',
     include_package_data = True,
     install_requires=requirements
