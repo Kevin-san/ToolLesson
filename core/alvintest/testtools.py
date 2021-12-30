@@ -9,7 +9,7 @@ from alvintools import common_filer,common_spliter ,common_executer,common_dater
 remote_dir = alvintools.get_remote_folder()
 
 def test_common_filer_merge_ts_and_to_mp4():
-    common_filer.merge_ts_and_to_mp4(remote_dir+"/Hider/Video/亚洲无码")
+    common_filer.merge_ts_and_to_mp4(remote_dir+"/Spider/Hider/Video/亚洲无码")
 
 def test_recur_split_novels_in_novel_parent_dir():
     common_spliter.recur_split_novels_in_novel_parent_dir(remote_dir+"/小说/玄幻")

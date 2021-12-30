@@ -19,7 +19,7 @@ def test_groupspider_download_spider_results():
         parent_downloader.get_image_spider_source_by_grps()
         groupspider.download_spider_trigger_results()
         groupspider.download_spider_missed_trigger_results()
-        common_filer.merge_ts_and_to_mp4(remote_dir+"/Hider/Video/亚洲无码")
+        common_filer.merge_ts_and_to_mp4(remote_dir+"/Spider/Hider/Video/亚洲无码")
         
 
 def test_groupspider_download_spider_missed_trigger_results():
