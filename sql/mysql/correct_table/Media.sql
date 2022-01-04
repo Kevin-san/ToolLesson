@@ -6,7 +6,7 @@ create table IF NOT EXISTS `Media`( -- 音视频的信息表
 	`ParentDir` VARCHAR(100) NOT NULL,-- 父目录
 	`Content` VARCHAR(3000) NOT NULL, -- 内容
 	`Authors` VARCHAR(300) NOT NULL, -- 作者
-	`ImageContent` VARCHAR(100) NOT NULL DEFAULT '', -- 图片
+	`ImageContent` VARCHAR(1000) NOT NULL DEFAULT '', -- 图片
 	`CategoryId` INT UNSIGNED NOT NULL, -- 分类 (视频，音频)
 	`TotalTime` INT NOT NULL, -- 时长 s 网页显示 按 min / hour
 	`TotalSize` BIGINT NOT NULL, -- 大小 b 网页显示按 Mb / Gb
@@ -18,5 +18,5 @@ create table IF NOT EXISTS `Media`( -- 音视频的信息表
 	PRIMARY KEY ( `Id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into Media SELECT Id,Name,CONCAT('/img/美女/',Name,''),'','',CONCAT('/img/美女/',Name,CONCAT('/',Name,'_0.jpg')),SourceId+200,0,0,now(),'alvin',0,'alvin',curdate() FROM spideritem WHERE SourceId >=15 AND DeleteFlag = 2;
-update spideritem set DeleteFlag = -2 where SourceId >=15 AND DeleteFlag = 2;
+insert into Media SELECT Id,Name,CONCAT('/img/美女/',Name,''),'','',CONCAT('/img/美女/',Name,CONCAT('/',Name,'_0.jpg')),SourceId+200,0,0,now(),'alvin',0,'alvin',curdate() FROM SpiderItem WHERE SourceId >=15 AND DeleteFlag = 2;
+update SpiderItem set DeleteFlag = -2 where SourceId >=15 AND DeleteFlag = 2;

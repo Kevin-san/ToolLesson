@@ -5,7 +5,9 @@ Created on 2020/5/3
 @author: xcKev
 '''
 import alvintools
-from alvintools import common_filer,common_spliter ,common_executer,common_dater,common_converter
+from alvintools import common_filer,common_spliter ,common_executer,common_dater,common_converter,\
+    common_db
+from alvinconst import constants
 remote_dir = alvintools.get_remote_folder()
 
 def test_common_filer_merge_ts_and_to_mp4():
@@ -87,4 +89,16 @@ def test_common_coverter():
     insert_sql_str='''insert into CommonSubFuncs values(470,'sql去除单引号','sql_rem_squote','',27,0,'alvin',curdate());
 '''
     print(common_converter.sql_rem_squote(common_converter.sql_add_squote(insert_sql_str)))
-    
+
+
+def test_common_db(db_handler):
+    common_db.execute_ins_upd_del_sql(constants.BOOK_UPD_SQL_AUTHOR, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.BOOK_UPD_SQL_INTRO, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.BOOK_UPD_SQL_IMAGE, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.BOOK_UPD_SQL_LATEST, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.SECTION_INS_SQL, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.SPIDER_PROPERTY_UPD_FLG_SQL, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.MEDIA_UPD_SQL, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.SPIDER_ITEM_UPD_SQL, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.MEDIA_SECTION_UPD_SQL, db_handler)
+    common_db.execute_ins_upd_del_sql(constants.SPIDER_PROPERTY_UPD_FLG_SQL2, db_handler)

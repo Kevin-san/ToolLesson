@@ -25,7 +25,7 @@ class Media(models.Model):
     ParentDir = models.CharField(max_length=100,verbose_name='父目录')
     Content = models.CharField(max_length=3000,verbose_name='内容')
     Authors = models.CharField(max_length=300,default='',verbose_name='作者')
-    ImageContent = models.ImageField(upload_to=avdeo_directory_path,max_length=100,default='',verbose_name='图片',null=True,blank=True)
+    ImageContent = models.ImageField(upload_to=avdeo_directory_path,max_length=1000,default='',verbose_name='图片',null=True,blank=True)
     CategoryId= models.IntegerField(verbose_name='分类Id')
     TotalTime = models.IntegerField(verbose_name='总时长')
     TotalSize = models.IntegerField(verbose_name='总大小')
