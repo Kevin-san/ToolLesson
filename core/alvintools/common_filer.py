@@ -178,7 +178,7 @@ def merget_ts_files_without_key(ts_dir,ts_path):
     ts_path_h.close()
     mp4_path=to_mp4_files(ts_path)
     os.remove(ts_path)
-#     remove_dir(ts_dir)
+    remove_dir(ts_dir)
     return mp4_path
 
 def merge_ts_and_to_mp4(parent_folder):

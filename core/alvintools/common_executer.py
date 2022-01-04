@@ -26,7 +26,7 @@ class Executor():
         container.stop()
     
     def run_python(self,cmds):
-        container=self.get_container('python')
+        container=self.get_container('python-test')
         exec_results=[]
         real_cmds=['/bin/bash','touch /tmp/test.py',['sh','-c','echo "#!/usr/bin/python" > /tmp/test.py']]
         for cmd in cmds:
@@ -40,7 +40,7 @@ class Executor():
         return exec_results
     
     def run_perl(self,cmds):
-        container=self.get_container("perl")
+        container=self.get_container("perl-test")
         exec_results=[]
         real_cmds=['/bin/bash','touch /tmp/test.pl',['sh','-c','echo "#!/usr/local/bin/perl" > /tmp/test.pl']]
         for cmd in cmds:
@@ -54,7 +54,7 @@ class Executor():
         return exec_results
     
     def run_golang(self,cmds):
-        container=self.get_container("golang")
+        container=self.get_container("golang-test")
         real_cmds=["rm -rf /tmp/test.go","touch /tmp/test.go"]
         exec_results=[]
         for cmd in cmds:
@@ -68,7 +68,7 @@ class Executor():
         return exec_results
     
     def run_bash(self,cmds):
-        container=self.get_container("bash")
+        container=self.get_container("bash-test")
         real_cmds=["bash"]
         exec_results=[]
         for cmd in cmds:
@@ -80,7 +80,7 @@ class Executor():
         return exec_results
     
     def run_java(self,cmds):
-        container=self.get_container("java")
+        container=self.get_container("java-test")
         real_cmds=["rm -rf /tmp/Test.java","touch /tmp/Test.java"]
         exec_results=[]
         cmd='\n'.join(cmds)
@@ -97,7 +97,7 @@ class Executor():
         return exec_results
     
     def run_node(self,cmds):
-        container=self.get_container("node")
+        container=self.get_container("node-test")
         real_cmds=["rm -rf /tmp/test.js","touch /tmp/test.js"]
         exec_results=[]
         for cmd in cmds:
