@@ -437,7 +437,7 @@ def insert_novel_spider_property(item_id, spider):
     rowcount, titles = get_need_spider_property(item_id, '章节', spider.get_page_titles())
     last_novel_text=''
     for title in titles:
-        novel_text = spider.get_page_novel_detail(title.spider_val)
+        novel_text = spider.get_page_novel_details(title.spider_val)
         insert_spider_property_entity(item_id, rowcount + title.a_href, '章节', title.a_text, novel_text)
         last_novel_text=title.a_text
     max_order_id = get_max_novel_spider_property_order_id(item_id)

@@ -128,6 +128,13 @@ class ParentSpider():
         texts = common_spider.get_beautifulsoup_from_html(html, self.content_tag, attrs=self.content_attrs)
         detail_item = texts[0]
         return self.get_novel_text(detail_item)
+    
+    def get_page_novel_details(self,url):
+        detail_text = self.get_page_novel_detail(url)
+        if detail_text.find("（继续下一页）") !=-1:
+            new_detail_text = self.get_page_novel_detail(url.replace(".html","_2.html"))
+            return detail_text.replace("（继续下一页）", new_detail_text, 1)
+        return detail_text
 
     def get_novel_text(self, html_tag):
         novel_text=""
