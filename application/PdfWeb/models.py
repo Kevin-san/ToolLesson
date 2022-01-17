@@ -195,7 +195,7 @@ class Comment(models.Model):
     Content= models.CharField(max_length=3000,verbose_name=u'评论内容', default='')
     AuthorId = models.IntegerField(verbose_name=u'作者Id')
     AuthorName = models.CharField(max_length=200, verbose_name=u'作者昵称')
-    DeleteFlag=models.BooleanField(default=1,verbose_name='删除状态')
+    DeleteFlag=models.BooleanField(default=0,verbose_name='删除状态')
     CreateTime= models.DateTimeField(verbose_name=u'创建时间',  auto_now_add=True)
     UpdateTime= models.DateTimeField(verbose_name=u'更新时间',  auto_now=True)
     submission_user=models.CharField(default='alvin',max_length=30,verbose_name="上传用户")
