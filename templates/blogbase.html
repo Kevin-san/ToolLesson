@@ -82,7 +82,7 @@
 				</div>
 				<div class="row text-left">
 					<p>评论 <small>共{{ comments|length }}条评论</small></p>
-					<form action="/blog/comment/ins/{{ article.Id }}" method="post">
+					<form action="/blog/comment/ins/{{ article.Id }}/" method="post">
 						{% csrf_token %}
 						<!-- {{ form.media }} -->
 						<div class="form-group">

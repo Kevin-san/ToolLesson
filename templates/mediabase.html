@@ -87,7 +87,7 @@
 					<div class="col-md-1"></div>
 					<div class="col-md-11">
 						<p>评论 <small>共{{ comments|length }}条评论</small></p>
-						<form action="/{{media_type}}/comment/ins/{{ media_section.Id }}" method="post">
+						<form action="/{{media_type}}/comment/ins/{{ media_section.Id }}/" method="post">
 						{% csrf_token %}
 						<!-- {{ form.media }} -->
 						<div class="form-group">

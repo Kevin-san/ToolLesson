@@ -106,7 +106,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-11">
 					<p>评论 <small>共{{ comments|length }}条评论</small></p>
-					<form action="/{{book_type}}/comment/ins/{{ book_content_info.cur_content.Id }}" method="post">
+					<form action="/{{book_type}}/comment/ins/{{ book_content_info.cur_content.Id }}/" method="post">
 					{% csrf_token %}
 					<!-- {{ form.media }} -->
 					<div class="form-group">
