@@ -133,6 +133,19 @@ def get_comments_by_category_id_and_item_id(category_id,item_id):
 def get_comments_by_category_key_and_item_id(category_key,item_id):
     return Comment.objects.filter(CategoryId=category_map[category_key],ItemId=item_id,DeleteFlag=0)
 
+def get_comment_by_category_id_and_comment_id(category_id,comment_id):
+    return Comment.objects.filter(CategoryId=category_id,Id=comment_id,DeleteFlag=0)[0]
+
+def ins_comment_by_category_key_and_item_id(category_key,item_id,content,user_id,user_name):
+    return Comment.objects.create(CategoryId= category_map[category_key],ItemId=item_id,Content=content,AuthorId=user_id,AuthorName=user_name)
+
+def del_comment_by_id(category_key,comment_id):
+    category_id = category_map[category_key]
+    comment = get_comment_by_category_id_and_comment_id(category_id,comment_id)
+    comment.DeleteFlag = 1
+    comment.save(update_fields=['DeleteFlag'])
+    return comment
+
 def get_user_by_name(user_name):
     return User.objects.filter(Name=user_name)
 
@@ -310,6 +323,9 @@ def get_media_sections_by_media_id(media_id):
 
 def get_media_section_count_by_media_id(media_id):
     return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id).count()
+
+def get_media_section_by_id(section_id):
+    return MediaSection.objects.get(DeleteFlag=0,Id=section_id)
 
 def get_common_code_type(code_type):
     return CommonCodeMap.objects.filter(DeleteFlag=0,CodeType=code_type)

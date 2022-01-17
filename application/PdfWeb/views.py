@@ -506,10 +506,35 @@ def media_content(request,media_type,media_id,order_no):
     return render(request,const.MEDIA_BASE_HTML,result)
 
 def comment_add_submit(request,category_key,item_id):
-    pass
+    comment_form = forms.CommentForm(request.POST,request.FILES)
+    if comment_form.is_valid():
+        comment_content = comment_form.cleaned_data['Content']
+        user_id = request.session['user_id']
+        user_name = request.session['user_name']
+        comment = services.ins_comment_info(category_key,item_id,comment_content,user_id,user_name)
+        return render_comment_parent_item(request,category_key, comment.ItemId)
+    return render_comment_parent_item(request, category_key, item_id)
 
 def comment_del(request,category_key,comment_id):
-    pass
+    comment = services.del_comment_by_id(category_key, comment_id)
+    return render_comment_parent_item(request,category_key, comment.ItemId)
+
+def render_comment_parent_item(request,category_key,item_id):
+    if category_key in ('video','audio','image'):
+        media_section = db.get_media_section_by_id(item_id)
+        order_no = media_section.OrderNo
+        media_id = media_section.MediaId
+        return media_content(request, category_key, media_id, order_no)
+    elif category_key in ('novel','learn'):
+        section=db.get_book_section_by_id(item_id)
+        book_id = section.BookId
+        order_no = section.OrderNo
+        book = db.get_book_by_id(book_id)
+        max_order_no = book.MaxSectionId
+        return book_section(request,category_key,book_id,order_no,max_order_no)
+    elif category_key in ('blog'):
+        return blog_article(request,item_id)
+        
 
 @auth_required
 def tool_index(request):

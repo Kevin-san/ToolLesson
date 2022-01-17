@@ -355,6 +355,12 @@ def get_blog_article_info(author_id):
     result['blog_category_list'] = blog_category_list
     return result
 
+def ins_comment_info(category_key,item_id,comment_content,user_id,user_name):
+    return db.ins_comment_by_category_key_and_item_id(category_key, item_id, comment_content, user_id, user_name)
+
+def del_comment_by_id(category_key,comment_id):
+    return db.del_comment_by_id(category_key, comment_id)
+
 def get_tool_val_list():
     tool_val_list = []
     for common_tool_type in tool_menu_list:
