@@ -53,10 +53,10 @@
 						{% endif %}
 					{% elif media_type == 'video' %}
 						{% if total_count == 1 %}
-						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" controls preload="metadata">
+						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" controls autoplay muted preload="metadata">
 						</video >
 						{% else %}
-						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" controls preload="metadata">
+						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" controls autoplay muted preload="metadata">
 						</video >
 						{% endif %}
 					{% endif %}
