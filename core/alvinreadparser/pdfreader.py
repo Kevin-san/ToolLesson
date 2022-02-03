@@ -470,20 +470,20 @@ def start_text_pdfs_process():
     else:
         time.sleep(10)
 if __name__ == "__main__":
-    pass
+#     pass
 #     start_text_pdfs_process()
 #     start_img_pdfs_process()
 
     #'flags': 4, 'font': 'LucidaConsole' pre
     #'flags': 20, 'font': 'MicrosoftYaHei-Bold' p
-#     pdf = "F:\EBook\高级Bash脚本编程指南.3.9.1 (杨春敏 黄毅 译).pdf"
-#     pdfreader = SimplePdfReader(pdf)
-#     for item in pdfreader.extract_dict_to_items(1):
-#         if common_tools.is_list(item):
-#             for it in item:
-#                 print(it)
-#         else:
-#             print(item)
+    pdf = "F:\EBook\高级Bash脚本编程指南.3.9.1 (杨春敏 黄毅 译).pdf"
+    pdfreader = SimplePdfReader(pdf)
+    for item in pdfreader.extract_dict_to_items(1):
+        if common_tools.is_list(item):
+            for it in item:
+                print(it)
+        else:
+            print(item)
 #     output_name = pdfreader.get_pdf_generate_file_name()
 #     output_file = F"{output_name}_struct.txt"
 #     file_wrtr = SimpleFileWriter(output_file)

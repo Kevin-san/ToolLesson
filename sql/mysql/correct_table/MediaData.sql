@@ -19783,3 +19783,24 @@ UPDATE media SET MediaName = REPLACE(MediaName,'.mp3','') WHERE MediaName LIKE '
 UPDATE media SET MediaName = REPLACE(MediaName,'.flac','') WHERE MediaName LIKE '%.flac';
 UPDATE media SET MediaName = REPLACE(MediaName,'.avi','') WHERE MediaName LIKE '%.avi';
 UPDATE media SET MediaName = REPLACE(MediaName,'.mp4','') WHERE MediaName LIKE '%.mp4';
+
+insert into Media values (30001,'Cube.Zero','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30002,'Suicide.Squad','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30003,'冰雪奇缘2','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30004,'地心历险记2：神秘岛','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30005,'惊奇队长','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30006,'失控玩家','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30007,'小萝莉的猴神大叔','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30008,'隐秘而伟大','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30009,'长津湖','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30010,'黑衣人_全球追缉','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30011,'摩天营救','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30012,'摔跤吧!爸爸','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30013,'银河补习班','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30014,'战狼2','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30015,'丛林奇航','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30016,'红色通缉令','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30017,'尚气与十环传奇','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30018,'死侍2','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30019,'银魂2：规则是用来打破的','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into Media values (30020,'蜘蛛侠.英雄远征','/video/电影','','','/img/novel_bg.jpg',5001,7200,2147483648,now(),'alvin',0,'alvin',curdate());

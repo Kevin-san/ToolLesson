@@ -15,6 +15,7 @@ insert into Category values(1004,'blogtag','','','',4,0,'alvin',curdate());
 insert into Category values(1007,'novel','','','',7,0,'alvin',curdate());
 insert into Category values(1009,'image','','','',9,0,'alvin',curdate());
 insert into Category values(1005,'music','','','',5,0,'alvin',curdate());
+insert into Category values(1006,'video','','','',6,0,'alvin',curdate());
 insert into Category values(1010,'vhider','','','',8,0,'alvin',curdate());
 
 insert into Category values(11,'服务端','#linux','','',1001,0,'alvin',curdate());
@@ -175,7 +176,11 @@ insert into Category values(3013,'日本短片','127','ribenduanpian','',1010,0,
 insert into Category values(3014,'欧美短片','128','oumeiduanpian','',1010,0,'alvin',curdate());
 insert into Category values(3015,'动漫卡通','130','dongmankatong','',1010,0,'alvin',curdate());
 
-
+insert into Category values(5001,'电影','','dianying','',1006,0,'alvin',curdate());
+insert into Category values(5002,'动漫','','dongman','',1006,0,'alvin',curdate());
+insert into Category values(5003,'电视剧','','dianshiju','',1006,0,'alvin',curdate());
+insert into Category values(5004,'综艺','','zongyi','',1006,0,'alvin',curdate());
+insert into Category values(5005,'纪录片','','jilupian','',1006,0,'alvin',curdate());
 --insert into Category values(28,'常用工具','#datetool','','',10,0,'alvin',curdate());
 
 --insert into Category values(22,'网络工具','#webtool','','',10,0,'alvin',curdate());

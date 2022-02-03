@@ -19777,4 +19777,27 @@ insert into MediaSection values(19775,19775,0,0,'mp3',232,3714154,now(),'alvin',
 insert into MediaSection values(19776,19776,0,0,'mp3',234,3758750,now(),'alvin',0,'alvin',curdate());
 insert into MediaSection values(19777,19777,0,0,'mp3',226,3625915,now(),'alvin',0,'alvin',curdate());
 
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values()
+
 UPDATE mediasection SET Preffix = 'mp3' WHERE Preffix IN ('flac','mp4','avi');
+
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30001,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30002,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30003,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30004,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30005,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30006,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30007,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30008,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30009,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30010,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30011,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30012,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30013,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30014,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30015,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30016,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30017,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30018,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30019,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
+insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values(30020,0,0,'mp4',7200,2147483648,now(),'alvin',0,'alvin',curdate());
