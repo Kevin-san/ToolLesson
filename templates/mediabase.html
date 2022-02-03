@@ -40,25 +40,25 @@
 				<div class="container">
 					<div class="col-md-12 column text-center">
 					{% if media_type == 'image' %}
-						<img width="800" alt="{{media.MediaName}}_{{media_section.OrderNo}}" src="/media/{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}"/>
+						<img width="800" alt="{{media.MediaName}}_{{media_section.OrderNo}}" src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}"/>
 					{% elif media_type == 'audio' %}
 						{% if total_count == 1 %}
 						<audio controls>
-							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" type="audio/mpeg"/>
+							<source src="/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" type="audio/mpeg"/>
 						</audio>
 						{% else %}
 						<audio controls>
-							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" type="audio/mpeg"/>
+							<source src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" type="audio/mpeg"/>
 						</audio>
 						{% endif %}
 					{% elif media_type == 'video' %}
 						{% if total_count == 1 %}
 						<video width="800" height="600" controls>
-							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" type="video/mp4"/>
+							<source src="/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" type="video/mp4"/>
 						</video >
 						{% else %}
 						<video width="800" height="600"  controls>
-							<source src="/media/{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" type="video/mp4"/>
+							<source src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" type="video/mp4"/>
 						</video >
 						{% endif %}
 					{% endif %}
