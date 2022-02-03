@@ -22,7 +22,7 @@ category_map={
     "novel":db.get_novel_category_type_info(),
     "image":db.get_image_category_type_info(),
     "audio":db.get_audio_category_type_info(),
-    "video":db.get_media_category_type_info(),
+    "video":db.get_video_category_type_info(),
     }
 
 tool_menu_list = db.get_common_tool_type_info()

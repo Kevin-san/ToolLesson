@@ -188,8 +188,8 @@ def get_learn_category_type_info():
 def get_audio_category_type_info():
     return get_category_by_key('music')
 
-def get_media_category_type_info():
-    return get_category_by_key('media')
+def get_video_category_type_info():
+    return get_category_by_key('video')
 
 def get_common_tool_type_info():
     return get_category_by_key('tool')
