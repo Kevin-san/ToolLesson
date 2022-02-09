@@ -30,19 +30,20 @@ class PdfLine():
 
 class PdfSpan():
     
-    def __init__(self,pageno,bbox,size,text):
+    def __init__(self,pageno,bbox,pbbox,size,text):
         self.pageno=pageno
         self.x0=bbox[0]
         self.y0=bbox[1]
         self.index=self.y0
         self.x1=bbox[2]
         self.bbox=bbox
+        self.pbbox = pbbox
         self.size=size
         self.text=text
         self.item_type="span"
     
     def __str__(self):
-        return F"pageno:{self.pageno},x0:{self.x0},y0:{self.y0},x1:{self.x1},size:{self.size},text:{self.text},position:{self.bbox}"
+        return F"pageno:{self.pageno},x0:{self.x0},y0:{self.y0},x1:{self.x1},size:{self.size},text:{self.text},position:{self.bbox},parent_position:{self.pbbox}"
     
     
 class PdfText():
@@ -71,7 +72,7 @@ class PdfTable():
         self.item_type="table"
     
     def __str__(self):
-        return F"pageno:{self.pageno},index:{self.index},size:{self.size},headers:{self.headers},position:{self.bbox}"
+        return F"pageno:{self.pageno},index:{self.index},size:{self.size},headers:{self.headers},details:{self.details},position:{self.bbox}"
     
 class PdfLink():
     
@@ -86,7 +87,7 @@ class PdfLink():
         self.item_type="link"
     
     def __str__(self):
-        return F"pageno:{self.pageno},index:{self.index},xref:{self.xref},size:{self.size},text:{self.text},to_page:{self.to_pageno},positions:{self.bbox}"
+        return F"pageno:{self.pageno},index:{self.index},xref:{self.xref},size:{self.size},to_page:{self.to_pageno},text:{self.text},positions:{self.bbox}"
 
 class PdfImg():
     def __init__(self,pageno,bbox,pdf_image=None):
