@@ -45,6 +45,9 @@ h.hide_strikethrough = True
 html_types=HtmlTypes()
 html_map_keys=html_types.html_strs
 
+def mp3tomidi(file_path):
+    pass
+
 def upper2lower(str_val):
     return str_val.lower()
 

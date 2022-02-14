@@ -9,15 +9,15 @@ import time
 
 def user_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
-    return 'img/article/{0}/{1}'.format(childdir,filename)
+    return 'article/{0}/{1}'.format(childdir,filename)
 
 def book_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
-    return 'img/book/{0}/{1}'.format(childdir,filename)
+    return 'book/{0}/{1}'.format(childdir,filename)
 
 def avdeo_directory_path(instance,filename):
     childdir= time.strftime("%Y/%m/%d/%H/%M/%S", time.localtime())
-    return 'img/avdeo/{0}/{1}'.format(childdir,filename)
+    return 'avdeo/{0}/{1}'.format(childdir,filename)
 
 class Media(models.Model):
     Id=models.AutoField(primary_key=True,verbose_name='Id')

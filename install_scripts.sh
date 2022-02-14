@@ -23,3 +23,23 @@ cp /root/workspace/CorePdfPage/manage.py /usr/local/core_pdf_page
 cp /root/workspace/CorePdfPage/server.crt /usr/local/core_pdf_page
 cp /root/workspace/CorePdfPage/startservice.sh /usr/local/core_pdf_page
 cp /root/workspace/CorePdfPage/init_env.profile /usr/local/core_pdf_page
+
+docker run -dit --name node-test node 
+docker run -dit --name golang-test golang 
+docker run -dit --name python-test python 
+docker run -dit --name perl-test perl 
+docker run -dit --name bash-test centos 
+docker run -dit --name java-test java 
+
+docker run --name node -dit e71b22bd886f
+docker run --name golang -dit 37eabbc422cd
+docker run --name python -dit a42e2a4f3833
+docker run --name perl -dit 3e9417dedf6d
+docker run --name bash -dit 5d0da3dc9764
+docker run --name java -dit d23bdf5b1b1b
+
+pip install poetry
+pip install spleeter
+2stems
+4stems
+5stems
