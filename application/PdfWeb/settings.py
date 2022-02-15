@@ -80,7 +80,7 @@ DATABASES = {
         'PORT':'3306',
     }
 }
-
+#root,xc900923
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -130,15 +130,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ( 
     os.path.join(PARENT_DIR,'static'),
 )
-# 图片储存根路径
+# 鍥剧墖鍌ㄥ瓨鏍硅矾寰�
 MEDIA_ROOT = os.path.join(PARENT_DIR,'media')
-# 图片访问url
+# 鍥剧墖璁块棶url
 MEDIA_URL = '/media/'
 
 MDEDITOR_CONFIGS = {
 'default':{
-    'width': '90%',  # 自定义编辑框宽度
-    'heigth': 500,   # 自定义编辑框高度
+    'width': '90%',  # 鑷畾涔夌紪杈戞瀹藉害
+    'heigth': 500,   # 鑷畾涔夌紪杈戞楂樺害
     'toolbar': ["undo", "redo", "|",
                 "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
                 "h1", "h2", "h3", "h5", "h6", "|",
@@ -146,21 +146,21 @@ MDEDITOR_CONFIGS = {
                 "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime",
                 "emoji", "html-entities", "paalvinentities", "|", "goto-line",
                 "help", "info",
-                "||", "preview", "watch", "fullscreen"],  # 自定义编辑框工具栏
-    'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型
-    'image_folder': 'article',  # 图片保存文件夹名称
-    'theme': 'default',  # 编辑框主题 ，dark / default
-    'preview_theme': 'default',  # 预览区域主题， dark / default
-    'editor_theme': 'default',  # edit区域主题，pastel-on-dark / default
-    'toolbar_autofixed': True,  # 工具栏是否吸顶
-    'search_replace': True,  # 是否开启查找替换
-    'emoji': True,  # 是否开启表情功能
-    'tex': True,  # 是否开启 tex 图表功能
-    'flow_chart': True,  # 是否开启流程图功能
-    'sequence': True,  # 是否开启序列图功能
-    'watch': True,  # 实时预览
-    'lineWrapping': False,  # 自动换行
-    'lineNumbers': True  # 行号
+                "||", "preview", "watch", "fullscreen"],  # 鑷畾涔夌紪杈戞宸ュ叿鏍�
+    'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 鍥剧墖涓婁紶鏍煎紡绫诲瀷
+    'image_folder': 'article',  # 鍥剧墖淇濆瓨鏂囦欢澶瑰悕绉�
+    'theme': 'default',  # 缂栬緫妗嗕富棰� 锛宒ark / default
+    'preview_theme': 'default',  # 棰勮鍖哄煙涓婚锛� dark / default
+    'editor_theme': 'default',  # edit鍖哄煙涓婚锛宲astel-on-dark / default
+    'toolbar_autofixed': True,  # 宸ュ叿鏍忔槸鍚﹀惛椤�
+    'search_replace': True,  # 鏄惁寮�鍚煡鎵炬浛鎹�
+    'emoji': True,  # 鏄惁寮�鍚〃鎯呭姛鑳�
+    'tex': True,  # 鏄惁寮�鍚� tex 鍥捐〃鍔熻兘
+    'flow_chart': True,  # 鏄惁寮�鍚祦绋嬪浘鍔熻兘
+    'sequence': True,  # 鏄惁寮�鍚簭鍒楀浘鍔熻兘
+    'watch': True,  # 瀹炴椂棰勮
+    'lineWrapping': False,  # 鑷姩鎹㈣
+    'lineNumbers': True  # 琛屽彿
     }
 }
 
