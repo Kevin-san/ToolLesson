@@ -14,5 +14,5 @@ def get_ffmpeg_cmd():
 
 def get_holly_file():
     system_name = get_system_name()
-    holly_map={"Windows":"C:/Users/xcKev/eclipse-workspace/KToolApps/test/holiy_cn.txt","Linux":"/usr/local/core_pdf_page/config/holiy_cn.txt"}
+    holly_map={"Windows":"E:/eclipse-workspace/KToolApps/test/holiy_cn.txt","Linux":"/usr/local/core_pdf_page/config/holiy_cn.txt"}
     return holly_map[system_name]

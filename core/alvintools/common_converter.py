@@ -16,7 +16,8 @@ from pdfminer.converter import XMLConverter,HTMLConverter,TextConverter
 from pdfminer.layout import LAParams
 import fitz
 import re
-from alvintools import common_tools, common_formater
+import os
+from alvintools import common_tools, common_formater, common_filer
 import alvintools.common_logger as log
 import pypinyin
 from Pinyin2Hanzi import DefaultDagParams,dag
@@ -29,12 +30,17 @@ from alvinconst.javatmps import JavaConst
 from alvinconst.csharptmps import CSharpConst
 from alvinconst.langtypes import _const
 from alvinspider import common_spider
+import alvintools.common_audiotomidi as common_audiotomidi
+from spleeter.separator import Separator,AudioAdapter
+from spleeter.audio import STFTBackend,Codec
+
 java_const = JavaConst()
 csharp_const=CSharpConst()
 common_const=_const()
 column_types=common_const.sql_column_types
 sql_java_column_map = common_const.sql_java_col_map
 sql_cs_column_map=common_const.sql_csharp_col_map
+
 
 current_log=log.get_log('converter', log.LOG_DIR, 'converter')
 h = html2text.HTML2Text()
@@ -45,8 +51,20 @@ h.hide_strikethrough = True
 html_types=HtmlTypes()
 html_map_keys=html_types.html_strs
 
-def mp3tomidi(file_path):
-    pass
+def mp3toenvmp3(file_path,output_folder):
+    adapter="spleeter.audio.ffmpeg.FFMPEGProcessAudioAdapter"
+    audio_adapter= AudioAdapter.get(adapter)
+    separator = Separator("spleeter:2stems", MWF=False, stft_backend=STFTBackend.LIBROSA)
+    separator.separate_to_file(str(file_path),str(output_folder),audio_adapter=audio_adapter,offset=0.0,duration=600,codec=Codec.WAV,bitrate="128k",filename_format="{filename}/{instrument}.{codec}",synchronous=False)
+    
+def mp3tomidi(file_path,output_folder):
+    mp3toenvmp3(file_path, output_folder)
+    mp3_file_name = common_filer.get_file_name(file_path)
+    file_name = mp3_file_name.replace(".mp3","")
+    # https://www.upf.edu/web/mtg/melodia
+    # melodia
+    # https://docs.google.com/forms/d/e/1FAIpQLScAWn0xrRgSsMIacBZEv2sFnqnlHBDVe1bSxnrMB6E6lV_ykw/viewform
+    common_audiotomidi.audio_to_midi_melodia(output_folder+"/"+file_name+"/accompaniment.wav", output_folder+"/"+file_name+".mid", 60, 0.25, 0.1, True)
 
 def upper2lower(str_val):
     return str_val.lower()
@@ -911,3 +929,6 @@ def regex2bash(str1):
     fi
     '''
     return bash_code
+
+if __name__=="__main__":
+    mp3tomidi("E:/音乐/泠鸢yousa - 羽忆.mp3", "E:/midi")
