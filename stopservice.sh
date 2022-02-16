@@ -16,3 +16,6 @@ function kill_process(){
 
 `kill_process manage.py core_pdf_page`
 `kill_process test.py core_pdf_page`
+
+systemctl stop docker.socket
+systemctl stop docker
