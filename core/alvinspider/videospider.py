@@ -155,6 +155,11 @@ class VideoSpider():
             videos.append(video_item)
         return videos
 
+def main():
+    videospider=VideoSpider("https://www.qmdy5.com/guochanju/xingfumima/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","幸福密码")
+    videospider.download_all_videos()
+    videospider=VideoSpider("https://www.qmdy5.com/guochanju/laimaodeshizidaoying/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","赖猫的狮子倒影")
+    videospider.download_all_videos()
     
 if __name__=="__main__":
 #     common_filer.merge_ts_files("I:/电视剧/请回答1988/第2集", {}, "I:/电视剧/请回答1988/第2集.ts")
@@ -163,7 +168,9 @@ if __name__=="__main__":
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/damingwangchao1566/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"K:/Spider/video/","TV","大明王朝1566")
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/dazhangfu2014/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","大丈夫")
 #     videospider.download_all_videos()
-    videospider=VideoSpider("https://www.qmdy5.com/guochanju/yinmierweida/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","隐秘而伟大")
+    videospider=VideoSpider("https://www.qmdy5.com/guochanju/xingfumima/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","幸福密码")
+    videospider.download_all_videos()
+    videospider=VideoSpider("https://www.qmdy5.com/guochanju/laimaodeshizidaoying/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","赖猫的狮子倒影")
     videospider.download_all_videos()
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/pannizhe/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"I:/","电视剧","叛逆者")
 #     videospider.download_all_videos()
