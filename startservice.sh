@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+docker rm $(docker ps -a -q)
 docker run -dit --name node-test node
 docker run -dit --name golang-test golang
 docker run -dit --name python-test python
