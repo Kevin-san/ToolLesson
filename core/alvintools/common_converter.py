@@ -16,7 +16,6 @@ from pdfminer.converter import XMLConverter,HTMLConverter,TextConverter
 from pdfminer.layout import LAParams
 import fitz
 import re
-import os
 from alvintools import common_tools, common_formater, common_filer
 import alvintools.common_logger as log
 import pypinyin

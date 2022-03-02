@@ -19,7 +19,7 @@ from Crypto.Cipher import AES
 from pydub import AudioSegment
 from moviepy.editor import VideoFileClip
 import zipfile
-from alvinspider import artifactspider
+from alvintools import common_tools
 
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
@@ -273,7 +273,7 @@ def get_file_infos_service(local_xenv_home,local_home):
     path_list=[]
     current_log.info('start time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
     recur_file_infos(local_xenv_home,path_list)
-    dir_list,file_list=artifactspider.get_directory_file_list(path_list)
+    dir_list,file_list=common_tools.get_directory_file_list(path_list)
     arti_f=open(local_home+'/xenv.txt','w+')
     for index,dir_name in enumerate(dir_list):
         arti_f.write(F'{dir_name}={file_list[index]}\n')
