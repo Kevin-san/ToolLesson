@@ -24,6 +24,11 @@ from alvintools import common_tools
 
 current_log=log.get_log('filer', log.LOG_DIR, 'filer')
 
+def handle_uploaded_file(file_h,file_name):
+    write_h=open(file_name,"wb+")
+    for chunk in file_h.chunks():
+        write_h.write(chunk)
+
 def get_stream_data(file_path):
     current_log.info(F'read {file_path}')
     stream_reader = open(file_path,'rb')

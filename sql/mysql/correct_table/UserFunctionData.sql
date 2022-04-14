@@ -19,3 +19,4 @@ insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/audio/media/index',0,'alvin',curdate());
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/video/media/index',0,'alvin',curdate());
 insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',1,'/image/media/index',0,'alvin',curdate());
+insert into UserFunction(GroupKey,RoleId,FunctionStr,DeleteFlag,submission_user,submission_date) values ('a',0,'/vhider/media/index',0,'alvin',curdate());

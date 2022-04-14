@@ -80,12 +80,14 @@ def get_local_ip():
     return requests.get('https://api.ipify.org/?format=json').text
 
 def get_response_by_seconds(artifact_url,user,password,seconds,referer_url=''):
+    seconds = 0
     if seconds>0:
         real_seconds=random.randint(seconds,10)
         if seconds >=10:
             real_seconds=random.randint(seconds,seconds+10)
         current_log.info(real_seconds)
         time.sleep(real_seconds)
+    current_log.info(artifact_url)
     res=get_response(artifact_url, user, password,referer_url)
     return res
 

@@ -270,7 +270,11 @@ def find_vals_from_dict_by_keystr(complex_dict,key_str,result_vals):
     get_dict_vals(complex_dict, key_str, result_vals)
     current_log.info(result_vals)
     return result_vals
-                
+
+def get_upload_path(parent_folder,media_type):
+    upload_map={"video":"视频","audio":"音频","image":"图片","learn":"学习","novel":"小说"}
+    return parent_folder+"/"+upload_map[media_type]
+
 def get_list_vals(values,key_str,result_vals):
     for val in values:
         if is_str(val) and val.find(key_str)!=-1:

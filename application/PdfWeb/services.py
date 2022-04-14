@@ -23,6 +23,7 @@ category_map={
     "image":db.get_image_category_type_info(),
     "audio":db.get_audio_category_type_info(),
     "video":db.get_video_category_type_info(),
+    "vhider":db.get_vhider_category_type_info()
     }
 
 tool_menu_list = db.get_common_tool_type_info()
@@ -139,6 +140,9 @@ def get_media_content(media_type,media_id,order_no):
     keys = ['media_type','source_list','media','media_section','total_count','CategoryName','comments']
     vals=[media_type,category_map[media_type],media,media_section,total_count,category_name,comments]
     return common_tools.create_map(keys, vals)
+
+def init_media_info(media_dict,media_section_dict):
+    return db.ins_media(media_dict, media_section_dict)
 
 def init_common_book_info(link_dir,category):
     parent_dir = MEDIA_ROOT+link_dir
@@ -269,6 +273,9 @@ def get_section_info(book_type,section_id):
 def get_book_section_by_order_no(book_id,order_no):
     return db.get_book_section_by_order_no(book_id,order_no)
 
+def init_book_info(book_dict,write_file,book_type):
+    return db.ins_book_with_sections(book_dict,write_file,book_type)
+    
 def del_book_by_id(book_type,book_id):
     category_id=db.del_book_by_id(book_id)
     return get_book_list(book_type, category_id, 1)

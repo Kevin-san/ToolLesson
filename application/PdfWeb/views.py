@@ -11,15 +11,13 @@ import datetime
 from django.contrib.auth.hashers import check_password
 from django.http.response import HttpResponse, StreamingHttpResponse
 import json
-from alvintools import common_filer
+from alvintools import common_filer, common_tools
 from django.utils.http import urlquote
 from PdfWeb.forms import TxtUploadForm, PdfUploadForm, JpgUploadForm,\
-    Mp4UploadForm, Mp3UploadForm
+    Mp4UploadForm, Mp3UploadForm,all_categorys_map,preffix_map
 from PdfWeb.decorators import auth_required, login_required
 import django.contrib.messages as messages
-
-blog_categorys_map = dict(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
-tag_categorys_map = dict(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
+import alvintools
 
 def create_dict_base_on_keys_form(keys_list,form_data):
     dict_result={}
@@ -35,10 +33,10 @@ def create_dict_from_keys_form(keys_list,int_keys,form_data):
         dict_result[dict_key] = int(form_data.cleaned_data[dict_key])
         if dict_key == 'CategoryId':
             dict_result['CategoryId'] = int(form_data.cleaned_data[dict_key])
-            dict_result['CategoryName'] = blog_categorys_map[dict_result['CategoryId']]
+            dict_result['CategoryName'] = all_categorys_map[dict_result['CategoryId']]
         elif dict_key == 'TagId':
             dict_result['TagId'] = int(form_data.cleaned_data[dict_key])
-            dict_result['TagName'] = tag_categorys_map[dict_result['TagId']]
+            dict_result['TagName'] = all_categorys_map[dict_result['TagId']]
     return dict_result
     
 # def get_template_detail(book_lesson_id,api_key,menus):
@@ -93,6 +91,7 @@ def useredit(request):
             request.session['user_id'] = user.Id
             request.session['user_name'] = user.Name
             request.session['user_logo'] = user.Logo
+            request.session['user_role'] = user.Permissions
     return redirect(const.USER_PROFILE_URL)
 
 @login_required
@@ -115,6 +114,7 @@ def login(request):
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name
                 request.session['user_logo'] = user.Logo.url
+                request.session['user_role'] = user.Permissions
                 return redirect(const.INDEX_URL)
             else:
                 message = const.WRONG_PWD
@@ -162,7 +162,7 @@ def send_email(email, code):
     from django.core.mail import EmailMultiAlternatives
     subject = '来自www.alvin.com的确认邮件'
     text_content = '欢迎访问www.alvin.com，这里是Alvin站点，专注于各种知识分享！'
-    html_content = '<p>欢迎注册<a href="https://{}/confirm/?code={}" target="blank">www.alvin.com</a>，这里是Alvin的站点，专注于各种知识的分享！</p>'.format('127.0.0.1:8000',code)
+    html_content = '<p>欢迎注册<a href="https://{}/confirm/?code={}" target="blank">www.alvin.com</a>，这里是Alvin的站点，专注于各种知识的分享！</p>'.format('192.168.31.103:8000',code)
     msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -254,9 +254,9 @@ def blog_upd_submit(request):
         article = article_dict['article']
         article.Synopsis = article_form.cleaned_data['Synopsis']
         article.CategoryId = int(article_form.cleaned_data['CategoryId'])
-        article.CategoryName = blog_categorys_map[article.CategoryId]
+        article.CategoryName = all_categorys_map[article.CategoryId]
         article.TagId = int(article_form.cleaned_data['TagId'])
-        article.TagName = tag_categorys_map[article.TagId]
+        article.TagName = all_categorys_map[article.TagId]
         article.Type = int(article_form.cleaned_data['Type'])
         article.Original = int(article_form.cleaned_data['Original'])
         article.Content = article_form.cleaned_data['Content']
@@ -300,6 +300,29 @@ def book_upload(request,book_type):
     if book_type == 'learn':
         form = PdfUploadForm()
     result['form']=form
+    return render(request,const.FILE_UPLOAD_HTML,result)
+
+@auth_required
+def book_upload_submit(request,book_type):
+    result=dict()
+    form = TxtUploadForm(request.POST,request.FILES)
+    if book_type == 'learn':
+        form = PdfUploadForm(request.POST,request.FILES)
+    result['form']=form
+    if form.is_valid():
+        preffix = preffix_map[book_type]
+        book_name=form.cleaned_data['title']
+        category_id=form.cleaned_data['CategoryId']
+        category_name = all_categorys_map[category_id]
+        parent_dir = common_tools.get_upload_path(alvintools.get_remote_folder(), book_type)+"/"+category_name
+        write_file = parent_dir+"/"+book_name+"."+preffix
+        common_filer.make_dirs(parent_dir)
+        common_filer.handle_uploaded_file(request.FILES['file'], write_file)
+        content=form.cleaned_data['description']
+        authors=form.cleaned_data['author']
+        book_dict={"BookName":book_name,"Description":content,"Author":authors,"ImageContent":"","MaxSectionId":0,"MaxSectionName":""}
+        book_info = services.init_book_info(book_dict,write_file,book_type)
+        return book_menu(request, book_type, book_info.Id)
     return render(request,const.FILE_UPLOAD_HTML,result)
 
 @auth_required
@@ -486,7 +509,26 @@ def media_upload_submit(request,media_type):
         form = Mp3UploadForm(request.POST,request.FILES)
     result['form']=form
     if form.is_valid():
-        return "Cool"
+        preffix = preffix_map[media_type]
+        media_name=form.cleaned_data['title']
+        category_id=form.cleaned_data['CategoryId']
+        category_name = all_categorys_map[category_id]
+        parent_dir = common_tools.get_upload_path(alvintools.get_remote_folder(), media_type)+"/"+category_name
+        if media_type == "image":
+            parent_dir = parent_dir + "/"+media_name
+        write_file = parent_dir+"/"+media_name+"."+preffix
+        common_filer.make_dirs(parent_dir)
+        common_filer.handle_uploaded_file(request.FILES['file'], write_file)
+        content=form.cleaned_data['description']
+        authors=form.cleaned_data['author']
+        total_size = common_filer.get_file_size(write_file)
+        total_time = 0
+        if media_type != "image":
+            total_time = common_filer.get_file_total_time(write_file, media_type)
+        media_dict={"MediaName":media_name,"ParentDir":parent_dir,"Content":content,"Authors":authors,"ImageContent":"","TotalTime":total_time,"TotalSize":total_size}
+        media_section_dict={"OrderNo":0,"SectionNo":0,"Preffix":preffix,"Time":total_time,"Size":total_size}
+        media_section = services.init_media_info(media_dict,media_section_dict)
+        return media_content(request,media_type,media_section.MediaId,media_section.OrderNo)
     return render(request,const.FILE_UPLOAD_HTML,result)
 
 @auth_required
@@ -497,7 +539,7 @@ def media_index(request,media_type):
 @auth_required
 def media_list(request,media_type,category_id,page_no):
     result = services.get_media_list(media_type,category_id,page_no)
-    return render(request,const.MEDIA_INDEX_HTML,result)
+    return render(request,const.MEDIA_INDEX_HTML,result)   
 
 @auth_required
 def media_content(request,media_type,media_id,order_no):

@@ -175,6 +175,7 @@ insert into Category values(3012,'日本写真','129','ribenxiezhen','',1010,0,'
 insert into Category values(3013,'日本短片','127','ribenduanpian','',1010,0,'alvin',curdate());
 insert into Category values(3014,'欧美短片','128','oumeiduanpian','',1010,0,'alvin',curdate());
 insert into Category values(3015,'动漫卡通','130','dongmankatong','',1010,0,'alvin',curdate());
+insert into Category values(3016,'漫画图片','10','manhuatupian','',1010,0,'alvin',curdate());
 
 insert into Category values(5001,'电影','','dianying','',1006,0,'alvin',curdate());
 insert into Category values(5002,'动漫','','dongman','',1006,0,'alvin',curdate());

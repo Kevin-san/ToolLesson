@@ -10,6 +10,7 @@ from PdfWeb.models import CommonRules,User,UserConfirmString,UserFunction, Commo
 from PdfWeb.entitys import BookIndexItem,BookContentItem
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
+from alvintools import common_spliter
 
 category_map={'learn':2,'tool':3,'blog':4,'audio':5,'video':6,'novel':7,'hiders':8,'image':9}
 
@@ -197,6 +198,9 @@ def get_common_tool_type_info():
 def get_blog_category_type_info():
     return get_category_by_key('blog')
 
+def get_vhider_category_type_info():
+    return get_category_by_key('vhider')
+
 def get_novel_category_type_info():
     return get_category_by_key('novel')
 #     category_list = get_category_by_key('novel')
@@ -245,6 +249,29 @@ def del_book_by_id(book_id):
 def upd_book(book):
     book.save()
 
+def ins_book_with_sections(book_dict,write_file,book_type):
+    if book_type == "novel":
+        book_name = book_dict['BookName']
+        book_infos = get_book_by_name(book_name)
+        book_sections = common_spliter.split_txt_novel_to_book_section_dicts(write_file)
+        if book_infos:
+            book_info = book_infos[0]
+            if get_book_sections_by_book_id(book_info.Id):
+                return book_info.Id
+        else:
+            book_dict['MaxSectionId']=book_sections[-1]['SectionNo']
+            book_dict['MaxSectionName']=book_sections[-1]['ChapterName']
+            book_info = ins_book(book_dict)
+        for book_section_dict in book_sections:
+            book_section_dict['BookId'] = book_info.Id
+            ins_section(book_section_dict)
+        return book_info.Id
+    else:
+        book_name = book_dict['BookName']
+        book_infos = get_book_by_name(book_name)
+        book_sections = common_spliter.split_pdf_file_to_book_section_dicts(write_file)
+        
+
 def ins_book(book_dict):
     return Book.objects.create(**book_dict)
 
@@ -253,6 +280,9 @@ def get_book_count_by_category_id(category_id):
 
 def get_book_by_id(book_id):
     return Book.objects.filter(DeleteFlag=0,Id=book_id)[0]
+
+def get_book_by_name(book_name):
+    return Book.objects.filter(DeleteFlag=0,BookName=book_name)
 
 def get_book_infos_by_author(author_name):
     return Book.objects.filter(DeleteFlag=0,Author=author_name)
@@ -303,6 +333,19 @@ def get_book_distinct_id(section):
         return None
     return section.OrderNo
 
+def ins_media(media_dict,media_section_dict):
+    medias = get_media_by_name(media_dict['MediaName'],media_dict['ParentDir'])
+    if medias:
+        media_info = medias[0]
+        media_section_dict['OrderNo']=media_section_dict['OrderNo']+1
+    else:
+        media_info=Media.objects.create(**media_dict)
+    media_section_dict['MediaId']=media_info['Id']
+    return ins_single_media_section(media_section_dict)
+    
+def ins_single_media_section(media_section_dict):
+    return MediaSection.objects.create(**media_section_dict)
+
 def get_media_by_category_id(category_id,page_no,page_count):
     page_no = int(page_no)
     start_row=page_no*page_count-page_count
@@ -317,6 +360,9 @@ def get_media_count_by_category_id(category_id):
 
 def get_media_by_id(media_id):
     return Media.objects.get(DeleteFlag=0,Id=media_id)
+
+def get_media_by_name(media_name,parent_dir):
+    return Media.objects.filter(DeleteFlag=0,MediaName=media_name,ParentDir=parent_dir)
 
 def get_media_section_by_media_id_order_no(media_id,order_no):
     return MediaSection.objects.filter(DeleteFlag=0,MediaId=media_id,OrderNo=order_no)[0]

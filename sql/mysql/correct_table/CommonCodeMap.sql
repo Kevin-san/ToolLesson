@@ -16,9 +16,10 @@ create table IF NOT EXISTS `CommonCodeMap`(
 	PRIMARY KEY ( `Id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/audio/','I:/音频/');
-insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/img/','I:/图片/');
-insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/video/','I:/视频/');
-insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/novel/','I:/小说/');
-insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/learn/','I:/学习/');
-insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/blog/','I:/博客/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/audio/','/mnt/in/音频/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/img/','/mnt/in/图片/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/video/','/mnt/in/视频/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/novel/','/mnt/in/小说/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/learn/','/mnt/in/学习/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/blog/','/mnt/in/博客/');
+insert into CommonCodeMap(CodeType,TypeKey,TypeVal) values('LinkDirectory','/vhider/','/mnt/in/Spider/Hider/');

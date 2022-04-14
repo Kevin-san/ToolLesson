@@ -20,6 +20,9 @@ novel_categorys = db.get_novel_category_type_info().values_list('CategoryId','Ca
 learn_categorys = db.get_learn_category_type_info().values_list('CategoryId','CategoryName')
 image_categorys = db.get_image_category_type_info().values_list('CategoryId','CategoryName')
 audio_categorys = db.get_audio_category_type_info().values_list('CategoryId','CategoryName')
+video_categorys = db.get_video_category_type_info().values_list('CategoryId','CategoryName')
+all_categorys=blog_categorys+tag_categorys+novel_categorys+learn_categorys+image_categorys+audio_categorys+video_categorys
+all_categorys_map=dict(all_categorys)
 original_categorys = (
     (1,'原创'),
     (0,'转载')
@@ -29,7 +32,7 @@ type_categorys = (
     (0,'草稿'),
     (1,'正式')
 )
-
+preffix_map={"image":"jpg","audio":"mp3","video":"mp4","learn":"pdf","novel":"txt"}
 permissions= (
         ('b1c1d8e4f4g1','默认游客'), # 博客 读 课程 读  小说 读 
         ('b1c2d8e4f4g1','博客博主'), # 博客 读写
@@ -87,7 +90,7 @@ class JpgUploadForm(forms.Form):
 class Mp4UploadForm(forms.Form):
     """视频上传界面"""
     title=forms.CharField(label="标题",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
-    CategoryId = fields.ChoiceField(label="所属分类",choices=audio_categorys,initial=301,widget=forms.widgets.Select)
+    CategoryId = fields.ChoiceField(label="所属分类",choices=video_categorys,initial=5001,widget=forms.widgets.Select)
     description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
     file=forms.FileField(label="视频",validators=[validators.FileExtensionValidator(['mp4'],message='视频必须是mp4文件')])
     action="/video/media/upload"
