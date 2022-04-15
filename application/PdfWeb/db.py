@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
 from alvintools import common_spliter
 
-category_map={'learn':2,'tool':3,'blog':4,'audio':5,'video':6,'novel':7,'hiders':8,'image':9}
+category_map={'learn':2,'tool':3,'blog':4,'audio':5,'video':6,'novel':7,'vhider':8,'image':9}
 
 
 def get_prev_order_id(order_id):

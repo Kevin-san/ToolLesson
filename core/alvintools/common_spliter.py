@@ -134,15 +134,14 @@ def recur_hider_files(dir_path,parent_dir,media_type):
                 child_files = common_filer.get_child_files(file_path)
                 child_files.sort()
                 for child_id, child_file in enumerate(child_files):
-                    child_idx = child_id +1
                     child_file_infos = child_file.split(".")
                     child_file_prefix= child_file_infos[-1]
-                    child_correct_file = file_name+"_"+str(child_idx)+"."+child_file_prefix
+                    child_correct_file = file_name+"_"+str(child_id)+"."+child_file_prefix
                     print(child_file)
                     if child_correct_file not in child_files:
                         print(child_correct_file)
                         common_filer.move_file(file_path+"/"+child_file, file_path+"/"+child_correct_file)
-                    media_section_sql_str = "insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values("+start_id_str+","+str(child_idx)+",0,'"+child_file_prefix+"',7200,0,now(),'alvin',0,'alvin',curdate());"
+                    media_section_sql_str = "insert into MediaSection(MediaId,OrderNo,SectionNo,Preffix,Time,Size,UpdateTime,UpdateUser,DeleteFlag,submission_user,submission_date) values("+start_id_str+","+str(child_id)+",0,'"+child_file_prefix+"',7200,0,now(),'alvin',0,'alvin',curdate());"
                     media_section_sql_file_w.append_new_line(media_section_sql_str)
             else:
                 print("match:"+file_path)
@@ -155,11 +154,13 @@ def rename_files(dir_path,parent_dir):
         child_files = common_filer.get_child_files(file_path)
         child_correct_file = file_name+"_0.jpg"
         child_correct_file1 = file_name +"_0.png"
-        if child_correct_file in child_files or child_correct_file1 in child_files:
-            for child_id in range(len(child_files)-1,-1,-1):
-                child_idx = child_id+1
+        child_correct_file2 = file_name + "_0.PNG"
+        if child_correct_file not in child_files and child_correct_file1 not in child_files and child_correct_file2 not in child_files:
+            for child_id in range(1,len(child_files)+1):
+                child_idx = child_id-1
                 child_file = file_name+"_"+str(child_id)+".jpg"
                 child_file1 = file_name+"_"+str(child_id)+".png"
+                child_file2 = file_name+"_"+str(child_id)+".PNG"
                 if child_file in child_files :
                     correct_file_name = file_name+"_"+str(child_idx)+".jpg"
                     print(file_path+"/"+child_file+","+file_path+"/"+correct_file_name)
@@ -169,6 +170,10 @@ def rename_files(dir_path,parent_dir):
                     correct_file_name1 = file_name+"_"+str(child_idx)+".png"
                     print(file_path+"/"+child_file1+","+file_path+"/"+correct_file_name1)
                     common_filer.move_file(file_path+"/"+child_file1, file_path+"/"+correct_file_name1)
+                elif child_file2 in child_files:
+                    correct_file_name1 = file_name+"_"+str(child_idx)+".png"
+                    print(file_path+"/"+child_file2+","+file_path+"/"+correct_file_name1)
+                    common_filer.move_file(file_path+"/"+child_file2, file_path+"/"+correct_file_name1)
 
 
 def rename_child_files(dir_path):
@@ -180,7 +185,7 @@ def rename_child_files(dir_path):
 if __name__ == "__main__":
 #     recur_split_novels_in_novel_parent_dir("Y://小说//仙幻")
 #     recur_hider_files("Y://Spider//Hider","Video//亚洲无码","video")
-#     recur_hider_files("Y://Spider//Hider","Image//漫画","image")
-#     rename_files("Y://Spider//Hider","Image//漫画")
+#     recur_hider_files("Y://Spider//Hider","Image//unlist","image")
+    rename_files("Y://Spider//Hider","Image//漫画")
+# 1. rename files 2. insert data 3. update data 4. soft link
 #     rename_child_files("Y://Spider//Hider//Image//漫画//[漫画][渣渣汉化组][柚木N]姉恋")
-    pass

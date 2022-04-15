@@ -7,12 +7,14 @@ ln -s /mnt/in/视频 /usr/local/core_pdf_page/media/video
 ln -s /mnt/in/小说 /usr/local/core_pdf_page/media/novel
 ln -s /mnt/in/学习 /usr/local/core_pdf_page/media/learn
 ln -s /mnt/in/博客 /usr/local/core_pdf_page/media/blog
+ln -s /mnt/in/Spider/Hider /usr/local/core_pdf_page/media/vhider
 rm -f /usr/local/core_pdf_page/media/audio
 rm -f /usr/local/core_pdf_page/media/img
 rm -f /usr/local/core_pdf_page/media/video
 rm -f /usr/local/core_pdf_page/media/novel
 rm -f /usr/local/core_pdf_page/media/learn
 rm -f /usr/local/core_pdf_page/media/blog
+rm -f /usr/local/core_pdf_page/media/vhider
 rm -rf /usr/local/core_pdf_page/*
 
 cp -r /root/workspace/CorePdfPage/templates /usr/local/core_pdf_page

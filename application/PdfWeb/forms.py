@@ -14,14 +14,15 @@ gender = (
         ('1', "男"),
         ('0', "女"),
 )
-blog_categorys = db.get_blog_category_type_info().values_list('CategoryId','CategoryName')
-tag_categorys = db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName')
-novel_categorys = db.get_novel_category_type_info().values_list('CategoryId','CategoryName')
-learn_categorys = db.get_learn_category_type_info().values_list('CategoryId','CategoryName')
-image_categorys = db.get_image_category_type_info().values_list('CategoryId','CategoryName')
-audio_categorys = db.get_audio_category_type_info().values_list('CategoryId','CategoryName')
-video_categorys = db.get_video_category_type_info().values_list('CategoryId','CategoryName')
-all_categorys=blog_categorys+tag_categorys+novel_categorys+learn_categorys+image_categorys+audio_categorys+video_categorys
+blog_categorys = list(db.get_blog_category_type_info().values_list('CategoryId','CategoryName'))
+tag_categorys = list(db.get_blog_tag_category_type_info().values_list('CategoryId','CategoryName'))
+novel_categorys = list(db.get_novel_category_type_info().values_list('CategoryId','CategoryName'))
+learn_categorys = list(db.get_learn_category_type_info().values_list('CategoryId','CategoryName'))
+image_categorys = list(db.get_image_category_type_info().values_list('CategoryId','CategoryName'))
+audio_categorys = list(db.get_audio_category_type_info().values_list('CategoryId','CategoryName'))
+video_categorys = list(db.get_video_category_type_info().values_list('CategoryId','CategoryName'))
+vhider_categorys = list(db.get_vhider_category_type_info().values_list('CategoryId','CategoryName'))
+all_categorys=blog_categorys+tag_categorys+novel_categorys+learn_categorys+image_categorys+audio_categorys+video_categorys+vhider_categorys
 all_categorys_map=dict(all_categorys)
 original_categorys = (
     (1,'原创'),
