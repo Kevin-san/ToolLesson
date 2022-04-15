@@ -71,21 +71,14 @@
 				</div>
 				{% endif %}
 				<div class="col-md-12 text-center">
-				{% if total_count %}
-					<div class="row clearfix">
-						<ul class="pagination pagination-lg">
-						{% for i in "x"|ljust:total_count %}
-						{% if forloop.counter0|divisibleby:10 %}
-						</ul>
-						</div>
-						<div class="row clearfix">
-						<ul class="pagination pagination-lg">
-						{% endif %}
+				{% if pages %}
+					<ul class="pagination pagination-lg">
+						{% for page in pages %}
 						<li>
-							 <a href="/{{ media_type }}/media/content/{{media.Id}}/{{forloop.counter0}}">{{ forloop.counter }}</a>
+							 <a href="/{{ media_type }}/media/{{ page.page_url }}">{{ page.page_no }}</a>
 						</li>
 						{% endfor %}
-					</div>
+					</ul>
 				{% endif %}
 				</div>
 				<div class="row">
