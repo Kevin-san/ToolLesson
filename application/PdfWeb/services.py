@@ -46,13 +46,14 @@ def get_pages(begin_no,end_no,category_id,num_pages):
 def get_pages_by_zero(begin_no,end_no,middle_str,num_pages):
     pages = []
     pages.append(PageInfoItem("首页",F'{middle_str}/0'))
-    if begin_no >=0:
-        prev_page_no = begin_no 
+    if begin_no >0:
+        prev_page_no = begin_no -1
         pages.append(PageInfoItem("上一页",F'{middle_str}/{prev_page_no}'))
     for i in range(begin_no, end_no):
-        page_no=i+1
+        page_no=i
         page=PageInfoItem(page_no,F'{middle_str}/{page_no}')
         pages.append(page)
+    num_pages = num_pages-1
     pages.append(PageInfoItem("末页",F'{middle_str}/{num_pages}'))
     return pages
 
@@ -68,7 +69,7 @@ def pages_help_by_zero(page,num_pages,category_id,maxpage):
     '''
     
     if page is None:#首页时page=None
-        p=0
+        p=1
     else:
         p = int(page)
     # print(num_pages,p,maxpage)
@@ -77,16 +78,16 @@ def pages_help_by_zero(page,num_pages,category_id,maxpage):
         #假设100页 100-98=2,页尾处理
         # 结果小于规定数但是当前页大于规定页数
         # print("结果小于规定数但是当前页大于规定页数",[i + 1 for i in range(num_pages - maxpage, num_pages)])
-        return get_pages(num_pages - maxpage, num_pages,category_id,num_pages)
+        return get_pages_by_zero(num_pages - maxpage, num_pages,category_id,num_pages)
     elif num_pages <= maxpage:
         #假设3页  3<6，总页数很少，少于规定页数
         # 当前页码数小于规定数
         # print("当前页码数小于规定数",[i + 1 for i in range(num_pages)])
-        return get_pages(-1, num_pages,category_id,num_pages)
+        return get_pages_by_zero(0, num_pages,category_id,num_pages)
     else:
         # 正常页数分配
         # print("正常页数分配",[i + 1 for i in range(p - int(maxpage / 2), p + int(maxpage / 2))])
-        return get_pages(p-1, p + maxpage-1 ,category_id,num_pages)
+        return get_pages_by_zero(p-1, p + maxpage-1 ,category_id,num_pages)
 
 
 def pages_help(page,num_pages,category_id,maxpage):
@@ -183,7 +184,7 @@ def get_media_content(media_type,media_id,order_no):
     total_count=db.get_media_section_count_by_media_id(media_id)
     category_name = db.get_category_name_by_category_id(media.CategoryId)
     comments=db.get_comments_by_category_key_and_item_id(media_type, media_section.Id)
-    pages = pages_help_by_zero(order_no,total_count-1,F"content/{media_id}",10)
+    pages = pages_help_by_zero(int(order_no)+1,total_count,F"content/{media_id}",10)
     keys = ['media_type','source_list','media','media_section','total_count','CategoryName','comments','pages']
     vals=[media_type,category_map[media_type],media,media_section,total_count,category_name,comments,pages]
     return common_tools.create_map(keys, vals)
