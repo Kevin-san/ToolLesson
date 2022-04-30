@@ -35,16 +35,26 @@ type_categorys = (
 )
 preffix_map={"image":"jpg","audio":"mp3","video":"mp4","learn":"pdf","novel":"txt"}
 permissions= (
-        ('b1c1d8e4f4g1','默认游客'), # 博客 读 课程 读  小说 读 
-        ('b1c2d8e4f4g1','博客博主'), # 博客 读写
-        ('b4c2d8e4f4g1','课程文人'), # 课程 读写上传
-        ('b8c2d8e4f4g1','课程骚客'), # 课程 读写上传下载
-        ('b2c2d8e4f4g4','小说捉笔'), # 小说 读写上传
-        ('b2c2d8e4f4g8','小说墨客'), # 小说 读写上传下载
-        ('b1c1d8e8f4g1','音频知己'), # 音频 上传 下载
-        ('b1c1d8e8f8g1','视频光影'), # 视频 上传 下载
-        ('b8c8d8e8f8g8','都要大人'), # 所有 除了 hiders
-        ('0','幕后黑手'), # + hiders
+        ('b1c1d1e1f1g1i1','网站游客'), # read and novel/blog/learn/image/video/audio
+        ('b1c1d1e1f1g1h1i1','网站间客'), # read and novel/blog/learn/image/video/audio/vhider
+        ('b1c1d1e1f1g1i2','图片下载'), # read and image : export 
+        ('b1c1d1e1f2g1i1','视频下载'), # read and video : export 
+        ('b1c1d1e2f1g1i1','音频下载'), # read and audio : export 
+        ('b1c1d1e1f1g1i8','图片上传'), # read and image : import 
+        ('b1c1d1e1f8g1i1','视频上传'), # read and video : import 
+        ('b1c1d1e8f1g1i1','音频上传'), # read and image : import 
+        ('b1c1d1e1f1g4i1','小说作者'), # read and novel : write
+        ('b4c1d1e1f1g1i1','教程作者'), # read and learn : write
+        ('b1c1d1e1f1g8i1','小说编辑'), # read and novel : import
+        ('b8c1d1e1f1g1i1','教程编辑'), # read and learn : import
+        ('b1c1d1e4f4g1i4','媒体下载'), # read and image/video/audio : export
+        ('b1c1d1e8f8g1i8','媒体上传'), # read and image/video/audio : export
+        ('b4c1d1e1f1g4i1','文理作者'), # read and novel/blog/learn : write
+        ('b8c1d1e1f1g8i1','文理编辑'), # read and novel/blog/learn : import
+        ('b2c2d2e2f2g2i2','综合下载'), # read and novel/blog/learn/image/video/audio : export
+        ('b2c2d2e2f2g2h2i2','综艺下载'), # read and novel/blog/learn/image/video/audio/vhider : export
+        ('b8c8d8e8f8g8i8','综合上传'), # read and novel/blog/learn/image/video/audio : import
+        ('b9c9d9e9f9g9h9i9','管理员'), # + hiders
 )
 class Searchform(forms.Form):
     """搜索表单"""

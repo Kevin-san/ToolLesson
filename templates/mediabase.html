@@ -33,7 +33,9 @@
 				{% if media %}
 				<div class="row clearfix text-center">
 					<h1>{{ media.MediaName }}</h1>
+					{% if user_role.group_role_fr_map|get_map_val:book_type >=2 %}
 					<p><a href="/{{media_type}}/media/download/{{ media.Id }}">下载</a></p>
+					{% endif %}
 					<p>介绍:{{media.Content}}</p>
 					<p>作者:{{media.Authors}}</p>
 				</div>

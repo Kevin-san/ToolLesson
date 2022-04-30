@@ -32,7 +32,9 @@
 				<div class="row clearfix">
 					<div class="col-md-6">
 						{% if media_type != 'vhider' %}
+						{% if user_role.group_role_fr_map|get_map_val:book_type >=8 %}
 						<h1><a href="/{{ media_type }}/media/upload">上传</a></h1>
+						{% endif %}
 						{% endif %}
 					</div>
 				</div>

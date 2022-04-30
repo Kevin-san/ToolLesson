@@ -158,8 +158,8 @@ def merge_ts_files(ts_dir,key_map,ts_path):
         tmp_file.close()
     ts_path_h.close()
     mp4_path=to_mp4_files(ts_path)
-#     os.remove(ts_path)
-#     remove_dir(ts_dir)
+    os.remove(ts_path)
+    remove_dir(ts_dir)
     return mp4_path
 
 def to_mp4_files(ts_file):
@@ -172,7 +172,7 @@ def to_mp4_files(ts_file):
     os.system(cmd)
     return mp4_path
 
-def merget_ts_files_without_key(ts_dir,ts_path):
+def merge_ts_files_without_key(ts_dir,ts_path):
     files=get_child_absolute_files_exclude_spec_files(ts_dir,['index.m3u8'])
     files = natsorted(files)
     ts_path_h=open(ts_path,'ab+')
@@ -194,7 +194,7 @@ def merge_ts_and_to_mp4(parent_folder):
     for dir_path in list_children_dirs:
         if is_dir(dir_path):
             ts_file = dir_path + ".ts"
-            mp4_file = merget_ts_files_without_key(dir_path, ts_file)
+            mp4_file = merge_ts_files_without_key(dir_path, ts_file)
             index_path_h.write(mp4_file+"\n")
     index_path_h.close()
             

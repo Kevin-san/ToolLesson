@@ -122,10 +122,21 @@ def pages_help(page,num_pages,category_id,maxpage):
         # print("正常页数分配",[i + 1 for i in range(p - int(maxpage / 2), p + int(maxpage / 2))])
         return get_pages(p-1, p + maxpage-1 ,category_id,num_pages)
 
+def get_user_valid_urls(group_role_item):
+    valid_urls = []
+    for role_key,role_val in group_role_item.group_role_bk_map.items():
+        user_funcs = db.get_user_functions(role_key, role_val)
+        for user_func in user_funcs:
+            valid_urls.append(user_func.FunctionStr)
+    return valid_urls
+        
 
-def get_home_index():
-    user_funcs = db.get_user_function('a', 1)
+def get_home_index(group_role_item):
     content_list=[]
+    user_funcs = []
+    group_role_keys = group_role_item.group_role_bk_map.keys()
+    for role_key in group_role_keys:
+        user_funcs+=db.get_user_index_function(role_key, 1)
     for i, user_func in enumerate(user_funcs):
         func_str =user_func.FunctionStr
         title = func_str.split("/")[1].capitalize()

@@ -5,6 +5,7 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.shortcuts import render,redirect
+from django.template.defaulttags import register
 from PdfWeb import services,forms,settings,db, current_log
 import PdfWeb.constant as const
 import datetime
@@ -15,9 +16,10 @@ from alvintools import common_filer, common_tools
 from django.utils.http import urlquote
 from PdfWeb.forms import TxtUploadForm, PdfUploadForm, JpgUploadForm,\
     Mp4UploadForm, Mp3UploadForm,all_categorys_map,preffix_map
-from PdfWeb.decorators import auth_required, login_required
+from PdfWeb.decorators import auth_required, login_required, group_role_required
 import django.contrib.messages as messages
 import alvintools
+from PdfWeb.entitys import GroupRoleItem
 
 def create_dict_base_on_keys_form(keys_list,form_data):
     dict_result={}
@@ -50,9 +52,14 @@ def render_no_access(request):
     content=const.NO_ACCESS
     return render(request,const.INDEX_HTML,locals())
 
+@register.filter
+def get_map_val(dictionary,key):
+    return dictionary[key]
+
+@group_role_required
 @auth_required
 def index(request):
-    content=services.get_home_index()
+    content=services.get_home_index(request.session['user_role'])
     return render(request,const.INDEX_HTML,locals())
 
 @auth_required
@@ -62,6 +69,7 @@ def userprofile(request):
     edit_form = forms.EditUserForm(initial={'Id':user.Id,'Name':user.Name,'Email':user.Email,'Sex':user.Sex,'Logo':user.Logo,'Detail':user.Detail})
     result = {'edit_form':edit_form}
     return render(request,const.USER_PROFILE_HTML,result)
+
 
 @auth_required
 def useredit(request):
@@ -87,11 +95,13 @@ def useredit(request):
         if email != org_user.Email or username != org_user.Name or sex != org_user.Sex or logo != org_user.Logo or detail != org_user.Detail:
             services.update_user(org_user.Id,username,email,sex,detail,logo)
             user = services.get_user_by_id(org_user.Id)
+            group_role_item = GroupRoleItem(user.Permissions)
             request.session[const.IS_LOGIN_KEY] = True
             request.session['user_id'] = user.Id
             request.session['user_name'] = user.Name
             request.session['user_logo'] = user.Logo
-            request.session['user_role'] = user.Permissions
+            request.session['user_role'] = group_role_item
+            request.session['user_valid_urls'] = services.get_user_valid_urls(group_role_item)
     return redirect(const.USER_PROFILE_URL)
 
 @login_required
@@ -111,10 +121,12 @@ def login(request):
                 return render(request, const.LOGIN_HTML, locals())
             if check_password(password,user.Password):
                 request.session[const.IS_LOGIN_KEY] = True
+                group_role_item = GroupRoleItem(user.Permissions)
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name
                 request.session['user_logo'] = user.Logo.url
-                request.session['user_role'] = user.Permissions
+                request.session['user_role'] = group_role_item
+                request.session['user_valid_urls'] = services.get_user_valid_urls(group_role_item)
                 return redirect(const.INDEX_URL)
             else:
                 message = const.WRONG_PWD
@@ -186,16 +198,19 @@ def user_confirm(request):
         message = const.CONFIRM_LOGIN
         return render(request, const.CONFIRM_HTML, locals())
 
+@group_role_required
 @auth_required
 def blog_index(request):
     result = services.get_blog_home_index()
     return render(request,const.BLOG_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def blog_list(request,category_id,page_no):
     result = services.get_blog_home_list(category_id,page_no)
     return render(request,const.BLOG_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def blog_article(request,article_id):
     result = services.get_blog_article(article_id)
@@ -203,6 +218,7 @@ def blog_article(request,article_id):
     result['comment_form'] = forms.CommentForm()
     return render(request,const.BLOG_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def blog_articles(request):
     author_id = request.session['user_id']
@@ -210,6 +226,7 @@ def blog_articles(request):
     result['action'] = const.DETAIL_LIST_ACTION
     return render(request,const.BLOG_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def blog_add(request):
     author_id = request.session['user_id']
@@ -218,12 +235,14 @@ def blog_add(request):
     result['form'] = forms.ArticleForm()
     return render(request,const.BLOG_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def blog_del(request,article_id):
     author_id = request.session['user_id']
     services.del_blog_article_by_id(article_id)
     return redirect('/blog/articles/'+author_id)
 
+@group_role_required
 @auth_required
 def blog_upd(request,article_id):
     result=services.get_blog_article(article_id)
@@ -233,6 +252,7 @@ def blog_upd(request,article_id):
     result['form']=article_form
     return render(request,const.BLOG_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def blog_add_submit(request):
     article_form = forms.ArticleForm(request.POST,request.FILES)
@@ -246,6 +266,7 @@ def blog_add_submit(request):
         return blog_article(request, article.Id)
     return blog_add(request)
 
+@group_role_required
 @auth_required
 def blog_upd_submit(request):
     article_form = forms.ArticleForm(request.POST,request.FILES)
@@ -265,6 +286,7 @@ def blog_upd_submit(request):
         return blog_article(request, article.Id)
     return blog_upd(request, article.Id)
 
+@group_role_required
 @auth_required
 def blog_download(request,article_id):
     try:
@@ -279,6 +301,7 @@ def blog_download(request,article_id):
         return HttpResponse("Sorry but not found the file")
     return response
 
+@group_role_required
 @auth_required
 def book_download(request,book_type,book_id):
     try:
@@ -292,7 +315,8 @@ def book_download(request,book_type,book_id):
         current_log.info(e)
         return HttpResponse("Sorry but not found the file")
     return response
-    
+
+@group_role_required
 @auth_required
 def book_upload(request,book_type):
     result=dict()
@@ -302,6 +326,7 @@ def book_upload(request,book_type):
     result['form']=form
     return render(request,const.FILE_UPLOAD_HTML,result)
 
+@group_role_required
 @auth_required
 def book_upload_submit(request,book_type):
     result=dict()
@@ -325,32 +350,38 @@ def book_upload_submit(request,book_type):
         return book_menu(request, book_type, book_info.Id)
     return render(request,const.FILE_UPLOAD_HTML,result)
 
+@group_role_required
 @auth_required
 def book_index(request,book_type):
     result = services.get_book_home_index(book_type)
     return render(request,const.BOOK_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def book_list(request,book_type,category_id,page_no):
     result = services.get_book_list(book_type,category_id,page_no)
     return render(request,const.BOOK_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def book_menu(request,book_type,book_id):
     result = services.get_book_menu_info(book_type,book_id)
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def book_section(request,book_type,book_id,section_order_no,max_section_order_no):
     result = services.get_book_section_info(book_type,book_id,section_order_no,max_section_order_no)
     result['comment_form'] = forms.CommentForm()
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def book_author(request,book_type,book_id):
     result = services.get_book_infos_by_author(book_type,book_id)
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def book_menuadd(request,book_type):
     result=dict()
@@ -363,11 +394,13 @@ def book_menuadd(request,book_type):
     result['book_id']=0
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def book_menudel(request,book_type,book_id):
     result=services.del_book_by_id(book_type,book_id)
     return render(request,const.BOOK_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def book_menuupd(request,book_type,book_id):
     result = services.get_book_info(book_type,book_id)
@@ -386,6 +419,7 @@ def get_book_form(request, book_type):
         book_form = forms.NovelForm(request.POST, request.FILES)
     return book_form
 
+@group_role_required
 @auth_required
 def book_add_submit(request,book_type,book_id):
     book_form = get_book_form(request, book_type)
@@ -396,6 +430,7 @@ def book_add_submit(request,book_type,book_id):
         return book_menu(request, book_type,book.Id)
     return book_menuadd(request,book_type)
 
+@group_role_required
 @auth_required
 def book_upd_submit(request,book_type,book_id):
     book_form = get_book_form(request, book_type)
@@ -413,6 +448,7 @@ def book_upd_submit(request,book_type,book_id):
         return book_menu(request,book_type, book_id)
     return book_menuupd(request,book_type,book_id)
 
+@group_role_required
 @auth_required
 def book_sectionadd(request,book_type,book_id):
     result=services.get_book_info(book_type, book_id)
@@ -424,11 +460,13 @@ def book_sectionadd(request,book_type,book_id):
     result['form'] = forms.SectionForm(initial={'BookId':book_id,'OrderNo':order_no,'SectionNo':section_no})
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def book_sectiondel(request,book_type,section_id):
     result=services.del_section_by_id(book_type,section_id)
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def book_sectionupd(request,book_type,section_id):
     result=services.get_section_info(book_type,section_id)
@@ -439,6 +477,7 @@ def book_sectionupd(request,book_type,section_id):
     result['form'] = forms.SectionForm(initial={'Id':section.Id,'BookId':section.BookId,'OrderNo':section.OrderNo,'SectionNo':section.SectionNo,'ChapterName':section.ChapterName,'Content':section.Content})
     return render(request,const.BOOK_BASE_HTML,result)
 
+@group_role_required
 @auth_required
 def section_add_submit(request,book_type,book_id):
     section_form = forms.SectionForm(request.POST,request.FILES)
@@ -454,6 +493,7 @@ def section_add_submit(request,book_type,book_id):
         return book_section(request, book_type, book_id,section.OrderNo, max_section_order_no)
     return book_sectionadd(request,book_type,book_id)
 
+@group_role_required
 @auth_required
 def section_upd_submit(request,book_type,section_id):
     section_form = forms.SectionForm(request.POST,request.FILES)
@@ -474,6 +514,7 @@ def section_upd_submit(request,book_type,section_id):
         return book_section(request, book_type, book_id,section.OrderNo,max_section_order_no)
     return book_sectionupd(request, book_type, section_id)
 
+@group_role_required
 @auth_required
 def media_download(request,media_type,media_id):
     try:
@@ -488,6 +529,7 @@ def media_download(request,media_type,media_id):
         return HttpResponse("Sorry but not found the file")
     return response
 
+@group_role_required
 @auth_required
 def media_upload(request,media_type):
     result=dict()
@@ -499,6 +541,7 @@ def media_upload(request,media_type):
     result['form']=form
     return render(request,const.FILE_UPLOAD_HTML,result)
 
+@group_role_required
 @auth_required
 def media_upload_submit(request,media_type):
     result=dict()
@@ -531,22 +574,27 @@ def media_upload_submit(request,media_type):
         return media_content(request,media_type,media_section.MediaId,media_section.OrderNo)
     return render(request,const.FILE_UPLOAD_HTML,result)
 
+@group_role_required
 @auth_required
 def media_index(request,media_type):
     result = services.get_media_home_index(media_type)
     return render(request,const.MEDIA_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def media_list(request,media_type,category_id,page_no):
     result = services.get_media_list(media_type,category_id,page_no)
     return render(request,const.MEDIA_INDEX_HTML,result)   
 
+@group_role_required
 @auth_required
 def media_content(request,media_type,media_id,order_no):
     result = services.get_media_content(media_type,media_id,order_no)
     result['comment_form'] = forms.CommentForm()
     return render(request,const.MEDIA_BASE_HTML,result)
 
+@group_role_required
+@auth_required
 def comment_add_submit(request,category_key,item_id):
     comment_form = forms.CommentForm(request.POST,request.FILES)
     if comment_form.is_valid():
@@ -557,6 +605,8 @@ def comment_add_submit(request,category_key,item_id):
         return render_comment_parent_item(request,category_key, comment.ItemId)
     return render_comment_parent_item(request, category_key, item_id)
 
+@group_role_required
+@auth_required
 def comment_del(request,category_key,comment_id):
     comment = services.del_comment_by_id(category_key, comment_id)
     return render_comment_parent_item(request,category_key, comment.ItemId)
@@ -577,12 +627,13 @@ def render_comment_parent_item(request,category_key,item_id):
     elif category_key in ('blog'):
         return blog_article(request,item_id)
         
-
+@group_role_required
 @auth_required
 def tool_index(request):
     result = services.get_tool_home_index()
     return render(request,const.TOOL_INDEX_HTML,result)
 
+@group_role_required
 @auth_required
 def tool_funcs(request):
     result_str = services.get_tool_func(request.POST.get('tool'),request.POST.get('method'),request.POST.get('inputarea'),request.POST.get('passkey'));

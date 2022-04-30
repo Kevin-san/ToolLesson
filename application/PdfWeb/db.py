@@ -159,6 +159,12 @@ def get_user_by_id(user_id):
 def get_user_function(group_key,role_id):
     return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0)
 
+def get_user_index_function(group_key,role_id):
+    return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0,FunctionStr__contains="%/index")
+
+def get_user_functions(group_key,role_id):
+    return UserFunction.objects.filter(GroupKey=group_key,RoleId__lte=role_id,DeleteFlag=0)
+
 def create_user(user_name,password,email,sex,detail,logo,permission):
     password1=make_password(password,user_name,'pbkdf2_sha256')
     User.objects.create(Name = user_name,Password = password1,Email = email,Logo=logo,Sex = sex,Detail=detail,Permissions = permission)

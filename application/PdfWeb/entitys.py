@@ -134,3 +134,20 @@ class BookContentItem():
         self.prev_content_id=prev_content_id
         self.next_content_id=next_content_id
 
+class GroupRoleItem():
+    def __init__(self,group_role_str):
+        self.group_role_bk_map=self.split_str_into_group_role_map(group_role_str, False)
+        self.group_role_fr_map=self.split_str_into_group_role_map(group_role_str, True)
+
+    def split_str_into_group_role_map(self,group_role_str,is_conv):
+        group_role_str_list=list(group_role_str)
+        group_role_map = dict()
+        conv_map={'b':'b','e':'e','f':'f','g':'g','h':'h','i':'i'}
+        if is_conv:
+            conv_map={'b':'learn','e':'audio','f':'video','g':'novel','h':'vhider','i':'image'}
+        for idx,val in enumerate(group_role_str_list):
+            if idx %2 ==0:
+                group_role_map[conv_map[val]]=""
+            else:
+                group_role_map[conv_map[group_role_str_list[idx-1]]]=val
+        return group_role_map

@@ -34,6 +34,7 @@
 				<h2 class="text-center">{{ book_content_info.cur_content.ChapterName }}</h2>
 			</div>
 			<div class="row clearfix">
+				{% if user_role.group_role_fr_map|get_map_val:book_type >=4 %}
 				<div class="col-md-4 text-left">
 					<a href="/{{ book_type }}/book/sectiondel/{{book_content_info.cur_content.Id}}">删除</a>
 				</div>
@@ -42,6 +43,7 @@
 				<div class="col-md-4 text-right">
 					<a href="/{{ book_type }}/book/sectionupd/{{book_content_info.cur_content.Id}}">修改</a>
 				</div>
+				{% endif %}
 			</div>
 			<div class="row clearfix">
 				<div class="col-md-4 text-left">
@@ -145,8 +147,12 @@
 						{% endif %}
 					<p>简介:</p>
 					<p>{{ book_menu_info.book.Description}}</p>
+					{% if user_role.group_role_fr_map|get_map_val:book_type >=2 %}
 					<p><a href="/{{ book_type }}/book/download/{{book_menu_info.book.Id}}">下载本书</a></p>
+					{% endif %}
+					{% if user_role.group_role_fr_map|get_map_val:book_type >=4 %}
 					<p><a href="/{{ book_type }}/book/sectionadd/{{book_menu_info.book.Id}}">新增章节</a></p>
+					{% endif %}
 				</div>
 			</div>
 			<div class="col-md-12">

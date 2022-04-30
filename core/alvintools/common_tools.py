@@ -13,6 +13,7 @@ from alvinconst.filesuffixs import FileSuffix
 from alvintools import common_converter
 import time
 import re
+from PdfWeb.entitys import GroupRoleItem
 
 filesuffix=FileSuffix()
 

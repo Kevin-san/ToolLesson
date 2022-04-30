@@ -109,10 +109,11 @@ def recur_hider_files(dir_path,parent_dir,media_type):
     
     start_id = 50000+len(map_list)
     for file_path in file_list:
-        start_id = start_id +1
-        start_id_str = str(start_id)
+        
         if media_type == "video":
             if file_path not in map_list:
+                start_id = start_id +1
+                start_id_str = str(start_id)
                 print(file_path)
                 index_file_w.append_new_line(file_path)
                 file_size = common_filer.get_file_size(file_path)
@@ -126,10 +127,12 @@ def recur_hider_files(dir_path,parent_dir,media_type):
                 print("match:"+file_path)
         elif media_type == "image":
             if file_path not in map_list:
+                start_id = start_id +1
+                start_id_str = str(start_id)
                 print(file_path)
                 index_file_w.append_new_line(file_path)
                 file_name = common_filer.get_file_name(file_path)
-                media_sql_str = "insert into Media values ("+start_id_str+",'"+file_name+"','/vhider/Image/漫画','','','/img/novel_bg.jpg',3016,7200,0,now(),'alvin',0,'alvin',curdate());"
+                media_sql_str = "insert into Media values ("+start_id_str+",'"+file_name+"','/vhider/Image/漫画/"+file_name+"','','','/img/novel_bg.jpg',3016,7200,0,now(),'alvin',0,'alvin',curdate());"
                 media_sql_file_w.append_new_line(media_sql_str)
                 child_files = common_filer.get_child_files(file_path)
                 child_files.sort()
@@ -182,10 +185,41 @@ def rename_child_files(dir_path):
         print(child_file+","+child_file.replace("'",""))
         common_filer.move_file(child_file, child_file.replace("'",""))
 
+def rename_child_files_by_spec_list(dir_path,dir_name_list):
+    for dir_name in dir_name_list:
+        real_dir = dir_path+"/"+dir_name
+        files = common_filer.get_child_absolute_files(real_dir)
+        file_idxs=[]
+        for file_name in files:
+            file_idx = file_name.split("_")[-1].split(".")[0]
+            file_idxs.append(int(file_idx))
+        file_idxs.sort()
+        for list_id,list_val in enumerate(file_idxs):
+            correct_file_name1 = real_dir+"/"+dir_name+"_"+str(list_id)+".jpg"
+            child_file = real_dir+"/"+dir_name+"_"+str(list_val)+".jpg"
+            print(child_file+","+correct_file_name1)
+            common_filer.move_file(child_file, correct_file_name1)
+
 if __name__ == "__main__":
 #     recur_split_novels_in_novel_parent_dir("Y://小说//仙幻")
 #     recur_hider_files("Y://Spider//Hider","Video//亚洲无码","video")
-#     recur_hider_files("Y://Spider//Hider","Image//unlist","image")
-    rename_files("Y://Spider//Hider","Image//漫画")
+    recur_hider_files("Y://Spider//Hider","Image//漫画","image")
+#     rename_files("Y://Spider//Hider","Image//漫画")
+#     dir_name_list = ['[きひる]我的后宫佳丽_僕のハーレム[风的工房] [176p]',
+# '[ゲンツキ] 偏爱ヒロイズム [高画质][无邪気汉化组X无毒汉化组] [202p]',
+# '[ポン贵花田] とろとろえっち [204p]',
+# '[武内一真]とらいあんぐるH[光年汉化组] [203p]',
+# '[武田あらのぶ]ヒメハメトリップ[ROC_1112高清扫图] [215p]',
+# '[武田弘光]いまりあ[空気系☆汉化] [218p]',
+# '[泽野明] 兄想う故に妹あり 限定版 [209p]',
+# '[泽野明] 妹と付き合う11の方法 [206p]',
+# '[美矢火] 美少女公主_オトメヒメ [无邪気汉化组][MJK-15-D100] [207p]',
+# '[英丸] ハッスル! 団地妻[中国翻訳][魔剑个人汉化]',
+# '[蓬瑠璃] ハジメテのヒト [200p]',
+# '[锦ヶ浦鲤三郎] ほっこり桃源郷 [101p]',
+# '[高津]妖魔淫宴与爆乳肉慾性活 [219p]']
+# 
+#     rename_child_files_by_spec_list("Y:/Spider/Hider/Image/漫画", dir_name_list)
+        
 # 1. rename files 2. insert data 3. update data 4. soft link
 #     rename_child_files("Y://Spider//Hider//Image//漫画//[漫画][渣渣汉化组][柚木N]姉恋")

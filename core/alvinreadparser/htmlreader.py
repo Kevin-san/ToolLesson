@@ -278,7 +278,7 @@ def save_mht_all_images(input_path):
 def save_mhts_all_images(input_path_map,parent_dir):
     for input_key, vals in input_path_map.items():
         sub_path_name = os.path.join(parent_dir, input_key)
-        index = 1
+        index = 0
         for input_val in vals:
             current_log.info(input_val)
             input_path = parent_dir + input_val
@@ -300,3 +300,25 @@ def save_mhts_all_images(input_path_map,parent_dir):
                     continue
             file_reader.close()
             file_reader2.close()
+if __name__ == "__main__":
+    parent_path = "Y:/Spider/Hider/Image/漫画"
+    input_path_map={'body complex':['/unzip/body complex.mht'],
+'ejlt_719772':['/unzip/ejlt_719772.html.mht'],
+'[きひる]我的后宫佳丽_僕のハーレム[风的工房] [176p]':['/unzip/[きひる]我的后宫佳丽_僕のハーレム[风的工房] [176p].mht'],
+'[ゲンツキ] 偏爱ヒロイズム [高画质][无邪気汉化组X无毒汉化组] [202p]':['/unzip/[ゲンツキ] 偏爱ヒロイズム [高画质][无邪気汉化组X无毒汉化组] [202p].mht'],
+'[ポン贵花田] とろとろえっち [204p]':['/unzip/[ポン贵花田] とろとろえっち [204p].mht'],
+'[丸居まる] けもぱい 搾精ガールズ [高画质][篆仪通文书坊汉化] [183p]':['/unzip/[丸居まる] けもぱい 搾精ガールズ [高画质][篆仪通文书坊汉化] [183p].mht'],
+'[仓子仓次] 绝顶寸前 [204p]':['/unzip/[仓子仓次] 绝顶寸前 [204p].mht'],
+'[宵野コタロー] 発情ベイビー [208p]':['/unzip/[宵野コタロー] 発情ベイビー [208p].mht'],
+'[武内一真]とらいあんぐるH[光年汉化组] [203p]':['/unzip/[武内一真]とらいあんぐるH[光年汉化组] [203p].mht'],
+'[武田あらのぶ]ヒメハメトリップ[ROC_1112高清扫图] [215p]':['/unzip/[武田あらのぶ]ヒメハメトリップ[ROC_1112高清扫图] [215p].mht'],
+'[武田弘光]いまりあ[空気系☆汉化] [218p]':['/unzip/[武田弘光]いまりあ[空気系☆汉化] [218p].mht'],
+'[泽野明] 兄想う故に妹あり 限定版 [209p]':['/unzip/[泽野明] 兄想う故に妹あり 限定版 [209p].mht'],
+'[泽野明] 妹と付き合う11の方法 [206p]':['/unzip/[泽野明] 妹と付き合う11の方法 [206p].mht'],
+'[美矢火] 美少女公主_オトメヒメ [无邪気汉化组][MJK-15-D100] [207p]':['/unzip/[美矢火] 美少女公主_オトメヒメ [无邪気汉化组][MJK-15-D100] [207p].mht'],
+'[英丸] ハッスル! 団地妻[中国翻訳][魔剑个人汉化]':['/unzip/[英丸] ハッスル! 団地妻 1 [中国翻訳][魔剑个人汉化] [179p].mht','/unzip/[英丸] ハッスル! 団地妻 2 [中国翻訳][魔剑个人汉化] [177p].mht'],
+'[蓬瑠璃] ハジメテのヒト [200p]':['/unzip/[蓬瑠璃] ハジメテのヒト [200p].mht'],
+'[锦ヶ浦鲤三郎] ほっこり桃源郷 [101p]':['/unzip/[锦ヶ浦鲤三郎] ほっこり桃源郷 [101p].mht'],
+'[高津]妖魔淫宴与爆乳肉慾性活 [219p]':['/unzip/[高津]妖魔淫宴与爆乳肉慾性活 [219p].mht']
+}
+    save_mhts_all_images(input_path_map, parent_path)
