@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tagfilter %}
 {% block title %}{{ book_type }}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -8,7 +9,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="/{{ book_type }}/book/index">{{ book_type }}主页</a></li>
+					<li><a href="/{{ book_type }}/book/index/">{{ book_type }}主页</a></li>
 					{% if source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -34,7 +35,7 @@
 				<h2 class="text-center">{{ book_content_info.cur_content.ChapterName }}</h2>
 			</div>
 			<div class="row clearfix">
-				{% if user_role.group_role_fr_map|get_map_val:book_type >=4 %}
+				{% if request.session.user_role|get_map_val_by_key:book_type >= 4 %}
 				<div class="col-md-4 text-left">
 					<a href="/{{ book_type }}/book/sectiondel/{{book_content_info.cur_content.Id}}">删除</a>
 				</div>
@@ -147,10 +148,10 @@
 						{% endif %}
 					<p>简介:</p>
 					<p>{{ book_menu_info.book.Description}}</p>
-					{% if user_role.group_role_fr_map|get_map_val:book_type >=2 %}
+					{% if request.session.user_role|get_map_val_by_key:book_type >= 2 %}
 					<p><a href="/{{ book_type }}/book/download/{{book_menu_info.book.Id}}">下载本书</a></p>
 					{% endif %}
-					{% if user_role.group_role_fr_map|get_map_val:book_type >=4 %}
+					{% if request.session.user_role|get_map_val_by_key:book_type >= 4 %}
 					<p><a href="/{{ book_type }}/book/sectionadd/{{book_menu_info.book.Id}}">新增章节</a></p>
 					{% endif %}
 				</div>

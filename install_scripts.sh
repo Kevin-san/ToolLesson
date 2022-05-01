@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mount -t cifs -o username=root,password=xc19901109 //192.168.31.1/DATA /mnt/in
+
 mkdir -p /usr/local/core_pdf_page/media
 ln -s /mnt/in/音频 /usr/local/core_pdf_page/media/audio
 ln -s /mnt/in/图片 /usr/local/core_pdf_page/media/img

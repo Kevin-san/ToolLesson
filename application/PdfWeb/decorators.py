@@ -26,11 +26,14 @@ def login_required(func):
 
 def group_role_required(func):
     def inner_group_role_required(request,*args,**kwargs):
-        current_url = "/"+request.path+"/"
+        current_url = request.path
         conv_current_url = re.sub(r'\d+', "[num]", current_url)
         valid_urls = request.session['user_valid_urls']
         for valid_url in valid_urls:
             if conv_current_url.startswith(valid_url):
+                print(valid_url)
+                print(conv_current_url)
                 return func(request,*args,**kwargs)
+        print(conv_current_url)
         return render(request,const.INDEX_HTML,locals())
     return inner_group_role_required

@@ -131,12 +131,13 @@ def get_user_valid_urls(group_role_item):
     return valid_urls
         
 
-def get_home_index(group_role_item):
+def get_home_index(group_role_bk_map):
     content_list=[]
     user_funcs = []
-    group_role_keys = group_role_item.group_role_bk_map.keys()
+    group_role_keys = group_role_bk_map.keys()
     for role_key in group_role_keys:
-        user_funcs+=db.get_user_index_function(role_key, 1)
+        index_function=db.get_user_index_function(role_key, 1)
+        user_funcs=user_funcs+list(index_function)
     for i, user_func in enumerate(user_funcs):
         func_str =user_func.FunctionStr
         title = func_str.split("/")[1].capitalize()

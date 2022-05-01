@@ -160,7 +160,7 @@ def get_user_function(group_key,role_id):
     return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0)
 
 def get_user_index_function(group_key,role_id):
-    return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0,FunctionStr__contains="%/index")
+    return UserFunction.objects.filter(GroupKey=group_key,RoleId=role_id,DeleteFlag=0,FunctionStr__endswith="/index/")
 
 def get_user_functions(group_key,role_id):
     return UserFunction.objects.filter(GroupKey=group_key,RoleId__lte=role_id,DeleteFlag=0)

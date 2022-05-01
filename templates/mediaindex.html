@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tagfilter %}
 {% block title %}{{ media_type }}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -32,7 +33,7 @@
 				<div class="row clearfix">
 					<div class="col-md-6">
 						{% if media_type != 'vhider' %}
-						{% if user_role.group_role_fr_map|get_map_val:book_type >=8 %}
+						{% if request.session.user_role|get_map_val_by_key:media_type >= 8 %}
 						<h1><a href="/{{ media_type }}/media/upload">上传</a></h1>
 						{% endif %}
 						{% endif %}

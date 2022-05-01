@@ -5,7 +5,7 @@ Created on 2019/12/28
 @author: xcKev
 '''
 from django.shortcuts import render,redirect
-from django.template.defaulttags import register
+
 from PdfWeb import services,forms,settings,db, current_log
 import PdfWeb.constant as const
 import datetime
@@ -52,14 +52,10 @@ def render_no_access(request):
     content=const.NO_ACCESS
     return render(request,const.INDEX_HTML,locals())
 
-@register.filter
-def get_map_val(dictionary,key):
-    return dictionary[key]
 
-@group_role_required
 @auth_required
 def index(request):
-    content=services.get_home_index(request.session['user_role'])
+    content=services.get_home_index(request.session['user_permission'])
     return render(request,const.INDEX_HTML,locals())
 
 @auth_required
@@ -100,7 +96,8 @@ def useredit(request):
             request.session['user_id'] = user.Id
             request.session['user_name'] = user.Name
             request.session['user_logo'] = user.Logo
-            request.session['user_role'] = group_role_item
+            request.session['user_role'] = group_role_item.group_role_fr_map
+            request.session['user_permission'] = group_role_item.group_role_bk_map
             request.session['user_valid_urls'] = services.get_user_valid_urls(group_role_item)
     return redirect(const.USER_PROFILE_URL)
 
@@ -125,7 +122,8 @@ def login(request):
                 request.session['user_id'] = user.Id
                 request.session['user_name'] = user.Name
                 request.session['user_logo'] = user.Logo.url
-                request.session['user_role'] = group_role_item
+                request.session['user_role'] = group_role_item.group_role_fr_map
+                request.session['user_permission'] = group_role_item.group_role_bk_map
                 request.session['user_valid_urls'] = services.get_user_valid_urls(group_role_item)
                 return redirect(const.INDEX_URL)
             else:

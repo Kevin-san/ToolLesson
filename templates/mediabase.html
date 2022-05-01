@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tagfilter %}
 {% block title %}{{media_type}}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -8,7 +9,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-					<li><a href="/{{ media_type }}/media/index">{{ media_type }}主页</a></li>
+					<li><a href="/{{ media_type }}/media/index/">{{ media_type }}主页</a></li>
 					{% if source_list %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -33,7 +34,7 @@
 				{% if media %}
 				<div class="row clearfix text-center">
 					<h1>{{ media.MediaName }}</h1>
-					{% if user_role.group_role_fr_map|get_map_val:book_type >=2 %}
+					{% if request.session.user_role|get_map_val_by_key:media_type >= 2 %}
 					<p><a href="/{{media_type}}/media/download/{{ media.Id }}">下载</a></p>
 					{% endif %}
 					<p>介绍:{{media.Content}}</p>

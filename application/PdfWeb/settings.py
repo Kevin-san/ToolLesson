@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'captcha',
     'PdfWeb',
+    'PdfWeb.templatetags.tagfilter',
 ]
 
 MIDDLEWARE = [

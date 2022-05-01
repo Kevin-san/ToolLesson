@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tagfilter %}
 {% block title %}{{ book_type }}{% endblock %}
 {% block content %}
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -30,12 +31,12 @@
 		<div id="content" class="row">
 			<div class="col-sm-12 col-sm-offset-3 col-md-12 col-md-offset-2">
 				<div class="row clearfix">
-					{% if user_role.group_role_fr_map|get_map_val:book_type >=4 %}
+					{% if request.session.user_role|get_map_val_by_key:book_type >= 4 %}
 					<div class="col-md-6">
 						<h1><a href="/{{ book_type }}/book/menuadd">新增书籍</a></h1>
 					</div>
 					{% endif %}
-					{% if user_role.group_role_fr_map|get_map_val:book_type >=8 %}
+					{% if request.session.user_role|get_map_val_by_key:book_type >= 8 %}
 					<div class="col-md-6">
 						<h1><a href="/{{ book_type }}/book/upload">上传书籍</a></h1>
 					</div>
@@ -70,7 +71,7 @@
 						{% endif %}
 						</h4>
 					</div>
-					{% if user_role.group_role_fr_map|get_map_val:book_type >=4 %}
+					{% if request.session.user_role|get_map_val_by_key:book_type >= 4 %}
 					<div class="col-md-2">
 						<h4><a href="/{{ book_type }}/book/menuupd/{{ book_info.Id }}">修改</a></h4>
 					</div>
