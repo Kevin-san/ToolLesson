@@ -11,7 +11,7 @@ setup(
     author_email='xckevin1620@outlook.com',
     url='https://github.com/Kevin-san/CorePdfPage',
     description='PdfWeb',
-    packages= ["PdfWeb"],
+    packages= ["PdfWeb","PdfWeb.templatetags"],
     package_dir={'':'application'},
     package_data = {'PdfWeb':['*.crt']},
     python_requires='>=3.7.0',
