@@ -172,6 +172,14 @@ def to_mp4_files(ts_file):
     os.system(cmd)
     return mp4_path
 
+def mp4_to_fmp4_file(mp4_file):
+    ffmpeg_path=alvintools.get_ffmpeg_cmd()
+    output_mp4_file = mp4_file.replace(".mp4",".fmp4")
+    cmd = ffmpeg_path + " -i " + mp4_file + " -g 52 -f mp4 -movflags frag_keyframe+empty_moov " + output_mp4_file
+    current_log.info(cmd)
+    os.system(cmd)
+    return output_mp4_file
+
 def merge_ts_files_without_key(ts_dir,ts_path):
     files=get_child_absolute_files_exclude_spec_files(ts_dir,['index.m3u8'])
     files = natsorted(files)
@@ -282,4 +290,13 @@ def get_file_infos_service(local_xenv_home,local_home):
     arti_f=open(local_home+'/xenv.txt','w+')
     for index,dir_name in enumerate(dir_list):
         arti_f.write(F'{dir_name}={file_list[index]}\n')
-    current_log.info('end time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))    
+    current_log.info('end time:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
+    
+if __name__ == '__main__':
+    list_files = get_child_absolute_files("Y:\视频\电影")
+    for mp4_file in list_files:
+        if is_dir(mp4_file):
+            continue
+        mp4_to_fmp4_file(mp4_file)
+    
+    

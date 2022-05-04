@@ -105,7 +105,7 @@ body {
 @-o-viewport      { width: device-width; }
 @viewport         { width: device-width; }
 body {
-	background-image: url('../img/bg.jpg');
+	background-image: url('/media/img/bg.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -113,4 +113,8 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+}
+
+#mse{
+	margin:0 auto!important;
 }

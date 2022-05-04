@@ -56,16 +56,31 @@
 						{% endif %}
 					{% elif media_type == 'video' %}
 						{% if total_count == 1 %}
-						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" controls autoplay muted preload="metadata">
-						</video >
+						<div id="mse"></div>
+<script>
+let player = new Player({
+	  id: 'mse',
+	  url: "/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}"
+	});
+</script>
 						{% else %}
-						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}" controls autoplay muted preload="metadata">
-						</video >
+						<div id="mse"></div>
+<script>
+let player = new Player({
+	  id: 'mse',
+	  url: "/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}"
+	});
+</script>
 						{% endif %}
 					{% elif media_type == 'vhider' %}
 						{% if total_count == 1 %}
-						<video width="800" height="600" src="/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}" controls autoplay muted preload="metadata">
-						</video >
+						<div id="mse"></div>
+<script>
+let player = new Player({
+	  id: 'mse',
+	  url: "/media{{media.ParentDir}}/{{media.MediaName}}.{{media_section.Preffix}}"
+	});
+</script>
 						{% else %}
 						<img width="800" alt="{{media.MediaName}}_{{media_section.OrderNo}}" src="/media{{media.ParentDir}}/{{media.MediaName}}_{{media_section.OrderNo}}.{{media_section.Preffix}}"/>
 						{% endif %}
@@ -73,6 +88,7 @@
 					</div>
 				</div>
 				{% endif %}
+
 				<div class="col-md-12 text-center">
 				{% if pages %}
 					<ul class="pagination pagination-lg">

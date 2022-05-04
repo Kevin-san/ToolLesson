@@ -58,7 +58,8 @@
 				</div>
 				{% endif %}
 			</div>
-			<div class="col-md-12">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
 				{% if pages %}
 					<ul class="pagination pagination-lg">
 						{% for page in pages %}
@@ -69,6 +70,27 @@
 					</ul>
 				{% endif %}
 			</div>
+			<div class="col-md-2"></div>
+			{% if media_type == 'audio' %}
+			
+			<div id="aplayer"></div>
+			<script type="text/javascript">
+			const ap = new APlayer({
+			    container: document.getElementById('aplayer'),
+			    fixed: true,
+			    audio: [
+{% for media_info in contacts %}
+{
+    name: '{{media_info.MediaName}}',
+    artist: 'artist',
+    url: '/media{{media_info.ParentDir}}/{{media_info.MediaName}}.mp3',
+    cover: '/media/{{ media_info.ImageContent }}',
+},		    	
+{% endfor %}
+]
+			});
+			</script>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
