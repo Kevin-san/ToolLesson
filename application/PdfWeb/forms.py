@@ -79,6 +79,7 @@ class PdfUploadForm(forms.Form):
     CategoryId = fields.ChoiceField(label="所属分类",choices=learn_categorys,initial=11,widget=forms.widgets.Select)
     description=forms.CharField(label="简介",max_length=300,error_messages={"required":"不能为空","invalid":"格式错误"})
     author=forms.CharField(label="作者",max_length=100,error_messages={"required":"不能为空","invalid":"格式错误"})
+    chapterPages=forms.Textarea(label="章节页号",error_messages={"required":"不能为空","invalid":"格式错误"})
     file=forms.FileField(label="教程",validators=[validators.FileExtensionValidator(['pdf'],message='教程必须是pdf文件')])
     action="/learn/book/upload"
 

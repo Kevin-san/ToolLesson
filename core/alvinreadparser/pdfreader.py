@@ -15,11 +15,11 @@ API_KEY='bmz77GlmsKDlLsHd1zDGsMlx'
 SERCRET_KEY = 'B4I96wFfrlbpzccosQVkjL7c691Yb9y7'
 client = AipOcr(APP_ID, API_KEY, SERCRET_KEY)
 pdfreader_logger = common_logger.get_log('pdfreader', common_logger.LOG_DIR, 'pdfreader')
-book_dir='E:/lib/books'
+book_dir='E:/IDE/allpdf/allpdf'
 img_pdf_dir='imgpdf'
 text_pdf_dir='textpdf'
 done_dir='donepdf'
-pdf_dir='pdf'
+pdf_dir='textpdf'
 done_pdf_dir='done_pdf'
 pdf_book_dir='pdfbook'
 class SimplePdfReader(object):
@@ -63,57 +63,25 @@ class SimplePdfReader(object):
         for i in range(self.get_page_cnt()):
             texts.append(self.get_page_text(i))
         return texts
-    
+
+    def get_page_tables(self, pageno):
+        span_blocks = self.get_span_blocks(pageno)
+        if span_blocks:
+            span_dicts = self.to_pdf_span_dicts(pageno, span_blocks)
+            return self.to_pdf_table_item(pageno, span_dicts)
+        return []
+
     def get_page_links(self, pageno):
         return self.get_page_obj(pageno).getLinks()
 
     def get_blocks(self, pageno):
         raw_dict = self.get_page_structure_dict(pageno)
         return raw_dict['blocks']
-    
-    def get_span_blocks(self,blocks):
-        span_blocks = []
-        for pdf_block in blocks:
-            if "lines" in pdf_block:
-                spans = pdf_block['lines']
-                for span in spans:
-                    span_blocks.append(span)
-        return span_blocks    
-    
-    def get_image_blocks(self, blocks):
-        image_blocks=[]
-        for pdf_block in blocks:
-            if "image" in pdf_block:
-                image_blocks.append(pdf_block)
-        return image_blocks
-    
-    def get_span_image_blocks(self, pageno):
-        blocks = self.get_blocks(pageno)
-        span_blocks = self.get_span_blocks(blocks)
-        image_blocks=self.get_image_blocks(blocks)
-        return image_blocks, span_blocks
-    
-    def to_pdf_span_dicts(self, pageno, span_blocks, exclude_no=0):
-        span_dicts = dict()
-        for pdf_block in span_blocks:
-            bbox = common_tools.to_integer_list(pdf_block['bbox'])
-            span_its = self.to_pdf_span_item(pageno, pdf_block)
-            pdf_key = bbox[1]
-            if pdf_key in span_dicts:
-                span_dicts[pdf_key] = span_dicts[pdf_key] + span_its
-            else:
-                span_dicts[pdf_key] = span_its
-        pdf_key_list = common_tools.to_unique_list(span_dicts.keys())
-        pdf_key_list.sort()
-        if exclude_no > 0:
-            exclude_keys = pdf_key_list[0:exclude_no]
-            for exclude_key in exclude_keys:
-                del span_dicts[exclude_key]
-        return span_dicts
-    
+
     def get_page_images(self, pageno):
         page = self.get_page_obj(pageno)
         il = page.getImageList()
+        print(len(il))
         img_list = []
         for img in il:
             xref = img[0]
@@ -160,7 +128,65 @@ class SimplePdfReader(object):
         pix1 = pix2 = None  # free temp pixmaps
         # we may need to adjust something for CMYK pixmaps here:
         return getimage(pix)
+
+    def get_span_image_blocks(self,pageno):
+        blocks = self.get_blocks(pageno)
+        image_span_blocks=[]
+        for pdf_block in blocks:
+            if "lines" in pdf_block:
+                spans = pdf_block['lines']
+                for span in spans:
+                    image_span_blocks.append(["lines",span])
+            if "image" in pdf_block:
+                image_span_blocks.append(["image",pdf_block])
+        return image_span_blocks
+
+    def get_span_blocks(self,blocks):
+        span_blocks = []
+        for pdf_block in blocks:
+            if "lines" in pdf_block:
+                spans = pdf_block['lines']
+                for span in spans:
+                    span_blocks.append(span)
+        return span_blocks    
     
+    def get_image_blocks(self, blocks):
+        image_blocks=[]
+        for pdf_block in blocks:
+            if "image" in pdf_block:
+                image_blocks.append(pdf_block)
+        return image_blocks
+    
+    def to_pdf_span_dicts(self, pageno, span_blocks, exclude_no=0):
+        span_dicts = dict()
+        for pdf_block in span_blocks:
+            bbox = common_tools.to_integer_list(pdf_block['bbox'])
+            span_its = self.to_pdf_span_item(pageno, pdf_block)
+            pdf_key = bbox[1]
+            if pdf_key in span_dicts:
+                span_dicts[pdf_key] = span_dicts[pdf_key] + span_its
+            else:
+                span_dicts[pdf_key] = span_its
+        pdf_key_list = common_tools.to_unique_list(span_dicts.keys())
+        pdf_key_list.sort()
+        if exclude_no > 0:
+            exclude_keys = pdf_key_list[0:exclude_no]
+            for exclude_key in exclude_keys:
+                del span_dicts[exclude_key]
+        return span_dicts
+
+    def to_pdf_page_image(self,pageno,image_block,common_id):
+        ext = image_block["ext"]
+        imgdata = image_block["image"]
+        n = image_block["colorspace"]
+        return PdfImage(pageno, common_id, ext, imgdata, n)
+
+    def to_pdf_image_item(self,pageno,image_block,common_id):
+        print(common_id)
+        pdf_image = self.to_pdf_page_image(pageno,image_block,common_id)
+        bbox = common_tools.to_integer_list(image_block['bbox'])
+        return PdfImg(pageno, bbox, pdf_image)
+
     def to_pdf_span_item(self, pageno, lines_text):
         spans = lines_text['spans']
         span_items = []
@@ -195,13 +221,7 @@ class SimplePdfReader(object):
                     pdf_link_item = PdfLink(pageno, link['xref'], span_item.bbox, span_item.size, span_item.text, link['uri'])
                     return pdf_link_item
 
-    def to_pdf_pre_items(self, pageno):
-        pass
-    
-    def to_pdf_uol_items(self, pageno):
-        pass
-
-    def to_pdf_link_text_items(self, pageno, span_items, page_links):
+    def to_pdf_link_text_item(self, pageno, span_items, page_links):
         link_text_items = []
         pdf_text_item = self.to_pdf_text(pageno, span_items)
         if pdf_text_item is not None:
@@ -218,15 +238,30 @@ class SimplePdfReader(object):
                 return link_text_items
             link_text_items.append(pdf_text_item)
         return link_text_items
+    
+    def to_pdf_table_item(self, pageno, span_dicts):
+        tab_key_map = self.to_tab_cnt_key_map(span_dicts)
+        pdf_key_list = self.to_pdf_key_list(span_dicts)
+        tab_items = []
+        for tab_cnt, pdf_keys in tab_key_map.items():
+            tab_keys = [val for val in pdf_keys if val in pdf_key_list]
+            if tab_cnt > 1 and tab_keys == pdf_keys:
+                pdf_keys.sort()
+                header_key = pdf_keys[0]
+                headers = span_dicts[header_key]
+                details = []
+                for detail_key in pdf_keys[1:]:
+                    details.append(span_dicts[detail_key])
+                bbox_end = span_dicts[pdf_keys[-1]][-1].bbox
+                bbox = [headers[0].bbox[0], headers[0].bbox[1], bbox_end[2], bbox_end[3]]
+                pdf_tab = PdfTable(pageno, bbox, headers[0].size, headers, details)
+                tab_items.append(pdf_tab)
+        return tab_items
 
-    def to_pdf_image_items(self,pageno,image_blocks):
-        image_items=[]
-        for img_id, img_block in enumerate(image_blocks):
-            pdf_image = self.get_page_images(pageno)[img_id]
-            bbox = common_tools.to_integer_list(img_block['bbox'])
-            image_items.append(PdfImg(pageno, bbox, pdf_image))
-        return image_items
-
+    def to_pdf_link_text_items(self,pageno,span_items):
+        page_links = self.get_page_links(pageno)
+        return self.to_pdf_link_text_item(pageno, span_items, page_links)
+    
     def is_same_line_position(self, from_rect, positions):
         x0 = abs(int(from_rect.x0) - positions[0])
         y0 = abs(int(from_rect.y0) - positions[1])
@@ -236,21 +271,45 @@ class SimplePdfReader(object):
 
     def extract_dict_to_items(self, pageno):
         print("========================")
-        image_blocks, span_blocks = self.get_span_image_blocks(pageno)
-        items = self.to_pdf_image_items(pageno, image_blocks)
-        span_dicts = self.to_pdf_span_dicts(pageno, span_blocks)
-        items = items + self.to_pdf_table_order_text_items(pageno, span_dicts)
+        span_image_blocks = self.get_span_image_blocks(pageno)
+        common_id = 0
+        items = []
+        for span_img_block in span_image_blocks:
+            block_type = span_img_block[0]
+            pdf_block = span_img_block[1]
+            if block_type == "image":
+                pdf_img_item = self.to_pdf_image_item(pageno, pdf_block, common_id)
+                items.append(pdf_img_item)  
+            if block_type == "lines":
+                pdf_span_items = self.to_pdf_span_item(pageno, pdf_block)
+                pdf_link_text_items = self.to_pdf_link_text_items(pageno, pdf_span_items)
+                items=items+pdf_link_text_items
+            common_id=common_id+1
         final_items = self.sort_pdf_items(items)
-        print(final_items)
-        return final_items
+        final_item_list = []
+        common_item_list = []
+        for final_it in final_items:
+            if common_tools.is_list(final_it):
+                for final_item in final_it:
+                    if final_item.item_type == "image":
+                        final_item_list.append(final_item)
+                        if common_item_list:
+                            final_item_list.append(common_item_list)
+                            common_item_list=[]
+                    else:
+                        common_item_list.append(final_item)
+            else:
+                if final_it.item_type == "image":
+                    final_item_list.append(final_it)
+                    if common_item_list:
+                        final_item_list.append(common_item_list)
+                        common_item_list=[]
+                else:
+                    common_item_list.append(final_it)
+        if common_item_list:
+            final_item_list.append(common_item_list)
+        return final_item_list
 
-    def get_page_tables(self, pageno):
-        span_blocks = self.get_span_blocks(pageno)
-        if span_blocks:
-            span_dicts = self.to_pdf_span_dicts(pageno, span_blocks)
-            return self.to_pdf_table_item(pageno, span_dicts)
-        return []
-    
     def to_pdf_final_item(self, pdf_item):
         cnt = 0
         text_val = ""
@@ -286,35 +345,6 @@ class SimplePdfReader(object):
             pdf_item = self.to_pdf_final_item(y0_dict[y0])
             final_results.append(pdf_item)
         return final_results
-
-
-    
-
-    
-
-
-    def to_pdf_table_item(self, pageno, span_dicts):
-        tab_key_map = self.to_tab_cnt_key_map(span_dicts)
-        pdf_key_list = self.to_pdf_key_list(span_dicts)
-        tab_items = []
-        for tab_cnt, pdf_keys in tab_key_map.items():
-            tab_keys = [val for val in pdf_keys if val in pdf_key_list]
-            if tab_cnt > 1 and tab_keys == pdf_keys:
-                pdf_keys.sort()
-                header_key = pdf_keys[0]
-                headers = span_dicts[header_key]
-                details = []
-                for detail_key in pdf_keys[1:]:
-                    details.append(span_dicts[detail_key])
-                bbox_end = span_dicts[pdf_keys[-1]][-1].bbox
-                bbox = [headers[0].bbox[0], headers[0].bbox[1], bbox_end[2], bbox_end[3]]
-                pdf_tab = PdfTable(pageno, bbox, headers[0].size, headers, details)
-                tab_items.append(pdf_tab)
-        return tab_items
-    
-
-    
-
     
     def to_pdf_key_list(self,span_dicts):
         pdf_key_list = common_tools.to_unique_list(span_dicts.keys())
@@ -335,7 +365,7 @@ class SimplePdfReader(object):
         page_links = self.get_page_links(pageno)
         common_items = []
         for span_items in span_dicts.values():
-            pdf_link_text_items = self.to_pdf_link_text_items(pageno, span_items, page_links)
+            pdf_link_text_items = self.to_pdf_link_text_item(pageno, span_items, page_links)
             common_items = common_items + pdf_link_text_items
         return common_items
 
@@ -382,9 +412,6 @@ class SimplePdfReader(object):
             txt_val = span_item.text
             text_val = F"{text_val}{txt_val}"
         return text_val
-
-
-
         
     def get_pdf_generate_file_name(self):
         book_name = self.get_pdf_book_name()
@@ -524,22 +551,22 @@ def start_pdf_process():
         for i in range(page_cnt):
             page_real_index=i+1
             common_filer.make_dirs(local_pdf_dir)
-            for item in pdfreader.extract_dict_to_items(i):
+            for index,item in enumerate(pdfreader.extract_dict_to_items(i)):
                 convert_file_name=F"{local_pdf_dir}/{page_real_index}"
                 if common_tools.is_list(item):
                     for it in item:
-                        write_val_into_file(it, convert_file_name,False)
+                        write_val_into_file(it, convert_file_name,index,False)
                 else:
-                    write_val_into_file(item, convert_file_name)
+                    write_val_into_file(item, convert_file_name,index)
 #         common_filer.move_file(src_path, to_path)
 
-def write_val_into_file(item,convert_file_name,is_enter=True):
-    write_file_path=F"{convert_file_name}.txt"
+def write_val_into_file(item,convert_file_name,index,is_enter=True):
+    write_file_path=F"{convert_file_name}_{index}.txt"
     filewrter=SimpleFileWriter(write_file_path)
     pdfreader_logger.info(write_file_path)
     if item.item_type == 'image':
         ext = item.ext
-        image_file_path = F"{convert_file_name}_{item.index}.{ext}"
+        image_file_path = F"{convert_file_name}_{index}.{ext}"
         pdfreader_logger.info(image_file_path)
         file_w=open(image_file_path,'wb')
         file_w.write(item.imgdata)
@@ -568,9 +595,17 @@ if __name__ == "__main__":
 #     start_img_pdfs_process()
     start_pdf_process()
     #'flags': 4, 'font': 'LucidaConsole' pre
-    #'flags': 20, 'font': 'MicrosoftYaHei-Bold' p
-#     pdf = "E:/lib/books/textpdf/经典算法大全.pdf"
+    #'flags': 20, 'font': 'MicrosoftYaHei-Bold' 
+#     pdf = "E:/IDE/allpdf/allpdf/pdf/自然语言处理技术入门与实战_兰红云_电子工业_2017.10.pdf"
+#     pdf_output = "E:/IDE/allpdf/allpdf/pdfbook"
 #     pdfreader = SimplePdfReader(pdf)
+#     structures=pdfreader.get_structures()
+#     key_list = []
+#     for file_id,structure in enumerate(structures):
+#         file_writer = SimpleFileWriter(pdf_output+"/"+str(file_id)+".txt")
+#         file_writer.append_new_line(structure.replace(",",",\n"))
+#         file_writer.close()
+        
 #     for item in pdfreader.extract_dict_to_items(3):
 #         if common_tools.is_list(item):
 #             for it in item:
