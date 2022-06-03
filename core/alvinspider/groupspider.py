@@ -473,12 +473,24 @@ def insert_spider_properties(count):
             content_attr=GroupAttribute.get_block_spider_attribute(url_dict['content_attr'])
             if source_id >13:
                 spider = ParentSpider(target_url, index_attrs=index_attr, content_attrs=content_attr)
+                if spider.target_html == "":
+                    current_log.error(F"{target_url} is invalid")
+                    sql_upd_str=constant.SPIDER_ITEM_UPD_FLG_ONE_SQL_TEMPLATE %(item_id)
+                    common_db.execute_ins_upd_del_sql(sql_upd_str, db)
+                    count +=1
+                    continue
                 insert_image_spider_property(item_id,spider)
             else:
                 intro_attr=GroupAttribute.get_block_spider_attribute(url_dict['intro_attr'])
                 author_attr=GroupAttribute.get_block_spider_attribute(url_dict['author_attr'])
                 image_attr=GroupAttribute.get_block_spider_attribute(url_dict['image_attr'])
                 spider=ParentSpider(target_url,index_attr,content_attr,intro_attr,author_attr,image_attr)
+                if spider.target_html == "":
+                    current_log.error(F"{target_url} is invalid")
+                    sql_upd_str=constant.SPIDER_ITEM_UPD_FLG_ONE_SQL_TEMPLATE %(item_id)
+                    common_db.execute_ins_upd_del_sql(sql_upd_str, db)
+                    count +=1
+                    continue
                 intro = spider.get_page_intro()
                 image = spider.get_page_image()
                 insert_spider_property(item_id, -1, "简介", intro, "")
@@ -491,7 +503,7 @@ def insert_spider_properties(count):
                     common_db.execute_ins_upd_del_sql(sql_upd_str, db)
                     count +=1
                     continue
-            sql_updd_str=constant.SPIDER_ITEM_UPD_FLG_TWO_SQL_TEMPLATE %(item_id) 
+            sql_updd_str=constant.SPIDER_ITEM_UPD_FLG_TWO_SQL_TEMPLATE %(item_id)
             common_db.execute_ins_upd_del_sql(sql_updd_str, db)
             count +=1
     return count

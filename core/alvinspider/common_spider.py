@@ -18,6 +18,7 @@ from selenium.webdriver.chrome.options import Options
 from alvintools import common_coder, common_converter, common_tools, common_filer
 from alvinwritecreater.fileswriter import SimpleFileWriter
 from alvinreadparser.filesreader import SimpleFileReader
+from requests.models import Response
 urllib3.disable_warnings(InsecureRequestWarning)
 from selenium import webdriver
 import random
@@ -40,6 +41,8 @@ def get_spider_content_items(file_path):
 
 def get_response_text(artifact_url,user,password,seconds,referer_url=''):
     res=get_response_by_seconds(artifact_url, user, password,seconds,referer_url)
+    if res.encoding is None:
+        return ""
     coding=res.encoding.lower()
     if res.apparent_encoding is not None and res.apparent_encoding != res.encoding:
         return get_utf8_response_text_with_diff_coding(res,coding,res.apparent_encoding.lower())
@@ -88,8 +91,17 @@ def get_response_by_seconds(artifact_url,user,password,seconds,referer_url=''):
         current_log.info(real_seconds)
         time.sleep(real_seconds)
     current_log.info(artifact_url)
-    res=get_response(artifact_url, user, password,referer_url)
-    return res
+    try:
+        res=get_response(artifact_url, user, password,referer_url)
+        response_text = get_utf8_response_text(res,"utf-8")
+        if "https://www.23qb.net" in artifact_url and "出现错误！" in response_text:
+            return get_none_response()
+        return res
+    except Exception:
+        return get_none_response()
+
+def get_none_response():
+    return Response()
 
 @retry(stop_max_attempt_number=10,wait_fixed=10000)
 def get_response(artifact_url,user,password,referer_url='',proxies=''):
@@ -104,6 +116,9 @@ def get_response(artifact_url,user,password,referer_url='',proxies=''):
             response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,auth=(user,password),stream=True)
         if response is not None and response.status_code == 200:
             return response
+        if response.status_code != 200:
+            current_log.error(artifact_url)
+            raise Exception(F"{artifact_url} is not 200")
     except Exception:
         current_log.error(artifact_url)
         return get_response(artifact_url, user, password, referer_url, proxies)

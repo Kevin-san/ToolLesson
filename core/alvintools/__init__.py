@@ -4,7 +4,7 @@ def get_system_name():
 
 def get_remote_folder():
     system_name = get_system_name()
-    remote_map={"Windows":"I:","Linux":"/mnt/in"}
+    remote_map={"Windows":"Y:","Linux":"/mnt/in"}
     return remote_map[system_name]
 
 def get_ffmpeg_cmd():

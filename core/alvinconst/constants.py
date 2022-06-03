@@ -27,6 +27,7 @@ SPIDER_ITEM_SEL_URL_SQL='select Url from SpiderItem group by Url having count(Id
 SPIDER_ITEM_SEL_ID_TEMPLATE="select Id from SpiderItem where Url = '%s'"
 SPIDER_ITEM_DEL_SQL_TEMPLATE="delete from SpiderItem where Id = %s"
 SPIDER_ITEM_UPD_FLG_TWO_SQL_TEMPLATE="update SpiderItem set DeleteFlag = 2 where Id = %s"
+SPIDER_ITEM_UPD_FLG_THREE_SQL_TEMPLATE="update SpiderItem set DeleteFlag = 3 where Id = %s"
 SPIDER_ITEM_UPD_FLG_ONE_SQL_TEMPLATE="update SpiderItem set DeleteFlag = 1 where Id = %s"
 SPIDER_PROPERTY_DEL_SQL_TEMPLATE="delete from SpiderProperty where ItemId = %s"
 SPIDER_PROPERTY_CNT_SQL_TEMPLATE="select count(*) from SpiderProperty where ItemId = %s and OrderId = %s"
