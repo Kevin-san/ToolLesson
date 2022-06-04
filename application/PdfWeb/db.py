@@ -7,10 +7,11 @@ Created on 2019/12/28
 
 from PdfWeb.models import CommonRules,User,UserConfirmString,UserFunction, CommonSubFuncs, Category, UnitDictionary,Article,Comment,Media,MediaSection,Book,Section,\
     CommonCodeMap
-from PdfWeb.entitys import BookIndexItem,BookContentItem
+from PdfWeb.entitys import BookIndexItem,BookContentItem, SearchResultItem
 from django.contrib.auth.hashers import make_password
 from PdfWeb import current_log
-from alvintools import common_spliter
+from alvintools import common_spliter,common_tools
+from django.db.models import Q
 
 category_map={'learn':2,'tool':3,'blog':4,'audio':5,'video':6,'novel':7,'vhider':8,'image':9}
 
@@ -69,6 +70,54 @@ def get_articles_group_by_month(articles):
         else:
             month_dict[year_month]=[article]
     return month_dict
+
+def query_book_media_by_like(like_key,category_type):
+    category_list = get_category_by_key(category_type).values_list("CategoryId",flat=True)
+    search_results=[]
+    if category_type == "blog":
+        blogs = Article.objects.filter(Q(Title__contains=like_key)|Q(Synopsis__contains=like_key)|Q(AuthorName__contains=like_key)|Q(CategoryName__contains=like_key)|Q(Content__contains=like_key),DeleteFlag=0)
+        for blog in list(blogs):
+            author = blog.AuthorName
+            title = blog.Title
+            description = blog.Synopsis
+            content=blog.Content
+            url = F"/blog/article/{blog.Id}"
+            search_item = SearchResultItem(author,title,description,content,category_type,url)
+            search_results.append(search_item)
+    elif category_type in ( "learn", "novel"):
+        books = Book.objects.filter(Q(BookName__contains=like_key)|Q(Description__contains=like_key)|Q(Author__contains=like_key)|Q(MaxSectionName__contains=like_key),DeleteFlag=0,CategoryId__in=category_list)
+        sections = Section.objects.filter(Q(ChapterName__contains=like_key)|Q(Content__contains=like_key),DeleteFlag=0)
+        for book in list(books):
+            author = book.Author
+            title = book.BookName
+            description = book.Description
+            content = ""
+            url = F"{category_type}/book/menu/{book.Id}/"
+            search_item = SearchResultItem(author,title,description,content,category_type,url)
+            search_results.append(search_item)
+        for section in list(sections):
+            author = ""
+            title = section.ChapterName
+            description = ""
+            org_content = section.Content
+            like_index = org_content.index(like_key)+len(like_key)
+            content = org_content[0:like_index]
+            if len(content) >50:
+                content = org_content[like_index-50:like_index]
+            url = F"{category_type}/book/section/{section.BookId}/{section.OrderNo}/100/"
+            search_item = SearchResultItem(author,title,description,content,category_type,url)
+            search_results.append(search_item)
+    elif category_type in ("image","audio","video","vhider"):
+        medias = Media.objects.filter(Q(MediaName__contains=like_key)|Q(Content__contains=like_key)|Q(Authors__contains=like_key),DeleteFlag=0,CategoryId__in=category_list)
+        for media in list(medias):
+            author = media.Authors
+            title= media.MediaName
+            description = ""
+            content = media.Content
+            url = F"{category_type}/media/content/{media.Id}/0/"
+            search_item = SearchResultItem(author,title,description,content,category_type,url)
+            search_results.append(search_item)
+    return search_results
 
 def get_blog_articles_info_by_author_id(author_id):
     articles=get_articles_by_author_id(author_id)

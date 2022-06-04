@@ -138,14 +138,26 @@ function tool_picker(toolName){
 	}else if(toolName=="searcher"){
 		$('#clickspan').attr("class","glyphicon glyphicon-search");
 		$('#clickbutton').click(function(){
+			var url = window.location.pathname;
+			var url_arr = url.split("/");
+			if(url_arr[0] == "tool"){
+				alert("This tool page don't support search function");
+				return;
+			}
+			var correct_url = "/"+url_arr[1]+"/search/";
 			var searchtext = $('#toolintext').val();
-			$.post('/search',{
-				search:searchtext
-			},
-			function(data,status){
-				alert("");
-			})
-		})
+			$.ajax({
+				url:correct_url,
+				type:'post',
+				dataType:'json',
+				data:{
+				searchtext:searchtext
+				},
+				success:function(data){
+					$('#content').html(data.result);
+				}
+			});
+		});
 	}else if(toolName =="qrcodew"){
 		$('#clickspan').attr("class","glyphicon glyphicon-qrcode");
 		$('#clickbutton').click(function(){

@@ -134,6 +134,26 @@ class BookContentItem():
         self.prev_content_id=prev_content_id
         self.next_content_id=next_content_id
 
+class SearchResultItem():
+    def __init__(self,author,title,description,content,category_name,url):
+        self.author=author
+        self.title=title
+        self.description=description
+        self.category_name=category_name
+        self.content=content
+        self.url=url
+        
+    def to_html(self):
+        return F'''<div class="row clearfix" onclick="window.location.pathname='{self.url}';return false">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        <h3>标题:<a href="{self.url}">{self.title}</a></h3>
+        <p>作者:<a href="{self.url}">{self.author}</a></p>
+        <p>简介:<a href="{self.url}">{self.description}</a></p>
+        <p>内容:<a href="{self.url}">{self.content}</a></p>
+    </div>
+</div>
+'''
 class GroupRoleItem():
     def __init__(self,group_role_str):
         self.group_role_bk_map=self.split_str_into_group_role_map(group_role_str, False)

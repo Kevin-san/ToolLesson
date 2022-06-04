@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^blog/articleupd/submit/$',views.blog_upd_submit, name='blog_upd_submit'),
     url(r'^blog/articledel/(\d+)/$',views.blog_del,name='blog_del'),
     url(r'^blog/download/(\d+)/$',views.blog_download,name='blog_download'),
+    url(r'^(blog|novel|learn|audio|image|video|vhider)/search/$',views.search,name='search'),
     url(r'^(blog|novel|learn|audio|image|video)/comment/ins/(\d+)/$',views.comment_add_submit,name='comment_add_submit'),
     url(r'^(blog|novel|learn|audio|image|video)/comment/del/(\d+)/$',views.comment_del,name='comment_del'),
     url(r'^(novel|learn)/book/index',views.book_index,name='book_index'),

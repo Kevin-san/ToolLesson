@@ -168,6 +168,11 @@ def register(request):
     register_form = forms.RegisterForm()
     return render(request, const.REG_HTML, locals())
 
+def search(request,category_type):
+    result_html=services.search_vals_by_text(request.POST.get('searchtext'),category_type)
+    result_dict = {'result':result_html}
+    return HttpResponse(json.dumps(result_dict))
+
 def send_email(email, code):
     from django.core.mail import EmailMultiAlternatives
     subject = '来自www.alvin.com的确认邮件'
@@ -635,5 +640,5 @@ def tool_index(request):
 @auth_required
 def tool_funcs(request):
     result_str = services.get_tool_func(request.POST.get('tool'),request.POST.get('method'),request.POST.get('inputarea'),request.POST.get('passkey'));
-    result_dict = {'outputarea':result_str};
+    result_dict = {'outputarea':result_str}
     return HttpResponse(json.dumps(result_dict))

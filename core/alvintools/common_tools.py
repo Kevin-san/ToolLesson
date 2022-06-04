@@ -431,6 +431,13 @@ def add_char_to_str_both_side(val_str,char_str,char_len):
     added_head = add_char_to_str_first(val_str, char_str, char_len)
     return add_char_to_str_last(added_head, char_str, char_len)
 
+def add_item_into_dict_val_by_key(val_dict,dict_key,val_item):
+    if dict_key in val_dict.keys():
+        val_dict[dict_key].append(val_item)
+    else:
+        val_dict[dict_key] = []
+        val_dict[dict_key].append(val_item)
+
 def replace_duplicate_str(dup_str,char_str):
     old_str=to_single_template_str([char_str,char_str])
     new_str=to_single_template_str([char_str])

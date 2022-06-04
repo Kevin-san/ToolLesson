@@ -46,5 +46,5 @@ def test_groupspider_download_all_spiders_one_by_random_one():
     groupspider.download_all_spiders_one_by_random_one(remote_dir+"/Spider", groupspider.detail_attrs)
     
 if __name__ == '__main__':
-#     test_groupspider_download_spider_results()
-    test_groupspider_download_spider_missed_trigger_results()
+    test_groupspider_download_spider_results()
+#     test_groupspider_download_spider_missed_trigger_results()

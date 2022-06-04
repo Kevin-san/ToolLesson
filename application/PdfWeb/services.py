@@ -130,6 +130,16 @@ def get_user_valid_urls(group_role_item):
             valid_urls.append(user_func.FunctionStr)
     return valid_urls
         
+def search_vals_by_text(search_text,category_type):
+    search_results=db.query_book_media_by_like(search_text,category_type)
+    return render_search_result_html(search_results)
+    
+def render_search_result_html(search_results):
+    result_html=""
+    for search_item in search_results:
+        result_html=result_html+search_item.to_html()
+    current_log.info(result_html)
+    return result_html
 
 def get_home_index(group_role_bk_map):
     content_list=[]

@@ -84,18 +84,17 @@ def split_txt_novel_to_book_section_dicts(file_path):
         section_no = section_no +1
     return section_list
 
-def split_pdf_file_to_book_section_dicts(file_path,chapter_list):
+def split_pdf_file_to_book_section_dicts(file_path):
     pdf_folder = file_path.replace(file_path,".pdf")
     common_filer.make_dirs(pdf_folder)
     pdf_reader = SimplePdfReader(file_path)
     page_cnt=pdf_reader.get_page_cnt()
-    page_items=[]
+    page_item_list=[]
     section_list=[]
     for i in range(page_cnt):
-        page_item = pdf_reader.extract_dict_to_items(i)
-        page_items.append(page_item)
-    for chapter_idxs in chapter_list:
-        pass
+        page_items = pdf_reader.extract_dict_to_items(i)
+        
+    
     return section_list
     
 
