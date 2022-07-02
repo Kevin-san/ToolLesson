@@ -479,7 +479,14 @@ def insert_spider_properties(count):
                     common_db.execute_ins_upd_del_sql(sql_upd_str, db)
                     count +=1
                     continue
-                insert_image_spider_property(item_id,spider)
+                try:
+                    insert_image_spider_property(item_id,spider)
+                except Exception as e:
+                    current_log.error(e)
+                    sql_upd_str=constant.SPIDER_ITEM_UPD_FLG_ONE_SQL_TEMPLATE %(item_id)
+                    common_db.execute_ins_upd_del_sql(sql_upd_str, db)
+                    count +=1
+                    continue
             else:
                 intro_attr=GroupAttribute.get_block_spider_attribute(url_dict['intro_attr'])
                 author_attr=GroupAttribute.get_block_spider_attribute(url_dict['author_attr'])
