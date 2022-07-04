@@ -340,7 +340,7 @@ def book_upload_submit(request,book_type):
     if form.is_valid():
         preffix = preffix_map[book_type]
         book_name=form.cleaned_data['title']
-        category_id=form.cleaned_data['CategoryId']
+        category_id=int(form.cleaned_data['CategoryId'])
         category_name = all_categorys_map[category_id]
         parent_dir = common_tools.get_upload_path(alvintools.get_remote_folder(), book_type)+"/"+category_name
         write_file = parent_dir+"/"+book_name+"."+preffix
