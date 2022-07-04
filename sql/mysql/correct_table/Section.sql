@@ -6,7 +6,7 @@ create table IF NOT EXISTS `Section`( -- 书的大章节表
 	`OrderNo` INT NOT NULL, -- 第几章
 	`SectionNo` INT NOT NULL DEFAULT 0, -- 第几节
 	`ChapterName` VARCHAR(100) character set utf8 NOT NULL, -- 章节名
-	`Content` TEXT character set utf8 NOT NULL, -- 章节内容
+	`Content` MEDIUMTEXT character set utf8 NOT NULL, -- 章节内容
 	`UpdateTime` DATETIME NOT NULL, --更新时间
 	`UpdateUser` VARCHAR(100) NOT NULL, --更新者
 	`DeleteFlag` TINYINT NOT NULL DEFAULT 0, -- 删除状态
