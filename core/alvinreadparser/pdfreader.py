@@ -280,7 +280,6 @@ class SimplePdfReader(object):
         return x0 <= 3 and y0 <= 3 and x1 <= 3 and y1 <= 3
 
     def extract_dict_to_items(self, pageno):
-        print("========================")
         span_image_blocks = self.get_span_image_blocks(pageno)
         common_id = 0
         items = []

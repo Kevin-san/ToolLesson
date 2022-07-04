@@ -344,6 +344,7 @@ def get_book_section_by_order_no(book_id,order_no):
     return db.get_book_section_by_order_no(book_id,order_no)
 
 def init_book_info(book_dict,write_file,book_type):
+    current_log.info(book_dict)
     return db.ins_book_with_sections(book_dict,write_file,book_type)
     
 def del_book_by_id(book_type,book_id):

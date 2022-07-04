@@ -71,7 +71,7 @@ def split_txt_novel_to_book_section_dicts(file_path):
                 section_dict[novel_chapter]=trim_line+"\n"
     section_no = 0
     for section_key,section_val in section_dict.items():
-        book_section_dict={"BookId":-1,"OrderNo":0,"SectionNo":section_no,"ChapterName":section_key,"Content":section_val}
+        book_section_dict={"BookId":-1,"OrderNo":section_no,"SectionNo":0,"ChapterName":section_key,"Content":section_val}
         section_list.append(book_section_dict)
         section_no = section_no +1
     return section_list
@@ -104,7 +104,9 @@ def split_pdf_file_to_book_section_dicts(file_path):
                         section_contents.append(common_tools.output_str_from_item(it, convert_file_name, img_parent_folder, item_id, ""))
                 else:
                     section_contents.append(common_tools.output_str_from_item(item, convert_file_name, img_parent_folder, item_id, "\n"))
-        book_section_dict={"BookId":-1,"OrderNo":0,"SectionNo":menu_id,"ChapterName":menu_title,"Content":"".join(section_contents)}
+        section_content="".join(section_contents)
+        print(len(section_content))
+        book_section_dict={"BookId":-1,"OrderNo":menu_id,"SectionNo":0,"ChapterName":menu_title,"Content":section_content}
         section_list.append(book_section_dict)
     return section_list
     
