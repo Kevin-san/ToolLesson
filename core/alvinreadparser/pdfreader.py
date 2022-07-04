@@ -137,7 +137,9 @@ class SimplePdfReader(object):
             menu_name = t[1]
             if common_tools.is_novel_chapter(menu_name):
                 menus.append(t)
-        return menus
+        if menus:
+            return menus
+        return toc
     
     def get_span_image_blocks(self,pageno):
         blocks = self.get_blocks(pageno)
