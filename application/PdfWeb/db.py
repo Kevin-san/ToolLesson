@@ -316,7 +316,7 @@ def ins_book_with_sections(book_dict,write_file,book_type):
     if book_infos:
         book_info = book_infos[0]
         if get_book_sections_by_book_id(book_info.Id):
-            return book_info.Id
+            return book_info
     else:
         book_dict['MaxSectionId']=book_sections[-1]['OrderNo']
         book_dict['MaxSectionName']=book_sections[-1]['ChapterName']
@@ -324,7 +324,7 @@ def ins_book_with_sections(book_dict,write_file,book_type):
     for book_section_dict in book_sections:
         book_section_dict['BookId'] = book_info.Id
         ins_section(book_section_dict)
-    return book_info.Id
+    return book_info
 
 def ins_book(book_dict):
     return Book.objects.create(**book_dict)
