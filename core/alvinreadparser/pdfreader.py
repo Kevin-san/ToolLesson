@@ -30,6 +30,7 @@ class SimplePdfReader(object):
         self.pdffile = pdffile
         self.filter_key_map=dict()
         self.begin_position_keys=set()
+        self.menus=self.get_menus()
     
     def get_document_info(self):
         return self.document.metadata
@@ -128,7 +129,16 @@ class SimplePdfReader(object):
         pix1 = pix2 = None  # free temp pixmaps
         # we may need to adjust something for CMYK pixmaps here:
         return getimage(pix)
-
+    
+    def get_menus(self):
+        menus=[]
+        toc = fitz.utils.getToC(self.document)
+        for t in toc:
+            menu_name = t[1]
+            if common_tools.is_novel_chapter(menu_name):
+                menus.append(t)
+        return menus
+    
     def get_span_image_blocks(self,pageno):
         blocks = self.get_blocks(pageno)
         image_span_blocks=[]
@@ -564,39 +574,24 @@ def write_val_into_file(item,convert_file_name,index,is_enter=True):
     write_file_path=F"{convert_file_name}_{index}.txt"
     filewrter=SimpleFileWriter(write_file_path)
     pdfreader_logger.info(write_file_path)
-    if item.item_type == 'image':
-        ext = item.ext
-        image_file_path = F"{convert_file_name}_{index}.{ext}"
-        pdfreader_logger.info(image_file_path)
-        file_w=open(image_file_path,'wb')
-        file_w.write(item.imgdata)
-        file_w.close()
-        image_url = image_file_path.replace(book_dir,"/img")
-        image_src=F"![alt {item.index}]({image_url})"
-        if is_enter:
-            filewrter.append_new_line(image_src)
-        else:
-            filewrter.append_string(image_src)
-    elif item.item_type == "link":
-        if is_enter:
-            filewrter.append_new_line(F"[{item.text}]({item.to_pageno})")
-        else:
-            filewrter.append_string(F"[{item.text}]({item.to_pageno})")
+    if is_enter:
+        filewrter.append_string(common_tools.output_str_from_item(item, convert_file_name, book_dir, index, "\n"))
     else:
-        if is_enter:
-            filewrter.append_new_line(item.text)
-        else:
-            filewrter.append_string(item.text)
+        filewrter.append_string(common_tools.output_str_from_item(item, convert_file_name, book_dir, index, ""))
     filewrter.close()
 
 if __name__ == "__main__":
 #     pass
 #     start_text_pdfs_process()
 #     start_img_pdfs_process()
-    start_pdf_process()
+#     start_pdf_process()
     #'flags': 4, 'font': 'LucidaConsole' pre
     #'flags': 20, 'font': 'MicrosoftYaHei-Bold' 
 #     pdf = "E:/IDE/allpdf/allpdf/pdf/自然语言处理技术入门与实战_兰红云_电子工业_2017.10.pdf"
+#     pdf = "E:/IDE/allpdf/allpdf/textpdf/Perl编程语言.pdf"
+    pdf = "E:/IDE/allpdf/allpdf/textpdf/Python核心编程.pdf"
+    pdfreader = SimplePdfReader(pdf)
+    print(pdfreader.menus)
 #     pdf_output = "E:/IDE/allpdf/allpdf/pdfbook"
 #     pdfreader = SimplePdfReader(pdf)
 #     structures=pdfreader.get_structures()

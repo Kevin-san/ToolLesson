@@ -325,7 +325,18 @@ def ins_book_with_sections(book_dict,write_file,book_type):
         book_name = book_dict['BookName']
         book_infos = get_book_by_name(book_name)
         book_sections = common_spliter.split_pdf_file_to_book_section_dicts(write_file)
-        
+        if book_infos:
+            book_info = book_infos[0]
+            if get_book_sections_by_book_id(book_info.Id):
+                return book_info.Id
+        else:
+            book_dict['MaxSectionId']=book_sections[-1]['SectionNo']
+            book_dict['MaxSectionName']=book_sections[-1]['ChapterName']
+            book_info = ins_book(book_dict)
+        for book_section_dict in book_sections:
+            book_section_dict['BookId'] = book_info.Id
+            ins_section(book_section_dict)
+        return book_info.Id
 
 def ins_book(book_dict):
     return Book.objects.create(**book_dict)

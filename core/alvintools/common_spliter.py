@@ -4,8 +4,8 @@ Created on 2021/7/11
 
 @author: xcKev
 '''
-from alvintools import common_filer
-import re
+from alvintools import common_filer,common_tools
+import alvintools
 from alvinreadparser.pdfreader import SimplePdfReader
 from alvinwritecreater.fileswriter import SimpleFileWriter
 from alvinreadparser.filesreader import SimpleFileReader
@@ -19,23 +19,15 @@ def split_chapter_names(trim_line):
 def is_novel_title(trim_line):
     line_list = split_chapter_names(trim_line)
     for line_str in line_list:
-        if is_novel_chapter(line_str):
+        if common_tools.is_novel_chapter(line_str):
             return True
     return False
 
 def get_novel_chapter(trim_line):
     line_list = split_chapter_names(trim_line)
     for line_id,line_str in enumerate(line_list):
-        if is_novel_chapter(line_str):
+        if common_tools.is_novel_chapter(line_str):
             return " ".join(line_list[line_id:]).replace("?","").replace("：","").replace(" ","")
-
-def is_novel_chapter(line_str):
-    line_str = line_str.strip()
-    match_obj = re.search(r'^第(\s*)([一二三四五六七八九十百千0123456789]*)(\s*)([章节回页]{1})(\s*)(.*)',line_str,re.M|re.I)
-    if match_obj:
-        print(line_str)
-        return True
-    return False
 
 def split_txt_novel_to_chapter(file_path):
     dir_path = file_path.replace(".txt","")
@@ -86,15 +78,34 @@ def split_txt_novel_to_book_section_dicts(file_path):
 
 def split_pdf_file_to_book_section_dicts(file_path):
     pdf_folder = file_path.replace(file_path,".pdf")
+    file_name = common_filer.get_file_name(file_path)
+    img_parent_folder=alvintools.get_remote_folder()+"/图片"
+    img_folder=alvintools.get_remote_folder()+"/图片/learn/"+file_name
+    common_filer.make_dirs(img_folder)
     common_filer.make_dirs(pdf_folder)
     pdf_reader = SimplePdfReader(file_path)
     page_cnt=pdf_reader.get_page_cnt()
-    page_item_list=[]
     section_list=[]
-    for i in range(page_cnt):
-        page_items = pdf_reader.extract_dict_to_items(i)
-        
-    
+    menu_len = len(pdf_reader.menus)
+    for menu_id, menu in enumerate(pdf_reader.menus):
+        menu_title = menu[1]
+        menu_start = menu[2]-1
+        if menu_id == menu_len -1:
+            menu_end = page_cnt
+        else:
+            menu_end = pdf_reader.menus[menu_id+1][2]-2
+        section_contents=[]
+        for i in range(menu_start,menu_end):
+            page_real_index = i+1
+            convert_file_name=F"{img_folder}/{page_real_index}"
+            for item_id, item in enumerate(pdf_reader.extract_dict_to_items(i)):
+                if common_tools.is_list(item):
+                    for it in item:
+                        section_contents.append(common_tools.output_str_from_item(it, convert_file_name, img_parent_folder, item_id, ""))
+                else:
+                    section_contents.append(common_tools.output_str_from_item(item, convert_file_name, img_parent_folder, item_id, "\n"))
+        book_section_dict={"BookId":-1,"OrderNo":0,"SectionNo":menu_id,"ChapterName":menu_title,"Content":"".join(section_contents)}
+        section_list.append(book_section_dict)
     return section_list
     
 
@@ -212,7 +223,10 @@ def rename_child_files_by_spec_list(dir_path,dir_name_list):
 if __name__ == "__main__":
 #     recur_split_novels_in_novel_parent_dir("Y://小说//仙幻")
 #     recur_hider_files("Y://Spider//Hider","Video//亚洲无码","video")
-    recur_hider_files("Y://Spider//Hider","Image//漫画","image")
+#     recur_hider_files("Y://Spider//Hider","Image//漫画","image")
+    book_section_dicts=split_pdf_file_to_book_section_dicts("E:/IDE/allpdf/allpdf/textpdf/Python核心编程.pdf")
+    for dict_book in book_section_dicts:
+        print(dict_book)
 #     rename_files("Y://Spider//Hider","Image//漫画")
 #     dir_name_list = ['[きひる]我的后宫佳丽_僕のハーレム[风的工房] [176p]',
 # '[ゲンツキ] 偏爱ヒロイズム [高画质][无邪気汉化组X无毒汉化组] [202p]',

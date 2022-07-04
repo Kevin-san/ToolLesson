@@ -545,3 +545,27 @@ def group_format(obj_val):
 def get_count(str1,str2):
     return (len(str1) - len(str1.replace(str2,""))) // len(str2)
 
+
+def is_novel_chapter(line_str):
+    line_str = line_str.strip()
+    match_obj = re.search(r'^第(\s*)([一二三四五六七八九十百千0123456789]*)(\s*)([章节回页]{1})(\s*)(.*)',line_str,re.M|re.I)
+    if match_obj:
+        print(line_str)
+        return True
+    return False
+
+def output_str_from_item(item,convert_file_name,real_image_folder,index,break_str):
+    if item.item_type == 'image':
+        ext = item.ext
+        image_file_path = F"{convert_file_name}_{index}.{ext}"
+        current_log.info(image_file_path)
+        file_w=open(image_file_path,'wb')
+        file_w.write(item.imgdata)
+        file_w.close()
+        image_url = image_file_path.replace(real_image_folder,"/img")
+        image_src=F"![alt {item.index}]({image_url}){break_str}"
+        return image_src
+    elif item.item_type == "link":
+        return F"[{item.text}]({item.to_pageno}){break_str}"
+    else:
+        return item.text+break_str
