@@ -93,7 +93,7 @@ def split_pdf_file_to_book_section_dicts(file_path):
         if menu_id == menu_len -1:
             menu_end = page_cnt
         else:
-            menu_end = pdf_reader.menus[menu_id+1][2]-2
+            menu_end = pdf_reader.menus[menu_id+1][2]
         section_contents=[]
         for i in range(menu_start,menu_end):
             page_real_index = i+1
@@ -103,7 +103,7 @@ def split_pdf_file_to_book_section_dicts(file_path):
                     for it in item:
                         section_contents.append(common_tools.output_str_from_item(it, convert_file_name, img_parent_folder, item_id, ""))
                 else:
-                    section_contents.append(common_tools.output_str_from_item(item, convert_file_name, img_parent_folder, item_id, "\n"))
+                    section_contents.append(common_tools.output_str_from_item(item, convert_file_name, img_parent_folder, item_id, "\r\n"))
         section_content="".join(section_contents)
         print(len(section_content))
         book_section_dict={"BookId":-1,"OrderNo":menu_id,"SectionNo":0,"ChapterName":menu_title,"Content":section_content}
