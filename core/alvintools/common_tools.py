@@ -560,7 +560,7 @@ def output_str_from_item(item,convert_file_name,real_image_folder,index,break_st
         file_w=open(image_file_path,'wb')
         file_w.write(item.imgdata)
         file_w.close()
-        image_url = image_file_path.replace(real_image_folder,"/img")
+        image_url = image_file_path.replace(real_image_folder,"/media/img")
         image_src=F"![alt {item.index}]({image_url}){break_str}"
         return image_src
     elif item.item_type == "link":
