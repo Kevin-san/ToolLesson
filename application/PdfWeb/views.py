@@ -445,7 +445,7 @@ def book_upd_submit(request,book_type,book_id):
         book.Description = book_form.cleaned_data['Description']
         book.Author = book_form.cleaned_data['Author']
         book.ImageContent = book_form.cleaned_data['ImageContent']
-        book.CategoryId = book_form.cleaned_data['CategoryId']
+        book.CategoryId = int(book_form.cleaned_data['CategoryId'])
         book.UpdateUser=request.session['user_name']
         services.upd_book(book)
         return book_menu(request,book_type, book_id)
@@ -557,7 +557,7 @@ def media_upload_submit(request,media_type):
     if form.is_valid():
         preffix = preffix_map[media_type]
         media_name=form.cleaned_data['title']
-        category_id=form.cleaned_data['CategoryId']
+        category_id=int(form.cleaned_data['CategoryId'])
         category_name = all_categorys_map[category_id]
         parent_dir = common_tools.get_upload_path(alvintools.get_remote_folder(), media_type)+"/"+category_name
         if media_type == "image":
