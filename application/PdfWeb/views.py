@@ -348,7 +348,7 @@ def book_upload_submit(request,book_type):
         common_filer.handle_uploaded_file(request.FILES['file'], write_file)
         content=form.cleaned_data['description']
         authors=form.cleaned_data['author']
-        book_dict={"BookName":book_name,"Description":content,"Author":authors,"ImageContent":"","MaxSectionId":0,"MaxSectionName":""}
+        book_dict={"BookName":book_name,"Description":content,"Author":authors,"ImageContent":"","MaxSectionId":0,"MaxSectionName":"","CategoryId":category_id}
         book_info = services.init_book_info(book_dict,write_file,book_type)
         return book_menu(request, book_type, book_info.Id)
     return render(request,const.FILE_UPLOAD_HTML,result)
