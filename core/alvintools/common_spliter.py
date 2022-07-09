@@ -101,9 +101,9 @@ def split_pdf_file_to_book_section_dicts(file_path):
             for item_id, item in enumerate(pdf_reader.extract_dict_to_items(i)):
                 if common_tools.is_list(item):
                     for it in item:
-                        section_contents.append(common_tools.output_str_from_item(it, convert_file_name, img_parent_folder, item_id, ""))
+                        section_contents.append(common_tools.output_str_from_item(it, convert_file_name, img_parent_folder, item_id, "\n"))
                 else:
-                    section_contents.append(common_tools.output_str_from_item(item, convert_file_name, img_parent_folder, item_id, "\r\n"))
+                    section_contents.append(common_tools.output_str_from_item(item, convert_file_name, img_parent_folder, item_id, "\n"))
         section_content="".join(section_contents)
         print(len(section_content))
         book_section_dict={"BookId":-1,"OrderNo":menu_id,"SectionNo":0,"ChapterName":menu_title,"Content":section_content}
