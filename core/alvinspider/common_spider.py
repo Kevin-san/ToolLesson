@@ -97,41 +97,34 @@ def get_response_by_seconds(artifact_url,user,password,seconds,referer_url=''):
         if "https://www.23qb.net" in artifact_url and "出现错误！" in response_text:
             return get_none_response()
         return res
-    except Exception:
+    except Exception as e:
+        current_log.error(e)
         return get_none_response()
 
 def get_none_response():
     return Response()
 
-@retry(stop_max_attempt_number=10,wait_fixed=10000)
+@retry(stop_max_attempt_number=10,wait_fixed=3000)
 def get_response(artifact_url,user,password,referer_url='',proxies=''):
     user_agent = random.choice(user_agent_list)
     headers = {'User-Agent': user_agent}
     if referer_url:
         headers['Referer']=referer_url
-    try:
-        if user == '' and password == '':
-            response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,stream=True)
-        else:
-            response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,auth=(user,password),stream=True)
-        if response is not None and response.status_code == 200:
-            return response
-        if response.status_code != 200:
-            current_log.error(artifact_url)
-            raise Exception(F"{artifact_url} is not 200")
-    except Exception:
+    if user == '' and password == '':
+        response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,stream=True)
+    else:
+        response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=30,verify=False,auth=(user,password),stream=True)
+    if response is not None and response.status_code == 200:
+        return response
+    if response.status_code != 200 or response.content is None:
         current_log.error(artifact_url)
-        return get_response(artifact_url, user, password, referer_url, proxies)
+        raise Exception(F"{artifact_url} is not 200 or falied to get url")
 
-@retry(stop_max_attempt_number=10,wait_fixed=10000)
+@retry(stop_max_attempt_number=10,wait_fixed=3000)
 def post_response(request_url,params):
-    try:
-        response = requests.post(request_url,params)
-        if response is not None and response.status_code == 200:
-            return response
-    except Exception as e:
-        current_log.error(e)
-        return post_response(request_url, params)
+    response = requests.post(request_url,params)
+    if response is not None and response.status_code == 200:
+        return response
 
 def check_valid_ip(ip):
     proxies={'http':'http://'+ip}

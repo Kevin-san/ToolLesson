@@ -35,7 +35,7 @@ SPIDER_PROPERTY_INS_SQL_TEMPLATE="insert SpiderProperty(ItemId,OrderId,PropertyK
 SPIDER_PROPERTY_UPD_SQL_TEMPLATE="update SpiderProperty set PropertyValue = '%s' , PropertyBigVal = '%s' where ItemId = %s and PropertyKey = '%s' and OrderId =%s"
 SPIDER_PROPERTY_UPD_FLG_TWO_SQL_TEMPLATE="update SpiderProperty set DeleteFlag = 2 where DeleteFlag = 0 and Id = %s"
 SPIDER_PROPERTY_SEL_CNT_SQL_TEMPLATE="select count(*) from SpiderProperty where ItemId = %s and PropertyKey = '%s'"
-SPIDER_PROPERTY_SEL_MAX_ORDID_SQL_TEMPLATE="select max(OrderId) from SpiderProperty where ItemId = %s and PropertyKey = '章节'"
+SPIDER_PROPERTY_SEL_MAX_ORDID_SQL_TEMPLATE="select case when max(OrderId) IS NULL then -1 ELSE max(OrderId) END from SpiderProperty where ItemId = %s and PropertyKey = '章节'"
 SPIDER_PROPERTY_SEL_SQL_TEMPLATE="select OrderId,PropertyBigVal,Id from SpiderProperty where DeleteFlag = 0 and ItemId = %s"
 SPIDER_PROPERTY_SEL_SQL_CHAPTER_TEMPLATE="select PropertyVal,PropertyBigVal,Id from SpiderProperty where DeleteFlag = 0 and ItemId = %s and PropertyKey = '章节'"
 SPIDER_CATEGORY_SEL_SQL_TEMPLATE='select CategoryId,CategoryName,CategoryValue1 from Category where DeleteFlag=0 and CategoryFather=%s order by CategoryId desc'
