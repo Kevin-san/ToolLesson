@@ -99,7 +99,16 @@ def get_response_by_seconds(artifact_url,user,password,seconds,referer_url=''):
         return res
     except Exception as e:
         current_log.error(e)
-        return get_none_response()
+        try:
+            time.sleep(300)
+            res=get_response(artifact_url, user, password,referer_url)
+            response_text = get_utf8_response_text(res,"utf-8")
+            if "https://www.23qb.net" in artifact_url and "出现错误！" in response_text:
+                return get_none_response()
+            return res
+        except Exception as e1:
+            current_log.error(e1)
+            return get_none_response()
 
 def get_none_response():
     return Response()
