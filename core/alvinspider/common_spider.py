@@ -120,9 +120,9 @@ def get_response(artifact_url,user,password,referer_url='',proxies=''):
     if referer_url:
         headers['Referer']=referer_url
     if user == '' and password == '':
-        response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=(300,350),verify=False,stream=True)
+        response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=(600,720),verify=False,stream=True)
     else:
-        response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=(300,350),verify=False,auth=(user,password),stream=True)
+        response = requests.get(url=artifact_url,proxies=proxies,headers=headers,timeout=(600,720),verify=False,auth=(user,password),stream=True)
     if response is not None and response.status_code == 200:
         return response
     if response.status_code != 200 or response.content is None:
