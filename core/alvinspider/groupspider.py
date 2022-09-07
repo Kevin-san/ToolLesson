@@ -34,14 +34,15 @@ group_attrs={
     "http://www.paoshuzw.com/":{"block_tag":"div","block_class":"l","block_id":"","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"a.text","page_tag":"a","page_class":"next","page_id":""},
     "http://www.quanji456.com":{"block_tag":"div","block_class":"classpage","block_id":"","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"a.text","page_tag":"","page_class":"","page_id":""},
     "https://www.qiqidongman.com/":{"block_tag":"ul","block_class":"ulPic fix","block_id":"LIST","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"a.title","page_tag":"div","page_class":"pages r","page_id":""},
-    "http://www.mm288.com/":{"block_tag":"div","block_class":"","block_id":"infinite_scroll","item_tag":"div","item_class":"ABox","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"img.alt","page_tag":"div","page_class":"NewPages","page_id":""},
+    "https://www.yeitu.com/meinv/xinggan/":{"block_tag":"div","block_class":"list-box","block_id":"","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"img.alt","page_tag":"a","page_class":"a1","page_id":""},
     "http://www.mm4000.com/meinv/":{"block_tag":"ul","block_class":"l-meinv-wrapp cl","block_id":"","item_tag":"div","item_class":"timg","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"img.alt","page_tag":"div","page_class":"pagelists","page_id":""},
-    "https://www.ku66.net/":{"block_tag":"div","block_class":"TypeList","block_id":"","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"div.innerHtml","page_tag":"div","page_class":"NewPages","page_id":""},
-    "https://www.mzitu.com/":{"block_tag":"ul","block_class":"","block_id":"pins","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"img.alt","page_tag":"a","page_class":"next page-numbers","page_id":""},
+    "https://www.ku666.cc/":{"block_tag":"div","block_class":"TypeList","block_id":"","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"div.innerHtml","page_tag":"div","page_class":"NewPages","page_id":""},
+    "https://www.cltzbl.com/":{"block_tag":"ul","block_class":"","block_id":"pins","item_tag":"li","item_class":"","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"img.alt","page_tag":"a","page_class":"next page-numbers","page_id":""},
+    "https://www.itu11.com/xingganmeinvxiezhen/":{"block_tag":"div","block_class":"container pic4list","block_id":"","item_tag":"li","item_class":"col-xs-1-5","item_id":"","children_tag":"a","children_index":"1","children_href":"a.href","children_text":"img.alt","page_tag":"div","page_class":"pageinfo","page_id":""},
 }
 detail_attrs={
     "picture":{
-        "https://www.ku66.net/":{
+        "https://www.ku666.cc/":{
             "index_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="NewPages"),
             "content_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="content")
         },
@@ -49,9 +50,17 @@ detail_attrs={
             "index_attrs":SpiderAttribute(tag_name="div",id_v="pageNum",class_v=""),
             "content_attrs":SpiderAttribute(tag_name="li",id_v="showimages",class_v="")
         },
-        "https://www.mzitu.com/":{
+        "https://www.cltzbl.com/":{
             "index_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="pagenavi"),
             "content_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="main-image")
+        },
+        "https://www.yeitu.com/meinv/xinggan/":{
+            "index_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="pages"),
+            "content_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="img_box")
+        },
+        "https://www.itu11.com/xingganmeinvxiezhen/":{
+            "index_attrs":SpiderAttribute(tag_name="ul",id_v="",class_v="list-inline text-center nryfy"),
+            "content_attrs":SpiderAttribute(tag_name="div",id_v="",class_v="nry")
         }
     },
     "novel":{
@@ -105,9 +114,11 @@ dict_attrs={
 "https://www.qiqidongman.com/vod-search.html"
 ],
 "picture":[
-"http://www.mm4000.com/meinv/",
-"https://www.ku66.net/r/1/index.html",
-"https://www.mzitu.com/"
+# "https://www.yeitu.com/meinv/xinggan/index.html",
+# "http://www.mm4000.com/meinv/",
+# "https://www.ku666.cc/r/1/index.html",
+#"https://www.cltzbl.com/page/index.html",
+"https://www.itu11.com/xingganmeinvxiezhen/list_1_1.html"
     ]
 }
 
@@ -210,7 +221,7 @@ class GroupItemSpider(object):
         if self.page_tag =="div" or self.page_tag =="ul":
             page_bs4=common_spider.get_beautifulsoup_from_html(str(page_index[0]),'a')
             for a_item in page_bs4:
-                if str(a_item).find('下一页') !=-1 or str(a_item).find('下一张')!=-1 or str(a_item).find(">>")!=-1:
+                if str(a_item).find('下一页') !=-1 or str(a_item).find('下一张')!=-1 or str(a_item).find(">>")!=-1 or str(a_item).find('下页') !=-1:
                     href_url=common_spider.get_correct_href(self.group_url, a_item)
                     if url == href_url:
                         return ""
@@ -640,7 +651,9 @@ def download_spider_trigger_results():
         update_spider_trigger_result(trigger_result['id'])
 
 if __name__ == "__main__":
+    get_group_hrefs(group_map_attrs, dict_attrs, "picture", "E:")
     pass
+    
 #     remove_duplicate_item_and_properties()
 #     load_group_urls()
     

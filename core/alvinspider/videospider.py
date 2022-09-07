@@ -116,7 +116,7 @@ class VideoSpider():
         summary_file_h=open(self.summary_file,'w')
         if self.index_attrs:
             div = common_spider.get_beautifulsoup_from_html(html, self.index_tag, self.index_attrs)
-            a_list=common_spider.get_beautifulsoup_from_html(str(div[1]), 'a')
+            a_list=common_spider.get_beautifulsoup_from_html(str(div[0]), 'a')
             for index,a_item in enumerate(a_list):
                 href_url=common_spider.get_correct_href(self.home_url, a_item)
                 episode_nm="第"+str(index+1)+"集"
@@ -156,14 +156,14 @@ class VideoSpider():
         return videos
 
 def main():
-    videospider=VideoSpider("https://www.qmdy5.com/guochanju/yidaihongshang/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"Y:/视频/","连续剧","一代洪商")
+    videospider=VideoSpider("https://www.qmdy5.com/juqingpian/shishangzuikuaideyindianmotuo/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"Y:/视频/","电影","世上最快的印地安摩托")
     videospider.download_all_videos()
 #     videospider=VideoSpider("https://www.qmdy5.com/guochanju/laimaodeshizidaoying/",SpiderAttribute(tag_name="div",id_v="",class_v="stui-pannel_bd col-pd clearfix"),SpiderAttribute(tag_name="div",id_v="",class_v="stui-player__video clearfix"),"/mnt/in/视频/","连续剧","赖猫的狮子倒影")
 #     videospider.download_all_videos()
     
 if __name__=="__main__":
-#     main()
-    common_filer.to_mp4_files("Y:/视频/连续剧/一代洪商/第39集.ts")
+    main()
+#     common_filer.to_mp4_files("Y:/视频/电影/世上最快的印地安摩托.ts")
 #     common_filer.merge_ts_files("I:/电视剧/请回答1988/第2集", {}, "I:/电视剧/请回答1988/第2集.ts")
 
 #     common_filer.to_mp4_files("I:/电视剧/请回答1988/第2集.ts")

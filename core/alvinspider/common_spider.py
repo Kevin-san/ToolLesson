@@ -127,6 +127,8 @@ def get_response(artifact_url,user,password,referer_url='',proxies=''):
         return response
     if response.status_code != 200 or response.content is None:
         current_log.error(artifact_url)
+        current_log.error(response.status_code)
+        current_log.error(response.content)
         raise Exception(F"{artifact_url} is not 200 or falied to get url")
 
 @retry(stop_max_attempt_number=10,wait_fixed=3000)
