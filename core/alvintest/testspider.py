@@ -9,6 +9,7 @@ from alvinspider import groupspider,parentdownloader
 from alvintools import get_remote_folder
 from alvintools import common_filer
 from alvintest import testtools
+import alvintest
 
 remote_dir = get_remote_folder()
 
@@ -20,7 +21,7 @@ def test_groupspider_download_spider_results():
         parent_downloader.get_image_spider_source_by_grps()
         groupspider.download_spider_trigger_results()
         groupspider.download_spider_missed_trigger_results()
-        common_filer.merge_ts_and_to_mp4(remote_dir+"/Spider/Hider/Video/亚洲无码")
+        common_filer.merge_ts_and_to_mp4(remote_dir+alvintest.get_test_hider_folders("01"))
         testtools.test_common_db(groupspider.db)
         
 
